@@ -1,0 +1,460 @@
+《最終 ITEM_DB 稀有度 / source 命名規則表》，之後你整個《森林益智樂園 / BushExplore》都可以照這套走。
+
+
+common：通用普通裝
+
+rare：通用稀有裝
+
+stage：關卡限定裝
+
+dream：夢幻裝
+
+myth：神話裝
+
+legendary：特殊彩蛋收藏級
+
+
+
+這版目標是：
+
+好懂
+
+不容易打架
+
+方便你之後擴充
+
+符合你現在的寶箱 / 彩蛋 / 關卡限定設計
+
+ITEM_DB 最終規則：先分成 3 個層次看
+1. id
+
+物品唯一編號
+
+2. rarity
+
+物品稀有度 / 顯示等級
+
+3. source
+
+取得來源 / 是否進抽獎池
+
+這三個不要混在一起。
+
+一、id 命名規則
+
+你之前已經定案這個方向，我幫你正式整理：
+
+item_[slot]_[name]_[source_or_group]
+
+例如：
+
+item_hat_leaf_bush
+item_cloth_fairydress_global
+item_fullset_motherslove_secret
+item_hat_littlecrown_special
+slot 建議值
+hat
+cloth
+fullset
+
+之後如果你有別的欄位也可以加：
+
+back
+hand
+face
+
+但目前先不要擴太多。
+
+name 命名建議
+
+用簡短英文小寫，不要太長：
+
+leaf
+flower
+littlecrown
+motherslove
+moonrobe
+rainbowcap
+最後一段 source_or_group
+
+這裡不是稀有度，是來源或池別，例如：
+
+global
+bush
+campfire
+firefly
+stage
+secret
+special
+
+所以像你之前定的：
+
+item_hat_tiara_global
+
+這種格式就是對的。
+
+二、rarity 最終規則
+
+這是最重要的部分。
+我建議你正式固定成這 6 種：
+
+common
+rare
+stage
+dream
+myth
+legendary
+1. common
+
+通用普通裝
+
+用途
+
+最常見
+
+小寶箱 / 大寶箱 / 夢幻寶箱都可能出
+
+給小孩穩定收集感
+
+例子
+rarity: 'common'
+2. rare
+
+通用稀有裝
+
+用途
+
+比 common 少見
+
+小寶箱低機率
+
+大寶箱正常機率
+
+夢幻寶箱也可能出
+
+例子
+rarity: 'rare'
+3. stage
+
+關卡限定裝
+
+用途
+
+特定關卡掉落
+
+不應該亂入別的關卡
+
+關卡寶箱專用或偏專用
+
+例子
+rarity: 'stage'
+4. dream
+
+夢幻裝
+
+用途
+
+高級稀有裝
+
+主要來自夢幻寶箱
+
+比 rare 更珍貴，但不是最高級
+
+例子
+rarity: 'dream'
+5. myth
+
+神話裝
+
+用途
+
+正式抽獎池內最高級
+
+夢幻寶箱極低機率掉落
+
+例如你現在設計的 0.5%
+
+例子
+rarity: 'myth'
+6. legendary
+
+特殊彩蛋顯示稀有度
+
+用途
+
+給特殊裝備的卡片演出 / 收藏標記
+
+不代表它一定能進抽獎池
+
+例如「母上的守護」
+
+很重要
+
+legendary 不是你目前正式寶箱池的一部分。
+它比較像是：
+
+特殊收藏級標籤
+
+例子
+rarity: 'legendary'
+三、source 最終規則
+
+這是控制「從哪裡來」和「能不能進池」的核心。
+
+我建議固定用這些：
+
+global
+bush
+campfire
+firefly
+animals
+constellation
+secret
+special
+
+你也可以依你的地圖 / 小遊戲繼續加，但規則要一致。
+
+1. global
+
+全遊戲共通掉落
+
+用途
+
+可進一般寶箱池
+
+不限定特定關卡
+
+source: 'global'
+2. bush
+
+草叢尋寶來源
+
+用途
+
+BushExplore 專屬掉落
+
+若 rarity: stage，通常就是草叢限定裝
+
+source: 'bush'
+3. campfire
+
+營火遊戲來源
+
+source: 'campfire'
+4. firefly
+
+螢火蟲遊戲來源
+
+source: 'firefly'
+5. animals
+
+動物相關小遊戲來源
+
+source: 'animals'
+6. constellation
+
+星座 / 星空類來源
+
+source: 'constellation'
+7. secret
+
+彩蛋 / 特殊取得，不進普通抽獎池
+
+這個超重要
+
+只要：
+
+source: 'secret'
+
+就代表：
+
+不進一般寶箱池
+
+不靠正常掉落取得
+
+靠彩蛋、特殊條件、首頁事件之類取得
+
+例子
+
+母上的守護
+
+8. special
+
+特殊事件來源
+
+用途
+
+不是一般寶箱池
+
+來自特別事件
+
+例如國王蟲送的小王冠
+
+source: 'special'
+四、最終判斷原則
+
+這邊最重要，我直接幫你定規則：
+
+A. 能不能進一般抽獎池，看 source
+不看 rarity
+
+也就是說：
+
+source !== 'secret' 才可能進一般抽獎
+
+source === 'secret' 就不進一般池
+
+B. 顯示什麼顏色 / 稀有度文字，看 rarity
+
+例如：
+
+common 顯示普通
+
+rare 顯示稀有
+
+dream 顯示夢幻
+
+myth 顯示神話
+
+legendary 顯示傳說
+
+C. 關卡限定裝最穩的寫法
+
+建議這樣：
+
+rarity: 'stage',
+source: 'bush'
+
+意思就是：
+
+它是關卡限定裝
+
+它屬於草叢尋寶這個遊戲
+
+這樣最清楚。
+
+五、你現在最終推薦結構
+一般通用裝
+{
+    id: 'item_hat_flower_global',
+    name: '花花小帽',
+    category: 'equipment',
+    slot: 'hat',
+    rarity: 'common',
+    source: 'global'
+}
+通用稀有裝
+{
+    id: 'item_cloth_moonrobe_global',
+    name: '月光小披風',
+    category: 'equipment',
+    slot: 'cloth',
+    rarity: 'rare',
+    source: 'global'
+}
+草叢關卡限定裝
+{
+    id: 'item_hat_leafcrown_bush',
+    name: '葉葉小王冠',
+    category: 'equipment',
+    slot: 'hat',
+    rarity: 'stage',
+    source: 'bush'
+}
+夢幻裝
+{
+    id: 'item_cloth_rainbowdress_global',
+    name: '彩虹夢洋裝',
+    category: 'equipment',
+    slot: 'cloth',
+    rarity: 'dream',
+    source: 'global'
+}
+神話裝
+{
+    id: 'item_fullset_starlight_global',
+    name: '星光神話套裝',
+    category: 'equipment',
+    slot: 'fullset',
+    rarity: 'myth',
+    source: 'global'
+}
+母上的守護
+{
+    id: 'item_fullset_motherslove_secret',
+    name: '母上的守護',
+    category: 'equipment',
+    slot: 'fullset',
+    rarity: 'legendary',
+    source: 'secret'
+}
+
+這樣代表：
+
+顯示上它是傳說級
+
+但它不進一般抽獎池
+
+只能靠彩蛋拿到
+
+這就是你現在最適合的設定。
+
+國王蟲禮物：小王冠
+{
+    id: 'item_hat_littlecrown_special',
+    name: '小王冠',
+    category: 'equipment',
+    slot: 'hat',
+    rarity: 'dream',
+    source: 'special'
+}
+
+或你想讓它更高級也可以：
+
+rarity: 'legendary',
+source: 'special'
+
+都行。
+
+六、命名規則表，正式版
+rarity 用途表
+rarity	中文建議	是否進正式寶箱池
+common	普通	可
+rare	稀有	可
+stage	關卡限定	可，但限對應遊戲
+dream	夢幻	可，主要夢幻寶箱
+myth	神話	可，極低機率
+legendary	傳說 / 特殊收藏	原則上不作正式池主體
+source 用途表
+source	用途	是否進一般抽獎池
+global	全域共通	可
+bush	草叢尋寶	可
+campfire	營火	可
+firefly	螢火蟲	可
+animals	動物玩法	可
+constellation	星座玩法	可
+special	特殊事件	視你程式控制
+secret	彩蛋取得	不可
+七、你之後寫 ITEM_DB 的一句話規則
+最穩公式
+
+rarity 管顯示與稀有度，source 管來源與是否進池。
+
+八、我幫你做最後定稿建議
+
+你之後就照這個原則走：
+
+正式抽獎主稀有度
+common / rare / stage / dream / myth
+特殊彩蛋顯示稀有度
+legendary
+不進一般池的控制
+source: 'secret'
+九、超簡短版本，給你之後查
+rarity:
+common / rare / stage / dream / myth / legendary
+
+source:
+global / bush / campfire / firefly / animals / constellation / special / secret
+
+你下一步最適合做的是把你現有的 ITEM_DB 其中幾件貼上來，我幫你直接檢查哪些要改成這套格式。
