@@ -5,7 +5,7 @@ import SaveSystem from '../systems/SaveSystem.js';
 import StageManager from '../systems/StageManager.js';
 import { getStageData } from '../data/StageData.js';
 
-import StageEntryPopup from '../ui/StageEntryPopup.js';
+import StageEntryPopup from '../UI/StageEntryPopup.js';
 
 export default class WorldMap extends Phaser.Scene {
     constructor() {
