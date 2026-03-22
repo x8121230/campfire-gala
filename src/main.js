@@ -16,7 +16,8 @@ const config = {
     backgroundColor: '#000000',
     scale: {
         mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        fullscreenTarget: document.getElementById('game-container')
     },
     scene: [
         BootScene,

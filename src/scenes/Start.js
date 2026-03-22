@@ -176,6 +176,60 @@ export default class Start extends Phaser.Scene {
             });
         });
 
+        // ===== 全螢幕按鈕 =====
+        const fullscreenBtn = this.add.rectangle(1040, 60, 120, 50, 0x2d6cdf)
+            .setDepth(999)
+            .setInteractive({ useHandCursor: true });
+
+        const fullscreenText = this.add.text(1040, 60, '全螢幕', {
+            fontSize: '22px',
+            color: '#ffffff'
+        })
+            .setOrigin(0.5)
+            .setDepth(1000);
+
+        fullscreenBtn.on('pointerover', () => {
+            this.tweens.add({
+                targets: [fullscreenBtn, fullscreenText],
+                scaleX: 1.05,
+                scaleY: 1.05,
+                duration: 100
+            });
+        });
+
+        fullscreenBtn.on('pointerout', () => {
+            this.tweens.add({
+                targets: [fullscreenBtn, fullscreenText],
+                scaleX: 1,
+                scaleY: 1,
+                duration: 100
+            });
+        });
+
+        fullscreenBtn.on('pointerdown', () => {
+            console.log('點擊全螢幕');
+
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            } else {
+                this.scale.startFullscreen();
+            }
+        });
+
+        this.scale.on('enterfullscreen', () => {
+            console.log('✅ 已進入全螢幕');
+            fullscreenText.setText('退出');
+        });
+
+        this.scale.on('leavefullscreen', () => {
+            console.log('↩️ 已離開全螢幕');
+            fullscreenText.setText('全螢幕');
+        });
+
+        this.scale.on('fullscreenfailed', (e) => {
+            console.error('❌ fullscreen失敗', e);
+        });
+
         // ===== 設定按鈕 =====
         const settingBtn = this.add.image(1180, 60, 'btn_setting')
             .setInteractive({ useHandCursor: true })
