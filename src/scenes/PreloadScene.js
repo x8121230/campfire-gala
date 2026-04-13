@@ -120,6 +120,107 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('bug_red', 'assets/bug_red.png');
         this.load.image('sparkle_gold', 'assets/sparkle_gold.png');
 
+        // ===== 形色棋 icon =====
+        this.load.image('tile_base', 'assets/tile_base_white.png');
+
+        this.load.image('shape_circle', 'assets/shape_circle_white.png');
+        this.load.image('shape_square', 'assets/shape_square_white.png');
+        this.load.image('shape_diamond', 'assets/shape_diamond_white.png');
+        this.load.image('shape_star', 'assets/shape_star_white.png');
+        this.load.image('shape_clover', 'assets/shape_clover_white.png');
+        this.load.image('shape_cross', 'assets/shape_cross_white.png');
+
+        // ===== 動物配對 icon =====
+        // AnimalFoodMatch 素材
+        // 路徑：assets/AnimalFoodMatch/
+        // =========================
+        this.load.image('forest_match_bg', 'assets/AnimalFoodMatch/forest_match_bg.png');
+        this.load.image('afm_brown_bear_body', 'assets/AnimalFoodMatch/food_brown_bear_body.png');
+        this.load.image('afm_brown_bear_item', 'assets/AnimalFoodMatch/food_brown_bear_item.png');
+
+        this.load.image('afm_butterfly_body', 'assets/AnimalFoodMatch/food_butterfly_body.png');
+        this.load.image('afm_butterfly_item', 'assets/AnimalFoodMatch/food_butterfly_item.png');
+
+        this.load.image('afm_cat_body', 'assets/AnimalFoodMatch/food_cat_body.png');
+        this.load.image('afm_cat_item', 'assets/AnimalFoodMatch/food_cat_item.png');
+
+        this.load.image('afm_deer_body', 'assets/AnimalFoodMatch/food_deer_body.png');
+        this.load.image('afm_deer_item', 'assets/AnimalFoodMatch/food_deer_item.png');
+
+        this.load.image('afm_dolphin_body', 'assets/AnimalFoodMatch/food_dolphin_body.png');
+        this.load.image('afm_dolphin_item', 'assets/AnimalFoodMatch/food_dolphin_item.png');
+
+        this.load.image('afm_hedgehog_body', 'assets/AnimalFoodMatch/food_hedgehog_body.png');
+        this.load.image('afm_hedgehog_item', 'assets/AnimalFoodMatch/food_hedgehog_item.png');
+
+        this.load.image('afm_monkey_body', 'assets/AnimalFoodMatch/food_monkey_body.png');
+        this.load.image('afm_monkey_item', 'assets/AnimalFoodMatch/food_monkey_item.png');
+
+        this.load.image('afm_mouse_body', 'assets/AnimalFoodMatch/food_mouse_body.png');
+        this.load.image('afm_mouse_item', 'assets/AnimalFoodMatch/food_mouse_item.png');
+
+        this.load.image('afm_owl_body', 'assets/AnimalFoodMatch/food_owl_body.png');
+        this.load.image('afm_owl_item', 'assets/AnimalFoodMatch/food_owl_item.png');
+
+        this.load.image('afm_panda_body', 'assets/AnimalFoodMatch/food_panda_body.png');
+        this.load.image('afm_panda_item', 'assets/AnimalFoodMatch/food_panda_item.png');
+
+        this.load.image('afm_rabbit_body', 'assets/AnimalFoodMatch/food_rabbit_body.png');
+        this.load.image('afm_rabbit_item', 'assets/AnimalFoodMatch/food_rabbit_item.png');
+
+        this.load.image('afm_seahorse_body', 'assets/AnimalFoodMatch/food_seahorse_body.png');
+        this.load.image('afm_seahorse_item', 'assets/AnimalFoodMatch/food_seahorse_item.png');
+
+        this.load.image('afm_squirrel_body', 'assets/AnimalFoodMatch/food_squirrel_body.png');
+        this.load.image('afm_squirrel_item', 'assets/AnimalFoodMatch/food_squirrel_item.png');
+
+        this.load.image('afm_tiger_body', 'assets/AnimalFoodMatch/food_tiger_body.png');
+        this.load.image('afm_tiger_item', 'assets/AnimalFoodMatch/food_tiger_item.png');
+
+        /* =========================
+        * MemoryMatchGame 動物頭像
+        * ========================= */
+        this.load.image('mm_tile_base', 'assets/MemoryMatchGame/tile_base_white.png');
+
+        this.load.image('mm_elephant', 'assets/MemoryMatchGame/大象.png');
+        this.load.image('mm_sheep', 'assets/MemoryMatchGame/小羊.png');
+        this.load.image('mm_dog', 'assets/MemoryMatchGame/小狗.png');
+        this.load.image('mm_raccoon', 'assets/MemoryMatchGame/小浣熊.png');
+        this.load.image('mm_deer', 'assets/MemoryMatchGame/小鹿.png');
+        this.load.image('mm_bear', 'assets/MemoryMatchGame/小熊.png');
+        this.load.image('mm_pig', 'assets/MemoryMatchGame/小豬.png');
+        this.load.image('mm_cat', 'assets/MemoryMatchGame/小貓.png');
+        this.load.image('mm_penguin', 'assets/MemoryMatchGame/企鵝.png');
+        this.load.image('mm_tiger', 'assets/MemoryMatchGame/老虎.png');
+        this.load.image('mm_cow', 'assets/MemoryMatchGame/乳牛.png');
+        this.load.image('mm_rabbit', 'assets/MemoryMatchGame/兔子.png');
+        this.load.image('mm_hedgehog', 'assets/MemoryMatchGame/刺蝟.png');
+        this.load.image('mm_squirrel', 'assets/MemoryMatchGame/松鼠.png');
+        this.load.image('mm_hippo', 'assets/MemoryMatchGame/河馬.png');
+        this.load.image('mm_fox', 'assets/MemoryMatchGame/狐狸.png');
+        this.load.image('mm_chipmunk', 'assets/MemoryMatchGame/花栗鼠.png');
+        this.load.image('mm_giraffe', 'assets/MemoryMatchGame/長頸鹿.png');
+        this.load.image('mm_frog', 'assets/MemoryMatchGame/青蛙.png');
+        this.load.image('mm_zebra', 'assets/MemoryMatchGame/斑馬.png');
+        this.load.image('mm_koala', 'assets/MemoryMatchGame/無尾熊.png');
+        this.load.image('mm_monkey', 'assets/MemoryMatchGame/猴子.png');
+        this.load.image('mm_lion', 'assets/MemoryMatchGame/獅子.png');
+        this.load.image('mm_panda', 'assets/MemoryMatchGame/熊貓.png');
+        this.load.image('mm_bee', 'assets/MemoryMatchGame/蜜蜂.png');
+        this.load.image('mm_butterfly', 'assets/MemoryMatchGame/蝴蝶.png');
+        this.load.image('mm_owl', 'assets/MemoryMatchGame/貓頭鷹.png');
+        this.load.image('mm_whale', 'assets/MemoryMatchGame/小鯨魚.png');
+        this.load.image('mm_bg_forest', 'assets/MemoryMatchGame/mm_bg_forest.png');
+
+        /* =========================
+        * FireflyExplore 點點螢火
+        * ========================= */
+        this.load.image('player_front', 'assets/characters/little_red/player_front.png');
+        this.load.image('player_back', 'assets/characters/little_red/player_back.png');
+        this.load.image('player_left', 'assets/characters/little_red/player_left.png');
+        this.load.image('player_right', 'assets/characters/little_red/player_right.png');
+
+        this.load.image('enemy_wolf', 'assets/characters/enemy/enemy_wolf.png');
         // ===== 載入進度 =====
         this.load.on('progress', (value) => {
             loadingText.setText(`森林益智樂園 載入中... ${Math.floor(value * 100)}%`);

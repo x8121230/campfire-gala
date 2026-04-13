@@ -7,6 +7,12 @@ import Collection from './scenes/Collection.js';
 import TreasureHunt from './scenes/TreasureHunt.js';
 import ForestGame from './scenes/ForestGame.js';
 import BushExplore from './scenes/BushExplore.js';
+import ShapeColorGame from './scenes/ShapeColorGame.js';
+import BushBanqiMiniGame from './scenes/BushBanqiMiniGame.js';
+import MiniGameHub from './scenes/MiniGameHub.js';
+import MemoryMatchGame from './scenes/MemoryMatchGame.js';
+import AnimalFoodMatch from './scenes/AnimalFoodMatch.js';
+import FireflyExplore from './scenes/FireflyExplore.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -27,7 +33,13 @@ const config = {
         Collection,
         TreasureHunt,
         ForestGame,
-        BushExplore
+        BushExplore,
+        ShapeColorGame,
+        BushBanqiMiniGame,
+        MiniGameHub,
+        MemoryMatchGame,
+        AnimalFoodMatch,
+        FireflyExplore
     ]
 };
 

@@ -274,6 +274,71 @@ export default class Start extends Phaser.Scene {
             owned.push('item_collectible_scout_test_01');
             this.registry.set('owned_items', owned);
         }
+
+        // ===== MINI 按鈕 =====
+        const miniBtnX = 1040;
+        const miniBtnY = 640;
+
+        const miniBtnBg = this.add.rectangle(miniBtnX, miniBtnY, 180, 60, 0x8b5e34, 0.95)
+            .setOrigin(0.5)
+            .setDepth(300)
+            .setInteractive({ useHandCursor: true });
+
+        const miniBtnText = this.add.text(miniBtnX, miniBtnY, 'MINI', {
+            fontSize: '24px',
+            color: '#ffffff',
+            fontStyle: 'bold'
+        })
+        .setOrigin(0.5)
+        .setDepth(301);
+
+        miniBtnBg.on('pointerover', () => {
+            this.tweens.add({
+                targets: [miniBtnBg, miniBtnText],
+                scale: 1.06,
+                duration: 120
+            });
+        });
+
+        miniBtnBg.on('pointerout', () => {
+            this.tweens.add({
+                targets: [miniBtnBg, miniBtnText],
+                scale: 1,
+                duration: 120
+            });
+        });
+
+        miniBtnBg.on('pointerdown', () => {
+            this.scene.start('MiniGameHub');
+        });
+    }
+
+    createMiniGameButton(x, y, text, callback) {
+        const bg = this.add.rectangle(x, y, 320, 100, 0xffffff)
+            .setStrokeStyle(4, 0x000000)
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true });
+
+        const label = this.add.text(x, y, text, {
+            fontSize: '32px',
+            color: '#000000',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        // hover效果（很加分🔥）
+        bg.on('pointerover', () => {
+            bg.setFillStyle(0xf5f5f5);
+            this.tweens.add({ targets: bg, scale: 1.05, duration: 100 });
+        });
+
+        bg.on('pointerout', () => {
+            bg.setFillStyle(0xffffff);
+            this.tweens.add({ targets: bg, scale: 1.0, duration: 100 });
+        });
+
+        bg.on('pointerdown', callback);
+
+        return { bg, label };
     }
 
     createFloatingFireflies() {
