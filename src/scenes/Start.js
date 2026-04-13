@@ -8,11 +8,14 @@ export default class Start extends Phaser.Scene {
     }
 
     create() {
+        // 🔥 先停掉其他場景音樂
+        AudioSystem.stopBgm(this);
+
         // 讀取存檔
         SaveSystem.applyToRegistry(this.registry);
 
         // 播放首頁音樂
-        AudioSystem.playBgm(this, 'home_bgm', 0.5);
+        AudioSystem.playBgm(this, 'home_bgm', 0.4);
 
         // 背景
         const bg = this.add.image(640, 360, 'bg_home');

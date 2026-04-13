@@ -4,6 +4,23 @@ export default class AnimalFoodMatch extends Phaser.Scene {
     }
 
     create() {
+        this.sound.stopAll();
+
+        let bgm = this.sound.get('afm_bgm');
+
+        if (!bgm) {
+            bgm = this.sound.add('afm_bgm', {
+                loop: true,
+                volume: 0.4
+            });
+        }
+
+        if (!bgm.isPlaying) {
+            bgm.play();
+        }
+
+        this.afmBgm = bgm;
+
         this.revealed = false;
         this.score = 0;
         this.isRevealing = false;

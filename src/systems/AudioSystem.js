@@ -41,4 +41,16 @@ export default class AudioSystem {
 
         bgm.play();
     }
+
+    static stopBgm(scene) {
+        if (!scene || !scene.sound) return;
+
+        const sounds = scene.sound.sounds;
+
+        sounds.forEach(s => {
+            if (s && s.isPlaying && s.loop) {
+                s.stop();
+            }
+        });
+    }
 }

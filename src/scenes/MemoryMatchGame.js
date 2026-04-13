@@ -4,6 +4,26 @@ export default class MemoryMatchGame extends Phaser.Scene {
     }
 
     create(data) {
+        this.canFlip = true;
+        this.firstCard = null;
+        this.secondCard = null;
+        this.openedCards = [];
+        this.matchedPairs = 0;
+
+        // 你如果有時間限制可用
+        this.gameEnded = false;
+        this.timeLeft = 60;
+
+        // 🔥 關掉首頁音樂
+        this.sound.stopAll();
+
+        this.canFlip = true;
+        this.firstCard = null;
+        this.secondCard = null;
+
+        // 音效初始化
+        this.setupAudio();
+        
         this.returnScene = data?.returnScene || 'MiniGameHub';
 
         // =========================
@@ -53,6 +73,70 @@ export default class MemoryMatchGame extends Phaser.Scene {
 
         this.createUI();
         this.createCards();
+    }
+
+    setupAudio() {
+        // BGM
+        let bgm = this.sound.get('memory_bgm');
+
+        if (!bgm) {
+            bgm = this.sound.add('memory_bgm', {
+                loop: true,
+                volume: 0.38
+            });
+        }
+
+        if (!bgm.isPlaying) {
+            bgm.play();
+        }
+
+        this.memoryBgm = bgm;
+
+        // 單次音效
+        this.sfxFlip = this.sound.add('mm_flip', { volume: 0.45 });
+        this.sfxMatch = this.sound.add('mm_match', { volume: 0.55 });
+        this.sfxWrong = this.sound.add('mm_wrong', { volume: 0.5 });
+        this.sfxWin = this.sound.add('mm_win', { volume: 0.65 });
+        this.sfxLose = this.sound.add('mm_lose', { volume: 0.65 });
+
+        // 場景結束時停止 BGM
+        this.events.once('shutdown', () => {
+            if (this.memoryBgm) {
+                this.memoryBgm.stop();
+            }
+        });
+
+        this.events.once('destroy', () => {
+            if (this.memoryBgm) {
+                this.memoryBgm.stop();
+            }
+        });
+    }
+
+    playFlipSound() {
+        if (this.sfxFlip) this.sfxFlip.play();
+    }
+
+    playMatchSound() {
+        if (this.sfxMatch) this.sfxMatch.play();
+    }
+
+    playWrongSound() {
+        if (this.sfxWrong) this.sfxWrong.play();
+    }
+
+    playWinSound() {
+        if (this.sfxWin) this.sfxWin.play();
+    }
+
+    playLoseSound() {
+        if (this.sfxLose) this.sfxLose.play();
+    }
+
+    stopMemoryBgm() {
+        if (this.memoryBgm && this.memoryBgm.isPlaying) {
+            this.memoryBgm.stop();
+        }
     }
 
     createUI() {

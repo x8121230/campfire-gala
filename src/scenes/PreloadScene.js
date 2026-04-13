@@ -137,46 +137,34 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('forest_match_bg', 'assets/AnimalFoodMatch/forest_match_bg.png');
         this.load.image('afm_brown_bear_body', 'assets/AnimalFoodMatch/food_brown_bear_body.png');
         this.load.image('afm_brown_bear_item', 'assets/AnimalFoodMatch/food_brown_bear_item.png');
-
         this.load.image('afm_butterfly_body', 'assets/AnimalFoodMatch/food_butterfly_body.png');
         this.load.image('afm_butterfly_item', 'assets/AnimalFoodMatch/food_butterfly_item.png');
-
         this.load.image('afm_cat_body', 'assets/AnimalFoodMatch/food_cat_body.png');
         this.load.image('afm_cat_item', 'assets/AnimalFoodMatch/food_cat_item.png');
-
         this.load.image('afm_deer_body', 'assets/AnimalFoodMatch/food_deer_body.png');
         this.load.image('afm_deer_item', 'assets/AnimalFoodMatch/food_deer_item.png');
-
         this.load.image('afm_dolphin_body', 'assets/AnimalFoodMatch/food_dolphin_body.png');
         this.load.image('afm_dolphin_item', 'assets/AnimalFoodMatch/food_dolphin_item.png');
-
         this.load.image('afm_hedgehog_body', 'assets/AnimalFoodMatch/food_hedgehog_body.png');
         this.load.image('afm_hedgehog_item', 'assets/AnimalFoodMatch/food_hedgehog_item.png');
-
         this.load.image('afm_monkey_body', 'assets/AnimalFoodMatch/food_monkey_body.png');
         this.load.image('afm_monkey_item', 'assets/AnimalFoodMatch/food_monkey_item.png');
-
         this.load.image('afm_mouse_body', 'assets/AnimalFoodMatch/food_mouse_body.png');
         this.load.image('afm_mouse_item', 'assets/AnimalFoodMatch/food_mouse_item.png');
-
         this.load.image('afm_owl_body', 'assets/AnimalFoodMatch/food_owl_body.png');
         this.load.image('afm_owl_item', 'assets/AnimalFoodMatch/food_owl_item.png');
-
         this.load.image('afm_panda_body', 'assets/AnimalFoodMatch/food_panda_body.png');
         this.load.image('afm_panda_item', 'assets/AnimalFoodMatch/food_panda_item.png');
-
         this.load.image('afm_rabbit_body', 'assets/AnimalFoodMatch/food_rabbit_body.png');
         this.load.image('afm_rabbit_item', 'assets/AnimalFoodMatch/food_rabbit_item.png');
-
         this.load.image('afm_seahorse_body', 'assets/AnimalFoodMatch/food_seahorse_body.png');
         this.load.image('afm_seahorse_item', 'assets/AnimalFoodMatch/food_seahorse_item.png');
-
         this.load.image('afm_squirrel_body', 'assets/AnimalFoodMatch/food_squirrel_body.png');
         this.load.image('afm_squirrel_item', 'assets/AnimalFoodMatch/food_squirrel_item.png');
-
         this.load.image('afm_tiger_body', 'assets/AnimalFoodMatch/food_tiger_body.png');
         this.load.image('afm_tiger_item', 'assets/AnimalFoodMatch/food_tiger_item.png');
-
+        
+        this.load.audio('afm_bgm', 'assets/AnimalFoodMatch/afm_bgm.mp3');
         /* =========================
         * MemoryMatchGame 動物頭像
         * ========================= */
@@ -211,6 +199,14 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('mm_owl', 'assets/MemoryMatchGame/貓頭鷹.png');
         this.load.image('mm_whale', 'assets/MemoryMatchGame/小鯨魚.png');
         this.load.image('mm_bg_forest', 'assets/MemoryMatchGame/mm_bg_forest.png');
+        // 音效
+        this.load.audio('memory_bgm', 'assets/MemoryMatchGame/mm_bgm.mp3');
+
+        this.load.audio('mm_flip', 'assets/MemoryMatchGame/mm_flip.mp3');
+        this.load.audio('mm_match', 'assets/MemoryMatchGame/mm_match.mp3');
+        this.load.audio('mm_wrong', 'assets/MemoryMatchGame/mm_wrong.mp3');
+        this.load.audio('mm_win', 'assets/MemoryMatchGame/mm_win.mp3');
+        this.load.audio('mm_lose', 'assets/MemoryMatchGame/mm_lose.mp3');
 
         /* =========================
         * FireflyExplore 點點螢火
