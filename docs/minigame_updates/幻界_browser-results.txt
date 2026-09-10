@@ -1,0 +1,1 @@
+PASS: real Chromium WebGL2 render, keyboard, ordinary-path quest completion, puzzle retry, save/reload, mobile touch cancellation, portrait/blur pause and exit cleanup; no page/console errors.

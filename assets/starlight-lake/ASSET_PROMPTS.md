@@ -1,0 +1,12 @@
+# 星光湖畔素材生成紀錄
+
+方法：內建圖片生成工具。兩張均為新生成，無編輯既有遊戲圖片。
+檔案：lakeside.png、owl-guide.png（同目錄）。
+
+## lakeside.png — production prompt
+
+Use case: illustration-story. Generate a production background asset for an interactive 2D fairytale game map called Starlight Lakeside. Wide landscape 16:9, ideally 1536x864 or 2048x1152. Rich hand painted storybook watercolor with crisp friendly silhouettes, painterly texture like a children's illustrated forest adventure, not flat vector, not photorealistic. Oblique aerial map view. Large moonlit turquoise lake occupies center, violet blue night sky band and distant forest at top, deep teal foliage framing edges. SIX distinct generously sized landmarks around the lake, connected by winding pale sandy paths and wooden bridges: upper left firefly meadow with glowing flowers, upper center small timber astronomical observatory with large brass telescope, upper right glowing blue-purple crystal cave; lower left wooden boat dock with one small boat, lower middle cozy owl treehouse with warm lit windows, lower right small circular lake island with an ancient moon stone arch and stepping stones. Landmarks positioned roughly normalized x/y: .19/.32, .50/.27, .82/.32, .18/.70, .48/.73, .82/.70. Composition must reserve top 12% for UI and bottom 12% for navigation without critical objects. Beautiful blue water reflections, golden firefly dots, lilies, reeds, friendly mysterious not scary. All landmarks clearly readable at mobile landscape size, not tiny. NO text, NO labels, NO buttons, NO frame, NO characters. This is a background art asset, game UI will be layered in code.
+
+## owl-guide.png — production prompt
+
+Use case illustration-story. Production game sprite: one adorable but not babyish wise little tawny owl, full body, facing viewer three-quarter, big amber eyes, cream face and belly, midnight blue short cape and small floppy midnight blue wizard hat embroidered with golden stars, holding a small brass lantern in one wing. Warm friendly explorer guide for Starlight Lakeside fairytale adventure. Hand painted watercolor/gouache with crisp outline and textured brown feathers, detailed tasteful storybook illustration, golden lantern glow, not photorealistic, not pixel art. Single isolated character centered, entire hat and feet visible with generous padding, no ground scenery, no letters, no watermark. Truly transparent alpha background. Square image.

@@ -1,0 +1,17 @@
+{
+  "tests": 375,
+  "checks": {
+    "regression": "passed",
+    "lake_scene": "passed",
+    "settings": "passed",
+    "journal": "passed",
+    "chests": "passed",
+    "layout": "passed"
+  },
+  "syntax_files": 53,
+  "unchanged_prior_source_art": 75,
+  "browser": "not run: browser download timed out",
+  "mobile_device": "pending",
+  "preview": "Approximate scene-object renders, not browser screenshots",
+  "packaging": "cumulative direct overlay; requires original complete game and v5.3 wardrobe"
+}

@@ -63,6 +63,9 @@ export const DEFAULT_SAVE_DATA = {
     ],
 
     owned_collectibles: [],
+    gold_grass_encyclopedia: [],
+    achievements: [],
+    tutorial_flags: {},
 
     placed_decorations: [],
 
@@ -71,11 +74,87 @@ export const DEFAULT_SAVE_DATA = {
     equipped_fullset: 'none',
     equipped_collectible: 'none',
     minigame_stats: {
-        treasure: { playCount: 0, clearCount: 0, bestScore: 0 },
+        treasure: {
+            playCount: 0,
+            clearCount: 0,
+            bestScore: 0,
+            bestBaseScore: 0,
+            dailyGrassDate: '',
+            goldenBugUnlocked: false,
+            goldenBugDiscovered: false,
+            goldenBugFindCount: 0,
+            goldenBugMissStreak: 0,
+            noFlagClearCount: 0,
+            noFlagAchievementRuleVersion: 2,
+            fullAchievementRewardClaimed: false
+        },
         firefly: { playCount: 0, clearCount: 0, bestScore: 0 },
-        campfire: { playCount: 0, clearCount: 0, bestScore: 0 },
-        constellation: { playCount: 0, clearCount: 0, bestScore: 0 },
-        animals: { playCount: 0, clearCount: 0, bestScore: 0 }
+        fireflyCatch: {
+            playCount: 0,
+            clearCount: 0,
+            bestScore: 0,
+            lastScore: 0,
+            bestAccuracy: 0,
+            bestCombo: 0,
+            fastestSeconds: 0
+        },
+        lanternMaze: { playCount: 0, clearCount: 0, bestScore: 0 },
+        campfire: {
+            mode: 'kids',
+            kids: {
+                playCount: 0,
+                clearCount: 0,
+                bestScore: 0,
+                lastScore: 0,
+                bestAccuracy: 0,
+                bestCombo: 0,
+                perfectClearCount: 0,
+                totalPerfectCount: 0,
+                rainbowPerfectCount: 0,
+                timeoutCount: 0,
+                fastestSeconds: 0,
+                rainbowMarshmallowCount: 0,
+                rainbowMarshmallowDiscovered: false
+            },
+            challenge: {},
+            playCount: 0,
+            clearCount: 0,
+            bestScore: 0,
+            rainbowMarshmallowCount: 0,
+            rainbowPerfectCount: 0
+        },
+        constellation: {
+            playCount: 0,
+            clearCount: 0,
+            bestScore: 0,
+            lastScore: 0,
+            bestAccuracy: 0,
+            bestCombo: 0,
+            perfectClearCount: 0,
+            fewestMistakes: null,
+            fastestSeconds: 0,
+            rainbowStarCount: 0,
+            friendEncyclopedia: {}
+        },
+        animals: {
+            mode: 'kids',
+            kids: {
+                playCount: 0,
+                clearCount: 0,
+                bestScore: 0,
+                lastScore: 0,
+                bestAccuracy: 0,
+                bestCombo: 0,
+                perfectClearCount: 0,
+                fastestSeconds: 0,
+                friendBook: []
+            },
+            challenge: {},
+            playCount: 0,
+            clearCount: 0,
+            bestScore: 0,
+            friendBook: []
+        }
     },
 
     bonus_play_counts: {},
@@ -100,7 +179,7 @@ export const ITEM_DB = {
         category: 'equipment',
         type: 'hat',
         source: 'starter',
-        rarity: 'common',
+        rarity: 'good',
         texture: 'item_hat_daily_01',
         icon: 'item_hat_daily_01',
         placeable: false,
@@ -116,9 +195,9 @@ export const ITEM_DB = {
         category: 'equipment',
         type: 'cloth',
         source: 'starter',
-        rarity: 'common',
-        texture: 'item_cloth_daily_01',
-        icon: 'item_cloth_daily_01',
+        rarity: 'base',
+        texture: 'wardrobe_doll_daily_v50',
+        icon: 'wardrobe_doll_daily_v50',
         placeable: false,
         effects: {},
         desc: '舒服的日常穿搭。',
@@ -132,9 +211,9 @@ export const ITEM_DB = {
         category: 'equipment',
         type: 'fullset',
         source: 'starter',
-        rarity: 'common',
-        texture: 'fullset_pink_home_01',
-        icon: 'icon_fullset_pink_home_01',
+        rarity: 'good',
+        texture: 'wardrobe_doll_pink_v50',
+        icon: 'wardrobe_doll_pink_v50',
         placeable: false,
         effects: {
             rewardRate: 10,
@@ -173,8 +252,8 @@ export const ITEM_DB = {
         type: 'hat',
         source: 'global',
         rarity: 'rare',
-        texture: 'hat_tiara',
-        icon: 'item_hat_tiara',
+        texture: 'wardrobe_hat_crown_v53',
+        icon: 'wardrobe_hat_icon_crown_v53',
         placeable: false,
         effects: {
             rewardRate: 20
@@ -191,8 +270,8 @@ export const ITEM_DB = {
         type: 'cloth',
         source: 'firefly',
         rarity: 'stage',
-        texture: 'cloth_fairy',
-        icon: 'item_cloth_fairy',
+        texture: 'wardrobe_doll_fairy_v52',
+        icon: 'wardrobe_doll_fairy_v52',
         placeable: false,
         effects: {
             dropRate: 15
@@ -209,8 +288,8 @@ export const ITEM_DB = {
         type: 'hat',
         source: 'bush',
         rarity: 'stage',
-        texture: 'hat_explorer',
-        icon: 'icon_hat_explorer',
+        texture: 'wardrobe_hat_explorer_v53',
+        icon: 'wardrobe_hat_icon_explorer_v53',
         placeable: false,
         effects: {
             extraPlayCount: 1
@@ -227,8 +306,8 @@ export const ITEM_DB = {
         type: 'cloth',
         source: 'bush',
         rarity: 'stage',
-        texture: 'cloth_explorer',
-        icon: 'icon_cloth_explorer',
+        texture: 'wardrobe_doll_explore_v53',
+        icon: 'wardrobe_doll_explore_v53',
         placeable: false,
         effects: {
             dropRate: 10
@@ -245,8 +324,8 @@ export const ITEM_DB = {
         type: 'fullset',
         source: 'bush',
         rarity: 'stage',
-        texture: 'fullset_explorer',
-        icon: 'icon_fullset_explorer',
+        texture: 'wardrobe_doll_explore_full_v53',
+        icon: 'wardrobe_doll_explore_full_v53',
         placeable: false,
         effects: {
             revealHint: 1
@@ -263,8 +342,8 @@ export const ITEM_DB = {
         type: 'hat',
         source: 'firefly',
         rarity: 'stage',
-        texture: 'hat_firefly',
-        icon: 'icon_hat_firefly',
+        texture: 'wardrobe_hat_firefly_v53',
+        icon: 'wardrobe_hat_icon_firefly_v53',
         placeable: false,
         effects: {
             timeBonus: 3
@@ -281,8 +360,8 @@ export const ITEM_DB = {
         type: 'cloth',
         source: 'firefly',
         rarity: 'stage',
-        texture: 'cloth_firefly',
-        icon: 'icon_cloth_firefly',
+        texture: 'wardrobe_doll_firefly_v53',
+        icon: 'wardrobe_doll_firefly_v53',
         placeable: false,
         effects: {
             rewardRate: 15
@@ -299,8 +378,8 @@ export const ITEM_DB = {
         type: 'fullset',
         source: 'firefly',
         rarity: 'stage',
-        texture: 'fullset_firefly',
-        icon: 'icon_fullset_firefly',
+        texture: 'wardrobe_doll_forest_fairy_v53',
+        icon: 'wardrobe_doll_forest_fairy_v53',
         placeable: false,
         effects: {
             extraMistake: 1
@@ -310,6 +389,22 @@ export const ITEM_DB = {
         notes: '螢火蟲關卡限定裝'
     },
 
+    item_hat_forest_fairy_01: {
+        id: 'item_hat_forest_fairy_01',
+        name: '森林精靈冠',
+        category: 'equipment',
+        type: 'hat',
+        source: 'firefly',
+        rarity: 'stage',
+        texture: 'wardrobe_hat_forest_fairy_v53',
+        icon: 'wardrobe_hat_icon_forest_fairy_v53',
+        placeable: false,
+        effects: {},
+        desc: '森林精靈服的獨立葉冠，也能搭配其他服裝。',
+        status: 'ready',
+        notes: '螢火蟲關卡限定頭飾；能力待平衡'
+    },
+
     item_hat_campfire_01: {
         id: 'item_hat_campfire_01',
         name: '火焰廚師帽',
@@ -317,8 +412,8 @@ export const ITEM_DB = {
         type: 'hat',
         source: 'campfire',
         rarity: 'stage',
-        texture: 'hat_cook',
-        icon: 'icon_hat_cook',
+        texture: 'wardrobe_hat_chef_v53',
+        icon: 'wardrobe_hat_icon_chef_v53',
         placeable: false,
         effects: {
             timeBonus: 3
@@ -335,8 +430,8 @@ export const ITEM_DB = {
         type: 'cloth',
         source: 'campfire',
         rarity: 'stage',
-        texture: 'cloth_cook',
-        icon: 'icon_cloth_cook',
+        texture: 'wardrobe_doll_campfire_v53',
+        icon: 'wardrobe_doll_campfire_v53',
         placeable: false,
         effects: {
             rewardRate: 20
@@ -353,8 +448,8 @@ export const ITEM_DB = {
         type: 'fullset',
         source: 'campfire',
         rarity: 'stage',
-        texture: 'fullset_cook',
-        icon: 'icon_fullset_cook',
+        texture: 'wardrobe_doll_chef_v52',
+        icon: 'wardrobe_doll_chef_v52',
         placeable: false,
         effects: {
             extraMistake: 1
@@ -371,8 +466,8 @@ export const ITEM_DB = {
         type: 'hat',
         source: 'constellation',
         rarity: 'stage',
-        texture: 'hat_constellation',
-        icon: 'icon_hat_constellation',
+        texture: 'wardrobe_hat_star_magic_v53',
+        icon: 'wardrobe_hat_icon_star_magic_v53',
         placeable: false,
         effects: {
             timeBonus: 3
@@ -389,8 +484,8 @@ export const ITEM_DB = {
         type: 'cloth',
         source: 'constellation',
         rarity: 'stage',
-        texture: 'cloth_constellation',
-        icon: 'icon_cloth_constellation',
+        texture: 'wardrobe_doll_constellation_v53',
+        icon: 'wardrobe_doll_constellation_v53',
         placeable: false,
         effects: {
             rewardRate: 15
@@ -407,8 +502,8 @@ export const ITEM_DB = {
         type: 'fullset',
         source: 'constellation',
         rarity: 'stage',
-        texture: 'fullset_constellation',
-        icon: 'icon_fullset_constellation',
+        texture: 'wardrobe_doll_astronaut_v52',
+        icon: 'wardrobe_doll_astronaut_v52',
         placeable: false,
         effects: {
             revealHint: 1
@@ -425,7 +520,7 @@ export const ITEM_DB = {
         type: 'fullset',
         source: 'secret',
         rarity: 'legendary',
-        texture: 'fullset_guard', ///外觀
+        texture: 'wardrobe_doll_mother_guard_v53',
         icon: 'icon_guard',
         placeable: false,
         effects: {
@@ -435,6 +530,23 @@ export const ITEM_DB = {
         desc: '感受到了母親大人的愛意。\n進入關卡不消耗體力，並可無視聲望門檻。',
         status: 'ready',
         notes: '彩蛋裝備'
+    },
+
+    item_decoration_golden_bug_house_bush: {
+        id: 'item_decoration_golden_bug_house_bush',
+        name: '黃金蟲小屋',
+        category: 'decoration',
+        type: 'decoration',
+        source: 'bush',
+        rarity: 'legendary',
+        texture: 'q_golden_bug_house',
+        icon: 'q_golden_bug_house',
+        collectionScale: 0.22,
+        placeable: true,
+        effects: {},
+        desc: '完成草叢探險全部成就的紀念裝飾。已放在森林營地中。',
+        status: 'ready',
+        notes: '草叢探險全成就獎勵'
     }
 };
 

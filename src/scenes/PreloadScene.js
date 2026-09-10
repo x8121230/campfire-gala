@@ -1,4 +1,7 @@
 // src/scenes/PreloadScene.js
+import ConfigManager from '../systems/ConfigManager.js';
+import { PAPER_DOLL_FILES } from '../data/PaperDollConfig.js';
+
 export default class PreloadScene extends Phaser.Scene {
     constructor() {
         super('PreloadScene');
@@ -15,6 +18,7 @@ export default class PreloadScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // ===== 首頁 / 背景 =====
+        this.load.json('game_balance_config', 'assets/config/game_balance.json');
         this.load.image('bg_home', 'assets/forest_bg.jpg');
         this.load.image('collection_bg', 'assets/forest_bg.jpg');
         this.load.image('bg_collection_room', 'assets/bg_collection_room.jpg');
@@ -31,6 +35,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.audio('chest_open_sfx', 'assets/chest_open_sfx.mp3');
         this.load.audio('click_sfx', 'assets/click_sfx.mp3');
         this.load.audio('bush_bgm', 'assets/bush_bgm.mp3');
+        this.load.audio('campfire_music', 'assets/campfire_bgm.mp3');
         this.load.audio('dig_grass_sfx', 'assets/dig_grass_sfx.mp3');
         this.load.audio('ui_click_sfx', 'assets/ui_click_sfx.mp3');
         this.load.audio('answer_correct_sfx', 'assets/answer_correct_sfx.mp3');
@@ -44,11 +49,14 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('empty', 'assets/empty.png');
 
         // ===== 紙娃娃穿戴圖層 =====
+        Object.entries(PAPER_DOLL_FILES).forEach(([key, file]) => {
+            if (!this.textures.exists(key)) this.load.image(key, file);
+        });
         this.load.image('hat_tiara', 'assets/item_hat_tiara.png');
         this.load.image('cloth_fairy', 'assets/item_cloth_fairy.png');
 
         this.load.image('item_hat_daily_01', 'assets/item_hat_daily_01.png');
-        this.load.image('item_cloth_daily_01', 'assets/item_cloth_daily_01.png');
+        this.load.image('item_cloth_daily_01', 'assets/00item_cloth_daily_01.png');
 
         this.load.image('fullset_pink_home_01', 'assets/item_fullset_pink_home_01.png');
         this.load.image('icon_fullset_pink_home_01', 'assets/item_fullset_pink_home_01.png');
@@ -83,6 +91,13 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('icon_chest', 'assets/icon_chest.png');
         this.load.image('icon_tent', 'assets/icon_tent.png');
         this.load.image('icon_tree', 'assets/icon_tree.png');
+        this.load.image('icon_constellation', 'assets/icon_constellation.png');
+        this.load.image('constellation_friend_fish', 'assets/constellation_friend_fish.png');
+        this.load.image('constellation_friend_rabbit', 'assets/constellation_friend_rabbit.png');
+        this.load.image('constellation_friend_owl', 'assets/constellation_friend_owl.png');
+        this.load.image('constellation_friend_bear', 'assets/constellation_friend_bear.png');
+        this.load.image('constellation_friend_deer', 'assets/constellation_friend_deer.png');
+        this.load.image('constellation_friend_squirrel', 'assets/constellation_friend_squirrel.png');
         this.load.image('icon_fire', 'assets/icon_fire.png');
         this.load.image('icon_firefly', 'assets/icon_firefly.png');
 
@@ -107,6 +122,15 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('icon_gold_rainbow', 'assets/icon_gold_rainbow.png');
         this.load.image('icon_gold_mystery', 'assets/icon_gold_mystery.png');
         this.load.image('icon_gold_kingbug', 'assets/icon_gold_kingbug.png');
+        this.load.image('q_bush', 'assets/q_minesweeper/q_bush.png');
+        this.load.image('q_flag', 'assets/q_minesweeper/q_flag.png');
+        this.load.image('q_danger', 'assets/q_minesweeper/q_danger.png');
+        this.load.image('q_gold_golden', 'assets/q_minesweeper/q_gold_golden.png');
+        this.load.image('q_gold_rainbow', 'assets/q_minesweeper/q_gold_rainbow.png');
+        this.load.image('q_gold_mystery', 'assets/q_minesweeper/q_gold_mystery.png');
+        this.load.image('q_golden_bug', 'assets/q_minesweeper/q_golden_bug.png');
+        this.load.image('q_golden_bug_house', 'assets/q_minesweeper/q_golden_bug_house.png');
+        this.load.image('icon_sparkle', 'assets/sparkle_gold.png');
 
         this.load.image('fruit_generic', 'assets/fruit_generic.png');
         this.load.image('fruit_gold', 'assets/fruit_gold.png');
@@ -116,8 +140,6 @@ export default class PreloadScene extends Phaser.Scene {
         // ===== 草叢尋寶素材 =====
         this.load.image('tile_dirt', 'assets/tile_dirt.png');
         this.load.image('leaf_particle', 'assets/leaf_particle.png');
-        this.load.image('bug_green', 'assets/bug_green.png');
-        this.load.image('bug_red', 'assets/bug_red.png');
         this.load.image('sparkle_gold', 'assets/sparkle_gold.png');
 
         // ===== 形色棋 icon =====
@@ -201,6 +223,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('mm_bg_forest', 'assets/MemoryMatchGame/mm_bg_forest.png');
         // 音效
         this.load.audio('memory_bgm', 'assets/MemoryMatchGame/mm_bgm.mp3');
+        this.load.audio('firefly_rhythm_bgm', 'assets/FireflyRhythm/firefly_waltz.mp3');
 
         this.load.audio('mm_flip', 'assets/MemoryMatchGame/mm_flip.mp3');
         this.load.audio('mm_match', 'assets/MemoryMatchGame/mm_match.mp3');
@@ -233,6 +256,10 @@ export default class PreloadScene extends Phaser.Scene {
     }
 
     create() {
+        const packagedConfig = this.cache.json.get('game_balance_config');
+        if (packagedConfig) ConfigManager.setBaseConfig(packagedConfig);
+        ConfigManager.applyToRegistry(this.registry);
+
         if (!this.registry.has('hearts')) {
             this.registry.set('hearts', 3);
         }
@@ -266,6 +293,18 @@ export default class PreloadScene extends Phaser.Scene {
 
         if (!this.registry.has('owned_collectibles')) {
             this.registry.set('owned_collectibles', []);
+        }
+
+        if (!this.registry.has('gold_grass_encyclopedia')) {
+            this.registry.set('gold_grass_encyclopedia', []);
+        }
+
+        if (!this.registry.has('achievements')) {
+            this.registry.set('achievements', []);
+        }
+
+        if (!this.registry.has('tutorial_flags')) {
+            this.registry.set('tutorial_flags', {});
         }
 
         if (!this.registry.has('placed_decorations')) {

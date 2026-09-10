@@ -1,6 +1,7 @@
 // src/systems/StageManager.js
 
 import SaveSystem from './SaveSystem.js';
+import ConfigManager from './ConfigManager.js';
 import { getStageData, STAGE_DATA } from '../data/StageData.js';
 import { DEFAULT_STAGE_PROGRESS, getItemEffect } from '../data/GameData.js';
 
@@ -76,9 +77,15 @@ export default class StageManager {
         return getItemEffect(equippedFullset, 'noHeartCost') > 0;
     }
 
+    static hasUnlockAllStages() {
+        return ConfigManager.get('worldMap.unlockAllStages', false) === true;
+    }
+
     static syncUnlockState(registry, stageId) {
         const stageData = getStageData(stageId);
         if (!stageData) return false;
+
+        if (this.hasUnlockAllStages()) return true;
 
         let stageProgress = registry.get('stage_progress') || {};
         const rep = registry.get('reputation') || 0;
@@ -135,11 +142,12 @@ export default class StageManager {
 
         const ignoreReputationLock = this.hasIgnoreReputationLock(registry);
         const noHeartCost = this.hasNoHeartCost(registry);
+        const unlockAllStages = this.hasUnlockAllStages();
 
         const rep = registry.get('reputation') || 0;
         const requiredRep = stageData.unlockReputation || 0;
 
-        if (!ignoreReputationLock && rep < requiredRep) {
+        if (!unlockAllStages && !ignoreReputationLock && rep < requiredRep) {
             return {
                 ok: false,
                 reason: 'locked',
@@ -194,6 +202,14 @@ export default class StageManager {
         const stageData = getStageData(stageId);
         if (!stageData) {
             console.warn('❌ 找不到關卡資料', stageId);
+            return false;
+        }
+
+        const availableScenes = scene.scene?.manager?.keys || {};
+        if (!availableScenes[stageData.scene]) {
+            const message = `${stageData.name}還在準備中，之後會開放體驗！`;
+            if (scene.showMessage) scene.showMessage(message);
+            else if (typeof alert === 'function') alert(message);
             return false;
         }
 

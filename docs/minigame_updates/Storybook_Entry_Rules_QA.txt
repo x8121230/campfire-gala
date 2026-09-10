@@ -1,0 +1,60 @@
+✔ default equipment sets exactly attack 1, defense 1, range 5 (3.96753ms)
+✔ armor changes incoming damage and swap does not refill resources or cooldowns (0.747203ms)
+✔ hurt grace prevents stacked hits, low attacks still deal one, defeat keeps progress (0.593209ms)
+✔ wand respects range, interval, zero MP and removed weapon (2.954471ms)
+✔ honey only spends on valid casts, roots and pauses a pending attack (3.285187ms)
+✔ skills use MP and unlocked loadouts, swaps do not reset skill cooldown (0.341904ms)
+✔ dandelion remains free, reveals hidden pads and cannot cross unsupported water (0.780308ms)
+✔ walkable route connects both shores only after revealing pads; every step can be traversed (13.13399ms)
+✔ single task slot and sequential offers, contextual collection cannot occur out of quest (0.858637ms)
+✔ moon chain grants skills, preserves purification and opens a traversable ice shortcut (1.393292ms)
+✔ forest chain honors task-only clean and saves completed collectors (0.805666ms)
+✔ legacy B migration preserves prior progress and records without touching source (0.574247ms)
+✔ enemy telegraphs precede damage; basics cannot overlap a special action (0.961788ms)
+✔ angry animals never spawn on unsupported water and every type has complete stats (0.414101ms)
+✔ duck escort pauses when far, resumes without teleport and reaches home (11.405335ms)
+✔ gold acorn event coexists with one main task and ends after 30 seconds (40.273887ms)
+pilot 98731 {
+  status: 'won',
+  time: 443,
+  hp: 8,
+  score: 37550,
+  stats: { cleared: 207, rescued: 7, hits: 0, upgrades: 9, bombs: 1 },
+  upgrades: [ 2, 2, 0, 2, 2, 3 ]
+}
+pilot 12 {
+  status: 'won',
+  time: 443,
+  hp: 8,
+  score: 36975,
+  stats: { cleared: 211, rescued: 7, hits: 1, upgrades: 9, bombs: 1 },
+  upgrades: [ 2, 2, 0, 2, 2, 3 ]
+}
+pilot 431 {
+  status: 'won',
+  time: 443,
+  hp: 8,
+  score: 36025,
+  stats: { cleared: 210, rescued: 5, hits: 0, upgrades: 9, bombs: 1 },
+  upgrades: [ 2, 2, 0, 2, 2, 3 ]
+}
+✔ three touch owners: movement, shooting, upgrade; cancel releases all (2.334989ms)
+✔ energy cycles all six slots; purchases reset cursor; weapon switching preserves upgrades (0.821297ms)
+✔ full shield does not spend selection; refill after damage; hit invulnerability (0.461594ms)
+✔ one-shot actions survive high refresh frames and do not repeat while held (7.548271ms)
+✔ pause freezes simulation and all cooldowns; movement is bounded and diagonal normalized (19.224417ms)
+✔ swept hit catches fast shots, laser hits two enemies and terrain blocks it (3.942321ms)
+✔ ambush warns before arrival; stage retry restores stage equipment and health (2.182663ms)
+✔ boss has three phases and beam telegraph; starburst clears hostile bullets (3.632506ms)
+✔ normal pilots can complete full stage and boss using only ordinary controls (2202.77954ms)
+✔ merged catalog keeps 23 unique games and one storybook entry (2.265822ms)
+✔ all merged catalog scene keys are registered in main (1.798082ms)
+✔ old scene key delegates to storybook and no active 3D switch remains (1.257121ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2656.238602

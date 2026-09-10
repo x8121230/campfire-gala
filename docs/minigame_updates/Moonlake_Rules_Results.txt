@@ -1,0 +1,46 @@
+✔ default equipment sets exactly attack 1, defense 1, range 5 (4.702451ms)
+✔ armor changes incoming damage and swap does not refill resources or cooldowns (0.744669ms)
+✔ hurt grace prevents stacked hits, low attacks still deal one, defeat keeps progress (0.686338ms)
+✔ wand respects range, interval, zero MP and removed weapon (3.079991ms)
+✔ honey only spends on valid casts, roots and pauses a pending attack (7.185489ms)
+✔ skills use MP and unlocked loadouts, swaps do not reset skill cooldown (0.364577ms)
+✔ dandelion remains free, reveals hidden pads and cannot cross unsupported water (1.516345ms)
+✔ walkable route connects both shores only after revealing pads; every step can be traversed (17.809956ms)
+✔ single task slot and sequential offers, contextual collection cannot occur out of quest (1.503872ms)
+✔ moon chain grants skills, preserves purification and opens a traversable ice shortcut (3.067226ms)
+✔ forest chain honors task-only clean and saves completed collectors (1.025093ms)
+✔ legacy B migration preserves prior progress and records without touching source (0.601198ms)
+✔ enemy telegraphs precede damage; basics cannot overlap a special action (0.733837ms)
+✔ angry animals never spawn on unsupported water and every type has complete stats (1.317206ms)
+✔ duck escort pauses when far, resumes without teleport and reaches home (28.003251ms)
+✔ gold acorn event coexists with one main task and ends after 30 seconds (79.743493ms)
+✔ separate save key; same initial enemies and spell balance (7.260319ms)
+✔ apples collect by proximity after accepting, only once (48.989638ms)
+✔ escort pace caps straight and diagonal motion equally (1.252843ms)
+✔ musical mushrooms sound once per approach and can rearm (2.56507ms)
+✔ guidance follows acceptance, escort and automatic quest turn-in (1.688736ms)
+✔ reset creates fresh paper game without changing another journey (0.927737ms)
+✔ true elevation has continuous bridge and ramp; river and cliffs block movement (2.841023ms)
+✔ camera-relative movement, normalized diagonals, long-frame clamp (1.525666ms)
+✔ quest cannot be advanced remotely or out of order (0.625443ms)
+✔ full chapter using ordinary movement across bridge and elevated ramp, retry puzzle and shortcut (15.008493ms)
+✔ save schema is bounded, repeat collectibles idempotent, partial progress survives reload (0.478108ms)
+✔ main quest is completable by walking: owl, eight animals, five apples, owl (310.490587ms)
+✔ bubble needs quest, range and cooldown, tracks target, awards once (4.969304ms)
+✔ honey respects range, solid landing and three second root (4.986092ms)
+✔ dash cannot cross pond, map boundary or tree trunk (3.286542ms)
+✔ elephant cleans only front cone and has cooldown (0.39226ms)
+✔ safe village is not invaded; recovery preserves progress (13.086255ms)
+✔ duck escort can finish by following the south road after calming animals (29.989564ms)
+✔ acorn event has falling window, completes once and can restart (32.725009ms)
+✔ untrusted save values are bounded and legacy save never migrates (0.698374ms)
+✔ NPC approach triggers once, requires leaving the wider ring to rearm (0.891685ms)
+✔ all four NPC types support proximity dialogue; objective turn-in is automatic (0.387798ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 781.427625

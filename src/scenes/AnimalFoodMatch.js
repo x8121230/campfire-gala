@@ -1,516 +1,541 @@
+import AudioSystem from '../systems/AudioSystem.js';
+import SaveSystem from '../systems/SaveSystem.js';
+import StageManager from '../systems/StageManager.js';
+import {
+    ANIMAL_FOOD_DB as ANIMAL_DB,
+    KIDS_ANIMAL_ROUND_COUNT as ROUND_COUNT,
+    calculateAnimalFoodAccuracy,
+    calculateAnimalFoodScore,
+    getKidsChoiceCount
+} from '../data/AnimalFoodMatchData.js';
+
+const FONT = 'Microsoft JhengHei, Arial';
+
 export default class AnimalFoodMatch extends Phaser.Scene {
     constructor() {
         super('AnimalFoodMatch');
     }
 
+    init(data = {}) {
+        this.stageId = data.stageId || 'animals_01';
+        this.returnScene = data.returnScene || 'WorldMap';
+        this.mapID = data.mapID || data.mapId || '01';
+        this.gameMode = data.mode || 'kids';
+        this.testMode = data.testMode === true;
+    }
+
     create() {
-        this.sound.stopAll();
+        this.rounds = Phaser.Utils.Array.Shuffle([...ANIMAL_DB]).slice(0, ROUND_COUNT);
+        this.roundIndex = 0;
+        this.wrongCount = 0;
+        this.hintsUsed = 0;
+        this.combo = 0;
+        this.bestCombo = 0;
+        this.firstTry = true;
+        this.inputLocked = false;
+        this.finished = false;
+        this.startedAt = this.time.now;
+        this.choiceObjects = [];
+        this.discoveredThisRun = [];
 
-        let bgm = this.sound.get('afm_bgm');
+        this.createBackground();
+        this.createHud();
+        this.createPlayArea();
+        this.startRound(0);
 
-        if (!bgm) {
-            bgm = this.sound.add('afm_bgm', {
-                loop: true,
-                volume: 0.4
-            });
-        }
-
-        if (!bgm.isPlaying) {
-            bgm.play();
-        }
-
-        this.afmBgm = bgm;
-
-        this.revealed = false;
-        this.score = 0;
-        this.isRevealing = false;
-        this.selectedChoice = null;
-
-        // =========================
-        // 背景
-        // =========================
-        this.add.image(640, 360, 'forest_match_bg')
-            .setDisplaySize(1280, 720);
-
-        this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.12);
-
-        // =========================
-        // 題庫
-        // =========================
-        this.animalDB = [
-        { key: 'brown_bear', body: 'afm_brown_bear_body', item: 'afm_brown_bear_item' },
-        { key: 'cat', body: 'afm_cat_body', item: 'afm_cat_item' },
-        { key: 'dolphin', body: 'afm_dolphin_body', item: 'afm_dolphin_item' },
-        { key: 'hedgehog', body: 'afm_hedgehog_body', item: 'afm_hedgehog_item' },
-        { key: 'panda', body: 'afm_panda_body', item: 'afm_panda_item' },
-        { key: 'rabbit', body: 'afm_rabbit_body', item: 'afm_rabbit_item' },
-        { key: 'monkey', body: 'afm_monkey_body', item: 'afm_monkey_item' },
-        { key: 'mouse', body: 'afm_mouse_body', item: 'afm_mouse_item' },
-        { key: 'owl', body: 'afm_owl_body', item: 'afm_owl_item' },
-        { key: 'squirrel', body: 'afm_squirrel_body', item: 'afm_squirrel_item' },
-        { key: 'tiger', body: 'afm_tiger_body', item: 'afm_tiger_item' },
-        { key: 'deer', body: 'afm_deer_body', item: 'afm_deer_item' },
-
-        { key: 'seahorse', body: 'afm_seahorse_body', item: 'afm_seahorse_item' },
-        { key: 'butterfly', body: 'afm_butterfly_body', item: 'afm_butterfly_item' }
-    ];
-
-    this.itemLabelMap = {
-        afm_brown_bear_item: '蜂蜜',
-        afm_cat_item: '魚',
-        afm_dolphin_item: '沙丁魚',
-        afm_hedgehog_item: '蘋果',
-        afm_panda_item: '竹子',
-        afm_rabbit_item: '紅蘿蔔',
-        afm_monkey_item: '香蕉',
-        afm_mouse_item: '起司',
-        afm_owl_item: '野莓',
-        afm_squirrel_item: '橡果',
-        afm_tiger_item: '肉',
-        afm_deer_item: '藍莓',
-
-        afm_seahorse_item: '浮游生物',
-        afm_butterfly_item: '花蜜'
-    };
-
-        // 抽 6 題
-        const shuffled = Phaser.Utils.Array.Shuffle([...this.animalDB]);
-        this.questions = shuffled.slice(0, 6);
-
-        // 答案池（6 正解 + 1 干擾 = 7）
-        const correct = this.questions.map(q => q.item);
-
-        const distractors = this.animalDB
-            .filter(a => !this.questions.includes(a))
-            .map(a => a.item);
-
-        Phaser.Utils.Array.Shuffle(distractors);
-
-        this.choicePool = Phaser.Utils.Array.Shuffle([
-            ...correct,
-            distractors[0]
-        ]);
-
-        this.createTitle();
-        this.createLeftPanel();
-        this.createRightPanel();
-        this.createQuestionSlots();
-        this.createChoices();
-        this.refreshInfo();
+        if (this.cache.audio.exists('afm_bgm')) AudioSystem.playBgm(this, 'afm_bgm', 0.32);
+        this.cameras.main.fadeIn(250, 56, 28, 12);
+        this.events.once('shutdown', () => AudioSystem.stopBgm(this));
+        this.events.once('destroy', () => AudioSystem.stopBgm(this));
     }
 
-    createTitle() {
-        this.add.text(80, 50, '動物吃什麼？', {
-            fontSize: '26px',
-            color: '#ffffff',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 5
-        });
+    createBackground() {
+        this.add.image(640, 360, 'forest_match_bg').setDisplaySize(1280, 720);
+        this.add.rectangle(640, 360, 1280, 720, 0x2a160d, 0.16);
+        this.add.rectangle(640, 42, 1280, 84, 0x294b31, 0.92);
+        this.add.rectangle(640, 687, 1280, 66, 0x173921, 0.84);
 
-        const backBtn = this.add.rectangle(92, 96, 120, 42, 0x6b4a2f, 0.95)
-            .setStrokeStyle(2, 0xffffff, 0.25)
-            .setInteractive({ useHandCursor: true });
-
-        this.add.text(92, 96, '← 返回', {
-            fontSize: '20px',
-            color: '#ffffff',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
-
-        backBtn.on('pointerdown', () => {
-            this.scene.start('MiniGameHub');
-        });
-    }
-
-    createLeftPanel() {
-        const x = 130;
-
-        this.modeText = this.add.text(50, 260, '', {
-            fontSize: '20px',
-            color: '#ffffff',
-            stroke: '#000000',
-            strokeThickness: 3
-        });
-
-        this.progressText = this.add.text(50, 300, '', {
-            fontSize: '20px',
-            color: '#ffffff',
-            stroke: '#000000',
-            strokeThickness: 3
-        });
-
-        this.scoreText = this.add.text(50, 340, '', {
-            fontSize: '20px',
-            color: '#ffffff',
-            stroke: '#000000',
-            strokeThickness: 3
-        });
-
-        this.revealBtn = this.add.rectangle(x, 500, 150, 60, 0x7fb069)
-            .setInteractive({ useHandCursor: true });
-
-        this.add.text(x, 500, '揭曉答案', {
-            fontSize: '22px',
-            color: '#ffffff',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
-
-        this.revealBtn.on('pointerdown', () => this.reveal());
-
-        const restartBtn = this.add.rectangle(x, 575, 150, 56, 0x7a8fa8)
-            .setInteractive({ useHandCursor: true });
-
-        this.add.text(x, 575, '重新開始', {
-            fontSize: '20px',
-            color: '#ffffff',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
-
-        restartBtn.on('pointerdown', () => this.scene.restart());
-    }
-
-    createRightPanel() {
-        this.add.text(1080, 200, '紙娃娃區', {
-            fontSize: '24px',
-            color: '#ffffff',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 4
-        });
-    }
-
-    // =========================
-    // 題目區（動物）
-    // =========================
-    createQuestionSlots() {
-        this.slots = [];
-
-        const startX = 450;
-        const startY = 260;
-        const gapX = 200;
-        const gapY = 160;
-
-        this.questions.forEach((q, i) => {
-            const col = i % 3;
-            const row = Math.floor(i / 3);
-
-            const x = startX + col * gapX;
-            const y = startY + row * gapY;
-
-            // 題目框比例微調：略高一些
-            const bg = this.add.rectangle(x, y, 126, 132, 0xffffff, 0.08)
-                .setStrokeStyle(4, 0xffffff);
-
-            const animal = this.add.image(x, y , q.body)
-                .setDisplaySize(104, 104);
-
-            const divider = this.add.rectangle(x, y + 18, 92, 2, 0xffffff, 0.20);
-
-            this.slots.push({
-                x,
-                y,
-                animalKey: q.key,
-                correct: q.item,
-                current: null,
-                bg,
-                animal,
-                divider
-            });
-        });
-    }
-
-    // =========================
-    // 答案區（7 個）
-    // =========================
-    createChoices() {
-        this.choices = [];
-
-        // 下方食物區底板（加深、提高辨識度）
-
-        const startX = 640 - 3 * 110;
-        const y = 600;
-
-        this.choicePool.forEach((key, i) => {
-            const x = startX + i * 110;
-
-            const bg = this.add.rectangle(x, y, 104, 112, 0xf7edd8, 0.9)
-                .setStrokeStyle(2, 0xffffff, 0.5);
-
-            const img = this.add.image(x, y - 8, key)
-                .setDisplaySize(90, 90)
-                .setInteractive({ draggable: true, useHandCursor: true });
-
-            const label = this.add.text(x, y + 42, this.itemLabelMap[key] || '', {
-                fontSize: '20px',
-                color: '#3d2c1c',
-                fontStyle: 'bold',
-                stroke: '#ffffff',
-                strokeThickness: 4
-            }).setOrigin(0.5);
-
-            const breatheTween = this.tweens.add({
-                targets: bg,
-                alpha: { from: 0.72, to: 1 },
+        for (let i = 0; i < 18; i += 1) {
+            const glow = this.add.circle(
+                Phaser.Math.Between(20, 1260),
+                Phaser.Math.Between(90, 650),
+                Phaser.Math.Between(2, 5),
+                0xffef8a,
+                Phaser.Math.FloatBetween(0.18, 0.55)
+            );
+            this.tweens.add({
+                targets: glow,
+                alpha: 0.06,
+                duration: Phaser.Math.Between(800, 1700),
                 yoyo: true,
                 repeat: -1,
-                duration: 900,
-                delay: i * 80
+                delay: Phaser.Math.Between(0, 800)
+            });
+        }
+    }
+
+    createHud() {
+        const returnLabel = this.returnScene === 'MiniGameHub' ? '← 樂園' : '← 地圖';
+        this.makeButton(86, 42, 136, 54, returnLabel, 0xffe7a0, 0x86652a, () => {
+            this.scene.start(this.returnScene, { mapID: this.mapID });
+        }, 22);
+
+        this.add.text(640, 31, '🌲 森林歷險①', {
+            fontFamily: FONT,
+            fontSize: '32px',
+            fontStyle: 'bold',
+            color: '#fff4b5',
+            stroke: '#315238',
+            strokeThickness: 5
+        }).setOrigin(0.5);
+
+        this.add.text(640, 61, '動物點心時間', {
+            fontFamily: FONT,
+            fontSize: '18px',
+            color: '#dff4dc'
+        }).setOrigin(0.5);
+
+        this.progressText = this.add.text(1070, 42, '', {
+            fontFamily: FONT,
+            fontSize: '21px',
+            fontStyle: 'bold',
+            color: '#ffffff'
+        }).setOrigin(0.5);
+    }
+
+    createPlayArea() {
+        this.add.rectangle(360, 376, 610, 530, 0xfffbeb, 0.95)
+            .setStrokeStyle(7, 0x80ad68, 1);
+        this.add.rectangle(955, 376, 510, 530, 0xfff8e3, 0.96)
+            .setStrokeStyle(7, 0xe9bd58, 1);
+
+        this.add.text(360, 132, '今天是哪位動物朋友？', {
+            fontFamily: FONT,
+            fontSize: '24px',
+            fontStyle: 'bold',
+            color: '#426b45'
+        }).setOrigin(0.5);
+
+        this.animalGlow = this.add.circle(360, 335, 148, 0xffdc76, 0.16);
+        this.animalImage = this.add.image(360, 335, ANIMAL_DB[0].body).setDisplaySize(300, 300);
+        this.animalNameText = this.add.text(360, 510, '', {
+            fontFamily: FONT,
+            fontSize: '31px',
+            fontStyle: 'bold',
+            color: '#5d422b'
+        }).setOrigin(0.5);
+        this.speechText = this.add.text(360, 558, '', {
+            fontFamily: FONT,
+            fontSize: '22px',
+            fontStyle: 'bold',
+            color: '#6d7952',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        this.add.text(955, 130, '請選一份點心', {
+            fontFamily: FONT,
+            fontSize: '28px',
+            fontStyle: 'bold',
+            color: '#79552c'
+        }).setOrigin(0.5);
+
+        this.feedbackText = this.add.text(955, 540, '', {
+            fontFamily: FONT,
+            fontSize: '24px',
+            fontStyle: 'bold',
+            color: '#4f7d4f',
+            align: 'center',
+            wordWrap: { width: 440 }
+        }).setOrigin(0.5);
+
+        this.comboText = this.add.text(360, 620, '', {
+            fontFamily: FONT,
+            fontSize: '21px',
+            fontStyle: 'bold',
+            color: '#ffe98e',
+            stroke: '#315238',
+            strokeThickness: 4
+        }).setOrigin(0.5);
+
+        this.hintButton = this.makeButton(955, 610, 260, 58, '✨ 小精靈提示', 0x9b78d1, 0x604091, () => {
+            this.showHint(true);
+        }, 21);
+
+        this.add.text(640, 687, '可以直接點食物，也可以拖曳給動物・答錯不會失敗', {
+            fontFamily: FONT,
+            fontSize: '18px',
+            color: '#efffe9'
+        }).setOrigin(0.5);
+    }
+
+    startRound(index) {
+        if (index >= this.rounds.length) {
+            this.finishGame();
+            return;
+        }
+
+        this.clearChoices();
+        this.roundIndex = index;
+        this.currentAnimal = this.rounds[index];
+        this.firstTry = true;
+        this.hintUsedThisRound = false;
+        this.inputLocked = false;
+        this.feedbackText.setText('哪一個才是牠喜歡的食物呢？').setColor('#6d7952');
+        this.hintButton.setVisible(true);
+        this.progressText.setText(`第 ${index + 1} / ${this.rounds.length} 位朋友`);
+        this.comboText.setText(this.combo > 1 ? `✨ 連續答對 ${this.combo} 次` : '');
+
+        this.animalImage.setTexture(this.currentAnimal.body).setDisplaySize(300, 300).setAlpha(0).setScale(0.72);
+        this.animalNameText.setText(this.currentAnimal.name);
+        this.speechText.setText('肚子咕嚕咕嚕～');
+        this.animalGlow.setFillStyle(this.currentAnimal.color, 0.2);
+        this.tweens.add({ targets: this.animalImage, alpha: 1, scale: 1, duration: 330, ease: 'Back.Out' });
+        this.tweens.add({ targets: this.animalGlow, scale: 1.1, alpha: 0.08, duration: 900, yoyo: true, repeat: -1 });
+
+        const choiceCount = getKidsChoiceCount(index);
+        const distractors = Phaser.Utils.Array.Shuffle(
+            ANIMAL_DB.filter((animal) => animal.id !== this.currentAnimal.id)
+        ).slice(0, choiceCount - 1);
+        const options = Phaser.Utils.Array.Shuffle([this.currentAnimal, ...distractors]);
+        this.createChoices(options);
+    }
+
+    createChoices(options) {
+        const positions = options.length === 2
+            ? [{ x: 830, y: 320 }, { x: 1080, y: 320 }]
+            : [{ x: 790, y: 320 }, { x: 955, y: 320 }, { x: 1120, y: 320 }];
+
+        options.forEach((animal, index) => {
+            const position = positions[index];
+            const width = options.length === 2 ? 190 : 145;
+            const imageSize = options.length === 2 ? 132 : 112;
+            const bg = this.add.rectangle(0, 0, width, 190, 0xffffff, 0.95)
+                .setStrokeStyle(5, 0xe1b35a, 1);
+            const image = this.add.image(0, -18, animal.food).setDisplaySize(imageSize, imageSize);
+            const label = this.add.text(0, 70, animal.foodName, {
+                fontFamily: FONT,
+                fontSize: options.length === 2 ? '23px' : '20px',
+                fontStyle: 'bold',
+                color: '#654527'
+            }).setOrigin(0.5);
+            const choice = this.add.container(position.x, position.y, [bg, image, label])
+                .setSize(width, 190)
+                .setInteractive({ useHandCursor: true });
+            choice.setData('animal', animal);
+            choice.setData('homeX', position.x);
+            choice.setData('homeY', position.y);
+            choice.setData('dragged', false);
+
+            choice.on('pointerover', () => {
+                if (!this.inputLocked) choice.setScale(1.05);
+            });
+            choice.on('pointerout', () => {
+                if (!this.inputLocked && !choice.getData('dragged')) choice.setScale(1);
+            });
+            choice.on('pointerdown', () => {
+                if (this.inputLocked) return;
+                this.tweens.killTweensOf(choice);
+                choice.setPosition(choice.getData('homeX'), choice.getData('homeY'));
+                choice.setData('dragged', false);
+            });
+            choice.on('dragstart', () => {
+                if (this.inputLocked) return;
+                choice.setData('dragged', true);
+                choice.setScale(1.08);
+                this.children.bringToTop(choice);
+            });
+            choice.on('drag', (pointer, dragX, dragY) => {
+                if (this.inputLocked) return;
+                choice.x = dragX;
+                choice.y = dragY;
+            });
+            choice.on('dragend', () => {
+                if (this.inputLocked) return;
+                const delivered = Phaser.Math.Distance.Between(choice.x, choice.y, this.animalImage.x, this.animalImage.y) < 235;
+                if (delivered) this.chooseFood(choice);
+                else this.returnChoice(choice);
+            });
+            choice.on('pointerup', () => {
+                if (this.inputLocked || choice.getData('dragged')) return;
+                this.chooseFood(choice);
             });
 
-            const obj = {
-                key,
-                img,
-                bg,
-                label,
-                startX: x,
-                startY: y,
-                slot: null,
-                isSelected: false,
-                baseSize: 90,
-                selectedSize: 99,
-                breatheTween
-            };
+            this.input.setDraggable(choice);
+            this.choiceObjects.push(choice);
+            this.tweens.add({ targets: choice, y: position.y - 7, duration: 720, yoyo: true, repeat: -1, delay: index * 100 });
+        });
+    }
 
-            this.input.setDraggable(img);
+    chooseFood(choice) {
+        if (this.inputLocked) return;
+        const selected = choice.getData('animal');
+        if (selected.food === this.currentAnimal.food) this.handleCorrect(choice);
+        else this.handleWrong(choice);
+    }
 
-            img.on('pointerdown', () => {
-                if (this.revealed || this.isRevealing) return;
+    handleCorrect(choice) {
+        this.inputLocked = true;
+        if (this.firstTry) {
+            this.combo += 1;
+            this.bestCombo = Math.max(this.bestCombo, this.combo);
+        }
+        if (!this.discoveredThisRun.includes(this.currentAnimal.id)) this.discoveredThisRun.push(this.currentAnimal.id);
 
-                this.choices.forEach(choice => {
-                    if (choice !== obj) {
-                        choice.isSelected = false;
-                        choice.img.setDisplaySize(choice.baseSize, choice.baseSize);
-                        choice.bg.setSize(104, 112);
-                        choice.bg.setStrokeStyle(2, 0xffffff, 0.5);
+        this.feedbackText.setText(`答對了！${this.currentAnimal.name}最喜歡${this.currentAnimal.foodName}！`).setColor('#3f8a47');
+        this.speechText.setText('好好吃，謝謝你！');
+        this.hintButton.setVisible(false);
+        this.playSfx('mm_match', 0.52);
+
+        this.tweens.killTweensOf(choice);
+        this.tweens.add({
+            targets: choice,
+            x: this.animalImage.x + 95,
+            y: this.animalImage.y + 55,
+            scale: 0.62,
+            duration: 360,
+            ease: 'Back.In'
+        });
+        this.tweens.add({ targets: this.animalImage, y: 319, duration: 160, yoyo: true, repeat: 2, ease: 'Sine.Out' });
+        this.spawnCelebration(360, 310, this.currentAnimal.color);
+        this.time.delayedCall(1250, () => this.startRound(this.roundIndex + 1));
+    }
+
+    handleWrong(choice) {
+        this.firstTry = false;
+        this.wrongCount += 1;
+        this.combo = 0;
+        choice.disableInteractive();
+        this.comboText.setText('');
+        this.feedbackText.setText('差一點點～換一份點心試試看！').setColor('#b36a51');
+        this.speechText.setText('這個不是我的點心唷～');
+        this.playSfx('mm_wrong', 0.35);
+
+        this.tweens.killTweensOf(choice);
+        const homeX = choice.getData('homeX');
+        const homeY = choice.getData('homeY');
+        this.tweens.add({
+            targets: choice,
+            x: homeX,
+            y: homeY,
+            scale: 1,
+            duration: 180,
+            ease: 'Back.Out',
+            onComplete: () => {
+                this.tweens.add({
+                    targets: choice,
+                    x: homeX + 8,
+                    angle: 5,
+                    duration: 60,
+                    yoyo: true,
+                    repeat: 3,
+                    onComplete: () => {
+                        choice.setPosition(homeX, homeY).setAngle(0).setScale(1).setAlpha(0.45);
                     }
                 });
-
-                obj.isSelected = true;
-                obj.img.setDisplaySize(obj.selectedSize, obj.selectedSize);
-                obj.bg.setSize(112, 120);
-                obj.bg.setStrokeStyle(3, 0xffe08a, 0.95);
-            });
-
-            img.on('dragstart', () => {
-                if (this.revealed || this.isRevealing) return;
-
-                if (obj.breatheTween) {
-                    obj.breatheTween.pause();
-                }
-
-                obj.bg.setVisible(false);
-                obj.label.setVisible(false);
-                this.children.bringToTop(obj.img);
-            });
-
-            img.on('drag', (pointer, dragX, dragY) => {
-                if (this.revealed || this.isRevealing) return;
-
-                img.x = dragX;
-                img.y = dragY;
-            });
-
-            img.on('dragend', () => {
-                if (this.revealed || this.isRevealing) return;
-                this.handleDrop(obj);
-            });
-
-            this.choices.push(obj);
+            }
         });
     }
 
-    handleDrop(choice) {
-        let placed = false;
-
-        this.slots.forEach(slot => {
-            const d = Phaser.Math.Distance.Between(
-                choice.img.x,
-                choice.img.y,
-                slot.x,
-                slot.y
-            );
-
-            if (d < 82 && !placed) {
-                // 如果這個答案原本已經在別格，先清掉舊格
-                if (choice.slot && choice.slot !== slot) {
-                    choice.slot.current = null;
-                }
-
-                // 如果目標格已經有其他答案，退回原位
-                if (slot.current && slot.current !== choice) {
-                    this.reset(slot.current);
-                }
-
-                slot.current = choice;
-                choice.slot = slot;
-                choice.isSelected = false;
-
-                if (choice.breatheTween) {
-                    choice.breatheTween.pause();
-                }
-
-                choice.img.setDisplaySize(choice.baseSize, choice.baseSize);
-
-                this.tweens.add({
-                    targets: choice.img,
-                    x: slot.x + 50,
-                    y: slot.y - 50,
-                    duration: 150,
-                    ease: 'Quad.Out'
-                });
-
-                placed = true;
-
-                this.tweens.add({
-                    targets: slot.bg,
-                    alpha: 0.18,
-                    yoyo: true,
-                    duration: 150
-                });
-
-                placed = true;
-            }
-        });
-
-        if (!placed) {
-            if (choice.slot) {
-                choice.slot.current = null;
-                choice.slot = null;
-            }
-            this.reset(choice);
-        }
-
-        this.refreshInfo();
-    }
-
-    reset(choice) {
-        choice.slot = null;
-        choice.isSelected = false;
-
-        choice.img.setDisplaySize(choice.baseSize, choice.baseSize);
-        choice.bg.setSize(104, 112);
-        choice.bg.setStrokeStyle(2, 0xffffff, 0.5);
-        choice.bg.setVisible(true);
-        choice.label.setVisible(true);
-
-        if (choice.breatheTween) {
-            choice.breatheTween.resume();
-        }
-
+    returnChoice(choice) {
         this.tweens.add({
-            targets: choice.img,
-            x: choice.startX,
-            y: choice.startY - 8,
-            duration: 150,
+            targets: choice,
+            x: choice.getData('homeX'),
+            y: choice.getData('homeY'),
+            scale: 1,
+            duration: 180,
             ease: 'Back.Out'
         });
     }
 
-    // =========================
-    // 揭曉（逐格）
-    // =========================
-    reveal() {
-        if (this.revealed || this.isRevealing) return;
-
-        this.revealed = true;
-        this.isRevealing = true;
-        this.score = 0;
-
-        this.revealBtn.disableInteractive();
-
-        const slotsInOrder = [...this.slots].sort((a, b) => {
-            if (a.y === b.y) return a.x - b.x;
-            return a.y - b.y;
-        });
-
-        slotsInOrder.forEach((slot, index) => {
-            this.time.delayedCall(index * 220, () => {
-                this.playRevealForSlot(slot, index === slotsInOrder.length - 1);
-            });
-        });
-    }
-
-    playRevealForSlot(slot, isLast) {
-        const isCorrect = slot.current && slot.current.key === slot.correct;
-
-        // 不再翻動物圖，只做框與答案位的結果特效
+    showHint(manual = false) {
+        if (this.inputLocked) return;
+        if (manual && !this.hintUsedThisRound) {
+            this.hintUsedThisRound = true;
+            this.hintsUsed += 1;
+            this.firstTry = false;
+            this.combo = 0;
+            this.comboText.setText('');
+        }
+        const correctChoice = this.choiceObjects.find((choice) => choice.getData('animal').food === this.currentAnimal.food);
+        if (!correctChoice) return;
+        this.feedbackText.setText(`小精靈說：${this.currentAnimal.name}喜歡${this.currentAnimal.foodName}！`).setColor('#7956a6');
         this.tweens.add({
-            targets: slot.bg,
-            scaleX: 0.08,
-            duration: 100,
-            ease: 'Quad.In',
-            onComplete: () => {
-                if (isCorrect) {
-                    // 對：金框
-                    slot.bg.setStrokeStyle(5, 0xffd54a);
-                    this.score += 1;
-                } else {
-                    // 錯或未作答：灰框
-                    slot.bg.setStrokeStyle(4, 0x8f8f8f);
-                }
-
-                this.tweens.add({
-                    targets: slot.bg,
-                    scaleX: 1,
-                    duration: 120,
-                    ease: 'Quad.Out',
-                    onComplete: () => {
-                        if (isCorrect) {
-                            this.tweens.add({
-                                targets: slot.bg,
-                                alpha: 0.22,
-                                yoyo: true,
-                                duration: 180
-                            });
-                        } else {
-                            this.tweens.add({
-                                targets: slot.bg,
-                                x: slot.x + 4,
-                                yoyo: true,
-                                repeat: 2,
-                                duration: 45,
-                                onComplete: () => {
-                                    slot.bg.x = slot.x;
-                                }
-                            });
-                        }
-
-                        this.refreshInfo();
-
-                        if (isLast) {
-                            this.isRevealing = false;
-                            this.showResultSummary();
-                        }
-                    }
-                });
-            }
+            targets: correctChoice,
+            scale: 1.14,
+            alpha: 0.55,
+            duration: 260,
+            yoyo: true,
+            repeat: 3
         });
+        this.playSfx('click_sfx', 0.22);
     }
 
-    showResultSummary() {
-        const passedAll = this.score === this.slots.length;
-
-        this.add.rectangle(640, 120, 360, 64, 0x000000, 0.35)
-            .setStrokeStyle(2, 0xffffff, 0.35);
-
-        this.add.text(
-            640,
-            120,
-            passedAll ? '🎉 全部答對！' : `本次答對 ${this.score} / ${this.slots.length}`,
-            {
-                fontSize: '30px',
-                color: '#ffffff',
-                fontStyle: 'bold'
-            }
-        ).setOrigin(0.5);
+    spawnCelebration(x, y, color) {
+        for (let i = 0; i < 14; i += 1) {
+            const particle = i % 3 === 0
+                ? this.add.text(x, y, '★', { fontSize: '24px', color: '#fff3a4' }).setOrigin(0.5)
+                : this.add.circle(x, y, Phaser.Math.Between(4, 8), i % 2 ? color : 0xffda64, 1);
+            this.tweens.add({
+                targets: particle,
+                x: x + Phaser.Math.Between(-185, 185),
+                y: y + Phaser.Math.Between(-150, 80),
+                alpha: 0,
+                scale: 0.3,
+                duration: Phaser.Math.Between(650, 1050),
+                ease: 'Quad.Out',
+                onComplete: () => particle.destroy()
+            });
+        }
     }
 
-    refreshInfo() {
-        const filled = this.slots.filter(s => !!s.current).length;
+    clearChoices() {
+        this.choiceObjects.forEach((choice) => {
+            this.tweens.killTweensOf(choice);
+            choice.destroy();
+        });
+        this.choiceObjects = [];
+        this.tweens.killTweensOf(this.animalGlow);
+    }
 
-        this.modeText.setText(`題型：食物`);
-        this.progressText.setText(`已放置：${filled}/6`);
-        this.scoreText.setText(`分數：${this.score}`);
+    finishGame() {
+        if (this.finished) return;
+        this.finished = true;
+        this.inputLocked = true;
+        const elapsedSeconds = Math.max(1, Math.round((this.time.now - this.startedAt) / 1000));
+        const score = calculateAnimalFoodScore({ wrongCount: this.wrongCount, hintsUsed: this.hintsUsed });
+        const accuracy = calculateAnimalFoodAccuracy(ROUND_COUNT, this.wrongCount);
+        const saved = this.saveProgress({ score, accuracy, elapsedSeconds });
+        this.showResult({ score, accuracy, elapsedSeconds, saved });
+    }
+
+    saveProgress({ score, accuracy, elapsedSeconds }) {
+        const allStats = { ...(this.registry.get('minigame_stats') || {}) };
+        const oldStats = allStats.animals || {};
+        const oldKidsStats = oldStats.kids || oldStats;
+        const oldBook = Array.isArray(oldKidsStats.friendBook) ? oldKidsStats.friendBook : [];
+        const friendBook = [...new Set([...oldBook, ...this.discoveredThisRun])];
+        const fastestSeconds = Number(oldKidsStats.fastestSeconds || 0);
+        const kids = {
+            ...oldKidsStats,
+            playCount: Number(oldKidsStats.playCount || 0) + 1,
+            clearCount: Number(oldKidsStats.clearCount || 0) + 1,
+            bestScore: Math.max(Number(oldKidsStats.bestScore || 0), score),
+            lastScore: score,
+            bestAccuracy: Math.max(Number(oldKidsStats.bestAccuracy || 0), accuracy),
+            bestCombo: Math.max(Number(oldKidsStats.bestCombo || 0), this.bestCombo),
+            perfectClearCount: Number(oldKidsStats.perfectClearCount || 0) + (this.wrongCount === 0 && this.hintsUsed === 0 ? 1 : 0),
+            fastestSeconds: fastestSeconds === 0 ? elapsedSeconds : Math.min(fastestSeconds, elapsedSeconds),
+            friendBook
+        };
+        const stats = {
+            ...oldStats,
+            mode: 'kids',
+            kids,
+            challenge: oldStats.challenge || {},
+            playCount: kids.playCount,
+            clearCount: kids.clearCount,
+            bestScore: kids.bestScore,
+            lastScore: kids.lastScore,
+            bestAccuracy: kids.bestAccuracy,
+            bestCombo: kids.bestCombo,
+            friendBook: kids.friendBook
+        };
+        allStats.animals = stats;
+        this.registry.set('minigame_stats', allStats);
+        const stageResult = StageManager.applyStageResult(this.registry, this.stageId, score);
+        SaveSystem.saveFromRegistry(this.registry);
+        return { stats, kids, stageResult };
+    }
+
+    showResult({ score, accuracy, elapsedSeconds, saved }) {
+        this.clearChoices();
+        this.add.rectangle(640, 360, 1280, 720, 0x17331f, 0.82).setInteractive().setDepth(80);
+        this.add.rectangle(640, 360, 740, 560, 0xfffbeb, 1).setStrokeStyle(8, 0xe8bd59, 1).setDepth(81);
+        this.add.rectangle(640, 145, 640, 86, 0x78b868, 1).setStrokeStyle(4, 0x477b42, 1).setDepth(82);
+        this.add.text(640, 145, '🎉 動物朋友都吃飽了！', {
+            fontFamily: FONT,
+            fontSize: '34px',
+            fontStyle: 'bold',
+            color: '#ffffff',
+            stroke: '#477b42',
+            strokeThickness: 4
+        }).setOrigin(0.5).setDepth(83);
+
+        const stars = '★'.repeat(saved.stageResult.stars) + '☆'.repeat(3 - saved.stageResult.stars);
+        this.add.text(640, 225, `${stars}　${score} / 100 分`, {
+            fontFamily: FONT,
+            fontSize: '36px',
+            fontStyle: 'bold',
+            color: '#6a501e'
+        }).setOrigin(0.5).setDepth(83);
+
+        const shownAnimals = this.rounds.slice(0, ROUND_COUNT);
+        const startX = 640 - ((shownAnimals.length - 1) * 102) / 2;
+        shownAnimals.forEach((animal, index) => {
+            this.add.circle(startX + index * 102, 324, 42, animal.color, 0.2).setDepth(82);
+            this.add.image(startX + index * 102, 324, animal.body).setDisplaySize(82, 82).setDepth(83);
+        });
+
+        this.add.text(640, 425,
+            `答題正確率：${accuracy}%　　試錯：${this.wrongCount} 次\n` +
+            `最高連續答對：${this.bestCombo}　　完成時間：${elapsedSeconds} 秒\n` +
+            `📖 動物朋友圖鑑：${saved.kids.friendBook.length}/${ANIMAL_DB.length}　　歷史最高：${saved.kids.bestScore} 分`, {
+            fontFamily: FONT,
+            fontSize: '21px',
+            color: '#536454',
+            align: 'center',
+            lineSpacing: 10
+        }).setOrigin(0.5).setDepth(83);
+
+        const message = this.wrongCount === 0 && this.hintsUsed === 0
+            ? '全部一次答對，你是森林點心小博士！'
+            : '每位朋友都得到點心了，再玩一次會遇見不同動物！';
+        this.add.text(640, 505, message, {
+            fontFamily: FONT,
+            fontSize: '21px',
+            fontStyle: 'bold',
+            color: '#4d7b51'
+        }).setOrigin(0.5).setDepth(83);
+
+        this.makeButton(490, 590, 260, 68, '再玩一次', 0x82cf54, 0x4d842e, () => {
+            this.scene.restart({
+                stageId: this.stageId,
+                returnScene: this.returnScene,
+                mapID: this.mapID,
+                mode: 'kids',
+                testMode: this.testMode
+            });
+        }, 27).setDepth(83);
+        const returnText = this.returnScene === 'MiniGameHub' ? '回測試樂園' : '回到地圖';
+        this.makeButton(790, 590, 260, 68, returnText, 0xf3bd45, 0x98701d, () => {
+            this.scene.start(this.returnScene, { mapID: this.mapID });
+        }, 27).setDepth(83);
+        this.spawnCelebration(640, 250, 0x7dbd68);
+        this.playSfx('mm_win', 0.5);
+    }
+
+    makeButton(x, y, width, height, label, fill, stroke, onClick, fontSize = 24) {
+        const bg = this.add.rectangle(0, 0, width, height, fill, 1).setStrokeStyle(4, stroke, 1);
+        const text = this.add.text(0, 0, label, {
+            fontFamily: FONT,
+            fontSize: `${fontSize}px`,
+            fontStyle: 'bold',
+            color: '#ffffff',
+            stroke: '#4d432d',
+            strokeThickness: 3
+        }).setOrigin(0.5);
+        const button = this.add.container(x, y, [bg, text]).setSize(width, height).setInteractive({ useHandCursor: true });
+        button.on('pointerover', () => button.setScale(1.03));
+        button.on('pointerout', () => button.setScale(1));
+        button.on('pointerdown', () => button.setScale(0.97));
+        button.on('pointerup', () => {
+            button.setScale(1.03);
+            onClick?.();
+        });
+        return button;
+    }
+
+    playSfx(key, volume = 0.4) {
+        if (this.cache.audio.exists(key)) this.sound.play(key, { volume });
     }
 }

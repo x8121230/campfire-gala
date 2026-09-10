@@ -1,0 +1,21 @@
+{
+  "tests": 391,
+  "detective_rule_tests": 16,
+  "checks": {
+    "regression": "passed",
+    "detective_scene": "passed",
+    "layout": "passed",
+    "lake": "passed",
+    "settings": "passed",
+    "chests": "passed"
+  },
+  "earlier_unchanged_source_assets": 82,
+  "main_cases": 3,
+  "epilogue": 1,
+  "clues": 57,
+  "generated_assets": 4,
+  "layout_renders": 24,
+  "browser": "not run: browser archive download incomplete",
+  "real_mobile": "pending",
+  "packaging": "cumulative overlay; requires original complete game and existing v5.3 wardrobe"
+}

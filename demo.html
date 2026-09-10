@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>動物點心隊 · 幼童試玩 v0.1</title>
+  <style>html,body{margin:0;width:100%;height:100%;background:#254b3d;overflow:hidden}#game-container{width:100%;height:100%}canvas{display:block;touch-action:none}#error{color:#fff3ce;font:20px sans-serif;padding:30px;position:fixed;inset:0;background:#254b3d;z-index:9}#error[hidden]{display:none}</style>
+</head>
+<body>
+  <div id="game-container"></div><div id="error" hidden></div>
+  <script>if(location.protocol==='file:'){const e=document.getElementById('error');e.hidden=false;e.textContent='請透過本機伺服器開啟：在本資料夾執行 python -m http.server 8000，再開 http://localhost:8000/demo.html。不能直接雙擊 HTML。'}</script>
+  <script src="phaser.js"></script><script type="module" src="demo.js"></script>
+</body>
+</html>

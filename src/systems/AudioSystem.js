@@ -5,7 +5,11 @@ export default class AudioSystem {
         'forest_music',
         'lake_music',
         'campfire_music',
-        'collection_bgm'
+        'collection_bgm',
+        'bush_bgm',
+        'memory_bgm',
+        'firefly_rhythm_bgm',
+        'afm_bgm'
     ];
 
     static stopAllBgm(scene) {

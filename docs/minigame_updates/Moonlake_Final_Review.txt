@@ -1,0 +1,13 @@
+2026-09-10
+
+PASS: 38 rules tests (16 adventure, 22 prior storybook/3D rules).
+PASS: 27 browser checks recorded in Moonlake_Browser_QA.json.
+PASS: packaged storybook-play.html opens B modules and switches to preserved A 3D.
+PASS: hedgehog and duck mother proximity cues and correct portraits.
+PASS: dragging the honey skill previews a chosen location and spends MP only once.
+PASS: mobile journal scrolls with browser touch events while play controls keep exclusive gestures.
+PASS: late aiming changes retain all 16 adventure rules tests.
+
+Final screenshots are rendered by the real game modules with prepared playable states.
+Original full Phaser host was not available; physical phone multitouch/audio/difficulty remain unverified.
+All seven preserved 3D source hashes match v0.5.

@@ -32,7 +32,9 @@ export default class StageEntryPopup {
         const currentHearts = entryResult.currentHearts ?? (this.scene.registry.get('hearts') || 0);
 
         const bypassReputation = entryResult.bypassReputation === true;
+        const unlockAllStages = entryResult.unlockAllStages === true || stageData.unlockAllStages === true;
         const bypassHeart = entryResult.bypassHeart === true || entryResult.bypassHeartCost === true;
+        const isFreePlay = stageData.freePlay === true;
 
         this.isOpen = true;
 
@@ -94,7 +96,7 @@ export default class StageEntryPopup {
         const titleBg = this.scene.add.rectangle(
             panelX,
             panelY - 215,
-            300,
+            520,
             54,
             0xf7d794,
             1
@@ -217,7 +219,7 @@ export default class StageEntryPopup {
         const reqTitle = this.scene.add.text(
             panelX - 165,
             boxY - 43,
-            '進入條件',
+            isFreePlay ? (stageData.freePlayEntryTitle || '遊玩方式') : '進入條件',
             {
                 fontSize: '22px',
                 color: '#2c6e7f',
@@ -229,7 +231,7 @@ export default class StageEntryPopup {
         const currentTitle = this.scene.add.text(
             panelX + 165,
             boxY - 43,
-            '目前狀態',
+            isFreePlay ? (stageData.freePlayStatusTitle || '收集進度') : '目前狀態',
             {
                 fontSize: '22px',
                 color: '#9a5a2d',
@@ -239,40 +241,56 @@ export default class StageEntryPopup {
         ).setOrigin(0.5);
 
         // ===== 左側：進入條件 =====
-        const needRepText = bypassReputation
-            ? '聲望門檻：✨ 已被祝福忽略'
+        const needRepText = unlockAllStages
+            ? '目前模式：✨ 全關卡開放'
+            : bypassReputation
+                ? '聲望門檻：✨ 已被祝福忽略'
             : `聲望門檻：${requiredReputation}`;
 
         const needHeartText = bypassHeart
             ? '體力消耗：✨ 本次不消耗'
             : `體力消耗：${heartCost}`;
 
+        const leftContent = isFreePlay
+            ? (Array.isArray(stageData.freePlayEntryLines)
+                ? stageData.freePlayEntryLines.join('\n')
+                : `♾ 可無限重玩・不耗體力\n🌿 今日圖鑑：${stageData.dailyGrassAvailable ? '可領取' : '已領取'}\n⭐ 後續回合仍可刷分`)
+            : `${needRepText}\n\n${needHeartText}`;
+
         const leftText = this.scene.add.text(
-            panelX - 295,
-            boxY - 32,
-            `${needRepText}\n\n${needHeartText}`,
+            panelX - 165,
+            boxY + 20,
+            leftContent,
             {
-                fontSize: '23px',
+                fontSize: isFreePlay ? '18px' : '22px',
                 color: '#2f4858',
-                lineSpacing: 20,
+                align: 'center',
+                lineSpacing: isFreePlay ? 7 : 10,
                 wordWrap: { width: 250 },
                 fontFamily: 'Microsoft JhengHei, Arial'
             }
-        ).setOrigin(0, 0);
+        ).setOrigin(0.5);
 
         // ===== 右側：目前狀態 =====
+        const rightContent = isFreePlay
+            ? (Array.isArray(stageData.freePlayProgressLines)
+                ? stageData.freePlayProgressLines.join('\n')
+                : `🌿 金草圖鑑 ${stageData.encyclopediaCount || 0}/3\n🏅 成就 ${stageData.achievementCount || 0}/${stageData.achievementTotal || 5}${stageData.goldenBugUnlocked ? '・🐞已解鎖' : ''}\n⭐ 今日最高 ${stageData.dailyBestScore || 0} 分`)
+            : `🏆 目前聲望：${currentReputation}\n\n❤️ 目前體力：${currentHearts}`;
+
         const rightText = this.scene.add.text(
-            panelX + 35,
-            boxY - 32,
-            `🏆 目前聲望：${currentReputation}\n\n❤️ 目前體力：${currentHearts}`,
+            panelX + 165,
+            boxY + 20,
+            rightContent,
             {
-                fontSize: '22px',
+                fontSize: isFreePlay ? '19px' : '22px',
                 color: '#6b4226',
-                lineSpacing: 20,
+                align: 'center',
+                lineSpacing: isFreePlay ? 7 : 20,
                 wordWrap: { width: 250 },
                 fontFamily: 'Microsoft JhengHei, Arial'
             }
-        ).setOrigin(0, 0);
+        ).setOrigin(0.5);
 
         // ===== 按鈕 =====
         const cancelButton = this.createButton({
@@ -297,7 +315,7 @@ export default class StageEntryPopup {
             y: panelY + 248,
             width: 210,
             height: 54,
-            text: '開始挑戰',
+            text: stageData.startButtonLabel || (isFreePlay ? '開始探索' : '開始挑戰'),
             fillColor: 0xf6b26b,
             strokeColor: 0x9a5a2d,
             textColor: '#ffffff',

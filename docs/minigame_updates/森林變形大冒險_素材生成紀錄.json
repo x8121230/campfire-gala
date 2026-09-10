@@ -1,0 +1,13 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "path": "assets/forest-morph/sprites.png",
+      "prompt": "Use case: illustration-story. Asset type: sprite atlas for a cute forest transformation platformer game for elementary school children. One transparent RGBA PNG exactly 1536x1024, 3 columns x 2 rows of equal 512x512 cells. One centered isolated item per cell, with 15 percent transparent padding on every edge. Top left: mint green perfectly round forest spirit ball with big friendly eyes, tiny leaf tuft, NO arms or feet, silhouette clearly circular. Top middle: warm amber triangular forest spirit with same friendly eyes, little leaf tuft, NO arms or feet, silhouette clearly upright triangle, gently rounded corners. Top right: indigo blue square forest spirit with same friendly eyes, tiny leaf tuft, NO arms or feet, silhouette clearly square, gently rounded corners. Bottom left: pink and coral spring mushroom with a broad bouncy cap, side view. Bottom middle: small friendly checkpoint lantern on a mossy stone base, side view, teal gold glow. Bottom right: leafy wooden exit arch with gentle golden magical opening, side view, no lettering. Consistent beautiful painted 2D storybook game art, clean strong silhouettes, bright but tasteful palette, charming rather than babyish, legible at 48 pixels. No scene backdrop, no ground, no borders, no grid, no text, no watermark, real transparent alpha background, not checkerboard."
+    },
+    {
+      "path": "assets/forest-morph/forest.png",
+      "prompt": "Use case: illustration-story. Asset type: wide 16:9 background for a SIDE-SCROLLING forest platformer videogame, elementary-school audience. Dreamy bright forest clearing in layered depth: distant misty turquoise mountains, soft tall teal tree trunks, sunbeams, pale jade foliage canopy along the top border, a few distant pink mushroom trees. Polished handpainted 2D storybook game style, inviting adventure, warm peach sunlight and mint green palette. The central 80 percent should have low-contrast distant scenery and plenty of open space. Crucially NO foreground ground, NO solid platforms, NO bridges, NO characters, NO game obstacles, NO objects suggesting collision surfaces: the actual playable ground and platforms will be drawn in code over the image. No UI, no text, no letters, no watermark. Strong depth and atmosphere but clear action readability."
+    }
+  ]
+}

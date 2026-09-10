@@ -1,0 +1,26 @@
+{
+  "name": "Forest Wardrobe v5.0 Update",
+  "date": "2026-09-09",
+  "baseVersion": "v4.2",
+  "type": "paper-doll synchronization validation patch",
+  "features": [
+    "one 1024x1536 transparent master doll per body look",
+    "shared wardrobe and world-map look resolver",
+    "first click previews and second click equips",
+    "world-map character and stage-label layout adjustment",
+    "legacy unpositioned pig companion layout correction"
+  ],
+  "preserves": [
+    "existing save keys and equipment IDs",
+    "green-to-blue one-step equipment upgrade",
+    "Mother's Guard secret reward",
+    "6x6 bush minesweeper",
+    "mini-game testing hub"
+  ],
+  "deferredByPlan": [
+    "individual review and redraw of legacy equipment images",
+    "entrance sign and map animation overhaul",
+    "map information redesign"
+  ],
+  "entryDocument": "README_FIRST.md"
+}

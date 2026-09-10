@@ -1,0 +1,55 @@
+{
+  "method": "built-in image_gen",
+  "date": "2026-09-09",
+  "assets": [
+    {
+      "path": "assets/forest-sky/units.png",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "cellSize": 512,
+      "frames": [
+        "青葉戰機",
+        "偵察機",
+        "俯衝機",
+        "狙擊機",
+        "召喚機（兼護衛）",
+        "補給艇"
+      ],
+      "prompt": "Use case: stylized-concept. Production game sprite atlas, EXACT 1536x1024, 3 columns and 2 rows of 512x512 cells, genuine transparent alpha background. Six separate fully visible centered sprites, generous padding in each cell, no text or grid lines. Cohesive cute hand-painted fantasy forest arcade vertical shoot-em-up, readable top-down silhouettes, polished 3D storybook shading, rounded wooden and leaf aviation designs. Top-left: heroic emerald leaf fighter aircraft facing UP, symmetrical swept leaf wings, small golden cockpit, blue glowing engine at bottom, no pilot body. Top-middle: enemy tiny red acorn drone aircraft facing DOWN, round crimson canopy, two stubby wings, contrasting enemy silhouette. Top-right: enemy fast orange hornet aircraft facing DOWN, narrow tapered body, angular wing fins, no actual insect legs. Bottom-left: enemy purple owl sniper aircraft facing DOWN, long symmetrical violet feather wings and a bright pink emitter at the front bottom. Bottom-middle: enemy steel-blue mushroom carrier aircraft facing DOWN, broad cap-shaped shield wings with three small orb launch pods, big navy central cockpit. Bottom-right: friendly golden animal-rescue airship facing UP, round ivory balloon, small wooden cabin and leaf propellers, green cross emblem as a simple geometric shape, no lettering. Keep every sprite isolated inside its own cell; at least 55 px clear padding. No projectiles, no shadow rectangles, no backgrounds."
+    },
+    {
+      "path": "assets/forest-sky/bosses.png",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "cellSize": 512,
+      "frames": [
+        "鐵甲鍬形艦",
+        "金翼巡航堡",
+        "雷雲魔魟",
+        "熔岩龍戰機",
+        "古城核心艦",
+        "綠傘小鳥"
+      ],
+      "prompt": "Use case: stylized-concept. Production sprite atlas EXACT 1536x1024, 3 columns x 2 rows of 512x512 square cells, genuinely transparent alpha background. Six separate fully visible centered sprites with clear padding, no text, no grid. Cohesive cute storybook fantasy arcade vertical airplane shooter art, top-down orthographic view, polished dimensional hand-painted wooden and leaf mechanical designs. Five imaginative enemy boss aircraft all facing DOWN, clear contrasting silhouettes, detailed but readable at 180px. Top-left: huge emerald bronze stag-beetle battleship, two rounded crescent pincers pointing down, twin red wing pods, amber central cockpit. Top-middle: sandy golden owl fortress aircraft, very wide feather-like wings, two blue crystal wing cannons, round owl-mask nose pointing down. Top-right: indigo storm manta aircraft, swept crescent wings, bright violet crystal heart, two small lightning coils, friendly fantasy machine. Bottom-left: crimson lava dragon aircraft, broad angular red-orange wings, bronze armor plates, glowing orange engine heart, two fireball pods, no actual flames outside silhouette. Bottom-middle: majestic floating sky-castle battleship, ivory stone body, teal roofs, two symmetrical tower turrets, gold central sun crystal, downward-facing bow. Bottom-right: adorable small golden chick animal suspended beneath a mint-green leaf parachute, facing viewer, small scarf, no weapons. Every sprite entirely isolated within its own cell, at least 40px edge clearance. No projectiles, interface, labels, logos, checkerboard or rectangular shadows."
+    },
+    {
+      "path": "assets/forest-sky/worlds.png",
+      "width": 1536,
+      "height": 1024,
+      "alpha": false,
+      "cellSize": 512,
+      "frames": [
+        "森林",
+        "峽谷",
+        "暴風雲",
+        "火山",
+        "古城",
+        "空港"
+      ],
+      "prompt": "Use case: stylized-concept. Production background atlas EXACT 1536x1024 with 3 columns x 2 rows, six perfectly square 512x512 edge-to-edge aerial backgrounds. No padding, no gutters, no dividing lines, no captions, no UI. Each cell is a separate top-down orthographic environment tile for a vertical scrolling cute forest airplane shooting game, looking STRAIGHT DOWN, absolutely no horizon. Cohesive polished softly painted storybook game art. Keep the central 65 percent of each tile calm and low contrast for readable bullets; concentrate scenery near left and right edges. Top-left cell: emerald forest canopy with a calm turquoise river through the center, tiny treetop platforms along edges. Top-middle: warm terracotta canyon cliffs on left and right, sandy winding clear valley floor, small turquoise pools. Top-right: deep blue storm clouds viewed from above, gentle lavender cloud edges, calm dark blue center with very subtle lightning near sides. Bottom-left: volcanic land with dark burgundy rocks at sides and thin glowing orange lava rivers near edges, muted dark middle. Bottom-middle: ancient floating sky ruins, ivory stone terraces and small teal-roof towers at edges in soft blue clouds, a calm open sky central corridor. Bottom-right: peaceful emerald and cream aerial forest airfield with wooden platforms along edges, meadow clearing center, no airplanes. No characters, vehicles, projectiles, text, logos or perspective buildings. Soft dimensional lighting and rounded organic forms. Tile edges should be similar colors vertically to allow scrolling repetition."
+    }
+  ],
+  "procedural": "子彈、判定圈、護罩、頭目部位圈、血條、天氣預警與爆炸粒子由 Phaser 程式繪製。"
+}

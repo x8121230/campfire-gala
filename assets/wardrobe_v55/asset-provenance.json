@@ -1,0 +1,62 @@
+[
+  {
+    "name": "peach",
+    "source": "exec-ae772196-40bd-464a-bfd2-7b09adb35744.png",
+    "source_mode": "RGBA",
+    "method": "preserved alpha"
+  },
+  {
+    "name": "dandelion",
+    "source": "exec-98f3d148-3f8c-4def-bb47-6de4efe825ca.png",
+    "source_mode": "RGB",
+    "method": "background-connected neutral matte"
+  },
+  {
+    "name": "acorn",
+    "source": "exec-677bf9cc-0371-4aad-84a1-5cef76de84a8.png",
+    "source_mode": "RGB",
+    "method": "background-connected neutral matte"
+  },
+  {
+    "name": "raincoat",
+    "source": "exec-30384b2f-7731-4fa9-89df-8a1acc29b039.png",
+    "source_mode": "RGBA",
+    "method": "preserved alpha"
+  },
+  {
+    "name": "orbit",
+    "source": "exec-ab201d12-e596-41b8-8e25-272ededa7ce8.png",
+    "source_mode": "RGB",
+    "method": "background-connected neutral matte"
+  },
+  {
+    "name": "capybara",
+    "source": "exec-d3c4c592-dd98-48fa-beee-71c3eb41bfd2.png",
+    "source_mode": "RGBA",
+    "method": "preserved alpha"
+  },
+  {
+    "name": "nightcap",
+    "source": "exec-609634af-7e91-46dd-85f7-774327886126.png",
+    "source_mode": "RGBA",
+    "method": "preserved alpha"
+  },
+  {
+    "name": "lemon",
+    "source": "exec-86d40ad1-a2f3-4225-9bcf-a2eb07c6ba2f.png",
+    "source_mode": "RGBA",
+    "method": "preserved alpha"
+  },
+  {
+    "name": "pinecone",
+    "source": "exec-86abca24-396f-4648-bec1-1e7c2df39a4b.png",
+    "source_mode": "RGBA",
+    "method": "preserved alpha"
+  },
+  {
+    "name": "swan",
+    "source": "exec-859eebb4-695f-47b9-b06e-44b9a7947934.png",
+    "source_mode": "RGBA",
+    "method": "preserved alpha"
+  }
+]

@@ -1,0 +1,945 @@
+368 項既有自動測試通過；本次另有設定與導航模擬檢查。
+圖鑑及設定場景使用模擬顯示／音訊介面，不是真實瀏覽器或手機測試。
+衣櫃參考檔缺少舊 TestGrantSystem，QA 使用會拋錯的替身，沒有執行原補齊全道具功能；此替身不在交付包中。
+PASS: actual host imports, test-session restoration, equipment grant, backup, upgrade hydration, blocked browser storage
+💾 存檔成功 {
+  hearts: 4,
+  max_hearts: 5,
+  recovery_seconds: 7200,
+  next_heart_time: 1789015121703,
+  user_crystals: 50,
+  reputation: 123,
+  owned_items: [ 'item_hat_firefly_01' ],
+  owned_collectibles: [],
+  gold_grass_encyclopedia: [],
+  achievements: [],
+  tutorial_flags: {},
+  placed_decorations: [],
+  equipped_hat: 'none',
+  equipped_cloth: 'none',
+  equipped_fullset: 'none',
+  equipped_collectible: 'none',
+  minigame_stats: {
+    treasure: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      bestBaseScore: 0,
+      dailyGrassDate: '',
+      goldenBugUnlocked: false,
+      goldenBugDiscovered: false,
+      goldenBugFindCount: 0,
+      goldenBugMissStreak: 0,
+      noFlagClearCount: 0,
+      noFlagAchievementRuleVersion: 2,
+      fullAchievementRewardClaimed: false
+    },
+    firefly: { playCount: 0, clearCount: 0, bestScore: 0 },
+    fireflyCatch: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      lastScore: 0,
+      bestAccuracy: 0,
+      bestCombo: 0,
+      fastestSeconds: 0
+    },
+    lanternMaze: { playCount: 0, clearCount: 0, bestScore: 0 },
+    campfire: {
+      mode: 'kids',
+      kids: [Object],
+      challenge: {},
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      rainbowMarshmallowCount: 0,
+      rainbowPerfectCount: 0
+    },
+    constellation: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      lastScore: 0,
+      bestAccuracy: 0,
+      bestCombo: 0,
+      perfectClearCount: 0,
+      fewestMistakes: null,
+      fastestSeconds: 0,
+      rainbowStarCount: 0,
+      friendEncyclopedia: {}
+    },
+    animals: {
+      mode: 'kids',
+      kids: [Object],
+      challenge: {},
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      friendBook: []
+    }
+  },
+  bonus_play_counts: {},
+  bonus_reward_rates: {},
+  bonus_drop_rates: {},
+  secret_state: {
+    motherGuardUnlocked: false,
+    motherGuardPendingReward: false,
+    motherGuardSequence: [],
+    motherGuardSequenceStartTime: 0
+  },
+  stage_progress: {
+    bush_01: {
+      unlocked: true,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    campfire_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    firefly_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    constellation_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    animals_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    }
+  },
+  equipment_upgrades: { item_hat_firefly_01: 1 },
+  chest_rewards_v1: {
+    version: 1,
+    queue: [ [Object] ],
+    games: { shape_color: [Object], bush_minesweeper: [Object] },
+    receipts: { 'actual-host-1': [Object], 'actual-map-bush': [Object] },
+    sequence: 2,
+    opened: 1,
+    lastResult: {
+      status: 'opened',
+      chestId: 'chest-1',
+      game: 'shape_color',
+      itemId: 'item_hat_firefly_01',
+      isNew: true,
+      isUpgrade: false,
+      crystals: 0,
+      openedAt: 1789007921703
+    }
+  },
+  new_items: [ 'item_hat_firefly_01' ]
+}
+PASS: real minesweeper map completion awards once despite claimed daily grass; subsequent host save retains chest
+PASS: reward is committed before animation launch; host pauses; repeated completion does not replay the reward
+🧪 小遊戲測試模式：略過正式存檔
+💾 存檔成功 {
+  hearts: 3,
+  max_hearts: 5,
+  recovery_seconds: 7200,
+  next_heart_time: 1789015121703,
+  user_crystals: 50,
+  reputation: 123,
+  owned_items: [ 'item_hat_firefly_01', 'item_hat_tiara_global' ],
+  owned_collectibles: [],
+  gold_grass_encyclopedia: [],
+  achievements: [],
+  tutorial_flags: {},
+  placed_decorations: [],
+  equipped_hat: 'none',
+  equipped_cloth: 'none',
+  equipped_fullset: 'none',
+  equipped_collectible: 'none',
+  minigame_stats: {
+    treasure: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      bestBaseScore: 0,
+      dailyGrassDate: '',
+      goldenBugUnlocked: false,
+      goldenBugDiscovered: false,
+      goldenBugFindCount: 0,
+      goldenBugMissStreak: 0,
+      noFlagClearCount: 0,
+      noFlagAchievementRuleVersion: 2,
+      fullAchievementRewardClaimed: false
+    },
+    firefly: { playCount: 0, clearCount: 0, bestScore: 0 },
+    fireflyCatch: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      lastScore: 0,
+      bestAccuracy: 0,
+      bestCombo: 0,
+      fastestSeconds: 0
+    },
+    lanternMaze: { playCount: 0, clearCount: 0, bestScore: 0 },
+    campfire: {
+      mode: 'kids',
+      kids: [Object],
+      challenge: {},
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      rainbowMarshmallowCount: 0,
+      rainbowPerfectCount: 0
+    },
+    constellation: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      lastScore: 0,
+      bestAccuracy: 0,
+      bestCombo: 0,
+      perfectClearCount: 0,
+      fewestMistakes: null,
+      fastestSeconds: 0,
+      rainbowStarCount: 0,
+      friendEncyclopedia: {}
+    },
+    animals: {
+      mode: 'kids',
+      kids: [Object],
+      challenge: {},
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      friendBook: []
+    }
+  },
+  bonus_play_counts: {},
+  bonus_reward_rates: {},
+  bonus_drop_rates: {},
+  secret_state: {
+    motherGuardUnlocked: false,
+    motherGuardPendingReward: false,
+    motherGuardSequence: [],
+    motherGuardSequenceStartTime: 0
+  },
+  stage_progress: {
+    bush_01: {
+      unlocked: true,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    campfire_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    firefly_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    constellation_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    animals_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    }
+  },
+  equipment_upgrades: { item_hat_firefly_01: 1, item_hat_tiara_global: 0 },
+  chest_rewards_v1: {
+    version: 1,
+    queue: [ [Object] ],
+    games: { shape_color: [Object], bush_minesweeper: [Object] },
+    receipts: { 'actual-host-1': [Object], 'actual-map-bush': [Object] },
+    sequence: 3,
+    opened: 2,
+    lastResult: {
+      status: 'opened',
+      chestId: 'chest-3',
+      game: 'shape_color',
+      itemId: 'item_hat_tiara_global',
+      isNew: true,
+      isUpgrade: false,
+      crystals: 0,
+      openedAt: 1789007921711
+    }
+  },
+  new_items: [ 'item_hat_firefly_01', 'item_hat_tiara_global' ]
+}
+💾 存檔成功 {
+  hearts: 3,
+  max_hearts: 5,
+  recovery_seconds: 7200,
+  next_heart_time: 1789015121703,
+  user_crystals: 50,
+  reputation: 123,
+  owned_items: [ 'item_hat_firefly_01', 'item_hat_tiara_global' ],
+  owned_collectibles: [],
+  gold_grass_encyclopedia: [],
+  achievements: [],
+  tutorial_flags: {},
+  placed_decorations: [],
+  equipped_hat: 'none',
+  equipped_cloth: 'none',
+  equipped_fullset: 'none',
+  equipped_collectible: 'none',
+  minigame_stats: {
+    treasure: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      bestBaseScore: 0,
+      dailyGrassDate: '',
+      goldenBugUnlocked: false,
+      goldenBugDiscovered: false,
+      goldenBugFindCount: 0,
+      goldenBugMissStreak: 0,
+      noFlagClearCount: 0,
+      noFlagAchievementRuleVersion: 2,
+      fullAchievementRewardClaimed: false
+    },
+    firefly: { playCount: 0, clearCount: 0, bestScore: 0 },
+    fireflyCatch: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      lastScore: 0,
+      bestAccuracy: 0,
+      bestCombo: 0,
+      fastestSeconds: 0
+    },
+    lanternMaze: { playCount: 0, clearCount: 0, bestScore: 0 },
+    campfire: {
+      mode: 'kids',
+      kids: [Object],
+      challenge: {},
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      rainbowMarshmallowCount: 0,
+      rainbowPerfectCount: 0
+    },
+    constellation: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      lastScore: 0,
+      bestAccuracy: 0,
+      bestCombo: 0,
+      perfectClearCount: 0,
+      fewestMistakes: null,
+      fastestSeconds: 0,
+      rainbowStarCount: 0,
+      friendEncyclopedia: {}
+    },
+    animals: {
+      mode: 'kids',
+      kids: [Object],
+      challenge: {},
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      friendBook: []
+    }
+  },
+  bonus_play_counts: {},
+  bonus_reward_rates: {},
+  bonus_drop_rates: {},
+  secret_state: {
+    motherGuardUnlocked: false,
+    motherGuardPendingReward: false,
+    motherGuardSequence: [],
+    motherGuardSequenceStartTime: 0
+  },
+  stage_progress: {
+    bush_01: {
+      unlocked: true,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    campfire_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    firefly_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    constellation_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    animals_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    }
+  },
+  equipment_upgrades: { item_hat_firefly_01: 1, item_hat_tiara_global: 0 },
+  chest_rewards_v1: {
+    version: 1,
+    queue: [ [Object] ],
+    games: { shape_color: [Object], bush_minesweeper: [Object] },
+    receipts: { 'actual-host-1': [Object], 'actual-map-bush': [Object] },
+    sequence: 3,
+    opened: 2,
+    lastResult: {
+      status: 'opened',
+      chestId: 'chest-3',
+      game: 'shape_color',
+      itemId: 'item_hat_tiara_global',
+      isNew: true,
+      isUpgrade: false,
+      crystals: 0,
+      openedAt: 1789007921711
+    }
+  },
+  new_items: [ 'item_hat_firefly_01', 'item_hat_tiara_global' ]
+}
+PASS: instant opening during test session survives snapshot restoration; repeat open does not spend twice
+
+PASS: real equipment references, four-set unlock, journal/filter/detail/sets/achievements/showcase selection and return link in simulated display
+
+💾 存檔成功 {
+  hearts: 5,
+  max_hearts: 5,
+  recovery_seconds: 7200,
+  next_heart_time: null,
+  user_crystals: 50,
+  reputation: 0,
+  owned_items: [
+    'item_hat_daily_01',
+    'item_cloth_daily_01',
+    'item_fullset_pink_home_01'
+  ],
+  owned_collectibles: [],
+  gold_grass_encyclopedia: [],
+  achievements: [],
+  tutorial_flags: {},
+  placed_decorations: [],
+  equipped_hat: 'none',
+  equipped_cloth: 'none',
+  equipped_fullset: 'none',
+  equipped_collectible: 'none',
+  minigame_stats: {
+    treasure: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      bestBaseScore: 0,
+      dailyGrassDate: '',
+      goldenBugUnlocked: false,
+      goldenBugDiscovered: false,
+      goldenBugFindCount: 0,
+      goldenBugMissStreak: 0,
+      noFlagClearCount: 0,
+      noFlagAchievementRuleVersion: 2,
+      fullAchievementRewardClaimed: false
+    },
+    firefly: { playCount: 0, clearCount: 0, bestScore: 0 },
+    fireflyCatch: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      lastScore: 0,
+      bestAccuracy: 0,
+      bestCombo: 0,
+      fastestSeconds: 0
+    },
+    lanternMaze: { playCount: 0, clearCount: 0, bestScore: 0 },
+    campfire: {
+      mode: 'kids',
+      kids: [Object],
+      challenge: {},
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      rainbowMarshmallowCount: 0,
+      rainbowPerfectCount: 0
+    },
+    constellation: {
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      lastScore: 0,
+      bestAccuracy: 0,
+      bestCombo: 0,
+      perfectClearCount: 0,
+      fewestMistakes: null,
+      fastestSeconds: 0,
+      rainbowStarCount: 0,
+      friendEncyclopedia: {}
+    },
+    animals: {
+      mode: 'kids',
+      kids: [Object],
+      challenge: {},
+      playCount: 0,
+      clearCount: 0,
+      bestScore: 0,
+      friendBook: []
+    }
+  },
+  bonus_play_counts: {},
+  bonus_reward_rates: {},
+  bonus_drop_rates: {},
+  secret_state: {
+    motherGuardUnlocked: false,
+    motherGuardPendingReward: false,
+    motherGuardSequence: [],
+    motherGuardSequenceStartTime: 0
+  },
+  stage_progress: {
+    bush_01: {
+      unlocked: true,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    campfire_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    firefly_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    constellation_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    },
+    animals_01: {
+      unlocked: false,
+      cleared: false,
+      stars: 0,
+      bestScore: 0,
+      firstClearRewardClaimed: false
+    }
+  }
+}
+PASS: original edit gear reused in banner; wrong settings frame removed; old title height restored; gear click no longer edits map; tint resets on resume; editing remains in full-screen menu; audio and map return checks passed
+
+✔ four distinct sets require three existing equipment ids each (4.845427ms)
+✔ partial sets and duplicate ids never unlock rewards (0.544342ms)
+✔ missing item definitions cannot produce a false complete set (4.62971ms)
+✔ completion unlocks once and preserves hearts, equipment, progress and unknown keys (6.877267ms)
+✔ all four sets unlock together from a fully collected wardrobe (0.516779ms)
+✔ display selection persists without changing equipped items or stats (1.478314ms)
+✔ unsupported collection save version is never overwritten (0.59429ms)
+✔ sources distinguish initial and secret items from shared chest pools (0.85973ms)
+✔ achievement goals follow current game configuration (7.487472ms)
+✔ achievement progress does not grant or infer completion from counters alone (3.416552ms)
+✔ saved completion survives later higher targets and duplicate gold grass is counted once (0.570526ms)
+✔ old no-flag rule counters do not appear as new-rule progress (0.395856ms)
+✔ six authored battles have distinct bosses and valid objectives and landmarks (13.19678ms)
+✔ level validation rejects obstructed checkpoints and disconnected gate requirements (4.389478ms)
+✔ all nine recorded complete campaigns reach victory using ordinary controls (4604.214956ms)
+✔ physics is stable across 30 and 120 Hz inputs and clamps long inactive frames (4.100827ms)
+✔ jump clears a 100px platform and lands on its top (1.555594ms)
+✔ coyote time allows a late jump and jump buffer launches on landing (0.698305ms)
+✔ down plus jump drops through one-way platforms while ordinary ground stays solid (2.906337ms)
+✔ crouching avoids an overhead bullet that hits standing players (1.723489ms)
+✔ a low ceiling prevents standing until the player leaves it (5.333505ms)
+✔ dash grants brief protection, has a cooldown and cannot pass a wall (7.255145ms)
+✔ each loadout changes its intended resource or movement tradeoff (5.754804ms)
+✔ difficulty changes health, enemy durability and bullet speed parameters (3.828209ms)
+✔ up aiming can be vertical or diagonal and preserves projectile speed (0.567592ms)
+✔ scatter fires five short-lived pellets and special ammunition falls back to infinite seed (0.482253ms)
+✔ swept projectiles hit thin targets and terrain occludes targets behind it (6.942516ms)
+✔ ricochet reverses at a wall and piercing shots do not damage the same target twice (2.474268ms)
+✔ shield protects the front but explosives, tank shells and attacks from behind bypass it (0.417404ms)
+✔ shield guards take time to turn, creating a real opening for a flank (1.483625ms)
+✔ a wide tank enters the boss arena without overlapping its newly created boundary (13.617141ms)
+✔ grenades bounce, explode across cover and clear nearby hostile bullets (2.700204ms)
+✔ rescues require opening a cage and reaching the friend; badges and rewards cannot duplicate (0.85645ms)
+✔ switches open bridges and generator destruction removes linked gates (0.543716ms)
+✔ a tank can be mounted and safely dismounted, with independent armor (0.923373ms)
+✔ tank cannon overheats and unlocks after cooling; tank cannot dash (12.126112ms)
+✔ destroyed tank ejects the player without stealing infantry health (0.565462ms)
+✔ checkpoints restore a consistent encounter without farming kills or supplies (1.487955ms)
+✔ checkpoint restores mounted vehicle at its canonical position (0.978242ms)
+✔ required rescue prevents premature arena lock and allows backtracking (1.314562ms)
+✔ all bosses expose their cores, transition through three phases and release the exit (125.168889ms)
+✔ breaking each weapon part scores once and lowers its remaining durability (0.557775ms)
+✔ hazards warn before activation and boss beams permit intended crouch and jump dodges (1.630479ms)
+✔ pause stops physics, damage and actions, and game completion locks input (0.587264ms)
+✔ score medals distinguish completion, full exploration and one-life play (0.544361ms)
+✔ catalog retains assault among 19 games and all new code avoids host save and network writes (2.249183ms)
+✔ all six battles run through scene input, camera and complete result flow (4429.210527ms)
+✔ selection offers six battles, three loadouts and three difficulty choices (7.611166ms)
+✔ keyboard aiming, crouching and weapon switching reach the model (6.026967ms)
+✔ two fingers independently hold movement and shooting and release outside stops them (9.151437ms)
+✔ an unrelated pointer release does not cancel a held control (5.173899ms)
+✔ brief action requests survive display frames shorter than a physics step (1.802597ms)
+✔ automatic fire is optional and updates its visible toggle (5.407204ms)
+✔ blur freezes combat and particles; resuming clears held buttons (2.481933ms)
+✔ visibility return requires manual resume and paused inputs cannot mutate combat (4.185863ms)
+✔ restart confirmation supports cancellation and a fresh battle (14.112391ms)
+✔ death returns to a checkpoint and keeps the scene playable (4.503696ms)
+✔ result navigation preserves records while restarting supplies (436.654134ms)
+✔ leaving removes owned listeners and keyboard captures and destroys the field mask (0.869992ms)
+✔ missing artwork gives a working return to the integrated hub (0.242237ms)
+✔ five rewards display their own large chest frame and a phone-sized collect target (11.408243ms)
+✔ arrival triggers star burst and floating chest after the bounce (11.136815ms)
+✔ early collect cancels arrival and resumes the original scene exactly once (2.924162ms)
+✔ stopping the celebration externally resumes a paused host without modifying saved rewards (2.012879ms)
+✔ missing bitmap still provides a visible fallback and usable collect action (1.707622ms)
+✔ sound mute and an early collect suppress the delayed celebratory sound (0.92124ms)
+✔ instant open transfers paused-host ownership once without resuming gameplay (0.950197ms)
+✔ no hearts leaves the chest available to collect (2.519943ms)
+✔ collect followed by instant-open click never starts a second flow (0.961724ms)
+✔ migration preserves all existing progress, equipment and unknown fields (8.554104ms)
+✔ corrupt or future schema stops rather than resetting save data (0.916178ms)
+✔ all five games guarantee their own first daily victory box (6.963771ms)
+✔ one run can never pay twice, including after loading a fresh service (2.473937ms)
+✔ three eligible misses guarantee the fourth replay win (1.947097ms)
+✔ one, two and three stars apply 20, 35 and 50 percent thresholds (2.711354ms)
+✔ Taiwan midnight renews daily reward, turning clock back does not (9.721894ms)
+✔ losses, unsupported games and invalid stars never write or advance pity (0.444667ms)
+✔ no hearts retains chest and inventory without writing (1.23084ms)
+✔ opening charges exactly one heart and credits equipment in a single write (5.829018ms)
+✔ rapid repeat opens cannot deduct twice or grant duplicates (1.282797ms)
+✔ save failure leaves heart and box unchanged, retry succeeds once (2.558619ms)
+✔ award write failure can retry the same run without duplicate rewards (1.110964ms)
+✔ first three openings prefer different unseen equipment (2.427622ms)
+✔ already owning all equipment still allows upgrade then crystal conversion (3.835559ms)
+✔ secret and starter items never enter the equipment pool (0.295779ms)
+✔ boxes survive date changes and large queues without expiration or capacity deletion (186.551358ms)
+✔ missing item pool cannot spend a heart or remove a box (1.072114ms)
+✔ banqi rewards the actual player color, and never PvP or an AI win (0.490768ms)
+✔ hook invokes original ending, awards once, and resets on a new game (4.141189ms)
+✔ hook retry does not rerun base-game rewards or score mutations (0.873166ms)
+✔ ordinary map sessions award the daily chest and preserve original ending (0.705453ms)
+✔ minesweeper map clear awards even when daily gold grass was already claimed (0.485435ms)
+✔ switching from map to test hub never grants a second daily chest (0.846ms)
+✔ map and hub replay wins share the same four-win pity (1.202644ms)
+✔ test grants save all five chest types atomically without affecting daily or pity (0.829931ms)
+✔ failed test grant preserves the entire save (0.428651ms)
+✔ refill sets configured maximum and clears countdown without changing boxes or crystals (0.999166ms)
+✔ invalid testing types never write (0.302295ms)
+✔ all 18 main missions and 12 variants are unique, solvable and can earn all three stars (265.211601ms)
+✔ arriving does not auto-pickup; only intended receiver accepts carried parcel (0.920007ms)
+✔ capacity uses weight rather than item count, and delivery frees capacity (0.480312ms)
+✔ narrow path checks total carried weight; blocked road never consumes distance or freshness (1.421661ms)
+✔ switch only works at its station and independently controls its own bridge (0.984761ms)
+✔ delivered permit opens road; just carrying permit does not (0.763721ms)
+✔ every prerequisite must be delivered before dependent parcel can be collected (0.48561ms)
+✔ freshness counts weighted travel only and accepts arrival exactly at its limit (0.993613ms)
+✔ expired delivery fails before handoff and can be undone without losing cargo (3.700675ms)
+✔ putting cargo back at pickup does not reset spent freshness; depot waiting does not age it (1.097435ms)
+✔ loading and bridge operations do not consume road distance or freshness (0.582955ms)
+✔ undo restores complete state including deliveries, ages and bridges; hints stay used (9.57879ms)
+✔ return-home goal keeps task open after last delivery and prevents further actions after completion (1.163795ms)
+✔ Dijkstra chooses lower total road cost instead of fewer moves (1.751828ms)
+✔ incremental solver starts from current state, is read-only, and returns remaining cost (11.718217ms)
+✔ unsolvable fresh cargo and search-budget limit have distinct results (0.584528ms)
+✔ stars require completion, optimal target and no hint independently (0.32424ms)
+✔ malformed routes, prerequisites and parcels are rejected without mutating source specs (2.579333ms)
+✔ main catalog has 19 unique entries and courier game is integrated without external progress writes (4.797945ms)
+✔ 30 missions complete through scene actions, movement animation and automatic delivery (331.842758ms)
+✔ rapid taps and keyboard input during travel cannot enqueue extra moves or cargo actions (10.440761ms)
+✔ A–D load buttons and numbered destination shortcuts honor locations and repeat guard (12.456968ms)
+✔ blocked move preserves history and explains route connection or load limit (2.000629ms)
+✔ pause during movement freezes tween, ignores controls and requires manual resume after focus (5.43846ms)
+✔ returning to selector during final travel records completed task and cancels stale animation (4.802131ms)
+✔ freshness failure is recoverable with scene undo and idle time consumes no freshness (4.122979ms)
+✔ third hint solves from current state without acting, pause suspends search (22.240415ms)
+✔ undo cancels hint computation and preserves used hints (11.961587ms)
+✔ help and restart cancel preserve state; confirmed restart resets state and resumes tweens (1.859263ms)
+✔ changing selector tabs does not erase running state or mix up main and bonus records (2.601301ms)
+✔ completion waits for return to departure station and replay retains best earned stars (20.321831ms)
+✔ exit cleans listeners, keyboard capture, audio and tweens and returns to host hub (5.327436ms)
+✔ missing artwork provides an exit instead of entering a broken game (0.616912ms)
+✔ 15 authored levels have valid anchored hex geometry and no overlapping fruit (104.722291ms)
+✔ all 15 story levels reach three stars using finite legal aim/swap/launcher input replays (254.56943ms)
+✔ all 32 daily combinations (4 templates × 4 palettes × mirror) have three-star input routes (334.576308ms)
+✔ preview traces are pure and share the precise flight path under wind and moving ceilings (7.608172ms)
+✔ left and right wall ricochets remain inside walls and attach only adjacent to first contact (5.346266ms)
+✔ wind curves real shots and reverses according to the visible shot cycle (0.854312ms)
+✔ two matching fruit remain; the third matching fruit clears the connected group (4.196154ms)
+✔ removing a support detaches other colors and rescues the bird below it (12.351234ms)
+✔ vine must be hit to unlock; locked colors do not count in a same-color group (2.207219ms)
+✔ armored fruit needs two direct hits and becomes matchable only when its shell is gone (5.975664ms)
+✔ pollen changes itself and neighboring ordinary fruit to the incoming color (0.559465ms)
+✔ direct pinecone hit chains through a neighboring pinecone and rescues adjacent birds (6.811883ms)
+✔ a normal color match also ignites a pinecone touching the popped group (0.535242ms)
+✔ color objective can finish while unrelated fruit remains attached (0.887691ms)
+✔ ammo retires absent colors after a shot while swap cannot cycle through the whole queue (1.665634ms)
+✔ flight blocks extra fire, swap and launch-position changes without consuming extra ammo (5.097701ms)
+✔ pause freezes both projectile and moving field; resuming continues the same flight (5.459159ms)
+✔ different display frame sizes produce the same shot resolution and final model time (22.04001ms)
+✔ last available shot can win; exhaustion on an incomplete goal loses and locks the model (8.883213ms)
+✔ turn-based descent reaches the warning line including the full moving-field envelope (0.693069ms)
+✔ tree-spirit level advances three rescue waves with one shared ammunition budget (41.352345ms)
+✔ invalid shots and time deltas do not mutate state; authored rows reject bad cells and floating fruit (15.926228ms)
+✔ daily seed uses the local calendar and is stable without fetching data or storing scores (28.153744ms)
+✔ new game is retained among the 19 integrated games and uses no formal progress or network writes (1.953327ms)
+✔ 15 complete story input routes pass through scene animation, wave changes and three-star result screens (612.4005ms)
+✔ a daily variant completes through the scene and records its date-specific best stars (45.65595ms)
+✔ touch hold aims, release fires exactly one shot, and a second finger cannot steal or release it (6.588417ms)
+✔ release outside cancels aim, HUD clicks and stage-selection release do not fire a shot (10.729896ms)
+✔ keyboard fine aiming, swap and two launch stations update both model and visible cannon (12.630863ms)
+✔ flight disables touch, keyboard swap and repeated fire without consuming ammunition (8.555459ms)
+✔ blur pauses mid-flight with no model or animation changes, and resume clears held input (17.105453ms)
+✔ visibility pause keeps falling fruit and rescued-bird effects frozen until manual resume (3.873252ms)
+✔ pause and restart-confirmation overlays reject gameplay input; cancel keeps the current board (8.691651ms)
+✔ confirmed restart resets the run but preserves stars from earlier completions (31.534896ms)
+✔ completed round locks input, next level and selection buttons remain usable (11.368486ms)
+✔ loss screen explains ammunition exhaustion and retry creates a fresh run (3.751349ms)
+✔ leaving cleans owned keyboard, pointer, blur and visibility listeners and stops the model (3.792749ms)
+✔ missing new artwork provides a recoverable route back to the integrated game hub (0.356573ms)
+✔ six kitchens and six distinct recipes use valid ingredients and cookware (4.799747ms)
+✔ all six normal shifts can be won with ordinary walking and cooking commands (140.356458ms)
+✔ relaxed and rush also complete six shifts without state shortcuts (71.599485ms)
+✔ replay seed reproduces orders and event choices (7.449533ms)
+✔ 18 saved recordings replay to the exact same outcomes through public actions (89.160161ms)
+✔ selecting a different chef does not cancel another chef chopping (6.457582ms)
+✔ occupied cutting board cannot process two chefs at once or steal work (0.810007ms)
+✔ chopping job rejects retargeting and retains the held ingredient (0.440479ms)
+✔ raw vegetables are rejected by cookware without losing them (0.481454ms)
+✔ duplicate and incompatible additions are rejected without destroying food (0.761724ms)
+✔ cooking requires empty-hand explicit start, allowing optional stew egg (0.406154ms)
+✔ two cookers progress together while the selected chef is elsewhere (0.775122ms)
+✔ burning interrupts combo and can be cleaned without losing held food (11.181825ms)
+✔ bear-started cooking extends safe pickup time (0.389181ms)
+✔ ready food cannot overwrite an occupied hand (0.24212ms)
+✔ salad needs two chopped vegetables and an explicit plating job (0.717881ms)
+✔ pancakes require honey after cooking before plating (0.436355ms)
+✔ counter provides FIFO handoffs and rejects a third item without loss (0.341904ms)
+✔ serving requires a plated dish and matches the most urgent order only (1.495259ms)
+✔ wrong dishes remain in hand and can be stored for later orders (0.357239ms)
+✔ three consecutive deliveries activate a temporary team party (0.35169ms)
+✔ orders expire, break combo, and are replaced without ending the shift (7.261014ms)
+✔ skills honor prerequisites and cooldown without consuming invalid use (0.39781ms)
+✔ warm hold pauses ready-food burning but does not stop cooking (0.484132ms)
+✔ river flood slows movement in the center corridor (0.340083ms)
+✔ bee warns before theft and a normal station command saves ingredients (0.286513ms)
+✔ ignored bee steals exactly one ingredient but never held or cooked food (0.609843ms)
+✔ freezing and thawing preserve stored food and need a second use tap (0.411253ms)
+✔ magic changes are telegraphed and allow old dish during grace (0.826121ms)
+✔ a magic order changes at most once, and old dish is rejected after grace (2.88473ms)
+✔ power outage freezes both cooking and burning but chopping continues (0.58882ms)
+✔ banquet advances three menus without deleting existing orders or food (0.306844ms)
+✔ cleanup clears only named idle or cooking station and counts waste (0.388124ms)
+✔ pause and completion block timers, orders, commands, skills and trash (0.567652ms)
+✔ invalid and very long frame deltas do not skip whole shifts (0.30694ms)
+✔ all active controls are in bounds, nonoverlapping and at least 45px on 667x375 phones (0.731656ms)
+✔ 19 unique integrated games retain all categories; kitchen makes no persistent or external writes (2.134483ms)
+✔ selection has six large level cards and all three difficulties (44.120869ms)
+✔ all six complete shifts work through actual scene pointer handlers and result flow (624.816456ms)
+✔ briefing freezes the shift until player taps open (17.697423ms)
+✔ food and workbench buttons issue walking commands with large art (4.855135ms)
+✔ chef cards and number shortcuts select without cancelling queued movement (7.114742ms)
+✔ each gameplay target uses the tested bounds exported by layout config (1.488348ms)
+✔ orders open paused large recipes, pages navigate, and closing resumes same state (6.949832ms)
+✔ cleanup is explicit and cancelling preserves food and combo (8.306944ms)
+✔ blur and document hiding pause everything and require manual resume (5.807725ms)
+✔ portrait during gameplay pauses, blocks hidden inputs and does not auto resume on rotation (1.308625ms)
+✔ portrait menu cannot launch a tiny kitchen and recovers after rotation (0.82324ms)
+✔ portrait over a recipe keeps the recipe and its paused state when landscape returns (1.410833ms)
+✔ restart confirmation cancellation preserves state while confirmation starts a new shift (18.695674ms)
+✔ expired shift produces loss screen without overwriting best records (2.130625ms)
+✔ sound toggle stops future synthesized tones and updates label (1.313318ms)
+✔ help offers distinct chef roles and returns to selection without a session (1.892705ms)
+✔ missing assets retain a working exit to the integrated hub (0.30404ms)
+✔ leaving pauses work and shutdown removes all owned listeners and captures (0.648281ms)
+✔ 20 distinct authored puzzles start unsolved and can earn three stars within adjustment targets (88.410804ms)
+✔ every shipped configuration terminates within finite ray-state bound and reports exact colors (38.290904ms)
+✔ both mirror slopes implement all four expected reflection directions (0.348695ms)
+✔ splitter sends a straight beam and a reflected beam to two independent receivers (0.528881ms)
+✔ dark receivers require zero; shutting every source off cannot satisfy a colored receiver (0.341009ms)
+✔ RGB light combines only at receivers; unwanted extra color invalidates an exact target (0.482644ms)
+✔ crossing rays do not transfer color to each other downstream (10.046405ms)
+✔ filters pass only selected RGB component from white light (0.395007ms)
+✔ closed ray loop with a splitter terminates without losing the external branch (0.652058ms)
+✔ walls, opaque source housings and receiving crystals stop incoming beams (0.501302ms)
+✔ turns cycle filters, reject invalid controls, and undo restores exact history without erasing hint use (0.47658ms)
+✔ hint solver minimizes forward-cycle adjustments from current state and never mutates it (101.378368ms)
+✔ live correct preview still needs submit; failed checks do not change configuration or penalize stars (0.831481ms)
+✔ compiler rejects overlap, missing lit goal, unsupported states and excessive search space (6.011294ms)
+✔ incremental solver pauses between chunks and distinguishes genuinely impossible optical layouts (0.707366ms)
+✔ catalog retains light workshop among 19 scenes; new logic has no formal progress or external writes (8.52684ms)
+✔ all 20 game scenes finish through scene controls and explicit submit (226.700423ms)
+✔ failed submit preserves configuration; repeated controls cycle; undo cancels current search (11.995984ms)
+✔ keyboard tab selects without moving state; space and number shortcuts adjust controls (12.853575ms)
+✔ hint reveals a machine only at third tier and does not auto-adjust the puzzle (26.675451ms)
+✔ visibility pauses solver and input; returning to foreground needs manual resume (2.731838ms)
+✔ mix chart preserves puzzle; reset cancel preserves history; confirmed restart clears hints and moves (2.271088ms)
+✔ selection retains current unsolved run and completed stars while replay starts fresh (8.45556ms)
+✔ exit releases captures and listeners and returns to configured main game hub (1.20943ms)
+✔ 18 distinct authored maps all reach exit with every crystal; target moves are attainable (3016.992873ms)
+✔ map validator rejects inconsistent sizes, missing spawn, unmatched crates and portal pairs (0.800907ms)
+✔ walls, out-of-bounds and illegal pushes never mutate state or increment moves (0.691938ms)
+✔ crate reaches plate, opens gate and re-closes after an undo (0.40155ms)
+✔ key is required, remains after passing door, and undo restores collection (0.253312ms)
+✔ stepping onto switch toggles bridge each time; undo restores both position and bridge (0.190222ms)
+✔ portals transfer once, count as one move, and reverse with undo (0.29215ms)
+✔ crystals are optional for exit but required for exploration star (0.388979ms)
+✔ gem pickup is restored by undo and hint use cannot be undone for efficiency star (0.541163ms)
+✔ corner crate reports a recoverable deadlock and can be undone (0.842689ms)
+✔ hint solver distinguishes exhausted search from a search budget limit (0.571349ms)
+✔ solver uses current state and does not change it; computed next step stays valid after detour (560.26537ms)
+✔ crate cannot cover uncollected items, bridges, portals or exits (0.441534ms)
+✔ catalog lists 19 games and retains mechanism in the four-game strategy category (1.587797ms)
+✔ mechanism scene and rules contain no formal saves, external calls or reward changes (0.906756ms)
+✔ intro leads to 18-level selection; all 18 scenes complete through actual scene move handlers (3477.919859ms)
+✔ rapid held inputs are limited to one step per cooldown; blocked moves do not count (4.829904ms)
+✔ tile tapping only moves one adjacent square; undo cancels hints and restores actor state (2.61499ms)
+✔ three-stage hint only creates a route arrow on third request and expires on active time (1.881647ms)
+✔ pausing freezes incremental solver, cooldown and input; return from background stays paused (7.23199ms)
+✔ restart cancellation keeps progress; confirmed restart resets hints and moves (1.392166ms)
+✔ selection preserves the current run for resume; replay keeps best stars in memory (4.247429ms)
+✔ shutdown releases input capture, listeners and hint job; leaving uses configured hub (0.696453ms)
+✔ 12 distinct stages finish by real movement/jump/form inputs with all badges and no falls (395.879518ms)
+✔ fixed-step simulation gives same result with 30, 60 and 120 FPS frame grouping (15.68948ms)
+✔ releasing jump early produces a lower jump; holding does not cause repeated jumps (4.216469ms)
+✔ coyote time accepts a jump just after walking off a ledge, but expires (1.79254ms)
+✔ jump buffer launches on landing without requiring an extra press (0.408105ms)
+✔ round form fits low passage and cannot expand through ceiling (0.574795ms)
+✔ triangle dash cuts vines; walking or dashing in another form does not (0.995715ms)
+✔ dash stops at solid stone without tunneling and requires release plus cooldown to repeat (0.900599ms)
+✔ square must stand on plate for its charge duration; opened door stays open after morphing (2.728256ms)
+✔ closing gate waits while occupied, then closes once player clears it (0.800065ms)
+✔ square resists wind drift and makes more progress against strong wind (4.04206ms)
+✔ rising air gives round form a higher jump (1.636747ms)
+✔ spring activates from ground approach and can reach high optional platforms (0.404591ms)
+✔ standing rider is carried by horizontal and vertical moving platforms (12.040941ms)
+✔ upward platform cannot push player through solid ceiling (1.340577ms)
+✔ rock warning is harmless and visible before the finite falling phase (1.068899ms)
+✔ checkpoint respawn retains badges and cleared vines but resets gate timers (0.508767ms)
+✔ pausing freezes physics, movers, gate countdown and checkpoint delay (0.31333ms)
+✔ stalled frames are capped; invalid or negative delta does not advance (0.534328ms)
+✔ badges and special challenge are optional; completion locks movement and grades separately (0.284111ms)
+✔ level validation rejects unsafe endpoints, invalid gate references and malformed movers (0.858611ms)
+✔ new action game remains integrated in the cumulative catalog with no formal progress writes (1.360916ms)
+✔ all 12 stages complete via scene update with input replay, badges and star records (717.376532ms)
+✔ two touch pointers can move and jump simultaneously; releasing one retains the other (10.675438ms)
+✔ pointer release outside canvas clears held input and a new touch can change form while moving (2.009542ms)
+✔ keyboard movement and jump release work and key repetition does not retrigger form or pause (10.706644ms)
+✔ blur pause freezes animation clocks and clears held controls; resume requires a new press (5.005138ms)
+✔ touch and keyboard changes cannot affect paused or confirmation states (0.892767ms)
+✔ checkpoint action preserves badges and returns camera to player after fall (1.549273ms)
+✔ morph blocked by low ceiling leaves current sprite and physics shape consistent (1.686596ms)
+✔ selector resume retains running checkpoint; restart cancel preserves and restart confirms reset (3.087217ms)
+✔ full completion locks controls and replay keeps best stars (47.57217ms)
+✔ leaving removes owned listeners, captures and inputs; reopening does not multiply touch pointers (1.00248ms)
+✔ missing artwork shows a recoverable return button (0.304853ms)
+✔ 200 seeded sessions: 2400 tasks are solvable, balanced, protect creatures and require exactly 15 pickups (73.529621ms)
+✔ protected animals are never caught and repeated wrong taps count once (1.035624ms)
+✔ invalid indices, bins and early advances cannot change progress (0.320556ms)
+✔ sorting captures once, waits for bin, rejects wrong bin once then accepts correct bin (0.586222ms)
+✔ two-object missions reject other trash and cannot count one item twice (0.468131ms)
+✔ hint counts once per task and returns remaining targets only (3.496776ms)
+✔ new task resets wrong choices, hints and pending state; completion cannot overflow (6.206284ms)
+✔ catalog includes ocean and mechanism games without duplicate entries (1.706245ms)
+✔ new scene and rules contain no formal progress writes or external requests (1.581492ms)
+✔ previous bubble rules: all 12 tasks still have exactly one answer for 80 seeds (19.616083ms)
+✔ previous snack rules: a missed guest returns and 12 correct deliveries finish the session (0.99901ms)
+✔ scene creates, initial hint is hidden, pause freezes flight and requires resume (11.083803ms)
+✔ rapid taps do not create extra shots or pickups (2.113005ms)
+✔ slow mode freezes items without blocking answers; hints disappear after 2.5 active seconds (6.366277ms)
+✔ bin clicks during flight are ignored, wrong-bin retry stays active and correct bin completes (2.834703ms)
+✔ background and blur pause; shutdown removes owned listeners (5.880781ms)
+✔ transition shows rule card and final task opens completion instead of another task (8.819256ms)
+✔ return and restart keep the configured destination and release paused tweens (3.586785ms)
+✔ 15 authored levels cover five environments, five mission types and five unique bosses (7.984274ms)
+✔ all 30 full missions in rookie and brave reach three stars through ordinary player controls (3008.114799ms)
+✔ diagonal movement is normalized and stays inside the visible play field (5.104946ms)
+✔ pointer target moves at flight speed rather than teleporting; invalid coordinates are ignored (0.513583ms)
+✔ focus and charging reduce travel speed to allow fine dodging (1.210654ms)
+✔ four weapons have distinct projectile patterns and piercing behavior (0.874752ms)
+✔ upgrade pickups improve all weapons and power caps at level three (0.385113ms)
+✔ laser pierces several enemies but cannot damage one target repeatedly along the same beam (0.579002ms)
+✔ homing seeds steer toward a visible enemy (0.772041ms)
+✔ longer charge increases damage and consumes energy once on release (1.327525ms)
+✔ short charge or insufficient energy does not fire a charged shot (1.284585ms)
+✔ dash grants invulnerability, respects cooldown, and a held key cannot retrigger it (2.683454ms)
+✔ shield absorbs damage before armor, with invulnerability preventing repeated damage (0.256026ms)
+✔ swept collision catches a fast bullet that would cross the player in one step (0.218865ms)
+✔ bomb clears hostile shots and telegraphs, damages enemies, and is limited by ammunition (0.846108ms)
+✔ shield supply also repairs escort armor, with caps on both resources (0.213473ms)
+✔ rescue birds ignore friendly fire and require approaching the parachute (0.259253ms)
+✔ escort collisions reduce escort armor separately and respect escort invulnerability (0.139377ms)
+✔ enemies escaping the bottom damage the defended beacon (0.193974ms)
+✔ hazard bands warn before becoming harmful and damage only while active (0.606145ms)
+✔ sniper warning locks the old aim position, allowing the pilot to dodge (0.499982ms)
+✔ carrier summons escorts over time and a destroyed carrier stops summoning (0.447041ms)
+✔ boss core is protected until both destructible weapon parts are removed (0.24051ms)
+✔ boss entry and phase transitions have visible protection; phase changes clear bullets (0.175102ms)
+✔ five bosses emit distinct patterns and losing parts reduces their attack density (0.453102ms)
+✔ mission end checks rescue and defeat quotas rather than granting a win just for elapsed time (12.10535ms)
+✔ pause freezes all clocks and cancels charge so returning does not release a stale shot (0.662766ms)
+✔ terminal states block firing tools and updates, keeping the final result stable (0.186174ms)
+✔ fixed-step replay is identical across frame sizes and ignores invalid time deltas (6.58188ms)
+✔ enemy projectile storage has a hard cap and offscreen shots expire (33.628163ms)
+✔ new shooting game is retained among 19 games with no persistent save or external writes (3.570781ms)
+✔ all 15 missions run through scene controls, scrolling, boss transitions and three-star results (2401.743412ms)
+✔ relative touch dragging never teleports the aircraft and release outside clears movement (3.358695ms)
+✔ second touch can charge while first touch steers, and release fires one charged shot (4.604376ms)
+✔ selection release and HUD touches do not move the plane, and a second finger cannot steal steering (6.600947ms)
+✔ keyboard movement, weapon cycling, focus and dash buttons reach the combat model (2.106994ms)
+✔ one-frame tool requests survive a display frame shorter than one physics step (1.415663ms)
+✔ blur pauses bullets, aircraft and effects; resume cancels held charge without consuming energy (2.232669ms)
+✔ visibility return does not automatically resume and paused controls cannot launch bombs or change weapons (1.252531ms)
+✔ restart confirmation preserves current run when cancelled and resets it when confirmed (5.377228ms)
+✔ difficulty-specific records survive replays while each new round resets supplies (97.337237ms)
+✔ completion locks flight controls and next-stage and selection navigation remain usable (34.424598ms)
+✔ loss gives a recoverable retry flow with fresh health (0.765844ms)
+✔ leaving destroys the playfield mask and cleans only owned listeners and captures (0.83146ms)
+✔ missing artwork recovers to the existing integrated game list (0.632729ms)
+ℹ tests 368
+ℹ suites 0
+ℹ pass 368
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7367.704122

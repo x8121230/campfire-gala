@@ -4,6 +4,8 @@ import AudioSystem from '../systems/AudioSystem.js';
 import SaveSystem from '../systems/SaveSystem.js';
 import StageManager from '../systems/StageManager.js';
 import { getStageData } from '../data/StageData.js';
+import { CONSTELLATION_PATTERNS } from '../data/ConstellationData.js';
+import { PAPER_DOLL_FILES, PAPER_DOLL_LAYOUT } from '../data/PaperDollConfig.js';
 
 import StageEntryPopup from '../UI/StageEntryPopup.js';
 
@@ -35,6 +37,10 @@ export default class WorldMap extends Phaser.Scene {
 
     preload() {
         this.load.image('current_map', `assets/WorldMap${this.mapID}.jpg`);
+
+        Object.entries(PAPER_DOLL_FILES).forEach(([key, file]) => {
+            if (!this.textures.exists(key)) this.load.image(key, file);
+        });
 
         if (!this.cache.audio.exists('forest_music')) {
             this.load.audio('forest_music', 'assets/forest_bgm.mp3');
@@ -72,10 +78,16 @@ export default class WorldMap extends Phaser.Scene {
 
         // 角色
         this.charManager = new CharacterManager(this);
-        this.charManager.createCharacter(400, 450);
+        const dollLayout = PAPER_DOLL_LAYOUT.worldMap;
+        this.charManager.createCharacter(dollLayout.centerX, dollLayout.centerY, dollLayout);
         this.charManager.container.setDepth(5);
 
-        const hitArea = new Phaser.Geom.Rectangle(-100, -200, 200, 400);
+        const hitArea = new Phaser.Geom.Rectangle(
+            -dollLayout.maxWidth / 2,
+            -dollLayout.maxHeight / 2,
+            dollLayout.maxWidth,
+            dollLayout.maxHeight
+        );
         this.charManager.container.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains);
 
         this.charManager.container.on('pointerdown', () => {
@@ -192,38 +204,51 @@ export default class WorldMap extends Phaser.Scene {
     createLevelIcons() {
         const levels = [
             {
-                x: 1150,
-                y: 610,
-                texture: 'icon_bush',
-                label: '草叢尋寶',
+                x: 1120,
+                y: 565,
+                texture: 'q_bush',
+                iconScale: 0.4,
+                label: '草叢探險①',
+                labelY: 67,
+                starsY: 99,
+                labelWidth: 174,
                 stageKey: 'bush_01'
             },
             {
-                x: 755,
-                y: 540,
+                x: 805,
+                y: 535,
                 texture: 'icon_fire',
                 label: '營火晚會',
+                labelY: 66,
+                starsY: 99,
                 stageKey: 'campfire_01'
             },
             {
-                x: 700,
+                x: 715,
                 y: 300,
                 texture: 'icon_firefly',
                 label: '點點螢火',
+                labelY: 70,
+                starsY: 103,
                 stageKey: 'firefly_01'
             },
             {
-                x: 150,
-                y: 330,
-                texture: 'icon_tree',
+                x: 510,
+                y: 180,
+                texture: 'icon_constellation',
+                iconScale: 0.48,
                 label: '星空連線',
+                labelY: 72,
+                starsY: 105,
                 stageKey: 'constellation_01'
             },
             {
-                x: 500,
-                y: 200,
-                texture: 'icon_animal',
+                x: 165,
+                y: 335,
+                texture: 'icon_tree',
                 label: '森林歷險',
+                labelY: 74,
+                starsY: 108,
                 stageKey: 'animals_01'
             }
         ];
@@ -241,16 +266,21 @@ export default class WorldMap extends Phaser.Scene {
             };
 
             const container = this.add.container(level.x, level.y).setDepth(10);
+            const iconScale = level.iconScale || 0.8;
+            const floatingScale = iconScale * 1.05;
+            const hoverScale = iconScale * 1.15;
 
             const glow = this.add.circle(0, 0, 46, 0xffffff, 0.12);
 
             const icon = this.add.image(0, 0, level.texture)
                 .setInteractive({ useHandCursor: true })
-                .setScale(0.8);
+                .setScale(iconScale);
 
-            const labelBg = this.add.rectangle(0, 76, 160, 34, 0x000000, 0.35);
+            const labelY = level.labelY ?? 76;
+            const starsY = level.starsY ?? 110;
+            const labelBg = this.add.rectangle(0, labelY + 1, level.labelWidth || 160, 34, 0x000000, 0.35);
 
-            const label = this.add.text(0, 75, level.label, {
+            const label = this.add.text(0, labelY, level.label, {
                 fontSize: '24px',
                 color: '#ffffff',
                 stroke: '#000',
@@ -273,9 +303,11 @@ export default class WorldMap extends Phaser.Scene {
             }).setOrigin(0.5);
 
             const starCount = progress.stars || 0;
-            const stars = '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
+            const stars = rawStageData?.freePlay
+                ? this.getFreePlayMapLabel(level.stageKey)
+                : '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
 
-            const starText = this.add.text(0, 110, stars, {
+            const starText = this.add.text(0, starsY, stars, {
                 fontSize: '20px',
                 color: unlocked ? '#ffd54f' : '#999999',
                 fontStyle: 'bold',
@@ -301,7 +333,7 @@ export default class WorldMap extends Phaser.Scene {
 
             this.tweens.add({
                 targets: icon,
-                scale: 0.84,
+                scale: floatingScale,
                 duration: 1200,
                 yoyo: true,
                 repeat: -1,
@@ -323,7 +355,7 @@ export default class WorldMap extends Phaser.Scene {
 
                 this.tweens.add({
                     targets: icon,
-                    scale: 0.92,
+                    scale: hoverScale,
                     duration: 120
                 });
 
@@ -350,7 +382,7 @@ export default class WorldMap extends Phaser.Scene {
             icon.on('pointerout', () => {
                 this.tweens.add({
                     targets: icon,
-                    scale: 0.84,
+                    scale: floatingScale,
                     duration: 120
                 });
 
@@ -386,14 +418,16 @@ export default class WorldMap extends Phaser.Scene {
 
                 const ignoreReputationLock = StageManager.hasIgnoreReputationLock(this.registry);
                 const noHeartCost = StageManager.hasNoHeartCost(this.registry);
+                const unlockAllStages = StageManager.hasUnlockAllStages();
 
+                const freePlaySummary = this.getFreePlaySummary(level.stageKey);
                 const popupStageData = {
                     ...rawStageData,
                     title: rawStageData.name,
                     sceneKey: rawStageData.scene,
 
                     // 顯示給 popup 用
-                    requiredReputation: ignoreReputationLock
+                    requiredReputation: (ignoreReputationLock || unlockAllStages)
                         ? '已無視'
                         : (rawStageData.unlockReputation || 0),
 
@@ -401,11 +435,21 @@ export default class WorldMap extends Phaser.Scene {
                         ? 0
                         : (rawStageData.staminaCost || 0),
 
-                    description: `${rawStageData.name} 即將開始，準備來挑戰吧！`,
-                    howToPlay: `${rawStageData.name} 的玩法說明之後可再補上。`,
+                    description: rawStageData.description || `${rawStageData.name} 即將開始，準備來挑戰吧！`,
+                    howToPlay: rawStageData.howToPlay || `${rawStageData.name} 的玩法說明之後可再補上。`,
+                    freePlay: rawStageData.freePlay === true,
+                    encyclopediaCount: (this.registry.get('gold_grass_encyclopedia') || []).length,
+                    achievementCount: (this.registry.get('achievements') || []).filter((id) => id.startsWith('bush_') || id === 'gold_grass_collector').length,
+                    achievementTotal: 6,
+                    dailyBestScore: this.getBushDailyBestScore(),
+                    dailyGrassAvailable: this.isBushDailyGrassAvailable(),
+                    goldenBugUnlocked: this.isGoldenBugEncounterUnlocked(),
+                    freePlayEntryLines: freePlaySummary.entryLines,
+                    freePlayProgressLines: freePlaySummary.progressLines,
 
                     // 額外提供 popup 可用資訊
-                    bypassReputation: ignoreReputationLock,
+                    bypassReputation: ignoreReputationLock || unlockAllStages,
+                    unlockAllStages,
                     bypassHeartCost: noHeartCost
                 };
 
@@ -413,7 +457,8 @@ export default class WorldMap extends Phaser.Scene {
                     success: checkResult.ok,
                     reason: checkResult.reason,
                     message: checkResult.message,
-                    bypassReputation: ignoreReputationLock,
+                    bypassReputation: ignoreReputationLock || unlockAllStages,
+                    unlockAllStages,
                     bypassHeartCost: noHeartCost
                 };
 
@@ -459,8 +504,11 @@ export default class WorldMap extends Phaser.Scene {
         const placed = this.registry.get('placed_decorations') || [];
         placed.push({
             key: this.selectedItem,
+            mapID: this.mapID,
             x,
-            y
+            y,
+            scale: 0.6,
+            userPositioned: true
         });
 
         this.registry.set('placed_decorations', placed);
@@ -471,41 +519,28 @@ export default class WorldMap extends Phaser.Scene {
         const placed = this.registry.get('placed_decorations') || [];
 
         placed.forEach((data) => {
-            const item = this.add.image(data.x, data.y, data.key)
-                .setScale(0.6)
+            if (data.mapID && data.mapID !== this.mapID) return;
+            if (!this.textures.exists(data.key)) return;
+            const layout = this.getDecorationLayout(data);
+            const item = this.add.image(layout.x, layout.y, data.key)
+                .setScale(layout.scale)
                 .setDepth(1);
 
             this.decorGroup.add(item);
         });
     }
 
+    getDecorationLayout(data) {
+        const key = String(data?.key || '');
+        const isLegacyPigCompanion = this.mapID === '01'
+            && !data?.userPositioned
+            && /(pig|pigtear|豬)/i.test(key);
+        if (isLegacyPigCompanion) return { x: 465, y: 565, scale: Math.min(data.scale || 0.6, 0.48) };
+        return { x: data.x, y: data.y, scale: data.scale || 0.6 };
+    }
+
     saveGameData() {
-        const dataToSave = {
-            hearts: this.registry.get('hearts'),
-            max_hearts: this.registry.get('max_hearts'),
-            recovery_seconds: this.registry.get('recovery_seconds'),
-            next_heart_time: this.registry.get('next_heart_time'),
-
-            user_crystals: this.registry.get('user_crystals'),
-            reputation: this.registry.get('reputation'),
-
-            owned_items: this.registry.get('owned_items'),
-            placed_decorations: this.registry.get('placed_decorations'),
-
-            equipped_hat: this.registry.get('equipped_hat'),
-            equipped_cloth: this.registry.get('equipped_cloth'),
-            equipped_fullset: this.registry.get('equipped_fullset'),
-
-            minigame_stats: this.registry.get('minigame_stats'),
-            bonus_play_counts: this.registry.get('bonus_play_counts'),
-            bonus_reward_rates: this.registry.get('bonus_reward_rates'),
-            bonus_drop_rates: this.registry.get('bonus_drop_rates'),
-
-            secret_state: this.registry.get('secret_state'),
-            stage_progress: this.registry.get('stage_progress')
-        };
-
-        localStorage.setItem('forest_save_data', JSON.stringify(dataToSave));
+        SaveSystem.saveFromRegistry(this.registry);
         console.log('💾 大地圖進度已存檔！');
     }
 
@@ -657,5 +692,161 @@ export default class WorldMap extends Phaser.Scene {
         });
 
         this.saveGameData();
+    }
+
+    getBushDailyBestScore() {
+        const stats = ((this.registry.get('minigame_stats') || {}).treasure || {});
+        const now = new Date();
+        const today = [
+            now.getFullYear(),
+            String(now.getMonth() + 1).padStart(2, '0'),
+            String(now.getDate()).padStart(2, '0')
+        ].join('-');
+        return stats.dailyScoreDate === today ? (stats.dailyBestScore || 0) : 0;
+    }
+
+    isBushDailyGrassAvailable() {
+        const stats = ((this.registry.get('minigame_stats') || {}).treasure || {});
+        const now = new Date();
+        const today = [
+            now.getFullYear(),
+            String(now.getMonth() + 1).padStart(2, '0'),
+            String(now.getDate()).padStart(2, '0')
+        ].join('-');
+        return stats.dailyGrassDate !== today;
+    }
+
+    isGoldenBugEncounterUnlocked() {
+        const stats = ((this.registry.get('minigame_stats') || {}).treasure || {});
+        if (stats.goldenBugUnlocked === true) return true;
+        const achievements = this.registry.get('achievements') || [];
+        const bushAchievementCount = achievements.filter(
+            (id) => id.startsWith('bush_') || id === 'gold_grass_collector'
+        ).length;
+        return bushAchievementCount >= 6;
+    }
+
+    getFreePlayMapLabel(stageKey) {
+        if (stageKey === 'bush_01') {
+            const goldGrass = this.registry.get('gold_grass_encyclopedia') || [];
+            return `🌿 ${goldGrass.length}/3｜${this.isBushDailyGrassAvailable() ? '🎁 可領' : '⭐ 刷分'}`;
+        }
+
+        if (stageKey === 'campfire_01') {
+            const stats = ((this.registry.get('minigame_stats') || {}).campfire || {});
+            const kids = stats.kids || stats;
+            return `🌈 ${kids.rainbowMarshmallowCount || 0}｜🎯 ${kids.rainbowPerfectCount || 0}｜⭐ ${kids.bestScore || 0}`;
+        }
+
+        if (stageKey === 'firefly_01') {
+            const stats = ((this.registry.get('minigame_stats') || {}).fireflyCatch || {});
+            return `⭐ 最高 ${stats.bestScore || 0}｜🎯 ${stats.bestAccuracy || 0}%`;
+        }
+
+        if (stageKey === 'constellation_01') {
+            const stats = ((this.registry.get('minigame_stats') || {}).constellation || {});
+            const friendCount = CONSTELLATION_PATTERNS.filter((friend) => (
+                Number(stats.friendEncyclopedia?.[friend.id]?.foundCount || 0) > 0
+            )).length;
+            return `📖 ${friendCount}/${CONSTELLATION_PATTERNS.length}｜⭐ 最高 ${stats.bestScore || 0}`;
+        }
+
+        if (stageKey === 'animals_01') {
+            const stats = ((this.registry.get('minigame_stats') || {}).animals || {});
+            const kids = stats.kids || stats;
+            const friendCount = Array.isArray(kids.friendBook) ? kids.friendBook.length : 0;
+            return `🐾 ${friendCount}/11｜⭐ 最高 ${kids.bestScore || 0}`;
+        }
+
+        return '♾ 可無限重玩';
+    }
+
+    getFreePlaySummary(stageKey) {
+        if (stageKey === 'campfire_01') {
+            const stats = ((this.registry.get('minigame_stats') || {}).campfire || {});
+            const kids = stats.kids || stats;
+            return {
+                entryLines: [
+                    '♾ 可無限重玩・不耗體力',
+                    '🔥 火焰左右往返，金黃時直接點棉花糖',
+                    '⏱ 每位客人有倒數，小精靈會協助超時',
+                    '🌈 Combo 4 或命中最正中央會出現彩虹'
+                ],
+                progressLines: [
+                    `⭐ 歷史最高 ${kids.bestScore || 0} 分`,
+                    `✨ 最高 Combo ${kids.bestCombo || 0}`,
+                    `🌈 彩虹棉花糖 ${kids.rainbowMarshmallowCount || 0} 顆`,
+                    `🎯 隱藏彩虹 Perfect ${kids.rainbowPerfectCount || 0} 次`
+                ]
+            };
+        }
+
+        if (stageKey === 'firefly_01') {
+            const stats = ((this.registry.get('minigame_stats') || {}).fireflyCatch || {});
+            return {
+                entryLines: [
+                    '♾ 可無限重玩・不耗體力',
+                    '🎨 每輪只找一種顏色',
+                    '😊 點錯不會失敗'
+                ],
+                progressLines: [
+                    `⭐ 歷史最高 ${stats.bestScore || 0} 分`,
+                    `🎯 最佳正確率 ${stats.bestAccuracy || 0}%`,
+                    `✨ 最高連擊 ${stats.bestCombo || 0}`
+                ]
+            };
+        }
+
+        if (stageKey === 'constellation_01') {
+            const stats = ((this.registry.get('minigame_stats') || {}).constellation || {});
+            const friendCount = CONSTELLATION_PATTERNS.filter((friend) => (
+                Number(stats.friendEncyclopedia?.[friend.id]?.foundCount || 0) > 0
+            )).length;
+            return {
+                entryLines: [
+                    '♾ 可無限重玩・不耗體力',
+                    '🔎 看星光密碼，從分岔找出相同答案',
+                    '🎵 正確路線會唱音階・累積星光連擊',
+                    '😊 錯路化成星塵・提示才顯示金色路線'
+                ],
+                progressLines: [
+                    `⭐ 歷史最高 ${stats.bestScore || 0} 分`,
+                    `📖 星星朋友圖鑑 ${friendCount}/${CONSTELLATION_PATTERNS.length}`,
+                    `🌈 彩虹星 ${stats.rainbowStarCount || 0} 顆`
+                ]
+            };
+        }
+
+        if (stageKey === 'animals_01') {
+            const stats = ((this.registry.get('minigame_stats') || {}).animals || {});
+            const kids = stats.kids || stats;
+            const friendCount = Array.isArray(kids.friendBook) ? kids.friendBook.length : 0;
+            return {
+                entryLines: [
+                    '♾ 可無限重玩・不耗體力',
+                    '🐾 每次幫一隻動物找點心',
+                    '👆 點擊或拖曳都可以',
+                    '😊 答錯不失敗・小精靈會提示'
+                ],
+                progressLines: [
+                    `⭐ 歷史最高 ${kids.bestScore || 0} 分`,
+                    `📖 動物朋友圖鑑 ${friendCount}/11`,
+                    `✨ 最高連續答對 ${kids.bestCombo || 0}`
+                ]
+            };
+        }
+
+        return {
+            entryLines: [
+                '♾ 可無限重玩・不耗體力',
+                `🌿 今日圖鑑：${this.isBushDailyGrassAvailable() ? '可領取' : '已領取'}`,
+                '⭐ 後續回合仍可刷分'
+            ],
+            progressLines: [
+                `🌿 金草圖鑑 ${(this.registry.get('gold_grass_encyclopedia') || []).length}/3`,
+                `🏅 成就 ${(this.registry.get('achievements') || []).filter((id) => id.startsWith('bush_') || id === 'gold_grass_collector').length}/6${this.isGoldenBugEncounterUnlocked() ? '・🐞已解鎖' : ''}`,
+                `⭐ 今日最高 ${this.getBushDailyBestScore()} 分`
+            ]
+        };
     }
 }

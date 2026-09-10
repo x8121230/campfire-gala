@@ -1,0 +1,233 @@
+森林果實彈射隊 v0.1｜2026-09-09
+執行：node --test project/tests/*.test.mjs
+Phaser 場景使用顯示與輸入模擬；真實 Game Viewer、觸控與音量待實機驗收。
+
+✔ all 18 main missions and 12 variants are unique, solvable and can earn all three stars (100.406817ms)
+✔ arriving does not auto-pickup; only intended receiver accepts carried parcel (0.45861ms)
+✔ capacity uses weight rather than item count, and delivery frees capacity (0.222955ms)
+✔ narrow path checks total carried weight; blocked road never consumes distance or freshness (0.194433ms)
+✔ switch only works at its station and independently controls its own bridge (0.362485ms)
+✔ delivered permit opens road; just carrying permit does not (0.240442ms)
+✔ every prerequisite must be delivered before dependent parcel can be collected (0.206721ms)
+✔ freshness counts weighted travel only and accepts arrival exactly at its limit (0.150317ms)
+✔ expired delivery fails before handoff and can be undone without losing cargo (0.22588ms)
+✔ putting cargo back at pickup does not reset spent freshness; depot waiting does not age it (0.325149ms)
+✔ loading and bridge operations do not consume road distance or freshness (0.313291ms)
+✔ undo restores complete state including deliveries, ages and bridges; hints stay used (4.486341ms)
+✔ return-home goal keeps task open after last delivery and prevents further actions after completion (0.217007ms)
+✔ Dijkstra chooses lower total road cost instead of fewer moves (0.293622ms)
+✔ incremental solver starts from current state, is read-only, and returns remaining cost (7.522039ms)
+✔ unsolvable fresh cargo and search-budget limit have distinct results (0.458149ms)
+✔ stars require completion, optimal target and no hint independently (0.213762ms)
+✔ malformed routes, prerequisites and parcels are rejected without mutating source specs (0.770389ms)
+✔ main catalog has 16 unique entries and courier game is integrated without external progress writes (1.0631ms)
+✔ 30 missions complete through scene actions, movement animation and automatic delivery (85.063447ms)
+✔ rapid taps and keyboard input during travel cannot enqueue extra moves or cargo actions (2.043425ms)
+✔ A–D load buttons and numbered destination shortcuts honor locations and repeat guard (2.399141ms)
+✔ blocked move preserves history and explains route connection or load limit (0.715396ms)
+✔ pause during movement freezes tween, ignores controls and requires manual resume after focus (0.668406ms)
+✔ returning to selector during final travel records completed task and cancels stale animation (2.155003ms)
+✔ freshness failure is recoverable with scene undo and idle time consumes no freshness (1.01657ms)
+✔ third hint solves from current state without acting, pause suspends search (8.836147ms)
+✔ undo cancels hint computation and preserves used hints (1.200056ms)
+✔ help and restart cancel preserve state; confirmed restart resets state and resumes tweens (1.478895ms)
+✔ changing selector tabs does not erase running state or mix up main and bonus records (1.460598ms)
+✔ completion waits for return to departure station and replay retains best earned stars (3.907981ms)
+✔ exit cleans listeners, keyboard capture, audio and tweens and returns to host hub (1.572155ms)
+✔ missing artwork provides an exit instead of entering a broken game (0.201363ms)
+✔ 15 authored levels have valid anchored hex geometry and no overlapping fruit (26.975579ms)
+✔ all 15 story levels reach three stars using finite legal aim/swap/launcher input replays (166.776126ms)
+✔ all 32 daily combinations (4 templates × 4 palettes × mirror) have three-star input routes (128.718515ms)
+✔ preview traces are pure and share the precise flight path under wind and moving ceilings (2.049054ms)
+✔ left and right wall ricochets remain inside walls and attach only adjacent to first contact (0.605411ms)
+✔ wind curves real shots and reverses according to the visible shot cycle (0.393772ms)
+✔ two matching fruit remain; the third matching fruit clears the connected group (1.171864ms)
+✔ removing a support detaches other colors and rescues the bird below it (3.771616ms)
+✔ vine must be hit to unlock; locked colors do not count in a same-color group (0.854305ms)
+✔ armored fruit needs two direct hits and becomes matchable only when its shell is gone (1.198414ms)
+✔ pollen changes itself and neighboring ordinary fruit to the incoming color (0.486663ms)
+✔ direct pinecone hit chains through a neighboring pinecone and rescues adjacent birds (0.434774ms)
+✔ a normal color match also ignites a pinecone touching the popped group (0.753234ms)
+✔ color objective can finish while unrelated fruit remains attached (2.042654ms)
+✔ ammo retires absent colors after a shot while swap cannot cycle through the whole queue (0.718091ms)
+✔ flight blocks extra fire, swap and launch-position changes without consuming extra ammo (1.966019ms)
+✔ pause freezes both projectile and moving field; resuming continues the same flight (3.021266ms)
+✔ different display frame sizes produce the same shot resolution and final model time (5.572155ms)
+✔ last available shot can win; exhaustion on an incomplete goal loses and locks the model (2.248774ms)
+✔ turn-based descent reaches the warning line including the full moving-field envelope (0.270457ms)
+✔ tree-spirit level advances three rescue waves with one shared ammunition budget (14.247761ms)
+✔ invalid shots and time deltas do not mutate state; authored rows reject bad cells and floating fruit (0.523308ms)
+✔ daily seed uses the local calendar and is stable without fetching data or storing scores (1.799659ms)
+✔ new game is registered as the 16th integrated game and uses no formal progress or network writes (1.072735ms)
+✔ 15 complete story input routes pass through scene animation, wave changes and three-star result screens (211.020582ms)
+✔ a daily variant completes through the scene and records its date-specific best stars (13.764413ms)
+✔ touch hold aims, release fires exactly one shot, and a second finger cannot steal or release it (2.362555ms)
+✔ release outside cancels aim, HUD clicks and stage-selection release do not fire a shot (0.855898ms)
+✔ keyboard fine aiming, swap and two launch stations update both model and visible cannon (8.528794ms)
+✔ flight disables touch, keyboard swap and repeated fire without consuming ammunition (4.574794ms)
+✔ blur pauses mid-flight with no model or animation changes, and resume clears held input (7.468359ms)
+✔ visibility pause keeps falling fruit and rescued-bird effects frozen until manual resume (3.924275ms)
+✔ pause and restart-confirmation overlays reject gameplay input; cancel keeps the current board (1.943766ms)
+✔ confirmed restart resets the run but preserves stars from earlier completions (5.613136ms)
+✔ completed round locks input, next level and selection buttons remain usable (1.281228ms)
+✔ loss screen explains ammunition exhaustion and retry creates a fresh run (0.764421ms)
+✔ leaving cleans owned keyboard, pointer, blur and visibility listeners and stops the model (0.539322ms)
+✔ missing new artwork provides a recoverable route back to the integrated game hub (0.183717ms)
+✔ 20 distinct authored puzzles start unsolved and can earn three stars within adjustment targets (45.846262ms)
+✔ every shipped configuration terminates within finite ray-state bound and reports exact colors (20.464386ms)
+✔ both mirror slopes implement all four expected reflection directions (0.303707ms)
+✔ splitter sends a straight beam and a reflected beam to two independent receivers (0.339842ms)
+✔ dark receivers require zero; shutting every source off cannot satisfy a colored receiver (1.43541ms)
+✔ RGB light combines only at receivers; unwanted extra color invalidates an exact target (0.42509ms)
+✔ crossing rays do not transfer color to each other downstream (0.329225ms)
+✔ filters pass only selected RGB component from white light (0.191448ms)
+✔ closed ray loop with a splitter terminates without losing the external branch (0.220062ms)
+✔ walls, opaque source housings and receiving crystals stop incoming beams (0.301964ms)
+✔ turns cycle filters, reject invalid controls, and undo restores exact history without erasing hint use (0.911982ms)
+✔ hint solver minimizes forward-cycle adjustments from current state and never mutates it (18.599589ms)
+✔ live correct preview still needs submit; failed checks do not change configuration or penalize stars (0.258219ms)
+✔ compiler rejects overlap, missing lit goal, unsupported states and excessive search space (1.272515ms)
+✔ incremental solver pauses between chunks and distinguishes genuinely impossible optical layouts (0.40526ms)
+✔ catalog retains light workshop among 16 scenes; new logic has no formal progress or external writes (1.411334ms)
+✔ all 20 game scenes finish through scene controls and explicit submit (50.943592ms)
+✔ failed submit preserves configuration; repeated controls cycle; undo cancels current search (6.615365ms)
+✔ keyboard tab selects without moving state; space and number shortcuts adjust controls (1.411444ms)
+✔ hint reveals a machine only at third tier and does not auto-adjust the puzzle (9.779897ms)
+✔ visibility pauses solver and input; returning to foreground needs manual resume (0.865603ms)
+✔ mix chart preserves puzzle; reset cancel preserves history; confirmed restart clears hints and moves (1.430052ms)
+✔ selection retains current unsolved run and completed stars while replay starts fresh (2.161021ms)
+✔ exit releases captures and listeners and returns to configured main game hub (0.4721ms)
+✔ 18 distinct authored maps all reach exit with every crystal; target moves are attainable (927.129721ms)
+✔ map validator rejects inconsistent sizes, missing spawn, unmatched crates and portal pairs (0.423978ms)
+✔ walls, out-of-bounds and illegal pushes never mutate state or increment moves (0.402646ms)
+✔ crate reaches plate, opens gate and re-closes after an undo (0.254574ms)
+✔ key is required, remains after passing door, and undo restores collection (0.216055ms)
+✔ stepping onto switch toggles bridge each time; undo restores both position and bridge (0.129655ms)
+✔ portals transfer once, count as one move, and reverse with undo (0.110366ms)
+✔ crystals are optional for exit but required for exploration star (0.178388ms)
+✔ gem pickup is restored by undo and hint use cannot be undone for efficiency star (0.284869ms)
+✔ corner crate reports a recoverable deadlock and can be undone (0.308555ms)
+✔ hint solver distinguishes exhausted search from a search budget limit (0.217267ms)
+✔ solver uses current state and does not change it; computed next step stays valid after detour (263.572856ms)
+✔ crate cannot cover uncollected items, bridges, portals or exits (0.439171ms)
+✔ catalog lists 16 games and retains mechanism in the four-game strategy category (0.895638ms)
+✔ mechanism scene and rules contain no formal saves, external calls or reward changes (0.549207ms)
+✔ intro leads to 18-level selection; all 18 scenes complete through actual scene move handlers (1043.477988ms)
+✔ rapid held inputs are limited to one step per cooldown; blocked moves do not count (1.55515ms)
+✔ tile tapping only moves one adjacent square; undo cancels hints and restores actor state (1.295049ms)
+✔ three-stage hint only creates a route arrow on third request and expires on active time (0.917471ms)
+✔ pausing freezes incremental solver, cooldown and input; return from background stays paused (3.159434ms)
+✔ restart cancellation keeps progress; confirmed restart resets hints and moves (0.730038ms)
+✔ selection preserves the current run for resume; replay keeps best stars in memory (1.938327ms)
+✔ shutdown releases input capture, listeners and hint job; leaving uses configured hub (0.410177ms)
+✔ 12 distinct stages finish by real movement/jump/form inputs with all badges and no falls (159.152979ms)
+✔ fixed-step simulation gives same result with 30, 60 and 120 FPS frame grouping (5.034957ms)
+✔ releasing jump early produces a lower jump; holding does not cause repeated jumps (0.954596ms)
+✔ coyote time accepts a jump just after walking off a ledge, but expires (0.307602ms)
+✔ jump buffer launches on landing without requiring an extra press (0.23948ms)
+✔ round form fits low passage and cannot expand through ceiling (0.293502ms)
+✔ triangle dash cuts vines; walking or dashing in another form does not (0.62497ms)
+✔ dash stops at solid stone without tunneling and requires release plus cooldown to repeat (0.520143ms)
+✔ square must stand on plate for its charge duration; opened door stays open after morphing (2.835387ms)
+✔ closing gate waits while occupied, then closes once player clears it (0.534565ms)
+✔ square resists wind drift and makes more progress against strong wind (1.960801ms)
+✔ rising air gives round form a higher jump (3.9342ms)
+✔ spring activates from ground approach and can reach high optional platforms (0.249756ms)
+✔ standing rider is carried by horizontal and vertical moving platforms (2.306822ms)
+✔ upward platform cannot push player through solid ceiling (1.304884ms)
+✔ rock warning is harmless and visible before the finite falling phase (0.390137ms)
+✔ checkpoint respawn retains badges and cleared vines but resets gate timers (0.292069ms)
+✔ pausing freezes physics, movers, gate countdown and checkpoint delay (0.162214ms)
+✔ stalled frames are capped; invalid or negative delta does not advance (0.493853ms)
+✔ badges and special challenge are optional; completion locks movement and grades separately (0.203647ms)
+✔ level validation rejects unsafe endpoints, invalid gate references and malformed movers (0.481144ms)
+✔ new action game remains integrated in the cumulative catalog with no formal progress writes (0.707485ms)
+✔ all 12 stages complete via scene update with input replay, badges and star records (217.293112ms)
+✔ two touch pointers can move and jump simultaneously; releasing one retains the other (1.699208ms)
+✔ pointer release outside canvas clears held input and a new touch can change form while moving (0.848237ms)
+✔ keyboard movement and jump release work and key repetition does not retrigger form or pause (1.147517ms)
+✔ blur pause freezes animation clocks and clears held controls; resume requires a new press (1.185564ms)
+✔ touch and keyboard changes cannot affect paused or confirmation states (1.255129ms)
+✔ checkpoint action preserves badges and returns camera to player after fall (1.339867ms)
+✔ morph blocked by low ceiling leaves current sprite and physics shape consistent (2.602757ms)
+✔ selector resume retains running checkpoint; restart cancel preserves and restart confirms reset (1.490603ms)
+✔ full completion locks controls and replay keeps best stars (10.674744ms)
+✔ leaving removes owned listeners, captures and inputs; reopening does not multiply touch pointers (0.872512ms)
+✔ missing artwork shows a recoverable return button (0.18614ms)
+✔ 200 seeded sessions: 2400 tasks are solvable, balanced, protect creatures and require exactly 15 pickups (26.523945ms)
+✔ protected animals are never caught and repeated wrong taps count once (0.446372ms)
+✔ invalid indices, bins and early advances cannot change progress (0.210887ms)
+✔ sorting captures once, waits for bin, rejects wrong bin once then accepts correct bin (0.273311ms)
+✔ two-object missions reject other trash and cannot count one item twice (0.300553ms)
+✔ hint counts once per task and returns remaining targets only (1.021006ms)
+✔ new task resets wrong choices, hints and pending state; completion cannot overflow (0.199029ms)
+✔ catalog includes ocean and mechanism games without duplicate entries (1.035819ms)
+✔ new scene and rules contain no formal progress writes or external requests (1.097672ms)
+✔ previous bubble rules: all 12 tasks still have exactly one answer for 80 seeds (4.720243ms)
+✔ previous snack rules: a missed guest returns and 12 correct deliveries finish the session (1.225204ms)
+✔ scene creates, initial hint is hidden, pause freezes flight and requires resume (3.041286ms)
+✔ rapid taps do not create extra shots or pickups (0.528376ms)
+✔ slow mode freezes items without blocking answers; hints disappear after 2.5 active seconds (1.172474ms)
+✔ bin clicks during flight are ignored, wrong-bin retry stays active and correct bin completes (2.12618ms)
+✔ background and blur pause; shutdown removes owned listeners (0.680564ms)
+✔ transition shows rule card and final task opens completion instead of another task (1.199595ms)
+✔ return and restart keep the configured destination and release paused tweens (0.605842ms)
+ℹ tests 170
+ℹ suites 0
+ℹ pass 170
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1406.351013
+
+15 關主線三星路徑摘要：
+{"id":1,"ms":18,"shots":2,"stars":3,"max":4}
+{"id":2,"ms":74,"shots":3,"stars":3,"max":6}
+{"id":3,"ms":7,"shots":2,"stars":3,"max":6}
+{"id":4,"ms":269,"shots":8,"stars":3,"max":8}
+{"id":5,"ms":83,"shots":3,"stars":3,"max":9}
+{"id":6,"ms":121,"shots":3,"stars":3,"max":14}
+{"id":7,"ms":76,"shots":3,"stars":3,"max":12}
+{"id":8,"ms":196,"shots":6,"stars":3,"max":14}
+{"id":9,"ms":19,"shots":2,"stars":3,"max":11}
+{"id":10,"ms":133,"shots":3,"stars":3,"max":15}
+{"id":11,"ms":290,"shots":4,"stars":3,"max":15}
+{"id":12,"ms":383,"shots":7,"stars":3,"max":18}
+{"id":13,"ms":2297,"shots":8,"stars":3,"max":15}
+{"id":14,"ms":301,"shots":6,"stars":3,"max":20}
+{"id":15,"ms":1105,"shots":14,"stars":3,"max":20}
+
+32 種每日變化三星路徑摘要：
+2026-01-01 11/2/true 4 shots 3 stars
+2026-01-02 10/3/false 3 shots 3 stars
+2026-01-03 8/0/false 5 shots 3 stars
+2026-01-04 6/1/false 3 shots 3 stars
+2026-01-06 10/0/true 3 shots 3 stars
+2026-01-07 8/1/false 5 shots 3 stars
+2026-01-08 6/2/false 3 shots 3 stars
+2026-01-09 11/3/true 4 shots 3 stars
+2026-01-10 8/1/true 5 shots 3 stars
+2026-01-11 10/0/false 3 shots 3 stars
+2026-01-12 11/3/false 4 shots 3 stars
+2026-01-13 6/2/true 3 shots 3 stars
+2026-01-14 8/2/false 5 shots 3 stars
+2026-01-15 10/1/false 3 shots 3 stars
+2026-01-18 8/3/false 5 shots 3 stars
+2026-01-20 10/2/true 3 shots 3 stars
+2026-01-21 8/3/true 5 shots 3 stars
+2026-01-22 6/3/false 3 shots 3 stars
+2026-01-23 11/0/false 4 shots 3 stars
+2026-01-24 10/1/true 3 shots 3 stars
+2026-01-25 8/2/true 5 shots 3 stars
+2026-02-01 6/3/true 3 shots 3 stars
+2026-02-04 11/0/true 4 shots 3 stars
+2026-02-08 11/1/true 4 shots 3 stars
+2026-02-09 6/0/false 3 shots 3 stars
+2026-02-22 11/2/false 4 shots 3 stars
+2026-02-23 6/1/true 3 shots 3 stars
+2026-03-04 10/2/false 3 shots 3 stars
+2026-03-06 6/0/true 3 shots 3 stars
+2026-03-07 11/1/false 4 shots 3 stars
+2026-03-12 8/0/true 5 shots 3 stars
+2026-03-13 10/3/true 3 shots 3 stars

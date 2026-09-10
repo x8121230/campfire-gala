@@ -1,0 +1,20 @@
+{
+  "tests": 414,
+  "new_rules": 5,
+  "browser": "PASS: actual Chromium WebGL2 with software GPU",
+  "browser_checks": [
+    "keyboard movement",
+    "ordinary-path full quest",
+    "wrong puzzle retry",
+    "save and reload",
+    "mobile touch cancellation",
+    "portrait pause",
+    "blur pause",
+    "Phaser scene enter/exit/reenter cleanup"
+  ],
+  "real_mobile": "pending",
+  "actual_game_viewer": "pending",
+  "new_map": "one small genuine 3D map; fixed 45-degree pitch; billboard character",
+  "preserved_source_assets": 99,
+  "package": "cumulative overlay requires original complete forest game and v5.3 wardrobe"
+}

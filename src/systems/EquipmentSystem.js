@@ -1,5 +1,6 @@
 // src/systems/EquipmentSystem.js
 import { ITEM_DB } from '../data/GameData.js';
+import EquipmentUpgradeSystem from './EquipmentUpgradeSystem.js';
 
 export default class EquipmentSystem {
     /**
@@ -9,7 +10,8 @@ export default class EquipmentSystem {
         return {
             hat: registry.get('equipped_hat') ?? 'none',
             cloth: registry.get('equipped_cloth') ?? 'none',
-            fullset: registry.get('equipped_fullset') ?? 'none'
+            fullset: registry.get('equipped_fullset') ?? 'none',
+            collectible: registry.get('equipped_collectible') ?? 'none'
         };
     }
 
@@ -44,7 +46,7 @@ export default class EquipmentSystem {
      */
     static getTotalBonus(registry) {
         const equipped = this.getEquippedItems(registry);
-        const equippedIds = [equipped.hat, equipped.cloth, equipped.fullset];
+        const equippedIds = [equipped.hat, equipped.cloth, equipped.fullset, equipped.collectible];
 
         let rewardRate = 0;
         let dropRate = 0;
@@ -244,68 +246,12 @@ export default class EquipmentSystem {
     /**
      * 發放道具
      * - 新裝備：加入 owned_items，並標記 new_items
-     * - 重複裝備：不重複加入，改成 +1 水晶
+     * - 重複裝備：同款最多升一階，滿階或特殊收藏改成 +1 水晶
      */
     static giveItem(registry, itemKey) {
-        const itemData = ITEM_DB[itemKey];
-
-        if (!itemData) {
-            console.warn(`⚠️ giveItem 找不到道具資料：${itemKey}`);
-            return {
-                success: false,
-                type: 'error',
-                itemKey,
-                itemData: null
-            };
-        }
-
-        let owned = registry.get('owned_items');
-        let crystals = registry.get('user_crystals');
-        let newItems = registry.get('new_items');
-
-        if (!Array.isArray(owned)) owned = [];
-        if (typeof crystals !== 'number') crystals = 0;
-        if (!Array.isArray(newItems)) newItems = [];
-
-        const alreadyOwned = owned.includes(itemKey);
-
-        if (alreadyOwned) {
-            crystals += 1;
-            registry.set('user_crystals', crystals);
-
-            console.log(`💎 重複獲得 ${itemKey}，轉成 1 水晶，目前水晶：${crystals}`);
-
-            return {
-                success: true,
-                type: 'crystal',
-                amount: 1,
-                itemKey,
-                itemData,
-                isDuplicate: true,
-                isNew: false
-            };
-        }
-
-        const newOwned = [...owned, itemKey];
-        registry.set('owned_items', newOwned);
-
-        if (!newItems.includes(itemKey)) {
-            newItems.push(itemKey);
-            registry.set('new_items', newItems);
-        }
-
-        console.log(`🎁 成功獲得新道具：${itemKey}`, newOwned);
-
-        return {
-            success: true,
-            type: 'item',
-            itemKey,
-            itemData,
-            amount: 0,
-            isDuplicate: false,
-            isNew: true
-        };
+        return EquipmentUpgradeSystem.receive(registry, itemKey);
     }
+
 
     /**
      * 是否擁有某個特殊效果

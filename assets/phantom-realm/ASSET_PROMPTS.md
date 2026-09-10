@@ -1,0 +1,5 @@
+# 幻界人物素材
+
+圖片生成工具製作一張透明四方向站立／行走圖集。使用同一格的兩種姿勢交替與少量彈跳；未實作八方向、骨骼動畫或紙娃娃換裝。場景為程式建立的真正 3D 網格、燈光與陰影。
+
+Use case: stylized-concept. Production game sprite sheet, square transparent image, precisely 4 columns by 2 rows, eight equal cells with ample transparent padding. SAME original chibi little forest adventurer in all cells, dark brown short hair, very large head, forest green cape and cream tunic, brown boots, acorn satchel, friendly fairy tale hand painted style, no weapon. ROW ONE: four idle full-body views facing FRONT, RIGHT, BACK, LEFT respectively. ROW TWO: matching four walking poses facing FRONT, RIGHT, BACK, LEFT respectively, one leg forward and opposite arm forward. Camera slightly from above, identical character size and baseline within each cell, each entire character inside its own cell, 20 percent padding, no overlap. Clean transparent background actual alpha, no ground shadows, no grid lines, no text, no labels, no UI. Polished cute 2D RPG sprites for use as billboards in a 3D woodland scene.

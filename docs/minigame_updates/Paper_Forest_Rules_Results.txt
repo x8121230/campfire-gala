@@ -1,0 +1,25 @@
+✔ separate save key; same initial enemies and spell balance (5.205866ms)
+✔ apples collect by proximity after accepting, only once (25.837383ms)
+✔ escort pace caps straight and diagonal motion equally (0.772907ms)
+✔ musical mushrooms sound once per approach and can rearm (2.194987ms)
+✔ guidance follows acceptance, escort and automatic quest turn-in (1.144681ms)
+✔ reset creates fresh paper game without changing another journey (0.548981ms)
+✔ main quest is completable by walking: owl, eight animals, five apples, owl (248.356916ms)
+✔ bubble needs quest, range and cooldown, tracks target, awards once (6.446257ms)
+✔ honey respects range, solid landing and three second root (3.721429ms)
+✔ dash cannot cross pond, map boundary or tree trunk (3.051276ms)
+✔ elephant cleans only front cone and has cooldown (0.336776ms)
+✔ safe village is not invaded; recovery preserves progress (6.313977ms)
+✔ duck escort can finish by following the south road after calming animals (29.592418ms)
+✔ acorn event has falling window, completes once and can restart (30.882866ms)
+✔ untrusted save values are bounded and legacy save never migrates (0.669199ms)
+✔ NPC approach triggers once, requires leaving the wider ring to rearm (1.045673ms)
+✔ all four NPC types support proximity dialogue; objective turn-in is automatic (0.340185ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 686.842135

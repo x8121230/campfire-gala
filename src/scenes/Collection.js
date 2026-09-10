@@ -1,1240 +1,424 @@
-// src/scenes/Collection.js
-import RewardPopup from '../UI/RewardPopup.js';
+// v5.3 — unified paper doll, master-aligned headwear and map synchronization.
 import AudioSystem from '../systems/AudioSystem.js';
-import CharacterManager from '../managers/CharacterManager.js';
 import SaveSystem from '../systems/SaveSystem.js';
 import EquipmentSystem from '../systems/EquipmentSystem.js';
+import Upgrade from '../systems/EquipmentUpgradeSystem.js';
+import { grantAllItemsForTesting } from '../systems/TestGrantSystem.js';
+import WardrobeAudio from '../systems/WardrobeAudio.js';
 import { ITEM_DB } from '../data/GameData.js';
+import { FAIRY_IDS, ensureFairyWardrobe } from '../data/FairyWardrobeData.js';
+import {
+    PAPER_DOLL_FILES,
+    PAPER_DOLL_LAYOUT,
+    currentLook,
+    fitImage
+} from '../data/PaperDollConfig.js';
+
+const CLIP = 'item_hat_daily_01';
+const SECRET = 'item_fullset_secret_guard';
+const NONE_HAT = '__none_hat__', NONE_ACCESSORY = '__none_accessory__';
+const NONE_ITEMS = {
+    [NONE_HAT]: { id: NONE_HAT, name: '不戴頭飾', type: 'none', desc: '保留原本的髮型，不配戴頭部裝備。' },
+    [NONE_ACCESSORY]: { id: NONE_ACCESSORY, name: '卸下能力飾品', type: 'none', desc: '暫時不使用能力飾品。' }
+};
+const C = { ink: '#3e5145', muted: '#788477', wood: 0x987454, cream: 0xf8f3e5, green: 0x557b60, gold: 0xe5bd72 };
+const FONT = '"Microsoft JhengHei", "Noto Sans CJK TC", Arial, sans-serif';
 
 export default class Collection extends Phaser.Scene {
-    constructor() {
-        super('Collection');
-    }
-
-    init(data) {
-        this.mapID = data?.mapID || '01';
+    constructor() { super('Collection'); }
+    init(data = {}) {
+        this.mapID = data.mapID || '01';
         this.selectedType = 'all';
+        this.page = 0;
+        this.selectedId = null;
+        this.previewId = null;
+        this.armedId = null;
+        this.modal = null;
     }
-
+    preload() {
+        Object.entries(PAPER_DOLL_FILES).forEach(([key, file]) => {
+            if (!this.textures.exists(key)) this.load.image(key, file);
+        });
+    }
     create() {
-        console.log('👗 進入 Collection', {
-            equipped_hat: this.registry.get('equipped_hat'),
-            equipped_cloth: this.registry.get('equipped_cloth'),
-            equipped_fullset: this.registry.get('equipped_fullset'),
-            equipped_collectible: this.registry.get('equipped_collectible'),
-            owned_items: this.registry.get('owned_items'),
-            owned_collectibles: this.registry.get('owned_collectibles')
+        AudioSystem.stopAllBgm(this);
+        if (ensureFairyWardrobe(this.registry)) this.save();
+        this.audio = new WardrobeAudio(this);
+        this.input.setTopOnly(true);
+        this.cabin();
+        this.header = this.add.container(0, 0);
+        this.grid = this.add.container(0, 0);
+        this.details = this.add.container(0, 0);
+        this.mirror = this.add.container(0, 0);
+        this.selectedId = this.owned()[0] || null;
+        this.previewId = null;
+        this.armedId = null;
+        if (Upgrade.normalizeRegistry(this.registry)) this.save();
+        EquipmentSystem.applyBonusToRegistry(this.registry);
+        this.render();
+        this.input.on('pointerdown', this.unlockAudio, this);
+        this.events.once('shutdown', () => {
+            this.input.off('pointerdown', this.unlockAudio, this);
+            this.clearWardrobeEffects(); this.audio.destroy(); this.modal = null;
         });
-
-        const collectionBgmKey = this.cache.audio.exists('collection_bgm')
-            ? 'collection_bgm'
-            : 'home_bgm';
-
-        AudioSystem.playBgm(this, collectionBgmKey, 0.32);
-
-        this.createCollectionBackground();
-
-        this.add.text(640, 48, '夢幻衣櫃', {
-            fontSize: '42px',
-            color: '#ffffff',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 6
-        }).setOrigin(0.5);
-
-        if (this.textures.exists('btn_back')) {
-            const backBtn = this.add.image(80, 60, 'btn_back')
-                .setInteractive({ useHandCursor: true })
-                .setScale(0.6)
-                .setDepth(30);
-
-            backBtn.on('pointerdown', () => {
-                console.log('⬅️ 離開 Collection', {
-                    equipped_hat: this.registry.get('equipped_hat'),
-                    equipped_cloth: this.registry.get('equipped_cloth'),
-                    equipped_fullset: this.registry.get('equipped_fullset'),
-                    equipped_collectible: this.registry.get('equipped_collectible')
-                });
-
-                this.scene.start('WorldMap', { mapID: this.mapID });
-            });
-        }
-
-        this.charManager = new CharacterManager(this);
-        this.charManager.createCharacter(300, 450);
-
-        if (this.charManager.container) {
-            this.charManager.container.setDepth(10);
-        }
-
-        if (this.charManager.refreshLook) {
-            this.charManager.refreshLook();
-        }
-
-        this.createCharacterGlow();
-        this.createEquippedInfo();
-        this.createFilterButtons();
-        this.createBonusInfo();
-        this.createItemInfoPanel();
-        this.createItemGrid();
-        this.createTestRewardButton();
-
-        this.checkMotherGuardReward();
+        this.time.delayedCall(350, () => this.checkMotherGuardReward());
     }
-
-    createCollectionBackground() {
-        if (this.textures.exists('bg_collection_room')) {
-            const bg = this.add.image(640, 360, 'bg_collection_room');
-            bg.setDisplaySize(1280, 720);
-            bg.setDepth(0);
-        } else {
-            this.cameras.main.setBackgroundColor('#f6d8e7');
-            this.add.rectangle(640, 360, 1280, 720, 0xffffff, 0.14).setDepth(0);
-        }
-
-        this.add.rectangle(285, 455, 410, 540, 0xffffff, 0.10)
-            .setStrokeStyle(6, 0xfaf7f2)
-            .setDepth(1);
-
-        this.add.rectangle(285, 455, 388, 518, 0xffffff, 0.08)
-            .setStrokeStyle(2, 0xffffff, 0.6)
-            .setDepth(2);
-
-        this.add.ellipse(285, 610, 160, 36, 0x000000, 0.18).setDepth(3);
-
-        this.add.rectangle(285, 80, 170, 42, 0x000000, 0.38)
-            .setStrokeStyle(2, 0xffffff)
-            .setDepth(4);
-
-        this.add.text(285, 80, '裝備祝福', {
-            fontSize: '22px',
-            color: '#ffffff',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 3
-        }).setOrigin(0.5).setDepth(5);
-
-        this.add.rectangle(945, 445, 660, 530, 0x000000, 0.14)
-            .setStrokeStyle(4, 0xffffff)
-            .setDepth(1);
+    unlockAudio() { this.audio.unlock(); }
+    txt(parent, x, y, text, size = 18, color = C.ink, bold = false) {
+        const node = this.add.text(x, y, text, { fontFamily: FONT, fontSize: `${size}px`, color,
+            fontStyle: bold ? 'bold' : 'normal', lineSpacing: 5 });
+        parent?.add(node); return node;
     }
-
-    createCharacterGlow() {
-        this.characterGlow = this.add.ellipse(300, 470, 210, 340, 0xffffff, 0.08)
-            .setDepth(6);
-
-        this.characterGlow2 = this.add.ellipse(300, 470, 235, 365, 0xfff4c9, 0.06)
-            .setDepth(5);
-
-        this.tweens.add({
-            targets: [this.characterGlow, this.characterGlow2],
-            alpha: 0.16,
-            scaleX: 1.03,
-            scaleY: 1.03,
-            duration: 1400,
-            yoyo: true,
-            repeat: -1,
-            ease: 'Sine.easeInOut'
-        });
+    panel(parent, x, y, w, h, fill = C.cream, radius = 18, stroke = null, strokeWidth = 2) {
+        const g = this.add.graphics();
+        g.fillStyle(fill, 1).fillRoundedRect(x, y, w, h, radius);
+        if (stroke !== null) g.lineStyle(strokeWidth, stroke).strokeRoundedRect(x, y, w, h, radius);
+        parent?.add(g); return g;
     }
-
-    createEquippedInfo() {
-        this.equippedHatText = this.add.text(285, 650, '', {
-            fontSize: '24px',
-            color: '#fff2a8',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(11).setVisible(false);
-
-        this.equippedClothText = this.add.text(285, 680, '', {
-            fontSize: '24px',
-            color: '#d9f7ff',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(11).setVisible(false);
-
-        this.equippedFullsetText = this.add.text(285, 710, '', {
-            fontSize: '24px',
-            color: '#ffd6ff',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(11).setVisible(false);
-
-        this.equippedCollectibleText = this.add.text(285, 740, '', {
-            fontSize: '24px',
-            color: '#b8fff1',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(11).setVisible(false);
-
-        this.updateEquippedInfo();
+    button(parent, x, y, w, h, label, action, fill = C.green, textColor = '#ffffff', name = '') {
+        const box = this.add.container(x, y); parent.add(box);
+        this.panel(box, 0, 0, w, h, fill, 12);
+        this.txt(box, w / 2, h / 2, label, 18, textColor, true).setOrigin(.5);
+        const hit = this.add.rectangle(w / 2, h / 2, w, h, 0xffffff, .001)
+            .setInteractive({ useHandCursor: true }).setName(name || label);
+        box.add(hit);
+        hit.on('pointerover', () => box.setAlpha(.86));
+        hit.on('pointerout', () => box.setAlpha(1));
+        hit.on('pointerdown', () => { if (!this.modal || parent === this.modal) { this.audio.effect('click'); action(); } });
+        return box;
     }
-
-    createFilterButtons() {
-        console.log('✅ createFilterButtons 新版有執行');
-
-        const filters = [
-            { key: 'all', label: '全部', x: 690 },
-            { key: 'hat', label: '帽子', x: 820 },
-            { key: 'cloth', label: '衣服', x: 950 },
-            { key: 'fullset', label: '全身裝', x: 1080 },
-            { key: 'collectible', label: '收藏品', x: 1210 }
-        ];
-
-        this.filterButtons = [];
-
-        filters.forEach(filter => {
-            const btn = this.add.rectangle(filter.x, 122, 120, 48, 0x000000, 0.42)
-                .setStrokeStyle(2, 0xffffff)
-                .setInteractive({ useHandCursor: true })
-                .setDepth(10);
-
-            const label = this.add.text(filter.x, 122, filter.label, {
-                fontSize: '22px',
-                color: '#ffffff',
-                fontStyle: 'bold'
-            }).setOrigin(0.5).setDepth(11);
-
-            btn.on('pointerdown', () => {
-                this.selectedType = filter.key;
-                this.refreshItemGrid();
-                this.refreshFilterButtons();
-            });
-
-            this.filterButtons.push({ key: filter.key, btn, label });
-        });
-
-        this.refreshFilterButtons();
+    cabin() {
+        this.cameras.main.setBackgroundColor('#dec8a9');
+        const g = this.add.graphics();
+        g.fillStyle(0xe7d6bc).fillRect(0, 0, 1280, 720);
+        for (let x = 0; x < 1280; x += 128) g.fillStyle(x % 256 ? 0xc9aa85 : 0xd5b993, .3).fillRect(x, 0, 3, 720);
+        g.fillStyle(0xad8a65).fillRect(0, 674, 1280, 46);
+        g.fillStyle(0x967452).fillRect(0, 672, 1280, 5);
+        this.panel(null, 28, 106, 394, 552, 0xb78e64, 26);
+        this.panel(null, 38, 116, 374, 532, C.cream, 21);
+        this.panel(null, 446, 106, 806, 552, 0xfdfaf2, 22);
+        this.txt(null, 58, 132, '今日的小小冒險家', 22, C.ink, true);
+        this.panel(null, 70, 200, 310, 394, C.cream, 70, 0xe5dbc6);
+        this.txt(null, 42, 686, 'FOREST ATELIER  /  小木屋衣櫃', 13, '#fff8e8');
+        this.txt(null, 1234, 686, 'v5.5 · 童話新裝 10 件', 13, '#fff8e8').setOrigin(1, 0);
     }
-
-    refreshFilterButtons() {
-        if (!this.filterButtons) return;
-
-        this.filterButtons.forEach(item => {
-            if (item.key === this.selectedType) {
-                item.btn.setFillStyle(0x6aa8ff, 0.92);
-            } else {
-                item.btn.setFillStyle(0x000000, 0.42);
-            }
-        });
+    item(id) { return ITEM_DB[id] || NONE_ITEMS[id] || null; }
+    owned() {
+        const a = this.registry.get('owned_items'), b = this.registry.get('owned_collectibles');
+        return [...new Set([...(Array.isArray(a) ? a : []), ...(Array.isArray(b) ? b : [])])].filter(id => ITEM_DB[id]);
     }
-
-    createBonusInfo() {
-        console.log('✅ createBonusInfo 新版有執行');
-
-        this.bonusLine0 = this.add.text(285, 116, '', {
-            fontSize: '26px',
-            color: '#fff2a8',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center',
-            wordWrap: { width: 250 }
-        }).setOrigin(0.5, 0).setDepth(11);
-
-        this.bonusLine1 = this.add.text(285, 150, '', {
-            fontSize: '26px',
-            color: '#ffe38a',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center',
-            wordWrap: { width: 250 }
-        }).setOrigin(0.5, 0).setDepth(11);
-
-        this.bonusLine2 = this.add.text(285, 184, '', {
-            fontSize: '26px',
-            color: '#ffd1dc',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center',
-            wordWrap: { width: 250 }
-        }).setOrigin(0.5, 0).setDepth(11);
-
-        this.bonusLine3 = this.add.text(285, 218, '', {
-            fontSize: '26px',
-            color: '#b8fff1',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center',
-            wordWrap: { width: 250 }
-        }).setOrigin(0.5, 0).setDepth(11);
-
-        this.updateBonusInfo();
+    isEquipped(id) {
+        if (id === NONE_HAT) return !this.registry.get('equipped_hat') || this.registry.get('equipped_hat') === 'none';
+        if (id === NONE_ACCESSORY) return !this.registry.get('equipped_collectible') || this.registry.get('equipped_collectible') === 'none';
+        return ['hat', 'cloth', 'fullset', 'collectible'].some(k => this.registry.get(`equipped_${k}`) === id);
     }
-
-    createItemInfoPanel() {
-        const panelX = 285;
-        const panelY = 640;
-
-        this.itemInfoBg = this.add.rectangle(panelX, panelY, 320, 210, 0x1a1a1a, 0.84)
-            .setStrokeStyle(2, 0xffffff, 0.9)
-            .setDepth(12)
-            .setVisible(false);
-
-        this.itemInfoTitle = this.add.text(panelX, panelY - 78, '', {
-            fontSize: '24px',
-            color: '#fff2a8',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center',
-            wordWrap: { width: 280 }
-        }).setOrigin(0.5).setDepth(13).setVisible(false);
-
-        this.itemInfoRarity = this.add.text(panelX, panelY - 40, '', {
-            fontSize: '20px',
-            color: '#ffffff',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center',
-            wordWrap: { width: 280 }
-        }).setOrigin(0.5).setDepth(13).setVisible(false);
-
-        this.itemInfoEffect = this.add.text(panelX, panelY + 12, '', {
-            fontSize: '18px',
-            color: '#d9f7ff',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center',
-            wordWrap: { width: 280 },
-            lineSpacing: 10
-        }).setOrigin(0.5).setDepth(13).setVisible(false);
-
-        this.itemInfoDesc = this.add.text(panelX, panelY + 82, '', {
-            fontSize: '17px',
-            color: '#ffdede',
-            stroke: '#000000',
-            strokeThickness: 3,
-            align: 'center',
-            wordWrap: { width: 280 },
-            lineSpacing: 8
-        }).setOrigin(0.5).setDepth(13).setVisible(false);
+    canUnequip(id) {
+        if (!this.isEquipped(id) || id === 'item_cloth_daily_01') return false;
+        const item = ITEM_DB[id];
+        return Boolean(item && ['hat', 'cloth', 'fullset', 'collectible'].includes(item.type));
     }
-
-    showItemInfo(itemData) {
-        if (!itemData) return;
-
-        const rarityMap = {
-            common: '普通',
-            rare: '稀有',
-            epic: '夢幻',
-            dream: '夢幻',
-            legend: '傳說',
-            legendary: '傳說',
-            stage: '關卡'
-        };
-
-        const rarityColorMap = {
-            common: '#ffffff',
-            rare: '#ffd966',
-            epic: '#d6a8ff',
-            dream: '#d6a8ff',
-            legend: '#ffb36b',
-            legendary: '#ffb36b',
-            stage: '#8fe3ff'
-        };
-
-        const rarityLabel = rarityMap[itemData.rarity] || '普通';
-        const rarityColor = rarityColorMap[itemData.rarity] || '#ffffff';
-
-        const effects = itemData.effects || {};
-        const effectLines = [];
-
-        if (effects.extraPlayCount > 0) {
-            effectLines.push(`今天可以多玩 ${effects.extraPlayCount} 次`);
-        }
-
-        if (effects.rewardRate > 0) {
-            effectLines.push(`寶箱獎勵變多（+${effects.rewardRate}%）`);
-        }
-
-        if (effects.dropRate > 0) {
-            effectLines.push(`更容易找到好東西（+${effects.dropRate}%）`);
-        }
-
-        if (effects.revealHint > 0) {
-            effectLines.push(`可以獲得提示 +${effects.revealHint}`);
-        }
-
-        if (effects.timeBonus > 0) {
-            effectLines.push(`答題時間增加 ${effects.timeBonus} 秒`);
-        }
-
-        if (effects.extraMistake > 0) {
-            effectLines.push(`可多容錯 ${effects.extraMistake} 次`);
-        }
-
-        if (effects.noHeartCost > 0) {
-            effectLines.push('進入小遊戲不消耗體力');
-        }
-
-        if (effects.ignoreReputationLock > 0) {
-            effectLines.push('進入關卡可無視聲望門檻');
-        }
-
-        if (itemData.skill?.type === 'scout') {
-            effectLines.push(`每局可探索 ${itemData.skill.usesPerRun || 1} 格未挖開區域`);
-        }
-
-        this.itemInfoBg.setVisible(true);
-        this.itemInfoTitle.setVisible(true);
-        this.itemInfoRarity.setVisible(true);
-        this.itemInfoEffect.setVisible(true);
-        this.itemInfoDesc.setVisible(true);
-
-        this.itemInfoTitle.setText(itemData.name || '未知裝備');
-        this.itemInfoRarity.setText(`稀有度：${rarityLabel}`);
-        this.itemInfoRarity.setColor(rarityColor);
-
-        if (effectLines.length > 0) {
-            this.itemInfoEffect.setText(effectLines.join('\n'));
-        } else {
-            this.itemInfoEffect.setText('目前沒有特殊加成');
-        }
-
-        this.itemInfoDesc.setText(itemData.desc || '');
+    save() {
+        try { SaveSystem.saveFromRegistry(this.registry); }
+        catch (error) { console.warn('衣櫃存檔失敗', error); this.saveFailed = true; }
     }
-
-    clearItemInfo() {
-        if (!this.itemInfoBg || !this.itemInfoTitle || !this.itemInfoRarity || !this.itemInfoEffect || !this.itemInfoDesc) return;
-
-        this.itemInfoTitle.setText('');
-        this.itemInfoRarity.setText('');
-        this.itemInfoEffect.setText('');
-        this.itemInfoDesc.setText('');
-
-        this.itemInfoBg.setVisible(false);
-        this.itemInfoTitle.setVisible(false);
-        this.itemInfoRarity.setVisible(false);
-        this.itemInfoEffect.setVisible(false);
-        this.itemInfoDesc.setVisible(false);
+    render() { this.clearWardrobeEffects(); this.renderHeader(); this.renderGrid(); this.renderDetails(); this.renderDoll(); }
+    renderHeader() {
+        this.header.removeAll(true);
+        this.button(this.header, 30, 29, 114, 48, '← 地圖', () => this.scene.start('WorldMap', { mapID: this.mapID }), 0xf9f2de, C.ink);
+        this.txt(this.header, 170, 24, '森林小木屋', 32, C.ink, true);
+        this.txt(this.header, 172, 64, '換一套心情，準備下一場冒險。', 16, '#6f735f');
+        this.txt(this.header, 676, 42, `水晶  ${this.registry.get('user_crystals') || 0}`, 21, C.ink, true);
+        const prefs = this.audio.prefs;
+        this.button(this.header, 826, 29, 110, 48, `音樂 ${prefs.music ? '開' : '關'}`, () => {
+            this.audio.toggle('music'); this.save(); this.renderHeader();
+        }, 0xf9f2de, C.ink, 'music-toggle');
+        this.button(this.header, 946, 29, 110, 48, `音效 ${prefs.sfx ? '開' : '關'}`, () => {
+            this.audio.toggle('sfx'); this.save(); this.renderHeader();
+        }, 0xf9f2de, C.ink, 'sfx-toggle');
+        this.button(this.header, 1066, 29, 184, 48, '測試工具', () => this.openTests(), 0x866a53, '#ffffff', 'test-tools');
     }
-
-    checkMotherGuardReward() {
-        const secretState = this.registry.get('secret_state') || {};
-        if (!secretState.motherGuardPendingReward) return;
-        if (secretState.motherGuardUnlocked) return;
-
-        const rewardItemKey = 'item_fullset_secret_guard';
-        const ownedRaw = this.registry.get('owned_items');
-        const ownedItems = Array.isArray(ownedRaw) ? [...ownedRaw] : [];
-
-        if (!ownedItems.includes(rewardItemKey)) {
-            ownedItems.push(rewardItemKey);
-            this.registry.set('owned_items', ownedItems);
-        }
-
-        let newItems = this.registry.get('new_items') || [];
-        if (!Array.isArray(newItems)) newItems = [];
-        if (!newItems.includes(rewardItemKey)) {
-            newItems.push(rewardItemKey);
-            this.registry.set('new_items', newItems);
-        }
-
-        this.registry.set('secret_state', {
-            ...secretState,
-            motherGuardUnlocked: true,
-            motherGuardPendingReward: false,
-            motherGuardSequence: [],
-            motherGuardSequenceStartTime: 0
-        });
-
-        SaveSystem.saveFromRegistry(this.registry);
-
-        this.refreshItemGrid();
-        this.updateEquippedInfo();
-        this.updateBonusInfo();
-
-        this.time.delayedCall(120, () => {
-            const itemName = ITEM_DB?.[rewardItemKey]?.name || '母上的守護';
-            const itemIcon = ITEM_DB?.[rewardItemKey]?.icon || null;
-
-            this.showRewardPopup(
-                '隱藏彩蛋完成！',
-                `獲得傳說裝備\n${itemName}`,
-                '#ffcf7d',
-                itemIcon
-            );
-
-            this.highlightItem(rewardItemKey);
-        });
-    }
-
-    createTestRewardButton() {
-        const testBtnBg = this.add.rectangle(1180, 60, 150, 44, 0x4a7dff, 0.9)
-            .setStrokeStyle(2, 0xffffff)
-            .setInteractive({ useHandCursor: true })
-            .setDepth(20);
-
-        this.add.text(1180, 60, '測試送裝備', {
-            fontSize: '22px',
-            color: '#ffffff',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 3
-        }).setOrigin(0.5).setDepth(21);
-
-        testBtnBg.on('pointerdown', () => {
-            const testItemKey = 'item_cloth_fairy_01';
-            const reward = EquipmentSystem.giveItem(this.registry, testItemKey);
-
-            console.log('🎁 測試送裝備結果：', reward);
-            console.log('👜 目前 owned_items =', this.registry.get('owned_items'));
-            console.log('📦 ITEM_DB[item_cloth_fairy_01] =', ITEM_DB?.[testItemKey]);
-
-            if (reward.type === 'item') {
-                const itemName = ITEM_DB?.[reward.itemKey]?.name || reward.itemKey;
-                const itemIcon = ITEM_DB?.[reward.itemKey]?.icon || reward.itemKey;
-
-                this.showRewardPopup(
-                    '獲得獎勵',
-                    `獲得新裝備\n${itemName}`,
-                    '#fff2a8',
-                    itemIcon
-                );
-            } else if (reward.type === 'crystal') {
-                this.showRewardPopup(
-                    '獲得獎勵',
-                    `重複裝備\n轉為 ${reward.amount} 水晶`,
-                    '#8fffd9',
-                    'icon_crystal'
-                );
-            }
-
-            this.refreshItemGrid();
-
-            if (reward.type === 'item' && reward.isNew) {
-                this.highlightItem(reward.itemKey);
-            }
-
-            SaveSystem.saveFromRegistry(this.registry);
-        });
-    }
-
-    showRewardToast(message, color = '#fff2a8') {
-        const bg = this.add.rectangle(640, 120, 420, 64, 0x000000, 0.72)
-            .setStrokeStyle(3, 0xffffff)
-            .setDepth(50)
-            .setAlpha(0);
-
-        const text = this.add.text(640, 120, message, {
-            fontSize: '28px',
-            color,
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 4,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(51).setAlpha(0);
-
-        this.tweens.add({
-            targets: [bg, text],
-            alpha: 1,
-            duration: 180,
-            ease: 'Sine.easeOut',
-            onComplete: () => {
-                this.time.delayedCall(900, () => {
-                    this.tweens.add({
-                        targets: [bg, text],
-                        alpha: 0,
-                        y: '-=10',
-                        duration: 220,
-                        ease: 'Sine.easeIn',
-                        onComplete: () => {
-                            bg.destroy();
-                            text.destroy();
-                        }
-                    });
-                });
-            }
-        });
-    }
-
-    showRewardPopup(title, content, color = '#fff2a8', iconKey = null) {
-        if (this.rewardPopupElements) {
-            this.rewardPopupElements.forEach(obj => obj.destroy());
-            this.rewardPopupElements = null;
-        }
-
-        const centerX = 640;
-        const centerY = 360;
-
-        const overlay = this.add.rectangle(centerX, centerY, 1280, 720, 0x000000, 0.45)
-            .setDepth(100)
-            .setInteractive();
-
-        const panel = this.add.rectangle(centerX, centerY, 460, 320, 0xffffff, 0.97)
-            .setStrokeStyle(4, 0x5b4636)
-            .setDepth(101);
-
-        const titleText = this.add.text(centerX, centerY - 78, title, {
-            fontSize: '34px',
-            color: '#5b3b22',
-            fontStyle: 'bold',
-            stroke: '#ffffff',
-            strokeThickness: 2
-        }).setOrigin(0.5).setDepth(102);
-
-        let rewardIcon = null;
-        let contentY = centerY + 28;
-
-        if (iconKey && this.textures.exists(iconKey)) {
-            rewardIcon = this.add.image(centerX, centerY - 18, iconKey)
-                .setDisplaySize(72, 72)
-                .setDepth(102);
-
-            contentY = centerY + 58;
-        }
-
-        const contentText = this.add.text(centerX, contentY, content, {
-            fontSize: '28px',
-            color,
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 4,
-            align: 'center',
-            wordWrap: { width: 320 },
-            lineSpacing: 16
-        }).setOrigin(0.5).setDepth(102);
-
-        const okBtn = this.add.rectangle(centerX, centerY + 126, 140, 50, 0x6aa8ff, 1)
-            .setStrokeStyle(2, 0xffffff)
-            .setInteractive({ useHandCursor: true })
-            .setDepth(102);
-
-        const okText = this.add.text(centerX, centerY + 126, '確定', {
-            fontSize: '26px',
-            color: '#ffffff',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 3
-        }).setOrigin(0.5).setDepth(103);
-
-        const closePopup = () => {
-            if (this.rewardPopupElements) {
-                this.rewardPopupElements.forEach(obj => obj.destroy());
-                this.rewardPopupElements = null;
-            }
-        };
-
-        okBtn.on('pointerdown', closePopup);
-        overlay.on('pointerdown', closePopup);
-
-        this.rewardPopupElements = [
-            overlay, panel, titleText, contentText, okBtn, okText
-        ];
-
-        if (rewardIcon) {
-            this.rewardPopupElements.push(rewardIcon);
-        }
-    }
-
-    createItemGrid() {
-        this.itemSlots = [];
-        this.itemSlotMap = {};
-        this.refreshItemGrid();
-
-        this.input.keyboard.on('keydown-R', () => {
-            const itemKey = 'item_cloth_fairy_01';
-            const result = EquipmentSystem.giveItem(this.registry, itemKey);
-
-            SaveSystem.saveFromRegistry(this.registry);
-            this.refreshItemGrid();
-
-            if (result.type === 'item') {
-                RewardPopup.showItem(this, itemKey, {
-                    title: '恭喜獲得新裝備！'
-                });
-            } else if (result.type === 'crystal') {
-                RewardPopup.showCrystal(this, result.amount || 1, {
-                    title: '重複裝備已轉換',
-                    itemName: `水晶 +${result.amount || 1}`,
-                    iconKey: 'icon_crystal',
-                    description: `你抽到重複的「小仙子洋裝」，已自動轉換成 ${result.amount || 1} 顆水晶。`
-                });
-            } else {
-                console.warn('R 測試送裝備失敗', result);
-            }
-        });
-    }
-
-    getRarityColor(rarity) {
-        const rarityColors = {
-            common: 0xffffff,
-            rare: 0xffd966,
-            epic: 0xc084ff,
-            dream: 0xc084ff,
-            legend: 0xff8c42,
-            legendary: 0xff8c42,
-            stage: 0x8fe3ff
-        };
-
-        return rarityColors[rarity] || 0xffffff;
-    }
-
-    applyRarityEffect(panel, rarity) {
-        if (!panel) return;
-
-        if (rarity === 'rare') {
-            this.tweens.add({
-                targets: panel,
-                alpha: 0.75,
-                duration: 700,
-                yoyo: true,
-                repeat: -1
-            });
-        }
-
-        if (rarity === 'epic' || rarity === 'dream') {
-            this.tweens.add({
-                targets: panel,
-                alpha: 0.68,
-                duration: 520,
-                yoyo: true,
-                repeat: -1
-            });
-        }
-
-        if (rarity === 'legend' || rarity === 'legendary') {
-            this.tweens.add({
-                targets: panel,
-                alpha: 0.6,
-                duration: 380,
-                yoyo: true,
-                repeat: -1
-            });
-        }
-    }
-
-    refreshItemGrid() {
-        if (this.itemSlots) {
-            this.itemSlots.forEach(obj => {
-                if (obj && obj.destroy) obj.destroy();
-            });
-        }
-
-        this.itemSlots = [];
-        this.itemSlotMap = {};
-
-        const ownedItemsRaw = this.registry.get('owned_items');
-        const ownedItems = Array.isArray(ownedItemsRaw) ? ownedItemsRaw : [];
-
-        const ownedCollectiblesRaw = this.registry.get('owned_collectibles');
-        const ownedCollectibles = Array.isArray(ownedCollectiblesRaw) ? ownedCollectiblesRaw : [];
-
-        const owned = [...ownedItems, ...ownedCollectibles];
-
-        const newItemsRaw = this.registry.get('new_items');
-        const newItems = Array.isArray(newItemsRaw) ? newItemsRaw : [];
-
-        const equippedHat = this.registry.get('equipped_hat') ?? 'none';
-        const equippedCloth = this.registry.get('equipped_cloth') ?? 'none';
-        const equippedFullset = this.registry.get('equipped_fullset') ?? 'none';
-        const equippedCollectible = this.registry.get('equipped_collectible') ?? 'none';
-
-        const filteredItems = owned.filter(itemKey => {
-            const itemData = ITEM_DB?.[itemKey];
-            if (!itemData) return false;
-
+    filtered() {
+        const result = this.owned().filter(id => {
+            const item = ITEM_DB[id];
             if (this.selectedType === 'all') return true;
-            return itemData.type === this.selectedType;
+            if (this.selectedType === 'fairy') return FAIRY_IDS.includes(id);
+            if (this.selectedType === 'body') return ['cloth', 'fullset'].includes(item.type);
+            if (this.selectedType === 'accessory') return item.type === 'collectible' && (item.skill || item.category === 'equipment');
+            if (this.selectedType === 'collection') return !['hat', 'cloth', 'fullset'].includes(item.type) && !item.skill && item.category !== 'equipment';
+            return item.type === this.selectedType;
         });
-
-        if (filteredItems.length === 0) {
-            const emptyText = this.add.text(945, 360, '這個分類還沒有收藏喔！', {
-                fontSize: '28px',
-                color: '#ffffff',
-                stroke: '#000000',
-                strokeThickness: 4
-            }).setOrigin(0.5).setDepth(6);
-
-            this.itemSlots.push(emptyText);
-            return;
-        }
-
-        filteredItems.forEach((itemKey, index) => {
-            const itemData = ITEM_DB?.[itemKey];
-            if (!itemData) return;
-
-            const isNew = newItems.includes(itemKey);
-            const rarityColor = this.getRarityColor(itemData.rarity);
-
-            const x = 710 + (index % 3) * 170;
-            const y = 280 + Math.floor(index / 3) * 175;
-
-            const panel = this.add.rectangle(x, y, 145, 145, 0x000000, 0.28)
-                .setStrokeStyle(3, rarityColor)
-                .setDepth(5);
-
-            this.applyRarityEffect(panel, itemData.rarity);
-
-            let isEquipped = false;
-            if (itemData.type === 'hat' && equippedHat === itemKey) isEquipped = true;
-            if (itemData.type === 'cloth' && equippedCloth === itemKey) isEquipped = true;
-            if (itemData.type === 'fullset' && equippedFullset === itemKey) isEquipped = true;
-            if (itemData.type === 'collectible' && equippedCollectible === itemKey) isEquipped = true;
-
-            if (isEquipped) {
-                panel.setStrokeStyle(5, 0x00ffcc);
-                panel.setFillStyle(0x00ffd0, 0.16);
-
-                this.tweens.add({
-                    targets: panel,
-                    alpha: 0.86,
-                    duration: 650,
-                    yoyo: true,
-                    repeat: -1
-                });
-            }
-
-            const iconKey = itemData.icon || itemKey;
-
-            const rarityMap = {
-                common: '普通',
-                rare: '稀有',
-                epic: '夢幻',
-                dream: '夢幻',
-                legend: '傳說',
-                legendary: '傳說',
-                stage: '關卡'
-            };
-
-            const rarityLabel = rarityMap[itemData.rarity] || '普通';
-
-            const tagX = x - 34;
-            const tagY = y - 52;
-
-            const rarityTag = this.add.rectangle(tagX, tagY, 72, 28, rarityColor, 0.95)
-                .setStrokeStyle(1, 0x000000, 0.25)
-                .setDepth(6);
-
-            const rarityText = this.add.text(x - 42, y - 58, rarityLabel, {
-                fontSize: '22px',
-                fontFamily: 'Microsoft JhengHei',
-                color: '#000000',
-                fontStyle: 'bold'
-            }).setOrigin(0.3).setDepth(7);
-
-            let newTag = null;
-            let newText = null;
-
-            if (isNew) {
-                const newX = x + 36;
-                const newY = y - 56;
-
-                newTag = this.add.rectangle(newX, newY, 64, 26, 0xff3b3b, 0.95)
-                    .setStrokeStyle(2, 0xffffff)
-                    .setDepth(7);
-
-                newText = this.add.text(newX, newY, 'NEW', {
-                    fontSize: '18px',
-                    color: '#ffffff',
-                    fontStyle: 'bold'
-                }).setOrigin(0.5).setDepth(8);
-
-                this.tweens.add({
-                    targets: [newTag, newText],
-                    alpha: 0.65,
-                    duration: 450,
-                    yoyo: true,
-                    repeat: -1
-                });
-            }
-
-            if (!this.textures.exists(iconKey)) {
-                const missingText = this.add.text(x, y, '缺少圖片', {
-                    fontSize: '18px',
-                    color: '#ffaaaa'
-                }).setOrigin(0.5).setDepth(6);
-
-                const nameText = this.add.text(x, y + 68, itemData.name || itemKey, {
-                    fontSize: '18px',
-                    color: '#ffffff',
-                    stroke: '#000000',
-                    strokeThickness: 3,
-                    align: 'center',
-                    wordWrap: { width: 130 }
-                }).setOrigin(0.5).setDepth(6);
-
-                this.itemSlots.push(panel, rarityTag, rarityText, missingText, nameText);
-                if (newTag) this.itemSlots.push(newTag);
-                if (newText) this.itemSlots.push(newText);
-
-                this.itemSlotMap[itemKey] = {
-                    panel,
-                    slot: null,
-                    nameText,
-                    rarityTag,
-                    rarityText,
-                    newTag,
-                    newText
-                };
-                return;
-            }
-
-            const slot = this.add.image(x, y - 12, iconKey)
-                .setScale(0.42)
-                .setDepth(6)
-                .setInteractive({ useHandCursor: true });
-
-            const nameText = this.add.text(x, y + 64, itemData.name || itemKey, {
-                fontSize: '20px',
-                color: '#ffffff',
-                fontStyle: 'bold',
-                stroke: '#000000',
-                strokeThickness: 3,
-                align: 'center',
-                wordWrap: { width: 130 }
-            }).setOrigin(0.5).setDepth(6);
-
-            let equipTagBg = null;
-            let equipTag = null;
-
-            if (isEquipped) {
-                const equipX = x + 34;
-                const equipY = y - 56;
-
-                equipTagBg = this.add.rectangle(equipX, equipY, 74, 30, 0x00d9b7, 0.95)
-                    .setStrokeStyle(2, 0xffffff, 0.9)
-                    .setDepth(7);
-
-                equipTag = this.add.text(equipX, equipY, '已裝備', {
-                    fontSize: '18px',
-                    fontFamily: 'Microsoft JhengHei',
-                    color: '#003a33',
-                    fontStyle: 'bold'
-                }).setOrigin(0.5).setDepth(8);
-
-                this.tweens.add({
-                    targets: [equipTagBg, equipTag],
-                    alpha: 0.88,
-                    duration: 650,
-                    yoyo: true,
-                    repeat: -1
-                });
-            }
-
-            slot.on('pointerover', () => {
-                this.showItemInfo(itemData);
-
-                this.tweens.add({
-                    targets: slot,
-                    scale: 0.47,
-                    duration: 100
-                });
-
-                this.tweens.add({
-                    targets: panel,
-                    alpha: 0.5,
-                    duration: 100
-                });
-            });
-
-            slot.on('pointerout', () => {
-                this.clearItemInfo();
-
-                this.tweens.add({
-                    targets: slot,
-                    scale: 0.42,
-                    duration: 100
-                });
-
-                this.tweens.add({
-                    targets: panel,
-                    alpha: 1,
-                    duration: 100
-                });
-            });
-
-            slot.on('pointerdown', () => {
-                this.showItemInfo(itemData);
-
-                if (
-                    itemData.type === 'hat' ||
-                    itemData.type === 'cloth' ||
-                    itemData.type === 'fullset' ||
-                    itemData.type === 'collectible'
-                ) {
-                    this.equipItem(itemKey, itemData.type);
-                }
-            });
-
-            this.itemSlots.push(panel, rarityTag, rarityText, slot, nameText);
-            if (equipTagBg) this.itemSlots.push(equipTagBg);
-            if (equipTag) this.itemSlots.push(equipTag);
-            if (newTag) this.itemSlots.push(newTag);
-            if (newText) this.itemSlots.push(newText);
-
-            this.itemSlotMap[itemKey] = {
-                panel,
-                slot,
-                nameText,
-                rarityTag,
-                rarityText,
-                newTag,
-                newText
-            };
-        });
+        if (this.selectedType === 'hat') result.unshift(NONE_HAT);
+        if (this.selectedType === 'accessory') result.unshift(NONE_ACCESSORY);
+        return result;
     }
-
-    highlightItem(itemKey) {
-        if (!this.itemSlotMap) return;
-
-        const target = this.itemSlotMap[itemKey];
-        if (!target) return;
-
-        const { panel, slot, nameText, rarityTag, rarityText } = target;
-
-        if (panel) {
-            panel.setStrokeStyle(6, 0xfff27a);
-            panel.setFillStyle(0xfff4a8, 0.18);
-
-            this.tweens.add({
-                targets: panel,
-                alpha: 0.45,
-                duration: 180,
-                yoyo: true,
-                repeat: 5,
-                onComplete: () => {
-                    const itemData = ITEM_DB?.[itemKey];
-                    const rarityColor = this.getRarityColor(itemData?.rarity);
-
-                    const equippedHat = this.registry.get('equipped_hat') ?? 'none';
-                    const equippedCloth = this.registry.get('equipped_cloth') ?? 'none';
-                    const equippedFullset = this.registry.get('equipped_fullset') ?? 'none';
-                    const equippedCollectible = this.registry.get('equipped_collectible') ?? 'none';
-
-                    let isEquipped = false;
-                    if (itemData?.type === 'hat' && equippedHat === itemKey) isEquipped = true;
-                    if (itemData?.type === 'cloth' && equippedCloth === itemKey) isEquipped = true;
-                    if (itemData?.type === 'fullset' && equippedFullset === itemKey) isEquipped = true;
-                    if (itemData?.type === 'collectible' && equippedCollectible === itemKey) isEquipped = true;
-
-                    if (isEquipped) {
-                        panel.setStrokeStyle(5, 0x00ffcc);
-                        panel.setFillStyle(0x00ffd0, 0.16);
-                    } else {
-                        panel.setStrokeStyle(3, rarityColor);
-                        panel.setFillStyle(0x000000, 0.28);
-                    }
-
-                    panel.setAlpha(1);
-                }
-            });
+    renderGrid() {
+        this.grid.list.forEach(n => this.tweens.killTweensOf(n));
+        this.grid.removeAll(true);
+        const tabs = [['all', '全部'], ['hat', '頭部'], ['body', '服裝造型'], ['accessory', '能力飾品'], ['collection', '收藏'], ['fairy', '童話新裝']];
+        tabs.forEach(([type, title], index) => this.button(this.grid, 467 + index * 126, 125, 119, 43, title, () => {
+            this.selectedType = type; this.page = 0; this.armedId = null; this.previewId = null; this.render();
+        }, this.selectedType === type ? C.green : 0xebe8dc, this.selectedType === type ? '#ffffff' : C.ink, `tab-${type}`));
+        const ids = this.filtered(), pages = Math.max(1, Math.ceil(ids.length / 6));
+        this.page = Math.min(this.page, pages - 1);
+        const unread = this.registry.get('new_items') || [];
+        ids.slice(this.page * 6, this.page * 6 + 6).forEach((id, i) => {
+            const cx = 469 + (i % 3) * 251, cy = 184 + Math.floor(i / 3) * 126, x = -117, y = -57, item = this.item(id);
+            const card = this.add.container(cx + 117, cy + 57); this.grid.add(card);
+            const quality = ITEM_DB[id] ? Upgrade.appearance(this.registry, id) : { color: 0xb9b9ab };
+            const active = this.isEquipped(id), selected = this.selectedId === id;
+            const fill = active ? 0xe1efe1 : selected ? 0xf2ead9 : 0xf5f1e7;
+            this.panel(card, x, y, 235, 114, fill, 14, active ? 0x3a9275 : selected ? 0xc89951 : quality.color, active ? 4 : 2);
+            this.drawIcon(card, id, x + 51, y + 54, 76, 75);
+            this.txt(card, x + 95, y + 34, item.name, 17, C.ink, true).setWordWrapWidth(130);
+            if (active) {
+                this.panel(card, x + 159, y + 5, 68, 23, 0x3a9275, 7);
+                this.txt(card, x + 165, y + 7, '已裝備', 13, '#ffffff', true);
+            }
+            this.txt(card, x + 95, y + 79, active ? (this.canUnequip(id) ? '再點一下卸下' : '基礎造型') : '點一下裝備', 13, active ? '#337b60' : C.muted);
+            if (unread.includes?.(id)) this.txt(card, x + 12, y + 5, 'NEW', 12, '#b35d43', true);
+            const hit = this.add.rectangle(x + 117, y + 57, 235, 114, 0xffffff, .001)
+                .setInteractive({ useHandCursor: true }).setName(`item-${id}`);
+            card.add(hit);
+            hit.on('pointerover', () => { if (this.modal) return; this.tweens.killTweensOf(card); this.tweens.add({targets:card,scale:1.035,duration:140,ease:'Sine.easeOut'}); });
+            hit.on('pointerout', () => { this.tweens.killTweensOf(card); this.tweens.add({targets:card,scale:1,duration:140,ease:'Sine.easeOut'}); });
+            hit.on('pointerdown', () => { if (!this.modal) this.selectItem(id); });
+        });
+        if (!ids.length) this.txt(this.grid, 850, 277, '這裡還空著，出發尋找新收藏吧！', 20, C.muted).setOrigin(.5);
+        this.txt(this.grid, 473, 444, `${ids.length} 個選項 · 綠框＝已裝備 · 點一下穿卸`, 14, C.muted);
+        this.button(this.grid, 1042, 432, 48, 39, '‹', () => { this.page = Math.max(0, this.page - 1); this.renderGrid(); }, 0xebe8dc, C.ink);
+        this.txt(this.grid, 1138, 442, `${this.page + 1} / ${pages}`, 16, C.ink).setOrigin(.5, 0);
+        this.button(this.grid, 1181, 432, 48, 39, '›', () => { this.page = Math.min(pages - 1, this.page + 1); this.renderGrid(); }, 0xebe8dc, C.ink);
+    }
+    selectItem(id) {
+        if (this.modal || !this.item(id) || (ITEM_DB[id] && !this.owned().includes(id))) return false;
+        const wasEquipped = this.isEquipped(id);
+        this.selectedId = id; this.previewId = null; this.armedId = null;
+        const unread = this.registry.get('new_items');
+        if (Array.isArray(unread)) this.registry.set('new_items', unread.filter(x => x !== id));
+        const changed = wasEquipped ? this.unequipItem(id, false) : this.equipItem(id, false);
+        this.audio.unlock();
+        if (this.audio.ctx?.state === 'suspended') this.audio.ctx.resume().then(() => { if (this.sys?.isActive()) this.audio.effect(changed ? 'equip' : 'click'); }).catch(() => {});
+        else this.audio.effect(changed ? 'equip' : 'click');
+        this.save(); this.render();
+        if (changed) this.playWardrobeEffect(!wasEquipped);
+        return changed;
+    }
+    clearWardrobeEffects() {
+        for (const entry of this.dollPulses || []) {
+            this.tweens.killTweensOf(entry.node);
+            if (entry.node.active) entry.node.setScale(entry.x, entry.y);
         }
-
-        if (slot) {
-            const baseScale = slot.scale;
-
-            this.tweens.add({
-                targets: slot,
-                scale: baseScale * 1.18,
-                duration: 180,
-                yoyo: true,
-                repeat: 3,
-                ease: 'Sine.easeInOut'
-            });
-        }
-
-        if (nameText) {
-            this.tweens.add({
-                targets: nameText,
-                alpha: 0.35,
-                duration: 150,
-                yoyo: true,
-                repeat: 5
-            });
-        }
-
-        if (rarityTag) {
-            this.tweens.add({
-                targets: [rarityTag, rarityText],
-                alpha: 0.4,
-                duration: 150,
-                yoyo: true,
-                repeat: 5
-            });
+        this.dollPulses = [];
+        if (this.wardrobeFx) {
+            this.wardrobeFx.list.forEach(n => this.tweens.killTweensOf(n));
+            this.tweens.killTweensOf(this.wardrobeFx);
+            this.wardrobeFx.destroy(); this.wardrobeFx = null;
         }
     }
-
-    equipItem(itemKey, type) {
-        const equippedHat = this.registry.get('equipped_hat') ?? 'none';
-        const equippedCloth = this.registry.get('equipped_cloth') ?? 'none';
-        const equippedFullset = this.registry.get('equipped_fullset') ?? 'none';
-        const equippedCollectible = this.registry.get('equipped_collectible') ?? 'none';
-
-        let newItems = this.registry.get('new_items') || [];
-        if (!Array.isArray(newItems)) newItems = [];
-        newItems = newItems.filter(i => i !== itemKey);
-        this.registry.set('new_items', newItems);
-
-        let equipSfxKey = 'click_sfx';
-
-        if (type === 'hat' && this.cache.audio.exists('equip_hat_sfx')) {
-            equipSfxKey = 'equip_hat_sfx';
+    playWardrobeEffect(equipping) {
+        this.clearWardrobeEffects();
+        const layout = PAPER_DOLL_LAYOUT.wardrobe;
+        const fx = this.add.container(0, 0).setDepth(40); this.wardrobeFx = fx;
+        const ring = this.add.graphics(); fx.add(ring);
+        ring.lineStyle(4, equipping ? 0xf2ca74 : 0xb6daca, .9).strokeEllipse(0, 0, 168, 46);
+        ring.setPosition(layout.centerX, layout.centerY + layout.maxHeight * .4);
+        this.tweens.add({targets:ring,scaleX:1.5,scaleY:1.5,alpha:0,duration:600});
+        for (let i=0;i<(equipping?12:6);i++) {
+            const angle=i*Math.PI*2/(equipping?12:6), x=layout.centerX+Math.cos(angle)*75, y=layout.centerY+Math.sin(angle)*120;
+            const star=this.txt(fx,x,y,'✦',18+i%3*5,equipping?'#e8bc5e':'#83bba8',true).setOrigin(.5);
+            this.tweens.add({targets:star,x:x+Math.cos(angle)*38,y:y-45,alpha:0,scale:.4,duration:550+i*15});
         }
-        if (type === 'cloth' && this.cache.audio.exists('equip_cloth_sfx')) {
-            equipSfxKey = 'equip_cloth_sfx';
-        }
-        if (type === 'fullset' && this.cache.audio.exists('equip_fullset_sfx')) {
-            equipSfxKey = 'equip_fullset_sfx';
-        }
-        if (type === 'collectible' && this.cache.audio.exists('equip_hat_sfx')) {
-            equipSfxKey = 'equip_hat_sfx';
-        }
-
-        if (this.cache.audio.exists(equipSfxKey)) {
-            this.sound.play(equipSfxKey, { volume: 0.55 });
-        }
-
-        if (type === 'hat') {
-            if (equippedHat === itemKey) {
-                this.registry.set('equipped_hat', 'none');
-            } else {
-                this.registry.set('equipped_hat', itemKey);
-                this.registry.set('equipped_fullset', 'none');
-            }
-        } else if (type === 'cloth') {
-            if (equippedCloth === itemKey) {
-                this.registry.set('equipped_cloth', 'none');
-            } else {
-                this.registry.set('equipped_cloth', itemKey);
-                this.registry.set('equipped_fullset', 'none');
-            }
-        } else if (type === 'fullset') {
-            if (equippedFullset === itemKey) {
-                this.registry.set('equipped_fullset', 'none');
-            } else {
-                this.registry.set('equipped_fullset', itemKey);
-                this.registry.set('equipped_hat', 'none');
-                this.registry.set('equipped_cloth', 'none');
-            }
-        } else if (type === 'collectible') {
-            if (equippedCollectible === itemKey) {
-                this.registry.set('equipped_collectible', 'none');
-            } else {
-                this.registry.set('equipped_collectible', itemKey);
-            }
-        }
-
-        console.log('🎽 裝備變更後', {
-            equipped_hat: this.registry.get('equipped_hat'),
-            equipped_cloth: this.registry.get('equipped_cloth'),
-            equipped_fullset: this.registry.get('equipped_fullset'),
-            equipped_collectible: this.registry.get('equipped_collectible')
-        });
-
-        if (this.charManager && this.charManager.refreshLook) {
-            this.charManager.refreshLook();
-        }
-
-        if (this.charManager?.container) {
-            this.tweens.add({
-                targets: this.charManager.container,
-                scaleX: 0.84,
-                scaleY: 0.84,
-                duration: 120,
-                yoyo: true,
-                ease: 'Back.easeOut'
-            });
-
-            const flash = this.add.circle(300, 440, 120, 0xffffff, 0.4).setDepth(9);
-
-            this.tweens.add({
-                targets: flash,
-                alpha: 0,
-                scale: 1.6,
-                duration: 350,
-                onComplete: () => flash.destroy()
-            });
-        }
-
-        this.updateEquippedInfo();
-        this.updateBonusInfo();
-        this.refreshItemGrid();
-        SaveSystem.saveFromRegistry(this.registry);
+        this.dollPulses = this.mirror.list.filter(n => n.type === 'Image').map(node => ({node,x:node.scaleX,y:node.scaleY}));
+        for(const e of this.dollPulses) this.tweens.add({targets:e.node,scaleX:e.x*1.035,scaleY:e.y*1.035,yoyo:true,duration:150,ease:'Sine.easeOut'});
+        this.tweens.add({targets:fx,alpha:0,duration:180,delay:650,onComplete:()=>{if(this.wardrobeFx===fx){fx.destroy();this.wardrobeFx=null;}}});
     }
-
-    updateEquippedInfo() {
-        const equippedHat = this.registry.get('equipped_hat') ?? 'none';
-        const equippedCloth = this.registry.get('equipped_cloth') ?? 'none';
-        const equippedFullset = this.registry.get('equipped_fullset') ?? 'none';
-        const equippedCollectible = this.registry.get('equipped_collectible') ?? 'none';
-
-        const lines = [];
-
-        if (equippedHat !== 'none' && ITEM_DB?.[equippedHat]) {
-            lines.push({
-                target: this.equippedHatText,
-                text: `帽子：${ITEM_DB[equippedHat].name}`
-            });
+    drawClip(parent, x, y, size) {
+        const g = this.add.graphics(); parent.add(g);
+        g.fillStyle(0x8d6847).fillRoundedRect(x - size / 2, y - size * .15, size, size * .3, size * .15);
+        g.fillStyle(0xe5bd72).fillRoundedRect(x - size / 2 + 2, y - size * .15 + 2, size - 4, size * .3 - 4, 5);
+        for (let i = 0; i < 5; i++) {
+            const a = i * Math.PI * 2 / 5;
+            g.fillStyle(0xfff4d7).fillCircle(x + Math.cos(a) * size * .11, y + Math.sin(a) * size * .11, size * .09);
         }
-
-        if (equippedCloth !== 'none' && ITEM_DB?.[equippedCloth]) {
-            lines.push({
-                target: this.equippedClothText,
-                text: `衣服：${ITEM_DB[equippedCloth].name}`
-            });
-        }
-
-        if (equippedFullset !== 'none' && ITEM_DB?.[equippedFullset]) {
-            lines.push({
-                target: this.equippedFullsetText,
-                text: `全身裝：${ITEM_DB[equippedFullset].name}`
-            });
-        }
-
-        if (equippedCollectible !== 'none' && ITEM_DB?.[equippedCollectible]) {
-            lines.push({
-                target: this.equippedCollectibleText,
-                text: `收藏品：${ITEM_DB[equippedCollectible].name}`
-            });
-        }
-
-        const allTargets = [
-            this.equippedHatText,
-            this.equippedClothText,
-            this.equippedFullsetText,
-            this.equippedCollectibleText
-        ];
-
-        allTargets.forEach(t => {
-            if (t) {
-                t.setText('');
-                t.setVisible(false);
-            }
-        });
-
-        const startY = 650;
-        const gapY = 30;
-
-        lines.forEach((line, index) => {
-            if (line.target) {
-                line.target.setText(line.text);
-                line.target.setY(startY + index * gapY);
-                line.target.setVisible(true);
-            }
-        });
+        g.fillStyle(0xe7a44b).fillCircle(x, y, size * .07);
+        return g;
     }
-
-    updateBonusInfo() {
-        if (!this.bonusLine0 || !this.bonusLine1 || !this.bonusLine2 || !this.bonusLine3) return;
-
-        const lines = EquipmentSystem.getBonusSummaryLines(this.registry);
-
-        this.bonusLine0.setText(lines[0] || '');
-        this.bonusLine1.setText(lines[1] || '');
-        this.bonusLine2.setText(lines[2] || '');
-        this.bonusLine3.setText(lines[3] || '');
-
-        if (!lines.length) {
-            this.bonusLine0.setText('目前沒有加成');
-            this.bonusLine1.setText('');
-            this.bonusLine2.setText('');
-            this.bonusLine3.setText('');
+    drawIcon(parent, id, x, y, maxW, maxH) {
+        if (id === NONE_HAT || id === NONE_ACCESSORY) {
+            const ring = this.add.graphics(); parent.add(ring);
+            ring.lineStyle(5, 0xa5ad9f).strokeCircle(x, y, 24);
+            ring.lineBetween(x - 17, y + 17, x + 17, y - 17);
+            return ring;
         }
+        if (id === CLIP) return this.drawClip(parent, x, y, maxW * .76);
+        const key = ITEM_DB[id]?.icon || ITEM_DB[id]?.texture;
+        if (!key || !this.textures.exists(key)) {
+            return this.txt(parent, x, y, ITEM_DB[id]?.type === 'hat' ? '帽' : ITEM_DB[id]?.type === 'collectible' ? '飾' : '衣', 28, '#a38c65', true).setOrigin(.5);
+        }
+        const img = this.add.image(x, y, key); parent.add(img);
+        img.setScale(Math.min(maxW / img.width, maxH / img.height)); return img;
+    }
+    qualityLine(id) {
+        const item = ITEM_DB[id];
+        if (item?.cosmeticOnly) return '童話外觀 · 能力預留，尚未啟用';
+        if (!item) return '點一下套用；再次點擊可卸下。';
+        const q = Upgrade.appearance(this.registry, id);
+        if (q.baseKey === 'base') return '基礎造型 · 不屬於品質裝備';
+        if (q.canUpgrade) return `${q.label}品質 · 再取得同款可升為${q.nextLabel}`;
+        if (item.source === 'secret') return `${q.label}品質 · 特殊彩蛋裝備，不參與升階`;
+        if (!q.max) return `${q.label}品質 · 最高品質，不參與升階`;
+        return `${q.label}品質 · 已達升階上限，重複將轉成 1 水晶`;
+    }
+    abilityLines(item) {
+        if (!item) return [];
+        const labels = {
+            rewardRate: v => `寶箱獎勵 +${v}%`, dropRate: v => `稀有掉落機率 +${v}%`,
+            extraPlayCount: v => `每日額外遊玩 +${v} 次`, maxHearts: v => `體力上限 +${v}`,
+            timeBonus: v => `關卡時間 +${v} 秒`, extraMistake: v => `容錯次數 +${v}`,
+            revealHint: v => `開局提示 +${v} 次`, noHeartCost: () => '進入關卡不消耗體力',
+            ignoreReputationLock: () => '不受聲望門檻限制', freeMinigameEntry: () => '小遊戲入場不消耗體力',
+            freeStageEntry: () => '關卡入場不消耗體力', reviveOnce: () => '每局可復活一次'
+        };
+        const result = Object.entries(item.effects || {}).filter(([, value]) => value !== 0 && value !== false)
+            .map(([key, value]) => labels[key] ? labels[key](value) : `${key}：${value}`);
+        if (item.skill?.type === 'scout') result.push(`偵查：每局探索 ${item.skill.usesPerRun || 1} 格`);
+        return result;
+    }
+    renderDetails() {
+        this.details.removeAll(true);
+        this.panel(this.details, 467, 485, 762, 153, 0xeee9da, 16);
+        const id = this.selectedId, item = this.item(id);
+        if (!item) { this.txt(this.details, 491, 511, '點一下裝備，再點一下卸下。', 19); return; }
+        this.txt(this.details, 490, 501, item.name, 23, C.ink, true);
+        this.txt(this.details, 490, 537, this.qualityLine(id), 15, '#76674f');
+        this.txt(this.details, 490, 565, (item.desc || '森林裡的小小收藏。').split('\n')[0], 14, C.muted).setWordWrapWidth(700);
+        const abilities = this.abilityLines(item);
+        const abilityText = abilities.length ? `能力：${abilities.join('　')}` : '能力：純外觀造型，沒有額外能力';
+        this.txt(this.details, 490, 597, abilityText, 14, abilities.length ? '#557b60' : C.muted, abilities.length).setWordWrapWidth(700);
+        const actionText = this.isEquipped(id)
+            ? (this.canUnequip(id)
+                ? '✓ 已裝備 · 點一下卸下'
+                : '✓ 基礎服裝')
+            : '點一下裝備';
+        this.txt(this.details, 1188, 505, actionText, 14, '#557b60', true).setOrigin(1, 0);
+    }
+    renderDoll() {
+        this.mirror.removeAll(true);
+        const layout = PAPER_DOLL_LAYOUT.wardrobe;
+        const look = currentLook(this.registry, this.previewId);
+        const key = this.textures.exists(look.bodyTexture) ? look.bodyTexture : 'wardrobe_doll_daily_v50';
+        if (this.textures.exists(key)) {
+            const doll = this.add.image(layout.centerX, layout.centerY, key); this.mirror.add(doll);
+            fitImage(doll, layout.maxWidth, layout.maxHeight);
+        } else this.txt(this.mirror, 225, 365, '公仔素材載入失敗\n請檢查 assets/wardrobe_v50', 16, '#975b4b').setOrigin(.5);
+        const left = layout.centerX - layout.maxWidth / 2;
+        const top = layout.centerY - layout.maxHeight / 2;
+        const clipX = left + layout.maxWidth * layout.hatAnchorX;
+        const headY = top + layout.maxHeight * 0.2;
+        if (!look.hatSuppressed && look.hatId === CLIP) {
+            this.drawClip(this.mirror, clipX, headY, 33);
+        } else if (look.hatTexture && this.textures.exists(look.hatTexture)) {
+            const hat = this.add.image(layout.centerX, layout.centerY, look.hatTexture); this.mirror.add(hat);
+            fitImage(hat, layout.maxWidth, layout.maxHeight);
+        }
+        const fallback = !look.bodyIsConverted;
+        const bodyItem = ITEM_DB[look.bodyId];
+        const label = fallback ? `${bodyItem?.name || '此造型'}待統一繪製，暫顯示日常公仔` : (bodyItem?.name || '日常休閒裝');
+        this.txt(this.mirror, 225, 606, label, 16, fallback ? '#977255' : C.ink).setOrigin(.5);
+        const hint = this.previewId ? '預覽中 · 再點同一張卡才會穿戴' : '目前正式穿戴造型';
+        this.txt(this.mirror, 225, 630, hint, 12, this.previewId ? '#9a6f32' : C.muted).setOrigin(.5);
+    }
+    equipItem(id, render = true) {
+        let changed = false;
+        if (id === NONE_HAT) {
+            changed = this.registry.get('equipped_hat') !== 'none';
+            this.registry.set('equipped_hat', 'none');
+        } else if (id === NONE_ACCESSORY) {
+            changed = this.registry.get('equipped_collectible') !== 'none';
+            this.registry.set('equipped_collectible', 'none');
+        } else {
+            const item = ITEM_DB[id];
+            if (!item || !this.owned().includes(id) || !['hat', 'cloth', 'fullset', 'collectible'].includes(item.type)) return false;
+            const key = `equipped_${item.type}`;
+            changed = this.registry.get(key) !== id;
+            this.registry.set(key, id);
+            if (item.type === 'cloth') this.registry.set('equipped_fullset', 'none');
+            if (item.type === 'fullset') this.registry.set('equipped_cloth', 'none');
+        }
+        EquipmentSystem.applyBonusToRegistry(this.registry);
+        if (render) { this.save(); this.audio.effect(changed ? 'equip' : 'click'); this.render(); }
+        return changed;
+    }
+    unequipItem(id, render = true) {
+        if (!this.canUnequip(id)) return false;
+        const item = ITEM_DB[id];
+        if (item.type === 'hat') this.registry.set('equipped_hat', 'none');
+        else if (item.type === 'collectible') this.registry.set('equipped_collectible', 'none');
+        else {
+            // 身體不能呈現裸體；脫下造型時自動換回基礎休閒裝。
+            this.registry.set('equipped_fullset', 'none');
+            this.registry.set('equipped_cloth', 'item_cloth_daily_01');
+        }
+        EquipmentSystem.applyBonusToRegistry(this.registry);
+        if (render) { this.save(); this.audio.effect('equip'); this.render(); }
+        return true;
+    }
+    openModal(title, body) {
+        if (this.modal) return null;
+        const modal = this.add.container(0, 0).setDepth(1000); this.modal = modal;
+        const shade = this.add.rectangle(640, 360, 1280, 720, 0x25382e, .62).setInteractive(); modal.add(shade);
+        this.panel(modal, 345, 166, 590, 390, C.cream, 24, 0xd6ba88);
+        this.txt(modal, 640, 202, title, 27, C.ink, true).setOrigin(.5, 0);
+        this.txt(modal, 385, 258, body, 18, C.ink).setWordWrapWidth(510);
+        this.button(modal, 515, 486, 250, 46, '知道了', () => this.closeModal(), C.green, '#fff', 'modal-close');
+        return modal;
+    }
+    closeModal() { if (this.modal) { this.modal.destroy(true); this.modal = null; } }
+    openTests() {
+        const item = ITEM_DB[this.selectedId], canGrant = item && item.source !== 'secret' && Upgrade.limit(item) > 0;
+        const modal = this.openModal('測試送裝備', '測試會改變目前存檔。\n左側依正式規則取得目前裝備；右側一次補齊全部道具。\n補齊全道具不升階、不轉水晶，也不改變目前穿戴。');
+        if (!modal) return;
+        if (canGrant) this.button(modal, 385, 367, 250, 48, '取得目前選取裝備', () => {
+            const id = this.selectedId; this.closeModal(); this.grantItem(id);
+        }, C.green, '#fff', 'grant-selected');
+        this.button(modal, 653, 367, 245, 48, '獲得全道具（測試用）', () => {
+            this.closeModal(); this.grantAllTestItems();
+        }, 0xb48258, '#fff', 'grant-all-items');
+        this.txt(modal, 390, 432, '全道具：只補未擁有項目，包含彩蛋與收藏。', 17, '#876b44');
+    }
+    grantAllTestItems() {
+        const added = grantAllItemsForTesting(this.registry, ITEM_DB);
+        this.save(); this.render(); this.audio.effect('equip');
+        const body = added.length
+            ? `已補齊 ${added.length} 件尚未擁有的道具。\n原有裝備品質、水晶與目前穿戴都沒有改變。`
+            : '目前版本的全部道具都已經擁有。\n原有裝備品質、水晶與目前穿戴都沒有改變。';
+        this.openModal('全道具已補齊', body);
+        return added;
+    }
+    grantItem(id, secret = false) {
+        if (!ITEM_DB[id] || (ITEM_DB[id].source === 'secret' && !secret)) return null;
+        const result = EquipmentSystem.giveItem(this.registry, id);
+        if (!result.success) return result;
+        this.save(); this.render(); this.audio.effect(result.isUpgrade ? 'upgrade' : 'equip');
+        const q = Upgrade.appearance(this.registry, id);
+        const title = result.isUpgrade ? '同款合併，品質提升！' : result.type === 'crystal' ? '已達上限，轉成水晶' : '找到新的收藏！';
+        const body = result.type === 'crystal'
+            ? `${ITEM_DB[id].name}\n水晶 +1；原裝備與目前品質保留。`
+            : `${ITEM_DB[id].name}\n${q.label}品質；圖示與裝備名稱維持不變。`;
+        const modal = this.openModal(title, body);
+        if (modal) {
+            const left = this.add.container(490, 403), right = this.add.container(790, 403); modal.add([left, right]);
+            this.drawIcon(left, id, 0, 0, 72, 79); this.drawIcon(right, id, 0, 0, 72, 79);
+            if (result.isUpgrade) this.tweens.add({ targets: [left, right], x: 640, duration: 480, ease: 'Sine.easeInOut', onComplete: () => { if (right.active) right.setVisible(false); } });
+            else { right.setVisible(false); left.setX(640); }
+        }
+        return result;
+    }
+    checkMotherGuardReward() {
+        const state = this.registry.get('secret_state') || {};
+        if (!state.motherGuardPendingReward) return;
+        this.registry.set('secret_state', { ...state, motherGuardUnlocked: true, motherGuardPendingReward: false, motherGuardSequence: [], motherGuardSequenceStartTime: 0 });
+        if (!this.owned().includes(SECRET)) { this.closeModal(); this.grantItem(SECRET, true); }
+        this.save();
     }
 }

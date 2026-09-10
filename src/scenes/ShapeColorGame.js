@@ -6,6 +6,7 @@ export default class ShapeColorGame extends Phaser.Scene {
 
     init(data) {
         this.returnScene = data?.returnScene || 'Start';
+        this.testMode = data?.testMode === true;
 
         // 棋盤設定（先回固定版）
         this.boardSize = 13;

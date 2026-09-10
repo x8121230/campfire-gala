@@ -1,0 +1,8 @@
+{
+  "name": "forest-puzzle-park",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/bush-logic.test.js && node tests/firefly-catch.test.js && node tests/constellation.test.js && node tests/animal-food-match.test.js && node tests/campfire-game.test.js"
+  }
+}

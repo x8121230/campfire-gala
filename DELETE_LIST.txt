@@ -1,0 +1,8 @@
+回復 v4.2 時，先把 ROLLBACK/src 覆蓋回正式專案，再刪除以下 v5.0 新增檔案：
+
+src/data/PaperDollConfig.js
+
+下列新增素材即使保留也不會被 v4.2 使用；若要完全清理可再刪除：
+
+assets/wardrobe_v50/doll_daily_v50.png
+assets/wardrobe_v50/doll_pink_home_v50_alpha.png

@@ -1,0 +1,17 @@
+{
+  "tests": 409,
+  "new_rule_tests": 18,
+  "checks": {
+    "regression": "passed",
+    "watch_scene": "passed",
+    "layout": "passed"
+  },
+  "earlier_unchanged_source_assets": 92,
+  "chapters": 1,
+  "waves": 3,
+  "generated_assets": 4,
+  "layout_renders": 9,
+  "browser": "not run",
+  "real_mobile": "pending",
+  "packaging": "cumulative overlay; requires original complete game and existing v5.3 wardrobe"
+}

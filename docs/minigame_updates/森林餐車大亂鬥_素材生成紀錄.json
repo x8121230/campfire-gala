@@ -1,0 +1,62 @@
+{
+  "game": "森林餐車大亂鬥",
+  "version": "0.1",
+  "date": "2026-09-10",
+  "method": "built-in image_gen; original transparent PNGs copied without raster editing",
+  "assets": [
+    {
+      "path": "assets/forest-kitchen/chefs.png",
+      "grid": "3 columns × 2 rows; 512 × 512 per frame",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: large readable mobile forest cooking game spritesheet, original cheerful hand-painted cartoon. Exactly 1536x1024, 3 columns and 2 rows of 512x512 cells, real transparent alpha background, no text, no grid, no scenery. Each independent subject centered within its cell, occupies approximately 380x400, 55px clear margins, no crossing into adjacent cells. Warm ivory, sage, apricot colors, strong outlines, simplified details recognizable when small. Row-major subjects: 1 full-body white rabbit chef in green apron and soft chef cap, empty paws facing viewer slightly three-quarter; 2 full-body cheerful raccoon chef in amber apron and cap, empty paws; 3 full-body kind brown bear chef in sky blue apron and cap, empty paws; 4 large black cooking skillet with wooden handle, slightly elevated three-quarter view, empty; 5 large turquoise soup pot with two handles and warm steam, empty top visible; 6 cheerful striped honeybee with wings, mischievous friendly expression. Characters share consistent scale and lighting. No letters, no watermark, no rendered backgrounds."
+    },
+    {
+      "path": "assets/forest-kitchen/ingredients.png",
+      "grid": "3 columns × 2 rows; 512 × 512 per frame",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: mobile forest cooking game ingredient spritesheet. Exactly 1536x1024, three columns two rows, six equal 512x512 cells. Real transparent alpha background, no text, no grid. Original cheerful hand-painted cartoon with thick clean outlines, warm colors, large simple silhouettes. Each subject centered in its cell, occupies about 380x380, 60px margins, never crosses cells. Row-major: 1 one ripe red tomato with small green leaves; 2 one large orange carrot with green leaves, diagonal; 3 two plump brown edible mushrooms; 4 two cream eggs, one cracked showing golden yolk; 5 a pale round dough ball with small flour dust; 6 squat golden honey jar with wooden dipper, no label or lettering. Consistent three-quarter view, soft warm highlights, readable on phone. No plates, no scenery, no cast background, no watermark."
+    },
+    {
+      "path": "assets/forest-kitchen/meals.png",
+      "grid": "3 columns × 2 rows; 512 × 512 per frame",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: large mobile forest cooking game dish spritesheet. Exactly 1536x1024, 3 columns and 2 rows of 512 square cells. Real transparent alpha background, no grid, no text or watermark. Original cozy hand-painted cartoon, thick clean dark outlines, sage ceramic tableware, appetizing warm colors. Six distinct dishes centered inside their own cells, each about 370x360 with at least60px clear margin, no crossing cells. Row-major: 1 round ivory plate with bright chopped tomato and carrot garden salad, green garnish; 2 deep teal bowl of creamy orange carrot and mushroom soup with two brown mushroom slices; 3 ivory plate with folded golden omelet and red tomato chunks; 4 round wooden plate with small tomato and mushroom flatbread; 5 ivory plate with three fluffy pancakes drizzled with golden honey; 6 deep rustic green bowl of chunky carrot mushroom egg stew with visible half boiled egg. Elevated three-quarter view, consistent scale and lighting, easily distinguished silhouettes. No cutlery, no other objects, no scenery."
+    }
+  ],
+  "frame_order": {
+    "chefs": [
+      "兔兔",
+      "浣浣",
+      "熊熊",
+      "平底鍋",
+      "湯鍋",
+      "蜜蜂"
+    ],
+    "ingredients": [
+      "番茄",
+      "紅蘿蔔",
+      "蘑菇",
+      "雞蛋",
+      "麵糰",
+      "蜂蜜"
+    ],
+    "meals": [
+      "田園沙拉",
+      "暖心蘑菇湯",
+      "番茄蛋包",
+      "森林烤餅",
+      "蜂蜜鬆餅",
+      "古樹濃燉湯"
+    ]
+  },
+  "layout": "Kitchen geometry and UI are code-native Phaser objects, not generated text or diagrams."
+}

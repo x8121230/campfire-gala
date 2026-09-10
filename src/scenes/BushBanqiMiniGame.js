@@ -12,6 +12,7 @@ export default class BushBanqiMiniGame extends Phaser.Scene {
         this.mode = data.mode || 'ai'; // 'ai' | 'pvp'
         this.onComplete = data.onComplete || null;
         this.stageId = data.stageId || 'banqi_01';
+        this.testMode = data.testMode === true;
     }
 
     create() {

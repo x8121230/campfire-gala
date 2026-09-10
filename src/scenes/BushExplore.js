@@ -12,6 +12,7 @@ import BushRewardSystem from '../systems/BushRewardSystem.js';
 import CollectibleSystem from '../systems/CollectibleSystem.js';
 import CharacterManager from '../managers/CharacterManager.js';
 import { ITEM_DB } from '../data/GameData.js';
+import SaveSystem from '../systems/SaveSystem.js';
 
 
 
@@ -4091,31 +4092,7 @@ export default class BushExplore extends Phaser.Scene {
     }
 
     saveGameData() {
-        const dataToSave = {
-            hearts: this.registry.get('hearts'),
-            max_hearts: this.registry.get('max_hearts'),
-            recovery_seconds: this.registry.get('recovery_seconds'),
-            next_heart_time: this.registry.get('next_heart_time'),
-
-            user_crystals: this.registry.get('user_crystals'),
-            reputation: this.registry.get('reputation'),
-
-            owned_items: this.registry.get('owned_items'),
-            placed_decorations: this.registry.get('placed_decorations'),
-
-            equipped_hat: this.registry.get('equipped_hat'),
-            equipped_cloth: this.registry.get('equipped_cloth'),
-            equipped_fullset: this.registry.get('equipped_fullset'),
-
-            minigame_stats: this.registry.get('minigame_stats'),
-            bonus_play_counts: this.registry.get('bonus_play_counts'),
-            bonus_reward_rates: this.registry.get('bonus_reward_rates'),
-            bonus_drop_rates: this.registry.get('bonus_drop_rates'),
-
-            stage_progress: this.registry.get('stage_progress')
-        };
-
-        localStorage.setItem('forest_save_data', JSON.stringify(dataToSave));
+        SaveSystem.saveFromRegistry(this.registry);
         console.log('💾 [BushExplore] 關卡結果已存檔！');
     }
 

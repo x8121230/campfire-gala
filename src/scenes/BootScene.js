@@ -1,5 +1,6 @@
 // src/scenes/BootScene.js
 import SaveSystem from '../systems/SaveSystem.js';
+import ConfigManager from '../systems/ConfigManager.js';
 
 export default class BootScene extends Phaser.Scene {
     constructor() {
@@ -8,6 +9,8 @@ export default class BootScene extends Phaser.Scene {
 
     create() {
         console.log('🚀 BootScene 啟動：初始化資料');
+
+        ConfigManager.applyToRegistry(this.registry);
 
         const savedData = SaveSystem.load() || {};
 
@@ -22,6 +25,9 @@ export default class BootScene extends Phaser.Scene {
 
             owned_items: Array.isArray(savedData.owned_items) ? savedData.owned_items : [],
             owned_collectibles: Array.isArray(savedData.owned_collectibles) ? savedData.owned_collectibles : [],
+            gold_grass_encyclopedia: Array.isArray(savedData.gold_grass_encyclopedia) ? savedData.gold_grass_encyclopedia : [],
+            achievements: Array.isArray(savedData.achievements) ? savedData.achievements : [],
+            tutorial_flags: savedData.tutorial_flags ?? {},
             placed_decorations: Array.isArray(savedData.placed_decorations) ? savedData.placed_decorations : [],
 
             equipped_hat: savedData.equipped_hat ?? 'none',
@@ -56,6 +62,9 @@ export default class BootScene extends Phaser.Scene {
 
         this.registry.set('owned_items', safeData.owned_items);
         this.registry.set('owned_collectibles', safeData.owned_collectibles);
+        this.registry.set('gold_grass_encyclopedia', safeData.gold_grass_encyclopedia);
+        this.registry.set('achievements', safeData.achievements);
+        this.registry.set('tutorial_flags', safeData.tutorial_flags);
         this.registry.set('placed_decorations', safeData.placed_decorations);
 
         this.registry.set('equipped_hat', safeData.equipped_hat);

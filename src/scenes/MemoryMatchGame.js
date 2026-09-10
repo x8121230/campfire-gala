@@ -25,6 +25,7 @@ export default class MemoryMatchGame extends Phaser.Scene {
         this.setupAudio();
         
         this.returnScene = data?.returnScene || 'MiniGameHub';
+        this.testMode = data?.testMode === true;
 
         // =========================
         // 設定
@@ -805,7 +806,8 @@ export default class MemoryMatchGame extends Phaser.Scene {
             this.scene.restart({
                 returnScene: this.returnScene,
                 aiDifficulty: this.aiDifficulty,
-                matchMode: this.matchMode
+                matchMode: this.matchMode,
+                testMode: this.testMode
             });
         });
 

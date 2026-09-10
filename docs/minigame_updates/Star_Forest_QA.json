@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-10",
+  "rules": 11,
+  "browser": [
+    "keyboard movement",
+    "NPC auto dialogue and quest acceptance without a button",
+    "standing beside NPC does not reopen dialogue",
+    "walking away and back rearms automatic dialogue",
+    "quest autosaved",
+    "hold J launches homing bubbles and calms animal",
+    "map pauses gameplay",
+    "blur clears inputs and freezes simulation",
+    "reload restores completed progress",
+    "two-finger joystick plus attack",
+    "touch cancellation releases joystick and attack",
+    "honey drag previews destination",
+    "honey release casts and clears aim",
+    "667x375 controls stay within viewport",
+    "portrait orientation pauses",
+    "landscape waits for manual resume",
+    "exit releases app DOM and RAF",
+    "no browser runtime or resource errors"
+  ],
+  "errors": [],
+  "renderer": "Chromium WebGL2 / SwiftShader",
+  "scope": "Standalone chapter module exercised in local harness. Uploaded overlay lacks base Phaser and PlatformStorage; full original game / Game Viewer not available for integration execution.",
+  "real_mobile": "not tested; touch and viewport emulation only",
+  "original_files_preserved": 218,
+  "original_files_modified": [
+    "src/data/MiniGameCatalog.js",
+    "src/scenes/PhantomRealmGame.js",
+    "使用方法.txt"
+  ],
+  "original_files_missing": [],
+  "npc_dialogue": "Automatic within 2.4 units, rearms after leaving 4.2 units. All 4 NPC types covered."
+}

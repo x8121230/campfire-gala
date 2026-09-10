@@ -1,0 +1,78 @@
+✨ 套用裝備加成 {
+  rewardRate: 0,
+  dropRate: 15,
+  extraPlayCount: 0,
+  maxHearts: 0,
+  freeMinigameEntry: false,
+  freeStageEntry: false,
+  reviveOnce: false,
+  reviveCost: 0,
+  reviveHearts: 0
+}
+✨ 套用裝備加成 {
+  rewardRate: 0,
+  dropRate: 0,
+  extraPlayCount: 0,
+  maxHearts: 0,
+  freeMinigameEntry: false,
+  freeStageEntry: false,
+  reviveOnce: false,
+  reviveCost: 0,
+  reviveHearts: 0
+}
+✨ 套用裝備加成 {
+  rewardRate: 0,
+  dropRate: 0,
+  extraPlayCount: 0,
+  maxHearts: 0,
+  freeMinigameEntry: false,
+  freeStageEntry: false,
+  reviveOnce: false,
+  reviveCost: 0,
+  reviveHearts: 0
+}
+✨ 套用裝備加成 {
+  rewardRate: 0,
+  dropRate: 0,
+  extraPlayCount: 0,
+  maxHearts: 0,
+  freeMinigameEntry: false,
+  freeStageEntry: false,
+  reviveOnce: false,
+  reviveCost: 0,
+  reviveHearts: 0
+}
+✨ 套用裝備加成 {
+  rewardRate: 0,
+  dropRate: 15,
+  extraPlayCount: 0,
+  maxHearts: 0,
+  freeMinigameEntry: false,
+  freeStageEntry: false,
+  reviveOnce: false,
+  reviveCost: 0,
+  reviveHearts: 0
+}
+✨ 套用裝備加成 {
+  rewardRate: 10,
+  dropRate: 5,
+  extraPlayCount: 1,
+  maxHearts: 0,
+  freeMinigameEntry: false,
+  freeStageEntry: false,
+  reviveOnce: false,
+  reviveCost: 0,
+  reviveHearts: 0
+}
+✨ 套用裝備加成 {
+  rewardRate: 0,
+  dropRate: 0,
+  extraPlayCount: 0,
+  maxHearts: 0,
+  freeMinigameEntry: false,
+  freeStageEntry: false,
+  reviveOnce: false,
+  reviveCost: 0,
+  reviveHearts: 0
+}
+PASS: single-click equip/unequip, base outfit fallback, hat clearing, outfit/fullset exclusivity, unread clearing, no invalid/modal mutation, only changed state emits FX.

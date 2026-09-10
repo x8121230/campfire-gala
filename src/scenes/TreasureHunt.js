@@ -4,6 +4,7 @@ import BaseMiniGame from './BaseMiniGame.js';
 import SaveSystem from '../systems/SaveSystem.js';
 import EquipmentSystem from '../systems/EquipmentSystem.js';
 import RewardPopup from '../UI/RewardPopup.js';
+import PlatformStorage from '../systems/PlatformStorage.js';
 
 export default class TreasureHunt extends BaseMiniGame {
     constructor() {
@@ -174,17 +175,17 @@ export default class TreasureHunt extends BaseMiniGame {
         let itemName = '';
 
         if (dropRoll < luckyThreshold) {
-            itemKey = 'item_hat_tiara';
+            itemKey = 'item_hat_tiara_global';
             itemName = '小皇冠';
         } else {
-            itemKey = 'item_cloth_fairy';
+            itemKey = 'item_cloth_fairy_01';
             itemName = '小仙子洋裝';
         }
 
         const itemResult = EquipmentSystem.giveItem(this.registry, itemKey);
 
         if (itemResult.type === 'item') {
-            rewardText += `\n還撿到：${itemName}`;
+            rewardText += itemResult.isUpgrade ? `\n${itemName} 合併升階 +${itemResult.upgradeStep}` : `\n還撿到：${itemName}`;
         } else if (itemResult.type === 'crystal') {
             rewardText += `\n重複獲得 ${itemName}，自動轉成 +1 水晶`;
         } else {
@@ -223,7 +224,7 @@ export default class TreasureHunt extends BaseMiniGame {
 
         if (itemResult.type === 'item') {
             RewardPopup.showItem(this, itemKey, {
-                title: '恭喜獲得新裝備！'
+                title: itemResult.isUpgrade ? `裝備合併升階 +${itemResult.upgradeStep}` : '恭喜獲得新裝備！'
             });
         } else if (itemResult.type === 'crystal') {
             RewardPopup.showCrystal(this, itemResult.amount || 1, {
@@ -290,12 +291,12 @@ export default class TreasureHunt extends BaseMiniGame {
 
     getTodayTreasurePlayCount() {
         const key = this.getTodayKey();
-        return Number(localStorage.getItem(key) || 0);
+        return Number(PlatformStorage.getItem(key) || 0);
     }
 
     addTodayTreasurePlayCount() {
         const key = this.getTodayKey();
         const current = this.getTodayTreasurePlayCount();
-        localStorage.setItem(key, String(current + 1));
+        PlatformStorage.setItem(key, String(current + 1));
     }
 }

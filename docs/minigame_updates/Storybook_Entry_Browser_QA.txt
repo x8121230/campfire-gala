@@ -1,0 +1,6 @@
+PASS: real catalog entry loads PhantomRealmGame and AdventureApp.
+PASS: PaperForestGame alias shares the same save.
+PASS: shutdown removes previous app; return goes to MiniGameHub.
+PASS: storybook-play.html has one storybook entry and no 3D switch.
+PASS: legacy save retained; no browser errors.
+Scope: missing AnimalSnackGame replaced by minimal host stub; missing PlatformStorage replaced by a localStorage adapter. Real scene wrappers/app/assets loaded. Full original host and physical phones not tested.

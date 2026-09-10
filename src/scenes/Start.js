@@ -1,6 +1,7 @@
 // src/scenes/Start.js
 import AudioSystem from '../systems/AudioSystem.js';
 import SaveSystem from '../systems/SaveSystem.js';
+import ConfigManager from '../systems/ConfigManager.js';
 
 export default class Start extends Phaser.Scene {
     constructor() {
@@ -287,8 +288,8 @@ export default class Start extends Phaser.Scene {
             .setDepth(300)
             .setInteractive({ useHandCursor: true });
 
-        const miniBtnText = this.add.text(miniBtnX, miniBtnY, 'MINI', {
-            fontSize: '24px',
+        const miniBtnText = this.add.text(miniBtnX, miniBtnY, '小遊戲測試', {
+            fontSize: '21px',
             color: '#ffffff',
             fontStyle: 'bold'
         })
@@ -314,6 +315,49 @@ export default class Start extends Phaser.Scene {
         miniBtnBg.on('pointerdown', () => {
             this.scene.start('MiniGameHub');
         });
+
+        // ===== 開發用 GM 控制台 =====
+        const gmEnabled = ConfigManager.get(
+            'developer.gmEnabled',
+            true,
+            this.registry.get('game_config')
+        );
+
+        if (gmEnabled) {
+            const gmBtnBg = this.add.rectangle(1190, 640, 110, 60, 0x356c54, 0.97)
+                .setOrigin(0.5)
+                .setDepth(300)
+                .setStrokeStyle(3, 0xf0cf65)
+                .setInteractive({ useHandCursor: true });
+
+            const gmBtnText = this.add.text(1190, 640, 'GM 調整', {
+                fontSize: '21px',
+                color: '#fff7cf',
+                fontStyle: 'bold',
+                fontFamily: 'Microsoft JhengHei, Arial'
+            }).setOrigin(0.5).setDepth(301);
+
+            gmBtnBg.on('pointerover', () => this.tweens.add({
+                targets: [gmBtnBg, gmBtnText],
+                scale: 1.05,
+                duration: 100
+            }));
+            gmBtnBg.on('pointerout', () => this.tweens.add({
+                targets: [gmBtnBg, gmBtnText],
+                scale: 1,
+                duration: 100
+            }));
+            gmBtnBg.on('pointerdown', () => this.openGMPanel());
+
+            this.input.keyboard?.on('keydown-G', (event) => {
+                if (event.ctrlKey && event.shiftKey) this.openGMPanel();
+            });
+        }
+    }
+
+    openGMPanel() {
+        this.sound.play('click_sfx', { volume: 0.6 });
+        this.scene.start('GMPanel', { returnScene: 'Start' });
     }
 
     createMiniGameButton(x, y, text, callback) {

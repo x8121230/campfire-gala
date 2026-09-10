@@ -1,0 +1,66 @@
+{
+  "game": "森林突擊小隊",
+  "version": "0.1",
+  "date": "2026-09-09",
+  "method": "image_gen built-in",
+  "use_case": "stylized-concept",
+  "assets": [
+    {
+      "path": "assets/forest-assault/units.png",
+      "source": "generated_images/exec-efeff39d-47ad-4db9-9d11-d9b13e4b2d0f.png",
+      "frames": [
+        "狐狸站姿",
+        "狐狸跑姿",
+        "狐狸蹲姿",
+        "機械守衛",
+        "飛行蜂機",
+        "甲蟲坦克"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: production spritesheet for an original polished cute forest horizontal run-and-gun game. Make exactly 1536x1024 pixels, 3 columns by 2 rows of 512x512 cells, no grid or labels. Genuine transparent background, clean alpha. All six independent subjects centered within their own cell with 65px empty padding, no overlap. Warm hand-painted cartoon game art with bold readable silhouettes, leaf-green and amber colors, clear soft shading, no text, no watermark. Exact row-major subjects: (1) brave orange fox forest ranger facing RIGHT in standing combat stance, green leaf cap and scarf, holding a wooden seed blaster horizontally right; (2) exactly same fox and outfit facing RIGHT in running stride, blaster pointing right, consistent proportions; (3) same fox crouching low facing RIGHT, blaster horizontal right; (4) squat blue-grey wind-up walking robot guard facing LEFT, red glass eye, wooden armored body, toy seed cannon, two feet; (5) hovering purple mechanical hornet drone facing LEFT, small two wings and orange glass eye; (6) rideable friendly GREEN BEETLE TANK facing RIGHT, broad tracks, leaf armor, round hatch and long acorn cannon. Side-on orthographic 2D game view, whole characters entirely visible, no scenery, no floor or shadows beyond tiny local soft shading. These are colorful toy machines, no violence or gore."
+    },
+    {
+      "path": "assets/forest-assault/bosses.png",
+      "source": "generated_images/exec-f6e5c30c-9ede-4293-9b6b-17410f9aa88d.png",
+      "frames": [
+        "鐵甲守門蟲",
+        "暴走裝甲列車",
+        "鑽地鼴鼠機",
+        "浮空夜梟堡",
+        "熔爐鋸木巨像",
+        "古樹機械王"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: six original bosses for a forest side-scrolling action game. Exactly 1536x1024 pixels, 3 columns x 2 rows, 512x512 cells. Transparent background with true alpha and absolutely no backdrop. Each subject smaller than 380x360 and centered in its cell with generous empty margins on all sides. No overlap, no grid, no text, no watermark. Entire side-view machines visible facing LEFT, bold readable silhouettes, colorful hand-painted cartoon shading, polished wooden and brass toy machinery. Row-major exact subjects: 1 red armored beetle fortress with four legs, two small side cannon pods and a cyan glass center core; 2 orange armored steam locomotive with wheels, two turrets and cyan boiler core; 3 violet mole drilling robot with powerful conical drill nose, chunky feet and cyan chest core; 4 dark blue mechanical owl air fortress with spread wings, two weapon pods and cyan belly core; 5 amber furnace sawmill walker with broad legs, two circular saw arms and cyan furnace window; 6 enormous ancient tree robot king with leafy crown, brass armored trunk and two weapon pods, bright cyan heart core. Shared forest-fairytale game aesthetic, friendly stylization yet formidable bosses; compact designs stay completely inside each cell, no ground, no realistic violence."
+    },
+    {
+      "path": "assets/forest-assault/worlds.png",
+      "source": "generated_images/exec-c92c18a2-417c-4e0f-a61d-9e02955c1795.png",
+      "frames": [
+        "苔光前哨",
+        "樹冠貨運線",
+        "螢晶深洞",
+        "雲端齒輪廠",
+        "熔岩伐木場",
+        "古樹核心堡"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: background tiles atlas for an original side-scrolling forest action game. Exactly 1536x1024 pixels, 3 columns x 2 rows of six square 512x512 scenes, no gutters, no labels, no grid lines. Each cell an independent full-bleed horizontal side-view PARALLAX BACKGROUND, all important scenery in the distant background, generous clear middle area where game characters and projectiles will be placed. No characters, no enemies, no UI, no text, no watermark. Painterly polished 2D cartoon, readable gentle detail and atmospheric depth, soft lighting, NOT top-down. Exact row-major environments: (1) sunlit moss forest ranger outpost among huge trunks, fern green and gold; (2) treetop freight railway high among tree canopies, old timber rails and distant leafy bridges, mint sky; (3) underground cave with cyan glowing crystals and softly luminous mushrooms, indigo teal; (4) floating windmill and brass gear factory among pale clouds, blue and cream; (5) volcanic sawmill with distant orange lava channels and timber cranes, warm sienna and smoky purple; (6) ancient tree citadel with huge green glowing heart chambers, giant roots and brass architecture, dark emerald and gold. Do not paint hard foreground collision platforms; the game adds playable platforms in front. Each cell has compatible colors on its left and right edge for repeating background scrolling."
+    }
+  ],
+  "technical": {
+    "width": 1536,
+    "height": 1024,
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "order": "3 columns × 2 rows, row-major",
+    "alpha": "units and bosses retain generated RGBA alpha; worlds RGB",
+    "code_drawn": [
+      "平台碰撞面",
+      "吊橋與開關",
+      "籠子與補給箱",
+      "能源裝置",
+      "子彈與松果",
+      "血條與攻擊預警",
+      "徽章與旗子"
+    ],
+    "notes": "狐狸以站姿／跑姿交替與蹲姿呈現；完整逐格角色動畫與場景接縫微調留待後續。"
+  }
+}
