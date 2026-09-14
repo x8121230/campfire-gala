@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>星星連線魔法 v0.1</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <p class="eyebrow">雲端島嶼 · 星座喚醒</p>
+        <h1>星星連線魔法</h1>
+      </div>
+      <div class="toolbar" aria-label="遊戲設定">
+        <button id="toddlerBtn" aria-pressed="false">幼幼模式：關</button>
+        <button id="slowBtn" aria-pressed="false">慢慢玩：關</button>
+        <button id="soundBtn" aria-pressed="true">音效：開</button>
+        <button id="pauseBtn">暫停</button>
+        <button id="restartBtn">重玩</button>
+      </div>
+    </header>
+
+    <section class="status" aria-live="polite">
+      <div><span id="chapter">第一章</span><strong id="levelName">月芽小舟</strong></div>
+      <p id="instruction">從 1 開始，依序點擊或滑過星星</p>
+      <div class="progress"><span id="progressFill"></span></div>
+      <button id="hintBtn">提示下一顆</button>
+    </section>
+
+    <section class="game-wrap">
+      <canvas id="game" width="960" height="540" aria-label="星星連線魔法遊戲區"></canvas>
+      <div id="pauseOverlay" class="overlay hidden">
+        <div class="card"><span>☁️</span><h2>先在雲上休息一下</h2><button id="resumeBtn">繼續出發</button></div>
+      </div>
+      <div id="chapterOverlay" class="overlay hidden">
+        <div class="card"><span id="chapterIcon">✨</span><h2 id="chapterTitle">新的天空展開了！</h2><p id="chapterText"></p><button id="nextChapterBtn">繼續</button></div>
+      </div>
+      <div id="finishOverlay" class="overlay hidden">
+        <div class="card"><span>🌙</span><h2>十二個星座都醒來了！</h2><p>今晚的雲端島嶼亮晶晶。</p><button id="playAgainBtn">再玩一次</button></div>
+      </div>
+    </section>
+
+    <p class="help">操作：點星星，或按住滑過星星。鍵盤也可按 1～8。點錯不扣分。</p>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>

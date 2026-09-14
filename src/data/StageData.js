@@ -1,6 +1,30 @@
 // src/data/StageData.js
 
 export const STAGE_DATA = {
+    bubble_bay_bubbles: {
+        id: 'bubble_bay_bubbles', name: '泡泡淺灣①　彩色泡泡隊', icon: '🫧',
+        scene: 'ColorBubbleGame', type: 'observation', staminaCost: 0,
+        unlockReputation: 0, rewardBase: 0, freePlay: true, difficulty: 1,
+        description: '在珍珠貝旁辨認泡泡的顏色與形狀。',
+        howToPlay: '先看顏色，再看形狀；點錯不扣分，可以慢慢再試。',
+        starConditions: { one: 60, two: 80, three: 95 }, config: { mode: 'kids' }
+    },
+    bubble_bay_cleanup: {
+        id: 'bubble_bay_cleanup', name: '泡泡淺灣②　海洋清潔隊', icon: '🐢',
+        scene: 'OceanCleanupGame', type: 'matching', staminaCost: 0,
+        unlockReputation: 0, rewardBase: 0, freePlay: true, difficulty: 1,
+        description: '幫海龜朋友把漂來的物品送到正確位置。',
+        howToPlay: '觀察物品後點選或拖曳分類；選錯只會得到提示。',
+        starConditions: { one: 60, two: 80, three: 95 }, config: { mode: 'kids' }
+    },
+    bubble_bay_waterflow: {
+        id: 'bubble_bay_waterflow', name: '珊瑚迷宮①　水流迷宮', icon: '💧',
+        scene: 'WaterFlowMazeGame', type: 'puzzle', staminaCost: 0,
+        unlockReputation: 0, rewardBase: 0, freePlay: true, difficulty: 1,
+        description: '轉動貝殼水門，讓小水滴穿過珊瑚拱門。',
+        howToPlay: '點一下旋轉水道，再放水測試；接錯不會失敗。',
+        starConditions: { one: 60, two: 80, three: 95 }, config: { mode: 'kids' }
+    },
     bush_01: {
         id: 'bush_01',
         name: '草叢探險①　尋找金色草叢',

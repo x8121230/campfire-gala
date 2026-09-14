@@ -195,7 +195,7 @@ export default class StageManager {
         return true;
     }
 
-    static enterStage(scene, stageId) {
+    static enterStage(scene, stageId, launchData = {}) {
         SaveSystem.applyToRegistry(scene.registry);
         this.applyToRegistry(scene.registry);
 
@@ -234,7 +234,8 @@ export default class StageManager {
 
         scene.scene.start(stageData.scene, {
             stageId: stageData.id,
-            stageData
+            stageData,
+            ...launchData
         });
 
         return true;

@@ -1,0 +1,7 @@
+const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process');
+const base=path.resolve(process.argv[2]);const overlay=path.resolve(__dirname,'../UPDATE');let imports=0,fail=[];
+function exists(rel){return fs.existsSync(path.join(overlay,rel))||fs.existsSync(path.join(base,rel));}
+function scan(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,entry.name);if(entry.isDirectory())scan(f);else if(f.endsWith('.js')){const content=fs.readFileSync(f,'utf8');const res=cp.spawnSync('node',['--input-type=module','--check'],{input:content,encoding:'utf8'});if(res.status)fail.push({file:f,error:res.stderr});for(const m of content.matchAll(/(?:from\s*|import\s*)['"](\.[^'"]+)['"]/g)){imports++;const target=path.resolve(path.dirname(f),m[1]);const rel=path.relative(base,target);if(f.startsWith(base)&&!exists(rel))fail.push({file:f,missing:m[1]});}}}}
+scan(path.join(base,'src'));scan(path.join(overlay,'src'));scan(path.join(overlay,'standalone'));
+for(const d of fs.readdirSync(path.join(overlay,'standalone'))){const file=path.join(overlay,'standalone',d,'index.html');const html=fs.readFileSync(file,'utf8');for(const m of html.matchAll(/(?:src|href)=["']([^"']+)["']/g)){if(!/^(https?:|#|data:)/.test(m[1])&&!fs.existsSync(path.resolve(path.dirname(file),m[1])))fail.push({file,missing:m[1]});}}
+console.log(JSON.stringify({imports,fail},null,2));if(fail.length)process.exitCode=1;

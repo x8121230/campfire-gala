@@ -16,12 +16,52 @@ export default class PreloadScene extends Phaser.Scene {
             color: '#ffffff',
             fontStyle: 'bold'
         }).setOrigin(0.5);
+        let finished = false;
+        const watchdog = window.setTimeout(() => {
+            if (finished || !this.scene.isActive()) return;
+            console.warn('Preload exceeded 30 seconds; entering the home screen with available assets.');
+            this.load.stop();
+            finished = true;
+            this.scene.start('Start');
+        }, 30000);
+        this.events.once('shutdown', () => window.clearTimeout(watchdog));
 
         // ===== 首頁 / 背景 =====
         this.load.json('game_balance_config', 'assets/config/game_balance.json');
         this.load.image('bg_home', 'assets/forest_bg.jpg');
         this.load.image('collection_bg', 'assets/forest_bg.jpg');
         this.load.image('bg_collection_room', 'assets/bg_collection_room.jpg');
+        this.load.image('world_map_overview', 'assets/world_map_overview.png');
+        this.load.image('forest_region_art', 'assets/WorldMap01.jpg');
+        this.load.image('forest_region_overview_v2', 'assets/forest_region_overview_v2.png');
+        this.load.image('forest_morning_camp_v2', 'assets/morning_camp_storybook_v2.png');
+        this.load.image('forest_emerald_woods_v2', 'assets/emerald_woods_storybook_v2.png');
+        this.load.image('forest_mosslight_valley_v2', 'assets/mosslight_valley_storybook_v2.png');
+        this.load.image('water_region_overview_v1', 'assets/water_region_overview_v1.png');
+        this.load.image('water_bubble_bay_storybook_v1', 'assets/water_bubble_bay_storybook_v1.png');
+        this.load.image('water_coral_maze_storybook_v1', 'assets/water_coral_maze_storybook_v1.png');
+        this.load.image('water_jellyfish_palace_storybook_v1', 'assets/water_jellyfish_palace_storybook_v1.png');
+        this.load.image('fairy_flower_crown_village_storybook_v1', 'assets/fairy_flower_crown_village_storybook_v1.png');
+        this.load.image('fairy_dew_garden_storybook_v1', 'assets/fairy_dew_garden_storybook_v1.png');
+        this.load.image('fairy_moon_butterfly_market_storybook_v1', 'assets/fairy_moon_butterfly_market_storybook_v1.png');
+        this.load.image('ice_snowbell_field_storybook_v1', 'assets/ice_snowbell_field_storybook_v1.png');
+        this.load.image('ice_mirror_lake_storybook_v1', 'assets/ice_mirror_lake_storybook_v1.png');
+        this.load.image('ice_aurora_palace_storybook_v1', 'assets/ice_aurora_palace_storybook_v1.png');
+        this.load.image('volcano_warmflame_foothill_storybook_v1', 'assets/volcano_warmflame_foothill_storybook_v1.png');
+        this.load.image('volcano_molten_workshop_storybook_v1', 'assets/volcano_molten_workshop_storybook_v1.png');
+        this.load.image('volcano_starfire_summit_storybook_v1', 'assets/volcano_starfire_summit_storybook_v1.png');
+        this.load.image('starlight_moonshadow_shore_storybook_v1', 'assets/starlight_moonshadow_shore_storybook_v1.png');
+        this.load.image('starlight_glow_reeds_storybook_v1', 'assets/starlight_glow_reeds_storybook_v1.png');
+        this.load.image('starlight_star_sunken_heart_storybook_v1', 'assets/starlight_star_sunken_heart_storybook_v1.png');
+        this.load.image('dinosaur_fossil_wilds_storybook_v1', 'assets/dinosaur_fossil_wilds_storybook_v1.png');
+        this.load.image('dinosaur_giant_fern_jungle_storybook_v1', 'assets/dinosaur_giant_fern_jungle_storybook_v1.png');
+        this.load.image('dinosaur_ancient_nest_valley_storybook_v1', 'assets/dinosaur_ancient_nest_valley_storybook_v1.png');
+        this.load.image('chess_pawn_harbor_storybook_v1', 'assets/chess_pawn_harbor_storybook_v1.png');
+        this.load.image('chess_knight_gallery_storybook_v1', 'assets/chess_knight_gallery_storybook_v1.png');
+        this.load.image('chess_crown_city_storybook_v1', 'assets/chess_crown_city_storybook_v1.png');
+        this.load.image('cloud_meadow_storybook_v1', 'assets/cloud_meadow_storybook_v1.png');
+        this.load.image('cloud_windchime_isle_storybook_v1', 'assets/cloud_windchime_isle_storybook_v1.png');
+        this.load.image('cloud_sky_temple_storybook_v1', 'assets/cloud_sky_temple_storybook_v1.png');
 
         // ===== 音效 / 音樂 =====
         this.load.audio('home_bgm', 'assets/home_bgm.mp3');
@@ -246,6 +286,8 @@ export default class PreloadScene extends Phaser.Scene {
         });
 
         this.load.on('complete', () => {
+            finished = true;
+            window.clearTimeout(watchdog);
             loadingText.setText('載入完成！');
 
             console.log('✅ preload 完成', {

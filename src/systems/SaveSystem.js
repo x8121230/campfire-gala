@@ -24,6 +24,7 @@ export default class SaveSystem {
                 gold_grass_encyclopedia: Array.isArray(parsed?.gold_grass_encyclopedia) ? parsed.gold_grass_encyclopedia : [],
                 achievements: Array.isArray(parsed?.achievements) ? parsed.achievements : [],
                 tutorial_flags: this.safeObjectValue(parsed?.tutorial_flags, {}),
+                world_progress: this.safeObjectValue(parsed?.world_progress, DEFAULT_SAVE_DATA.world_progress || {}),
                 placed_decorations: Array.isArray(parsed?.placed_decorations) ? parsed.placed_decorations : [...DEFAULT_SAVE_DATA.placed_decorations],
 
                 minigame_stats: this.mergeMiniGameStats(parsed?.minigame_stats),
@@ -54,6 +55,7 @@ export default class SaveSystem {
             gold_grass_encyclopedia: Array.isArray(DEFAULT_SAVE_DATA.gold_grass_encyclopedia) ? [...DEFAULT_SAVE_DATA.gold_grass_encyclopedia] : [],
             achievements: Array.isArray(DEFAULT_SAVE_DATA.achievements) ? [...DEFAULT_SAVE_DATA.achievements] : [],
             tutorial_flags: { ...(DEFAULT_SAVE_DATA.tutorial_flags || {}) },
+            world_progress: JSON.parse(JSON.stringify(DEFAULT_SAVE_DATA.world_progress || {})),
             placed_decorations: Array.isArray(DEFAULT_SAVE_DATA.placed_decorations) ? [...DEFAULT_SAVE_DATA.placed_decorations] : [],
             minigame_stats: this.mergeMiniGameStats(DEFAULT_SAVE_DATA.minigame_stats),
             bonus_play_counts: { ...(DEFAULT_SAVE_DATA.bonus_play_counts || {}) },
@@ -127,6 +129,7 @@ export default class SaveSystem {
             gold_grass_encyclopedia: this.safeArrayValue(registry.get('gold_grass_encyclopedia'), oldData.gold_grass_encyclopedia),
             achievements: this.safeArrayValue(registry.get('achievements'), oldData.achievements),
             tutorial_flags: this.safeObjectValue(registry.get('tutorial_flags'), oldData.tutorial_flags || {}),
+            world_progress: this.safeObjectValue(registry.get('world_progress'), oldData.world_progress || {}),
             placed_decorations: this.safeArrayValue(registry.get('placed_decorations'), oldData.placed_decorations),
 
             equipped_hat: this.safeValue(registry.get('equipped_hat'), oldData.equipped_hat ?? 'none'),
@@ -169,6 +172,7 @@ export default class SaveSystem {
         registry.set('gold_grass_encyclopedia', Array.isArray(data.gold_grass_encyclopedia) ? data.gold_grass_encyclopedia : []);
         registry.set('achievements', Array.isArray(data.achievements) ? data.achievements : []);
         registry.set('tutorial_flags', data.tutorial_flags ?? {});
+        registry.set('world_progress', this.safeObjectValue(data.world_progress, DEFAULT_SAVE_DATA.world_progress || {}));
         registry.set('placed_decorations', Array.isArray(data.placed_decorations) ? data.placed_decorations : []);
 
         registry.set('equipped_hat', data.equipped_hat ?? 'none');

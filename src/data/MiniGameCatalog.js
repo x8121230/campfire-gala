@@ -7,63 +7,167 @@ export const MINI_GAME_CATEGORIES = Object.freeze([
 ]);
 
 export const MINI_GAME_CATALOG = Object.freeze([
-    {id:'forest_starflight',scene:'ForestStarflightGame',category:'rhythm',icon:'🌟',title:'森林星航瘋狂隊',subtitle:'橫向飛行 × 循環強化 × 城堡首領',description:'飛越糖果雲海、市集與積木拱門，救援星精靈、選擇六種強化。手機橫放。',status:'第一關開放',accent:0xc79b60,launchData:{}},
-    {id:'phantom_realm',scene:'PhantomRealmGame',category:'observation',icon:'📖',title:'幻界・星芽谷｜繪本版',subtitle:'星之森 × 月亮湖 × 裝備與魔法',description:'靠近居民聽故事，探索荷葉路，用泡泡安撫動物。HP／MP、換裝與技能 A／B 已開放。',status:'繪本冒險・兩區開放',accent:0x8fc9cf,launchData:{}},
-    {id:'forest_night_watch',scene:'ForestNightWatchGame',category:'rhythm',icon:'🌙',title:'森林守夜隊',subtitle:'左搖桿 × 淨化戰鬥 × 防線建設',description:'阿晨晨守護月光樹：探索補給、選擇祝福、守住三波夢霧。橫向操作。',status:'第一關開放',accent:0xc6b575,launchData:{}},
-    {id:'starlight_detective',scene:'StarlightDetectiveGame',category:'observation',icon:'🔎',title:'星湖偵探社',subtitle:'三件委託與一封祕密邀請',description:'調查、追問、連結證據與重建現場。偵探案件會自動保存。',status:'已開放',accent:0xd5b477,launchData:{}},
     {
-        id:'forest_kitchen', scene:'ForestKitchenGame', category:'rhythm', icon:'🍳',
-        title:'森林餐車大亂鬥', subtitle:'6 座廚房 · 料理與隊員分工',
-        description:'指揮三名動物主廚，同時備料開火，趕蜜蜂、解凍工作台，挑戰三幕宴會。',
-        status:'新遊戲・玩法初版', accent:0x9b784b, launchData:{mode:'cooking'}
+        id: 'forest_starflight', scene: 'ForestStarflightGame', category: 'rhythm', icon: '🌟',
+        title: '森林星航瘋狂隊', subtitle: '4＋1 機體・七區怪物・可玩式亂流航線',
+        description: '每局隨機抽出三個不重複區域，以可玩的星風亂流無縫接續。亂流具有上下氣流、星砂安全航道與限時星願寶箱鳥；生命、武器、能量與冷卻全程延續，第三區後迎戰專屬首領。手機請橫放。',
+        status: 'v0.10.7・雨燕完整逐格／四鍵控制', accent: 0xc79b60, launchData: {}
     },
     {
-        id:'forest_assault', scene:'ForestAssaultGame', category:'rhythm', icon:'⚡',
-        title:'森林突擊小隊', subtitle:'6 場戰役 · 跑跳射擊與載具',
-        description:'組合武器與配置，駕駛甲蟲坦克、探索救援，挑戰六隻多階段頭目。',
-        status:'新遊戲・玩法初版', accent:0x507b59, launchData:{mode:'action'}
+        id: 'fruit_counting', scene: 'FruitCountingGame', category: 'observation', icon: '🍎',
+        title: '水果數數', subtitle: '找水果・數 1 到 5',
+        description: '看指定水果與數量，一顆一顆放進果籃；點到別種水果只會獲得溫暖提示。',
+        status: '果園候選 v0.1・幼童試玩', accent: 0x73a45f, launchData: { mode: 'kids' }
     },
     {
-        id:'forest_sky', scene:'ForestSkyGame', category:'rhythm', icon:'✈',
-        title:'森林天空守衛隊', subtitle:'15 關 · 飛行射擊與頭目戰',
-        description:'駕駛青葉戰機，升級四種武器，閃避彈幕、救援護送並迎戰五大頭目。',
-        status:'新遊戲・小學生版', accent:0x4d948a, launchData:{mode:'school'}
+        id: 'starlight_firefly', scene: 'StarlightFireflyGame', category: 'matching', icon: '✨',
+        title: '星光湖畔', subtitle: '看閃光・照順序點',
+        description: '觀察四隻螢火蟲的閃爍順序，再照順序或倒序點回去；點錯會溫柔重播。',
+        status: '湖畔候選 v0.1・幼童試玩', accent: 0x597fb0, launchData: { mode: 'kids' }
     },
     {
-        id:'forest_fruit', scene:'ForestFruitGame', category:'rhythm', icon:'🍒',
-        title:'森林果實彈射隊', subtitle:'15 關＋每日挑戰 · 瞄準連鎖',
-        description:'反彈射果、拆支點救小鳥，挑戰花粉染色、松果連爆與三幕樹靈。',
-        status:'新遊戲・小學生版', accent:0x73965b, launchData:{mode:'school'}
+        id: 'jump_climb_kids', scene: 'JumpClimbGame', category: 'rhythm', icon: '⛰️',
+        title: '跳躍登頂', subtitle: '按住蓄力・放開跳躍',
+        description: '控制蓄力時機跳上寬平台；力量太少或太多，都由彈力葉安全接回。',
+        status: '登頂候選 v0.1・幼童試玩', accent: 0x628f7e, launchData: { mode: 'kids' }
     },
     {
-        id:'forest_morph', scene:'ForestMorphGame', category:'rhythm', icon:'🍄',
-        title:'森林變形大冒險', subtitle:'12 關 · 跑跳變形與探索',
-        description:'化身三種精靈，鑽洞、破藤、開門，搭葉舟、踩彈跳菇找森林徽章。',
-        status:'新遊戲・小學生版', accent:0x65aa8a, launchData:{mode:'school'}
+        id: 'water_flow_maze', scene: 'WaterFlowMazeGame', category: 'board', icon: '💧',
+        title: '水流迷宮', subtitle: '旋轉水道・澆灌花朵',
+        description: '旋轉 2～4 塊大型水道，讓小水滴沿著正確方向流到等待盛開的花朵。',
+        status: '水世界 v0.1・幼童試玩', accent: 0x4aa6b8, launchData: { mode: 'kids' }
     },
     {
-        id:'forest_courier', scene:'ForestCourierGame', category:'board', icon:'📮',
-        title:'森林快遞調度站', subtitle:'18 關＋12 委託 · 路線規劃',
-        description:'安排裝貨與送貨順序，挑戰限重捷徑、開橋、前置委託和保鮮配送。',
-        status:'新遊戲・小學生版', accent:0x9b8053, launchData:{mode:'school'}
+        id: 'dinosaur_valley_kids', scene: 'DinosaurValleyGame', category: 'rhythm', icon: '🦕',
+        title: '恐龍山谷跑酷', subtitle: '自動前進・單鍵跳躍',
+        description: '跳過石頭、倒木與泥地，尋找十位恐龍朋友；碰撞只會短暫減速。',
+        status: '恐龍山谷 v0.1・幼童試玩', accent: 0x6e9c58, launchData: { mode: 'kids' }
     },
     {
-        id:'light_workshop', scene:'LightWorkshopGame', category:'observation', icon:'🦉',
-        title:'森林光路工坊', subtitle:'20 關 · 反射分光與混色',
-        description:'轉動鏡子、安排分光與濾色，同時點亮水晶並避開暗晶。',
-        status:'新遊戲・小學生版', accent:0x637cad, launchData:{mode:'school'}
+        id: 'cloud_glide_kids', scene: 'CloudGlideGame', category: 'rhythm', icon: '☁️',
+        title: '雲端滑翔', subtitle: '按住上升・放開下降',
+        description: '讓小探險家自動向前飛，調整高度穿過大順風圈，收集天空星星。',
+        status: '空中屬性 v0.1・幼童試玩', accent: 0x58a7c7, launchData: { mode: 'kids' }
     },
     {
-        id: 'forest_mechanism', scene: 'ForestMechanismGame', category: 'board', icon: '🦊',
-        title: '森林機關探險', subtitle: '18 關 · 推箱與機關冒險',
-        description: '推箱壓底座、開門搭橋、跨區傳送，規劃路線挑戰三星。',
-        status: '新遊戲・小學生版', accent: 0x667e4e, launchData: { mode: 'school' }
+        id: 'lava_step', scene: 'LavaStepGame', category: 'rhythm', icon: '🪨',
+        title: '熔岩踏石', subtitle: '看時機・安全踏石',
+        description: '觀察熔岩與踏石節奏，在安全時機跨過火熱路面。',
+        status: '火焰系列 v0.1', accent: 0xb95736, launchData: { mode: 'kids' }
     },
     {
-        id: 'ocean_cleanup', scene: 'OceanCleanupGame', category: 'observation', icon: '🐠',
-        title: '海洋清理隊', subtitle: '辨認垃圾 → 分類 → 任務',
-        description: '跟兔子船長收垃圾、保護海洋朋友，再練習分類與數量。',
-        status: '新遊戲・幼童試玩', accent: 0x2785a0, launchData: { mode: 'kids' }
+        id: 'cooling_workshop', scene: 'CoolingWorkshopGame', category: 'observation', icon: '❄️',
+        title: '冷卻工坊', subtitle: '觀察溫度・幫忙降溫',
+        description: '依照溫度提示使用正確冷卻方法，讓火熱工坊恢復安全。',
+        status: '火焰系列 v0.2', accent: 0x4e9fbd, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'lava_pipe', scene: 'LavaPipeGame', category: 'board', icon: '🚿',
+        title: '水管接接樂', subtitle: '旋轉水管・接通冷水',
+        description: '旋轉水管接出完整路線，把冷水送到需要降溫的地方。',
+        status: '火焰系列 v0.3', accent: 0xc76a37, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'volcano_echo', scene: 'VolcanoEchoGame', category: 'matching', icon: '🎵',
+        title: '洞穴回聲', subtitle: '聽聲音・照順序回應',
+        description: '記住火山洞穴傳來的回聲順序，再依序敲出相同旋律。',
+        status: '火焰系列 v0.4', accent: 0x8d536f, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'lava_bridge', scene: 'LavaBridgeGame', category: 'board', icon: '🌉',
+        title: '熔岩河搭橋', subtitle: '排列橋板・跨越熔岩',
+        description: '比較橋板長短並排出安全道路，幫小探險家越過熔岩河。',
+        status: '火焰系列 v0.5', accent: 0xa86b3f, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'lava_bubble_pop', scene: 'LavaBubblePopGame', category: 'rhythm', icon: '🫧',
+        title: '啵啵彩色岩漿泡泡', subtitle: '看提示・點對泡泡',
+        description: '依照顏色提示點破正確的岩漿泡泡，避開不需要的顏色。',
+        status: '火焰系列 v0.1', accent: 0xe96c73, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'ptero_fossil', scene: 'PteroFossilPuzzleGame', category: 'matching', icon: '🦴',
+        title: '彈果翼龍化石拼圖', subtitle: '辨認形狀・拼回化石',
+        description: '把散落的翼龍化石放回正確輪廓，完成可愛的古生物拼圖。',
+        status: '火焰系列 v0.2', accent: 0xa97855, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'volcano_gem_cart', scene: 'VolcanoGemCartGame', category: 'observation', icon: '💎',
+        title: '火山寶石分類車', subtitle: '看顏色・分寶石',
+        description: '觀察寶石顏色與種類，把它們送進正確的礦車。',
+        status: '火焰系列 v0.3', accent: 0xc56f45, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'hot_spring_capybara', scene: 'HotSpringCapybaraGame', category: 'matching', icon: '♨️',
+        title: '溫泉水豚躲貓貓', subtitle: '記住位置・找到水豚',
+        description: '記住水豚藏在哪座溫泉後，再從蒸氣中找出牠們。',
+        status: '火焰系列 v0.4', accent: 0x9a7180, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'jelly_sea_bridge', scene: 'JellySeaBridgeGame', category: 'board', icon: '🪨',
+        title: '造橋過果凍海', subtitle: '比較大小・依序搭橋',
+        description: '依照大小順序排列踏板，搭出能安全通過果凍海的橋。',
+        status: '火焰系列 v0.5', accent: 0xb65b3d, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'penguin_slide_maze', scene: 'PenguinSlideMazeGame', category: 'board', icon: '🐧',
+        title: '企鵝滑冰迷宮', subtitle: '想方向・滑到營火',
+        description: '規劃上下左右的順序，讓企鵝滑到障礙前停下，最後抵達營火。',
+        status: '備用原型・幼童試玩', accent: 0x579eb9, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'snow_house_memory', scene: 'SnowHouseMemoryGame', category: 'matching', icon: '🏠',
+        title: '雪屋躲貓貓', subtitle: '看位置・找一對',
+        description: '先看動物躲進哪間雪屋，再打開兩間，找出相同的朋友。',
+        status: '備用原型・幼童試玩', accent: 0x78b2c5, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'ice_fishing', scene: 'IceFishingGame', category: 'observation', icon: '🎣',
+        title: '冰窟釣魚對對碰', subtitle: '認顏色・數一數',
+        description: '看小熊需要的魚色與數量，點擊冰窟裡游過的正確小魚。',
+        status: '備用原型・幼童試玩', accent: 0x58aac3, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'snowman_shape', scene: 'SnowmanShapeGame', category: 'matching', icon: '⛄',
+        title: '形狀雪人拼拼樂', subtitle: '拖形狀・拼雪人',
+        description: '把圓形、三角形和長方形放進輪廓；點一下也能自動吸附。',
+        status: '備用原型・幼童試玩', accent: 0x73b8c9, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'ice_tap_rescue', scene: 'IceTapRescueGame', category: 'observation', icon: '🧊',
+        title: '敲冰塊救救橡果', subtitle: '觀察支撐・敲碎冰塊',
+        description: '觀察橡果腳下的支撐冰塊，依序敲碎，安全落到雪堆。',
+        status: '備用原型・幼童試玩', accent: 0x66b7ca, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'sled_delivery', scene: 'SledDeliveryGame', category: 'rhythm', icon: '🎁',
+        title: '北極熊雪橇快遞', subtitle: '調速度・送禮物',
+        description: '控制雪橇快慢，等雪屋進入配送區，再把五份禮物送出去。',
+        status: '新遊戲・幼童試玩', accent: 0x5b9db7, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'seal_rescue', scene: 'SealRescueGame', category: 'observation', icon: '🦭',
+        title: '小海豹冰河救援', subtitle: '選浮冰・找海豹',
+        description: '選擇浮冰自動跳躍，找到五隻小海豹；落水會由鯨魚接住。',
+        status: '新遊戲・幼童試玩', accent: 0x5aaec5, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'snowball_defense', scene: 'SnowballDefenseGame', category: 'rhythm', icon: '❄️',
+        title: '雪球防衛隊', subtitle: '點雪怪・自動發射',
+        description: '守護冰晶小屋，點擊三條雪道上的雪怪，自動丟出雪球。',
+        status: '新遊戲・幼童試玩', accent: 0x579db9, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'penguin_ice_puzzle', scene: 'PenguinIcePuzzleGame', category: 'board', icon: '🐧',
+        title: '企鵝冰塊推推樂', subtitle: '推冰塊・修冰橋',
+        description: '幫小企鵝把冰塊推到發光圓圈，五關都能復原與提示。',
+        status: '新遊戲・幼童試玩', accent: 0x63b8ca, launchData: { mode: 'kids' }
+    },
+    {
+        id: 'ice_ski', scene: 'IceSkiGame', category: 'rhythm', icon: '⛷️',
+        title: '冰原滑雪大冒險', subtitle: '左右滑行・跳過障礙',
+        description: '在雪道上左右滑行、跳過障礙，收集 12 顆藍色冰晶。',
+        status: '新遊戲・幼童試玩', accent: 0x4aa8c2, launchData: { mode: 'kids' }
     },
     {
         id: 'color_bubble', scene: 'ColorBubbleGame', category: 'observation', icon: '🫧',
@@ -182,6 +286,78 @@ export const MINI_GAME_CATALOG = Object.freeze([
         status: 'AI 版可測',
         accent: 0x9a6650,
         launchData: { mode: 'ai' }
+    },
+    {
+        id: 'standalone_cloud_glider', category: 'rhythm', icon: '☁️',
+        title: '雲端滑翔隊', subtitle: '天空獨立玩法・控制升降',
+        description: '控制小小滑翔員穿越雲海與風圈，避開障礙並收集天空星光。',
+        status: '天空 DEMO v0.1', accent: 0x66a9cc, standaloneFolder: 'Cloud_Glider_v0_1'
+    },
+    {
+        id: 'standalone_cloud_shapes', category: 'matching', icon: '☁️',
+        title: '雲朵變變變', subtitle: '觀察輪廓・配對形狀',
+        description: '觀察雲朵變成的可愛圖案，找出相同輪廓並完成配對。',
+        status: '天空 DEMO v0.1', accent: 0x8eb9d2, standaloneFolder: 'Cloud_Shapes_v0_1'
+    },
+    {
+        id: 'standalone_rainbow_bridge', category: 'board', icon: '🌈',
+        title: '彩虹橋修理隊', subtitle: '安排橋片・接通道路',
+        description: '旋轉與排列彩虹橋片，讓斷開的天空道路重新連接。',
+        status: '天空 DEMO v0.1', accent: 0xb578bd, standaloneFolder: 'Rainbow_Bridge_v0_1'
+    },
+    {
+        id: 'standalone_raindrop_home', category: 'board', icon: '💧',
+        title: '小雨滴回家', subtitle: '規劃水路・送回雲朵',
+        description: '安排安全路線，引導迷路的小雨滴避開障礙回到雲朵家。',
+        status: '天空 DEMO v0.1', accent: 0x63aeca, standaloneFolder: 'Raindrop_Home_v0_1'
+    },
+    {
+        id: 'standalone_sky_delivery', category: 'rhythm', icon: '📦',
+        title: '天空快遞隊', subtitle: '控制飛行・準時配送',
+        description: '在雲島間調整速度與高度，把包裹平安送到指定目的地。',
+        status: '天空 DEMO v0.1', accent: 0x5f9fc2, standaloneFolder: 'Sky_Delivery_v0_1'
+    },
+    {
+        id: 'standalone_rainbow_cloud_pop', category: 'rhythm', icon: '🫧',
+        title: '啵啵彩虹雲朵', subtitle: '看顏色・點泡泡',
+        description: '依提示點破正確顏色的彩虹雲泡泡，完成輕快的反應挑戰。',
+        status: '天空 DEMO v0.1', accent: 0xb66fa8, standaloneFolder: 'Rainbow_Cloud_Pop_v0_1'
+    },
+    {
+        id: 'standalone_star_constellation', category: 'observation', icon: '⭐',
+        title: '星星連線魔法', subtitle: '觀察星點・完成星座',
+        description: '依照提示順序連接天空星點，讓藏在雲海上的星座亮起來。',
+        status: '天空 DEMO v0.1', accent: 0x7184c2, standaloneFolder: 'Star_Constellation_Magic_v0_1'
+    },
+    {
+        id: 'standalone_owl_balloon', category: 'rhythm', icon: '🎈',
+        title: '貓頭鷹的熱氣球', subtitle: '調整火力・穿越雲層',
+        description: '幫貓頭鷹控制熱氣球升降，穿越風帶並抵達下一座雲島。',
+        status: '天空 DEMO v0.1', accent: 0xa37863, standaloneFolder: 'Owl_Hot_Air_Balloon_v0_1'
+    },
+    {
+        id: 'standalone_cloud_chime', category: 'rhythm', icon: '♫',
+        title: '雲端風鈴音樂會', subtitle: '聽節奏・敲風鈴',
+        description: '跟著雲端旋律依序敲響風鈴，完成一場柔和的天空音樂會。',
+        status: '天空 DEMO v0.1', accent: 0x78aaa4, standaloneFolder: 'Cloud_Chime_Concert_v0_1'
+    },
+    {
+        id: 'standalone_sun_moon', category: 'observation', icon: '🌙',
+        title: '太陽與月亮捉迷藏', subtitle: '找線索・辨認天空',
+        description: '根據光影與雲朵線索，找出躲起來的太陽或月亮。',
+        status: '天空 DEMO v0.1', accent: 0xc69054, standaloneFolder: 'Sun_Moon_Hide_Seek_v0_1'
+    },
+    {
+        id: 'standalone_forest_stair', category: 'rhythm', icon: '🌲',
+        title: '森林階梯探險隊', subtitle: '控制步伐・安全下樓',
+        description: '掌握移動節奏走過森林階梯，避開落差並平安抵達終點。',
+        status: '森林 DEMO v0.1', accent: 0x6f9a61, standaloneFolder: 'Forest_Stair_Adventure_v0_1'
+    },
+    {
+        id: 'standalone_volleyball', category: 'rhythm', icon: '🏐',
+        title: '阿晨晨打排球', subtitle: '移動跳躍・接球回擊',
+        description: '控制阿晨晨移動與跳躍，把排球接起並送回對方場地。',
+        status: '獨立遊戲 v1.0', accent: 0xd68155, standaloneFolder: 'AhChen_Volleyball_v1'
     }
 ]);
 

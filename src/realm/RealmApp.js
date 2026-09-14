@@ -1,43 +1,416 @@
-import {RealmWorld} from './RealmWorld.js';
-import {RealmJourney,SPOTS} from './RealmRules.js';
-const SAVE='forest_phantom_realm_v1';
-export class RealmApp{
- constructor(root,{onExit=()=>{},onSound=()=>{}}={}){this.root=root;this.onExit=onExit;this.onSound=onSound;this.abort=new AbortController();this.keys=new Set();this.axis={x:0,y:0};this.joyId=null;this.dead=false;this.paused=true;this.storageOK=true;let saved;try{saved=JSON.parse(localStorage.getItem(SAVE)||'null');}catch{}this.journey=new RealmJourney(saved);this.buildUI();}
- el(tag,cls,text,parent=this.root){const e=document.createElement(tag);e.className=cls;if(text)e.textContent=text;parent.append(e);return e;}
- on(el,type,fn){el.addEventListener(type,fn,{signal:this.abort.signal});}
- button(text,fn,parent,cls=''){const b=this.el('button',cls,text,parent);b.type='button';this.on(b,'click',fn);return b;}
- buildUI(){this.root.classList.add('realm-app');const style=this.el('style');style.textContent=`
- .realm-app{position:fixed;inset:0;z-index:10000;overflow:hidden;background:#183e38;color:#fff1ce;font:600 17px "Microsoft JhengHei",sans-serif;touch-action:none;user-select:none;isolation:isolate}
- .realm-app *{box-sizing:border-box}.realm-app canvas{width:100%;height:100%;display:block}.realm-app button{font:inherit;color:inherit;cursor:pointer;border:1px solid #d7c08b88;background:#244e46e8;border-radius:16px;min-height:46px;padding:10px 18px;touch-action:none}.realm-app button:active{transform:scale(.96);background:#67886b}.realm-app button:disabled{opacity:.5;cursor:default}
- .realm-app .top{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));right:max(16px,env(safe-area-inset-right));display:flex;align-items:start;justify-content:space-between;gap:10px;pointer-events:none}.realm-app .brand{background:#173e37ed;border:1px solid #dccf9866;border-radius:18px;padding:12px 18px;max-width:55%;box-shadow:0 6px 24px #173b3720}.realm-app .eyebrow{font-size:11px;letter-spacing:3px;color:#c5d9b9}.realm-app h1{margin:3px 0 7px;font-size:25px;letter-spacing:2px}.realm-app .objective{font-size:15px;color:#e9e9c2}.realm-app .topnav{display:flex;gap:7px;pointer-events:auto}.realm-app .topnav button{font-size:15px;padding:10px 13px}
- .realm-app .bottom{position:absolute;left:50%;bottom:max(15px,env(safe-area-inset-bottom));transform:translateX(-50%);background:#173e37db;border-radius:16px;padding:10px 18px;text-align:center;font-size:13px;max-width:40%;pointer-events:none}.realm-app .inventory{color:#eed59d;margin-bottom:5px}.realm-app .toast{position:absolute;left:50%;top:25%;transform:translateX(-50%);padding:12px 22px;background:#183e37eb;border:1px solid #d8c391;border-radius:16px;text-align:center;max-width:65%;opacity:0;transition:opacity .15s;pointer-events:none}
- .realm-app .joy{position:absolute;bottom:max(24px,env(safe-area-inset-bottom));left:max(27px,env(safe-area-inset-left));width:132px;height:132px;border-radius:50%;border:2px solid #eff0c780;background:#214d4659;box-shadow:inset 0 0 30px #ffffff14;touch-action:none}.realm-app .knob{position:absolute;width:56px;height:56px;left:36px;top:36px;border-radius:50%;background:#e1e6bed9;border:2px solid #fff5d4;pointer-events:none}.realm-app .joylabel{position:absolute;bottom:-19px;width:100%;text-align:center;font-size:12px;opacity:.85;pointer-events:none}
- .realm-app .actions{position:absolute;right:max(25px,env(safe-area-inset-right));bottom:max(25px,env(safe-area-inset-bottom));display:flex;align-items:end;gap:13px}.realm-app .actions button{border-radius:50%;width:82px;height:82px;padding:8px;font-size:17px;box-shadow:0 5px 16px #183b3733}.realm-app .actions .interact{width:108px;height:108px;background:#a47d3bea;border:2px solid #f4d991;font-size:21px}.realm-app .actions .fan{margin-bottom:65px;margin-right:-15px}.realm-app .context{position:absolute;bottom:27%;left:50%;transform:translateX(-50%);background:#1b433bcf;border-radius:12px;padding:8px 16px;pointer-events:none;font-size:16px;white-space:nowrap}
- .realm-app .modal{position:absolute;inset:0;background:#102d2aba;display:flex;justify-content:center;align-items:center;padding:18px;backdrop-filter:blur(4px)}.realm-app .card{width:min(740px,94%);max-height:94%;overflow:auto;background:#f7f0d9;color:#284f43;border:3px solid #bfa86b;border-radius:26px;padding:26px 34px;box-shadow:0 20px 80px #081f2b80}.realm-app h2{font-size:29px;margin:0 0 15px}.realm-app .body{font-size:19px;line-height:1.7;white-space:pre-line}.realm-app .choices{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}.realm-app .choices button{flex:1;color:#fff3d4;background:#356453;min-width:130px;min-height:56px}.realm-app .puzzleProgress{color:#937537;margin-top:10px;min-height:30px}.realm-app .loading{position:absolute;inset:0;display:grid;place-items:center;background:#173e37;font-size:24px}.realm-app .rotate{position:absolute;inset:0;z-index:5;background:#173e37f5;display:none;align-items:center;justify-content:center;text-align:center;padding:40px;font-size:23px;line-height:1.8}
- @media(max-height:500px){.realm-app{font-size:14px}.realm-app .top{top:8px;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right))}.realm-app .brand{padding:8px 12px}.realm-app h1{font-size:19px;margin:1px 0 3px}.realm-app .eyebrow{font-size:9px}.realm-app .objective{font-size:12px}.realm-app .topnav button{font-size:12px;min-height:42px;padding:7px 10px}.realm-app .joy{width:106px;height:106px;bottom:22px;left:max(20px,env(safe-area-inset-left))}.realm-app .knob{width:46px;height:46px;left:28px;top:28px}.realm-app .actions{bottom:16px;right:max(18px,env(safe-area-inset-right));gap:10px}.realm-app .actions button{width:65px;height:65px;font-size:14px}.realm-app .actions .interact{width:84px;height:84px;font-size:18px}.realm-app .actions .fan{margin-bottom:50px}.realm-app .bottom{font-size:10px;padding:6px 11px;bottom:9px;max-width:38%}.realm-app .card{padding:18px 25px}.realm-app h2{font-size:23px;margin-bottom:8px}.realm-app .body{font-size:16px;line-height:1.55}.realm-app .choices{margin-top:12px}.realm-app .choices button{min-height:46px}.realm-app .context{font-size:13px;bottom:26%}.realm-app .toast{font-size:14px}}
- `;
- this.canvas=this.el('canvas');this.canvas.setAttribute('aria-label','幻界立體探索地圖');const top=this.el('div','top'),brand=this.el('div','brand',null,top);this.el('div','eyebrow','PHANTOM REALM · CHAPTER 01',brand);this.el('h1','','幻界 · 星芽谷',brand);this.objective=this.el('div','objective','',brand);const nav=this.el('div','topnav',null,top);this.button('手帳',()=>this.journal(),nav);this.mapButton=this.button('鳥瞰',()=>{if(!this.world)return;this.world.overview=!this.world.overview;this.world.projection();this.mapButton.textContent=this.world.overview?'跟隨':'鳥瞰';},nav);this.button('暫停',()=>this.pause(),nav);
- const bottom=this.el('div','bottom');this.inventory=this.el('div','inventory','',bottom);this.el('div','','WASD 移動 · E 互動 · Q 引風 · Shift 快走',bottom);this.toast=this.el('div','toast');this.context=this.el('div','context');this.joy=this.el('div','joy');this.knob=this.el('div','knob','',this.joy);this.el('div','joylabel','拖曳移動',this.joy);
- const actions=this.el('div','actions');this.fanButton=this.button('引風',()=>this.useFan(),actions,'fan');this.runButton=this.button('快走',()=>{},actions);this.interactButton=this.button('互動',()=>this.interact(),actions,'interact');this.loading=this.el('div','loading','正在喚醒星芽谷…');this.rotate=this.el('div','rotate','請將手機橫放\n左手移動，右手探索。');this.rotate.style.whiteSpace='pre-line';this.bindInput();this.hud();
- }
- bindInput(){this.on(this.joy,'pointerdown',e=>{if(this.paused||this.joyId!==null)return;e.preventDefault();this.joyId=e.pointerId;this.joy.setPointerCapture(e.pointerId);this.joystick(e);});this.on(this.joy,'pointermove',e=>{if(e.pointerId===this.joyId)this.joystick(e);});for(const type of ['pointerup','pointercancel','lostpointercapture'])this.on(this.joy,type,e=>{if(e.pointerId===this.joyId)this.resetJoystick();});this.on(this.runButton,'pointerdown',e=>{if(this.paused)return;this.runId=e.pointerId;this.runButton.setPointerCapture(e.pointerId);this.running=true;});for(const type of ['pointerup','pointercancel','lostpointercapture'])this.on(this.runButton,type,()=>{this.running=false;});
- this.on(window,'keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();if(e.repeat)return;if(e.code==='Escape'){this.modal?this.close():this.pause();return;}if(this.paused)return;this.keys.add(e.code);if(e.code==='KeyE')this.interact();if(e.code==='KeyQ')this.useFan();});this.on(window,'keyup',e=>this.keys.delete(e.code));this.on(window,'blur',()=>this.pause());this.on(document,'visibilitychange',()=>{if(document.hidden)this.pause();});this.on(window,'resize',()=>this.resize());this.on(this.canvas,'webglcontextlost',e=>{e.preventDefault();this.paused=true;this.clearInput();this.dialog('畫面暫時中斷','請返回遊戲列表再進入，已完成的任務會保留。',[['返回遊戲列表',()=>this.onExit()]]);});}
- joystick(e){const r=this.joy.getBoundingClientRect(),dx=e.clientX-r.left-r.width/2,dy=e.clientY-r.top-r.height/2,l=Math.hypot(dx,dy),max=r.width*.34;this.axis=l<6?{x:0,y:0}:{x:dx/Math.max(max,l),y:dy/Math.max(max,l)};this.knob.style.transform=`translate(${this.axis.x*max}px,${this.axis.y*max}px)`;}
- resetJoystick(){this.joyId=null;this.axis={x:0,y:0};this.knob.style.transform='';}
- clearInput(){this.resetJoystick();this.running=false;this.keys.clear();}
- resize(){const r=this.root.getBoundingClientRect();this.world?.resize(r.width,r.height);const portrait=r.height>r.width;this.rotate.style.display=portrait?'flex':'none';if(portrait){this.paused=true;this.clearInput();if(!this.modal&&!this.loading)this.pause();}}
- async start(){try{this.world=new RealmWorld(this.canvas);await this.world.load();if(this.dead){this.world.dispose();return;}this.loading.remove();this.loading=null;this.resize();this.dialog('歡迎來到幻界','這裡的水車停了，星燈也失去光芒。\n找榛果爺爺接下委託，探索拱橋、坡道與高台。\n\n左搖桿移動；右側互動／引風／按住快走。\n手帳有任務與線索，鳥瞰可以查看整座山谷。',[['開始探索',()=>this.close()]]);this.last=performance.now();this.frame=requestAnimationFrame(t=>this.tick(t));}catch(e){if(this.dead)return;this.loading?.remove();this.loading=null;this.dialog('幻界尚未成功載入','請確認已完整覆蓋更新包，並使用支援 WebGL 2 的瀏覽器。\n其他遊戲仍可從列表進入。',[['返回遊戲列表',()=>this.onExit()]]);console.error('Phantom realm load failed',e);}}
- tick(t){if(this.dead)return;const dt=Math.min(.05,(t-this.last)/1000);this.last=t;let axis={x:0,y:0},moving=false;if(!this.paused){axis={x:this.axis.x+(this.keys.has('KeyD')||this.keys.has('ArrowRight')?1:0)-(this.keys.has('KeyA')||this.keys.has('ArrowLeft')?1:0),y:this.axis.y+(this.keys.has('KeyS')||this.keys.has('ArrowDown')?1:0)-(this.keys.has('KeyW')||this.keys.has('ArrowUp')?1:0)};moving=this.journey.move(dt,axis,this.running||this.keys.has('ShiftLeft')||this.keys.has('ShiftRight'));if(this.journey.collect()){this.save();this.notify(`找到螢火蟲！ ${this.journey.found.length} / 3`);this.onSound('correct');}this.hud();}this.world.render(this.journey,this.paused?0:dt,axis,moving);if(this.toastUntil&&t>this.toastUntil)this.toast.style.opacity='0';this.frame=requestAnimationFrame(n=>this.tick(n));}
- hud(){this.objective.textContent=this.journey.objective();this.inventory.textContent=`${this.journey.fan?'引風扇 ✓':'探險背包'} · ${this.journey.gear?'齒輪 ✓':'齒輪 —'} · 螢火 ${this.journey.found.length}/3`;const id=this.journey.nearby();this.context.textContent=id?`E / 互動 · ${SPOTS[id].name}`:'';this.context.style.display=id?'block':'none';this.fanButton.disabled=!this.journey.fan;this.interactButton.textContent=id==='keeper'?'交談':id==='lift'?'搭乘':id==='valve'?'機關':'互動';}
- notify(text){this.toast.textContent=text;this.toast.style.opacity='1';this.toastUntil=performance.now()+4200;}
- save(){try{localStorage.setItem(SAVE,JSON.stringify(this.journey.export()));this.storageOK=true;}catch{this.storageOK=false;this.notify('目前無法保存進度；請先不要關閉此頁。');}}
- result(r){if(r.changed){this.save();this.onSound(r.win?'finish':'correct');}this.hud();if(r.puzzle){this.puzzle();return;}if(r.title)this.dialog(r.title,r.message,[['繼續探索',()=>this.close()]]);else if(r.message)this.notify(r.message);}
- interact(){if(this.paused)return;const id=this.journey.nearby();if(!id){this.notify('靠近居民、機關或水車，再按互動。');return;}this.result(this.journey.act(id));}
- useFan(){if(this.paused||!this.journey.fan)return;this.onSound('hint');if(this.journey.nearby()==='jam')this.result(this.journey.act('jam',true));else this.notify('風把葉子吹起了。找找營地北方纏住齒輪的夢藤。');}
- dialog(title,text,choices){this.paused=true;this.clearInput();this.modal?.remove();this.modal=this.el('div','modal');const card=this.el('div','card',null,this.modal);this.el('h2','',title,card);this.el('div','body',text,card);const buttons=this.el('div','choices',null,card);for(const [label,fn]of choices)this.button(label,fn,buttons);return card;}
- close(){if(this.root.clientHeight>this.root.clientWidth)return;this.modal?.remove();this.modal=null;this.clearInput();this.paused=false;this.last=performance.now();}
- pause(){if(this.dead||this.loading)return;if(this.modal){this.clearInput();return;}this.dialog('在星芽谷歇一會兒',`${this.journey.objective()}\n${this.storageOK?'已完成的任務會自動保存。':'目前無法保存，離開可能遺失進度。'}`,[['繼續',()=>this.close()],['返回遊戲列表',()=>this.onExit()]]);}
- journal(){if(this.loading)return;this.dialog('星芽探險手帳',`目前：${this.journey.objective()}\n\n① 營地交談，取得引風扇。\n② 西岸北方吹開夢藤，找回齒輪。\n③ 過拱橋，從東岸南側木坡道登上高台。\n④ 石碑：葉先醒來，月接住露水，星才亮起。\n⑤ 開閘後可搭滑索回營地，修復水車。\n\n支線：三隻螢火蟲分別在西岸花叢、東岸南端、高台深處。`,[['回到探索',()=>this.close()],['重玩本章',()=>this.dialog('重新探索？','只重設幻界第一章與螢火蟲紀錄，不影響其他遊戲。',[['取消',()=>this.journal()],['確認重玩',()=>{this.journey=new RealmJourney();this.save();this.hud();this.close();}]])]]);}
- puzzle(){this.journey.steps=[];const card=this.dialog('星芽引水閘','石碑刻著：「葉先醒來，月接住露水，星才亮起。」\n依序點亮符印；選錯會熄滅，可以重新嘗試。',[['葉',()=>pick('leaf')],['星',()=>pick('star')],['月',()=>pick('moon')],['先離開',()=>this.close()]]);const status=this.el('div','puzzleProgress','尚未點亮符印',card);const pick=s=>{const r=this.journey.rune(s);status.textContent=r.message;if(r.changed){this.save();this.onSound('correct');this.dialog('水流回來了！',r.message,[['繼續探索',()=>this.close()]]);this.hud();}};}
- dispose(){this.dead=true;cancelAnimationFrame(this.frame);this.abort.abort();this.clearInput();this.world?.dispose();this.root.remove();}
+import { RealmWorld } from './RealmWorld.js';
+import { RealmJourney, SPOTS, WORLD_SCALE, addCampCollisionMark, disableCampObstaclesAt, eraseCampCollisionMarks, getCampCollisionPaint, setCampCollisionPaint } from './RealmRules.js';
+import { ITEM_CATALOG, STARSPROUT_QUICK_ITEMS, loadStarsproutInventory, mergeStarsproutItems, saveStarsproutInventory } from './StarsproutInventory.js';
+import { StarsproutInventoryPanel } from './StarsproutInventoryPanel.js';
+
+const SAVE = 'forest_starsprout_camp_v2';
+const COLLISION_SAVE = 'forest_starsprout_camp_collision_v1';
+
+export class RealmApp {
+  constructor(root, { onExit = () => {}, onTravel = () => {}, onSound = () => {}, entry = '' } = {}) {
+    this.root = root;
+    this.onExit = onExit;
+    this.onTravel = onTravel;
+    this.onSound = onSound;
+    this.abort = new AbortController();
+    this.keys = new Set();
+    this.axis = { x: 0, y: 0 };
+    this.joyId = null;
+    this.dead = false;
+    this.paused = true;
+    this.traveling = false;
+    this.requireGateExit = entry === 'northGate';
+    this.gateDwell = 0;
+    this.storageOK = true;
+    this.collisionEditing = false; this.collisionMode = 'block'; this.collisionRadius = 56 * WORLD_SCALE; this.collisionPointer = null; this.lastCollisionPoint = null;
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(SAVE) || 'null'); } catch {}
+    this.journey = new RealmJourney(saved);
+    try { setCampCollisionPaint(JSON.parse(localStorage.getItem(COLLISION_SAVE) || 'null') || {}); } catch { setCampCollisionPaint({}); }
+    this.inventoryState = mergeStarsproutItems(loadStarsproutInventory(), { '甜蘋果': this.journey.apples, ...(this.journey.robe ? { '星芽旅行者套裝': 1 } : {}) });
+    this.inventoryState = saveStarsproutInventory(this.inventoryState);
+    if (entry === 'northGate') this.journey.player = { x: SPOTS.northGate.x, y: SPOTS.northGate.y + 96 };
+    this.buildUI();
+  }
+
+  el(tag, cls = '', text = '', parent = this.root) {
+    const element = document.createElement(tag);
+    element.className = cls;
+    if (text) element.textContent = text;
+    parent.append(element);
+    return element;
+  }
+
+  on(element, type, fn) {
+    element.addEventListener(type, fn, { signal: this.abort.signal });
+  }
+
+  button(text, fn, parent, cls = '') {
+    const button = this.el('button', cls, text, parent);
+    button.type = 'button';
+    this.on(button, 'click', fn);
+    return button;
+  }
+
+  buildUI() {
+    this.root.classList.add('realm-app', 'starsprout-camp');
+    const style = this.el('style');
+    style.textContent = [
+      '.realm-app{position:fixed;inset:0;z-index:10000;overflow:hidden;background:#bfe1d5;color:#fff4d5;font:600 17px "Microsoft JhengHei",sans-serif;touch-action:none;user-select:none;isolation:isolate}',
+      '.realm-app *{box-sizing:border-box}.realm-app canvas{width:100%;height:100%;display:block}.realm-app button{font:inherit;color:inherit;cursor:pointer;border:1px solid #f6dfaa88;background:#28584fe8;border-radius:16px;min-height:46px;padding:10px 18px;touch-action:none}.realm-app button:active{transform:scale(.96);background:#73936d}.realm-app button:disabled{opacity:.5}',
+      '.realm-app .top{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));right:max(16px,env(safe-area-inset-right));display:flex;align-items:start;justify-content:space-between;gap:10px;pointer-events:none}.realm-app .brand{background:#244e43e8;border:1px solid #f6dda977;border-radius:20px;padding:11px 17px;max-width:58%;box-shadow:0 7px 24px #163f3733}.realm-app .eyebrow{font-size:11px;letter-spacing:2px;color:#d7e8c6}.realm-app h1{margin:2px 0 5px;font-size:24px}.realm-app .objective{font-size:14px;color:#fff0bd}.realm-app .topnav{display:flex;gap:7px;pointer-events:auto}.realm-app .topnav button{font-size:14px;padding:9px 13px}',
+      '.realm-app .bottom{position:absolute;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);background:#244e43d9;border-radius:17px;padding:8px 16px;text-align:center;font-size:12px;max-width:46%;pointer-events:none}.realm-app .inventory{color:#ffe3a0;margin-bottom:4px}.realm-app .toast{position:absolute;left:50%;top:22%;transform:translateX(-50%);padding:12px 22px;background:#244e43ef;border:1px solid #ffe2a6;border-radius:16px;text-align:center;max-width:70%;opacity:0;transition:opacity .15s;pointer-events:none;box-shadow:0 8px 28px #163f3744}',
+      '.realm-app .joy{position:absolute;bottom:max(23px,env(safe-area-inset-bottom));left:max(27px,env(safe-area-inset-left));width:130px;height:130px;border-radius:50%;border:2px solid #fff4cf99;background:#28584f66;box-shadow:inset 0 0 30px #ffffff18;touch-action:none}.realm-app .knob{position:absolute;width:56px;height:56px;left:35px;top:35px;border-radius:50%;background:#e6edcfe8;border:2px solid #fff8dd;pointer-events:none}.realm-app .joylabel{position:absolute;bottom:-19px;width:100%;text-align:center;font-size:12px;opacity:.9;pointer-events:none}',
+      '.realm-app .actions{position:absolute;right:max(25px,env(safe-area-inset-right));bottom:max(25px,env(safe-area-inset-bottom));display:flex;align-items:end;gap:13px}.realm-app .actions button{border-radius:50%;width:78px;height:78px;padding:8px;font-size:16px;box-shadow:0 5px 16px #183b3733}.realm-app .actions .interact{width:106px;height:106px;background:#a87538ed;border:2px solid #ffe09a;font-size:20px}.realm-app .context{position:absolute;bottom:25%;left:50%;transform:translateX(-50%);background:#244e43df;border:1px solid #fff0bc66;border-radius:13px;padding:8px 16px;pointer-events:none;font-size:15px;white-space:nowrap}',
+      '.realm-app .quickbar{position:absolute;left:50%;bottom:max(79px,calc(env(safe-area-inset-bottom) + 66px));transform:translateX(-50%);display:flex;gap:6px;padding:7px;background:#1d463ee8;border:1px solid #f7d99a88;border-radius:17px}.realm-app .quickslot{position:relative;width:55px;height:55px;min-height:55px!important;padding:3px!important;border-radius:12px!important;background:#fff5d821!important}.realm-app .quickslot .icon{display:block;font-size:24px}.realm-app .quickslot .count{position:absolute;right:5px;bottom:2px;font-size:11px}.realm-app .quickslot .key{position:absolute;left:5px;top:2px;font-size:9px}.realm-app .quickslot.empty{opacity:.42}',
+      '.realm-app .collision-tools{position:absolute;z-index:6;left:50%;bottom:18px;transform:translateX(-50%);display:none;align-items:center;gap:7px;padding:9px;background:#173f38ef;border:2px solid #ffe2a6;border-radius:18px}.realm-app .collision-tools.show{display:flex}.realm-app .collision-tools button{min-height:42px;padding:7px 11px;font-size:12px}.realm-app .collision-tools button.active{background:#b87937}.realm-app .collision-note{font-size:11px;max-width:150px;white-space:pre-line}.realm-app.collision-mode .joy,.realm-app.collision-mode .actions,.realm-app.collision-mode .quickbar,.realm-app.collision-mode .bottom,.realm-app.collision-mode .context{display:none}',
+      '.realm-app .modal{position:absolute;inset:0;background:#173c35a8;display:flex;justify-content:center;align-items:center;padding:18px;backdrop-filter:blur(4px)}.realm-app .card{width:min(720px,94%);max-height:92%;overflow:auto;background:#fff7df;color:#315747;border:3px solid #caae6b;border-radius:28px;padding:25px 33px;box-shadow:0 20px 80px #17372f77}.realm-app h2{font-size:28px;margin:0 0 14px}.realm-app .body{font-size:19px;line-height:1.7;white-space:pre-line}.realm-app .choices{display:flex;flex-wrap:wrap;gap:12px;margin-top:19px}.realm-app .choices button{flex:1;color:#fff7d8;background:#3c6956;min-width:130px;min-height:55px}.realm-app .reward{margin-top:14px;padding:12px 15px;background:#f3e7bd;border-radius:15px;color:#795b25}.realm-app .loading{position:absolute;inset:0;display:grid;place-items:center;background:#214d43;font-size:24px}.realm-app .rotate{position:absolute;inset:0;z-index:5;background:#214d43f5;display:none;align-items:center;justify-content:center;text-align:center;padding:40px;font-size:23px;line-height:1.8}',
+      '@media(max-height:500px){.realm-app{font-size:14px}.realm-app .top{top:7px;left:max(9px,env(safe-area-inset-left));right:max(9px,env(safe-area-inset-right))}.realm-app .brand{padding:7px 11px}.realm-app h1{font-size:18px;margin:1px 0 2px}.realm-app .eyebrow{font-size:9px}.realm-app .objective{font-size:11px}.realm-app .topnav button{font-size:12px;min-height:40px;padding:6px 10px}.realm-app .joy{width:104px;height:104px;bottom:20px;left:max(19px,env(safe-area-inset-left))}.realm-app .knob{width:45px;height:45px;left:27px;top:27px}.realm-app .actions{bottom:15px;right:max(17px,env(safe-area-inset-right));gap:9px}.realm-app .actions button{width:64px;height:64px;font-size:13px}.realm-app .actions .interact{width:84px;height:84px;font-size:17px}.realm-app .bottom{font-size:10px;padding:6px 10px;bottom:8px;max-width:42%}.realm-app .card{padding:17px 23px}.realm-app h2{font-size:22px;margin-bottom:7px}.realm-app .body{font-size:16px;line-height:1.52}.realm-app .choices{margin-top:11px}.realm-app .choices button{min-height:44px}.realm-app .context{font-size:12px;bottom:24%}.realm-app .toast{font-size:13px}}'
+    ].join('');
+
+    this.canvas = this.el('canvas');
+    this.canvas.setAttribute('aria-label', '幻界・微光星芽谷・星芽營地');
+    const top = this.el('div', 'top');
+    const brand = this.el('div', 'brand', '', top);
+    this.el('div', 'eyebrow', '幻界 · 微光星芽谷', brand);
+    this.el('h1', '', '星芽營地', brand);
+    this.objective = this.el('div', 'objective', '', brand);
+    const nav = this.el('div', 'topnav', '', top);
+    this.button('手帳', () => this.journal(), nav);
+    this.button('背包', () => this.backpack(), nav);
+    this.button('碰撞', () => this.openCollisionEditor(), nav);
+    this.mapButton = this.button('鳥瞰', () => {
+      if (!this.world) return;
+      this.world.overview = !this.world.overview;
+      this.mapButton.textContent = this.world.overview ? '跟隨' : '鳥瞰';
+    }, nav);
+    this.hillsButton = this.button('前往丘陵', () => this.openHills(), nav);
+    this.button('暫停', () => this.pause(), nav);
+
+    const bottom = this.el('div', 'bottom');
+    this.inventory = this.el('div', 'inventory', '', bottom);
+    this.el('div', '', 'WASD／左搖桿移動 · E／互動 · Shift／快走', bottom);
+    this.toast = this.el('div', 'toast');
+    this.context = this.el('div', 'context');
+    this.joy = this.el('div', 'joy');
+    this.knob = this.el('div', 'knob', '', this.joy);
+    this.el('div', 'joylabel', '拖曳移動', this.joy);
+    const actions = this.el('div', 'actions');
+    this.runButton = this.button('快走', () => {}, actions);
+    this.interactButton = this.button('互動', () => this.interact(), actions, 'interact');
+    this.quickbar = this.el('div', 'quickbar');
+    this.quickSlots = STARSPROUT_QUICK_ITEMS.map((name, index) => { const slot = this.button('', () => this.itemDetails(name), this.quickbar, 'quickslot'); this.el('span', 'key', String(index + 1), slot); this.el('span', 'icon', ITEM_CATALOG[name]?.icon || '🎒', slot); this.el('span', 'count', '0', slot); slot.title = name; return slot; });
+    this.collisionTools = this.el('div', 'collision-tools'); this.el('div', 'collision-note', '橙線＝既有阻擋\n橡皮擦可刪除', this.collisionTools); this.collisionButtons = {};
+    for (const [mode, label] of [['block', '紅色阻擋筆'], ['pass', '綠色通行筆'], ['erase', '橡皮擦']]) this.collisionButtons[mode] = this.button(label, () => this.setCollisionMode(mode), this.collisionTools);
+    this.button('筆刷－', () => this.changeCollisionRadius(-16), this.collisionTools); this.collisionSize = this.el('span', 'collision-note', '', this.collisionTools); this.button('筆刷＋', () => this.changeCollisionRadius(16), this.collisionTools); this.button('匯出JSON', () => this.exportCollision(), this.collisionTools); this.button('全部還原', () => this.clearCollision(), this.collisionTools); this.button('完成／試走', () => this.closeCollisionEditor(), this.collisionTools);
+    this.loading = this.el('div', 'loading', '正在打開星芽營地的繪本…');
+    this.rotate = this.el('div', 'rotate', '請將手機橫放\n左手移動，右手互動。');
+    this.rotate.style.whiteSpace = 'pre-line';
+    this.bindInput();
+    this.hud();
+  }
+
+  bindInput() {
+    this.on(this.canvas, 'pointerdown', (event) => { if (!this.collisionEditing) return; event.preventDefault(); this.collisionPointer = event.pointerId; this.canvas.setPointerCapture(event.pointerId); this.paintCollision(event, true); });
+    this.on(this.canvas, 'pointermove', (event) => { if (!this.collisionEditing) return; const point = this.world?.screenToWorld(event.clientX, event.clientY); this.world?.setCollisionEditor({ cursor: point }); if (event.pointerId === this.collisionPointer) this.paintCollision(event); });
+    for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) this.on(this.canvas, type, (event) => { if (event.pointerId === this.collisionPointer) { this.collisionPointer = null; this.lastCollisionPoint = null; this.saveCollision(); } });
+    this.on(this.joy, 'pointerdown', (event) => {
+      if (this.paused || this.joyId !== null) return;
+      event.preventDefault();
+      this.joyId = event.pointerId;
+      this.joy.setPointerCapture(event.pointerId);
+      this.joystick(event);
+    });
+    this.on(this.joy, 'pointermove', (event) => {
+      if (event.pointerId === this.joyId) this.joystick(event);
+    });
+    for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+      this.on(this.joy, type, (event) => {
+        if (event.pointerId === this.joyId) this.resetJoystick();
+      });
+    }
+    this.on(this.runButton, 'pointerdown', (event) => {
+      if (this.paused) return;
+      this.runId = event.pointerId;
+      this.runButton.setPointerCapture(event.pointerId);
+      this.running = true;
+    });
+    for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+      this.on(this.runButton, type, () => { this.running = false; });
+    }
+    this.on(window, 'keydown', (event) => {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(event.code)) event.preventDefault();
+      if (event.repeat) return;
+      if (event.code === 'Escape') {
+        if (this.inventoryPanel) this.inventoryPanel.close(); else if (this.collisionEditing) this.closeCollisionEditor(); else if (this.modal) this.close(); else this.pause();
+        return;
+      }
+      if (event.code === 'KeyB' && !event.repeat && !this.collisionEditing) { this.backpack(); return; }
+      if (event.code === 'KeyM' && !event.repeat && this.world && !this.collisionEditing) { this.world.overview = !this.world.overview; this.mapButton.textContent = this.world.overview ? '跟隨' : '鳥瞰'; return; }
+      if (/^Digit[1-6]$/.test(event.code) && !this.collisionEditing) { this.itemDetails(STARSPROUT_QUICK_ITEMS[Number(event.code.slice(-1)) - 1]); return; }
+      if (this.paused) return;
+      this.keys.add(event.code);
+      if (event.code === 'KeyE' || event.code === 'Space') this.interact();
+    });
+    this.on(window, 'keyup', (event) => this.keys.delete(event.code));
+    this.on(window, 'blur', () => this.pause());
+    this.on(document, 'visibilitychange', () => { if (document.hidden) this.pause(); });
+    this.on(window, 'resize', () => this.resize());
+  }
+
+  joystick(event) {
+    const rect = this.joy.getBoundingClientRect();
+    const dx = event.clientX - rect.left - rect.width / 2;
+    const dy = event.clientY - rect.top - rect.height / 2;
+    const length = Math.hypot(dx, dy);
+    const max = rect.width * .34;
+    this.axis = length < 6 ? { x: 0, y: 0 } : {
+      x: dx / Math.max(max, length),
+      y: dy / Math.max(max, length)
+    };
+    this.knob.style.transform = 'translate(' + (this.axis.x * max) + 'px,' + (this.axis.y * max) + 'px)';
+  }
+
+  resetJoystick() {
+    this.joyId = null;
+    this.axis = { x: 0, y: 0 };
+    this.knob.style.transform = '';
+  }
+
+  clearInput() {
+    this.resetJoystick();
+    this.running = false;
+    this.keys.clear();
+  }
+
+  resize() {
+    const rect = this.root.getBoundingClientRect();
+    if (this.world) this.world.resize(rect.width, rect.height);
+    const portrait = rect.height > rect.width;
+    this.rotate.style.display = portrait ? 'flex' : 'none';
+    if (portrait) {
+      this.paused = true;
+      this.clearInput();
+    }
+  }
+
+  async start() {
+    try {
+      this.world = new RealmWorld(this.canvas);
+      await this.world.load();
+      if (this.dead) return;
+      this.loading.remove();
+      this.loading = null;
+      this.resize();
+      this.dialog(
+        '歡迎來到微光星芽谷',
+        '你從幻界漩渦輕輕落在星芽營地。\n母樹的鐘聲響起，奧爾登長老正在廣場後方等你。\n\n先熟悉移動，再靠近發光驚嘆號按「互動」。',
+        [['開始探索', () => this.close()]]
+      );
+      this.last = performance.now();
+      this.frame = requestAnimationFrame((time) => this.tick(time));
+    } catch (error) {
+      if (this.dead) return;
+      if (this.loading) this.loading.remove();
+      this.loading = null;
+      console.error('Starsprout Camp load failed', error);
+      this.dialog(
+        '星芽營地尚未成功載入',
+        '請確認星芽營地背景與三位NPC素材已完整安裝。',
+        [['返回遊戲列表', () => this.onExit()]]
+      );
+    }
+  }
+
+  tick(time) {
+    if (this.dead) return;
+    const dt = Math.min(.05, (time - this.last) / 1000);
+    this.last = time;
+    let axis = { x: 0, y: 0 };
+    let moving = false;
+    if (!this.paused) {
+      axis = {
+        x: this.axis.x + (this.keys.has('KeyD') || this.keys.has('ArrowRight') ? 1 : 0) - (this.keys.has('KeyA') || this.keys.has('ArrowLeft') ? 1 : 0),
+        y: this.axis.y + (this.keys.has('KeyS') || this.keys.has('ArrowDown') ? 1 : 0) - (this.keys.has('KeyW') || this.keys.has('ArrowUp') ? 1 : 0)
+      };
+      moving = this.journey.move(dt, axis, this.running || this.keys.has('ShiftLeft') || this.keys.has('ShiftRight'));
+      this.hud();
+      const gateDistance = Math.hypot(
+        this.journey.player.x - SPOTS.northGate.x,
+        this.journey.player.y - SPOTS.northGate.y
+      );
+      if (this.requireGateExit && gateDistance > SPOTS.northGate.radius + 100) {
+        this.requireGateExit = false;
+        this.gateDwell = 0;
+      }
+      const gateReady = !this.requireGateExit && !this.traveling &&
+        this.journey.stage >= 3 && gateDistance < SPOTS.northGate.radius;
+      this.gateDwell = gateReady ? this.gateDwell + dt : 0;
+      if (this.gateDwell >= .12) {
+        this.travelToHills();
+        return;
+      }
+    }
+    this.world.render(this.journey, this.paused ? 0 : dt, axis, moving);
+    if (this.toastUntil && time > this.toastUntil) this.toast.style.opacity = '0';
+    this.frame = requestAnimationFrame((next) => this.tick(next));
+  }
+
+  hud() {
+    this.objective.textContent = this.journey.objective();
+    this.inventory.textContent = (this.journey.robe ? '星芽旅行者套裝 ✓' : '星芽旅行者套裝 —') + ' · 甜蘋果 ' + this.journey.apples + '/10';
+    const id = this.journey.nearby();
+    this.context.textContent = id ? 'E／互動 · ' + SPOTS[id].name : '';
+    this.context.style.display = id ? 'block' : 'none';
+    this.interactButton.textContent = id === 'northGate'
+      ? '前往丘陵'
+      : id === 'alden' || id === 'bronc' || id === 'phoebe' ? '交談' : '互動';
+    this.hillsButton.hidden = this.journey.stage < 3;
+    this.quickSlots?.forEach((slot, index) => { const count = this.inventoryState?.items?.[STARSPROUT_QUICK_ITEMS[index]] || 0; slot.querySelector('.count').textContent = String(count); slot.classList.toggle('empty', count <= 0); });
+  }
+
+  notify(text) {
+    this.toast.textContent = text;
+    this.toast.style.opacity = '1';
+    this.toastUntil = performance.now() + 4200;
+  }
+
+  save() {
+    try {
+      localStorage.setItem(SAVE, JSON.stringify(this.journey.export()));
+      this.inventoryState = mergeStarsproutItems(this.inventoryState, { '甜蘋果': this.journey.apples, ...(this.journey.robe ? { '星芽旅行者套裝': 1 } : {}) });
+      this.inventoryState = saveStarsproutInventory(this.inventoryState);
+      this.storageOK = true;
+    } catch {
+      this.storageOK = false;
+      this.notify('目前無法保存進度；請先不要關閉此頁。');
+    }
+  }
+
+  backpack() {
+    if (this.loading || this.collisionEditing || this.inventoryPanel) return;
+    this.modal?.remove(); this.modal = null; this.paused = true; this.clearInput();
+    this.inventoryState = mergeStarsproutItems(this.inventoryState, { '甜蘋果': this.journey.apples, ...(this.journey.robe ? { '星芽旅行者套裝': 1 } : {}) });
+    this.inventoryPanel = new StarsproutInventoryPanel(this.root, { state: this.inventoryState, onChange: (state) => { this.inventoryState = saveStarsproutInventory(state); }, onNotice: (message) => this.notify(message), onClose: (state) => { this.inventoryState = saveStarsproutInventory(state); this.inventoryPanel = null; this.paused = false; this.last = performance.now(); } });
+  }
+
+  itemDetails(name) {
+    if (!name || this.loading || this.collisionEditing) return;
+    const item = ITEM_CATALOG[name], count = this.inventoryState?.items?.[name] || 0;
+    this.dialog(`${item?.icon || '🎒'} ${name} ×${count}`, count ? item?.description : `${item?.description || '星芽谷的冒險物品。'}\n\n目前尚未取得。`, [['查看完整背包', () => { this.close(); this.backpack(); }], ['繼續探索', () => this.close()]]);
+  }
+
+  openCollisionEditor() { if (this.loading || !this.world) return; this.modal?.remove(); this.modal = null; this.paused = true; this.clearInput(); this.collisionEditing = true; this.root.classList.add('collision-mode'); this.collisionTools.classList.add('show'); this.world.setCollisionEditor({ enabled: true, mode: this.collisionMode, radius: this.collisionRadius, cursor: null }); this.setCollisionMode(this.collisionMode); this.notify('直接在營地地圖拖曳標記碰撞。'); }
+  closeCollisionEditor() { if (!this.collisionEditing) return; this.saveCollision(); this.collisionEditing = false; this.collisionPointer = null; this.lastCollisionPoint = null; this.root.classList.remove('collision-mode'); this.collisionTools.classList.remove('show'); this.world?.setCollisionEditor({ enabled: false, cursor: null }); this.paused = false; this.last = performance.now(); this.notify('營地碰撞已保存，可立即試走。'); }
+  setCollisionMode(mode) { this.collisionMode = mode; for (const [key, button] of Object.entries(this.collisionButtons || {})) button.classList.toggle('active', key === mode); if (this.collisionSize) this.collisionSize.textContent = String(Math.round(this.collisionRadius / WORLD_SCALE)); this.world?.setCollisionEditor({ mode, radius: this.collisionRadius }); }
+  changeCollisionRadius(delta) { this.collisionRadius = Math.max(24 * WORLD_SCALE, Math.min(112 * WORLD_SCALE, this.collisionRadius + delta * WORLD_SCALE)); this.setCollisionMode(this.collisionMode); }
+  paintCollision(event, force = false) { const point = this.world?.screenToWorld(event.clientX, event.clientY); if (!point) return; this.world.setCollisionEditor({ cursor: point }); if (!force && this.lastCollisionPoint && Math.hypot(point.x - this.lastCollisionPoint.x, point.y - this.lastCollisionPoint.y) < this.collisionRadius * .42) return; if (this.collisionMode === 'erase') { eraseCampCollisionMarks(point.x, point.y, this.collisionRadius); disableCampObstaclesAt(point.x, point.y, this.collisionRadius); } else addCampCollisionMark(this.collisionMode, { x: point.x, y: point.y, r: this.collisionRadius }); this.lastCollisionPoint = point; }
+  saveCollision() { try { localStorage.setItem(COLLISION_SAVE, JSON.stringify({ v: 1, ...getCampCollisionPaint() })); } catch { this.notify('瀏覽器無法保存碰撞標記，請先匯出 JSON。'); } }
+  exportCollision() { const data = JSON.stringify({ v: 1, map: '星芽營地', ...getCampCollisionPaint() }, null, 2), url = URL.createObjectURL(new Blob([data], { type: 'application/json' })), link = document.createElement('a'); link.href = url; link.download = '星芽營地_碰撞標記.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); this.notify('營地碰撞標記 JSON 已匯出。'); }
+  clearCollision() { if (!confirm('確定還原全部營地碰撞？')) return; setCampCollisionPaint({}); this.saveCollision(); this.notify('營地碰撞已還原。'); }
+
+  result(result) {
+    if (result.changed) {
+      this.save();
+      this.onSound(result.win ? 'finish' : 'correct');
+    }
+    this.hud();
+    if (result.title) {
+      const choices = result.travel
+        ? [['前往丘陵', () => this.travelToHills()], ['留在營地', () => this.close()]]
+        : [['繼續探索', () => this.close()]];
+      const card = this.dialog(result.title, result.message, choices);
+      if (result.win) this.el('div', 'reward', '獎勵：星芽旅行者套裝 · 甜蘋果 ×10 · Base EXP', card);
+    } else if (result.message) {
+      this.notify(result.message);
+    }
+  }
+
+  interact() {
+    if (this.paused) return;
+    const id = this.journey.nearby();
+    if (!id) {
+      this.notify('靠近居民、晨露池或地標，再按互動。');
+      return;
+    }
+    this.result(this.journey.act(id));
+  }
+
+  openHills() {
+    if (this.paused || this.journey.stage < 3) return;
+    this.travelToHills();
+  }
+
+  travelToHills() {
+    if (this.traveling || this.journey.stage < 3) return;
+    this.traveling = true;
+    this.paused = true;
+    this.clearInput();
+    this.onTravel('hills');
+  }
+
+  dialog(title, text, choices) {
+    this.paused = true;
+    this.clearInput();
+    if (this.modal) this.modal.remove();
+    this.modal = this.el('div', 'modal');
+    const card = this.el('div', 'card', '', this.modal);
+    this.el('h2', '', title, card);
+    this.el('div', 'body', text, card);
+    const buttons = this.el('div', 'choices', '', card);
+    for (const choice of choices) this.button(choice[0], choice[1], buttons);
+    return card;
+  }
+
+  close() {
+    if (this.root.clientHeight > this.root.clientWidth) return;
+    if (this.modal) this.modal.remove();
+    this.modal = null;
+    this.clearInput();
+    this.paused = false;
+    this.last = performance.now();
+  }
+
+  pause() {
+    if (this.dead || this.loading) return;
+    if (this.modal) {
+      this.clearInput();
+      return;
+    }
+    this.dialog(
+      '在星芽營地休息',
+      this.journey.objective() + '\n' + (this.storageOK ? '任務進度會自動保存。' : '目前無法保存，離開可能遺失進度。'),
+      [['繼續', () => this.close()], ['返回遊戲列表', () => this.onExit()]]
+    );
+  }
+
+  journal() {
+    if (this.loading) return;
+    this.dialog(
+      '星芽探險手帳',
+      '目前：' + this.journey.objective() + '\n\n① 與母樹前的奧爾登長老交談。\n② 到廣場左下方的晨露池清洗衣角。\n③ 拜訪左側裁縫鋪的布隆克。\n④ 取得星芽旅行者套裝與甜蘋果後，北門開放。\n\n菲比位於右側星核工房，之後會教你製作第一顆靈珠。',
+      [
+        ['回到探索', () => this.close()],
+        ['重玩序章', () => this.dialog('重新開始序章？', '只重設微光星芽谷的星芽營地進度，不影響其他遊戲。', [
+          ['取消', () => this.journal()],
+          ['確認重玩', () => {
+            this.journey = new RealmJourney();
+            this.save();
+            this.hud();
+            this.close();
+          }]
+        ])]
+      ]
+    );
+  }
+
+  dispose() {
+    this.dead = true;
+    cancelAnimationFrame(this.frame);
+    this.abort.abort();
+    this.clearInput();
+    if (this.inventoryPanel) { this.inventoryPanel.style.remove(); this.inventoryPanel.overlay.remove(); this.inventoryPanel = null; }
+    if (this.world) this.world.dispose();
+    this.root.remove();
+  }
 }

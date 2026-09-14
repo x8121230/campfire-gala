@@ -1,0 +1,30 @@
+{
+  "version": "森林星航瘋狂隊 v0.2",
+  "date": "2026-09-10",
+  "automated_tests": {
+    "command": "node --test game/tests/*.test.mjs",
+    "passed": 461,
+    "failed": 0
+  },
+  "starflight_rules": {
+    "passed": 11,
+    "failed": 0,
+    "pilot_finish_seconds": [314, 301, 315]
+  },
+  "browser_qa": {
+    "status": "PASS",
+    "desktop": true,
+    "mobile_viewport": true,
+    "route_length": 10,
+    "connector_compatible": true,
+    "unique_maps": true,
+    "weapon_picker": true,
+    "theme_switch": true,
+    "browser_errors": 0
+  },
+  "manual_follow_up": [
+    "physical phone touch feel",
+    "wave density and difficulty tuning",
+    "hidden-map unlock condition"
+  ]
+}

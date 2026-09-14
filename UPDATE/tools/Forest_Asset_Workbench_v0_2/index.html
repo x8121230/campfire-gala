@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' file:; style-src 'self' file: 'unsafe-inline'; img-src 'self' file: data: blob:; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>森林素材驗收台 · v0.2</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="demo-data.js"></script>
+  <script defer src="core.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand"><span class="brand-icon">♧</span><div>森林素材驗收台<small>FOREST ATELIER</small></div></div>
+  <div class="nav-label">驗收工作區</div>
+  <nav aria-label="驗收分類">
+    <button class="nav-item active" data-tab="wardrobe" aria-current="page"><span>♧</span>服裝・紙娃娃<small>01</small></button>
+    <button class="nav-item" data-tab="characters"><span>♙</span>公仔・控制者<small>02</small></button>
+    <button class="nav-item" data-tab="monsters"><span>♞</span>怪物・動作<small>03</small></button>
+    <button class="nav-item" data-tab="games"><span>▦</span>獨立遊戲<small>04</small></button>
+  </nav>
+  <div class="project-card"><span class="live-dot"></span><strong id="sourceLabel">內建範例</strong><p id="sourceDetail">先試看，再選取你的遊戲資料夾。</p><div class="source-meta"><span id="assetCount">— 張圖片</span><span>唯讀</span></div></div>
+  <div class="sidebar-bottom"><p>讓每一個森林角色<br>都以最好的模樣出場。</p><span>LOCAL EDITION <b>v0.2</b></span></div>
+</aside>
+<main>
+  <header class="page-header"><div><div class="eyebrow">FOREST ASSET WORKBENCH</div><h1 id="pageTitle">服裝・紙娃娃</h1><p id="pageSubtitle">自由混搭，檢查比例與每一層的遮擋。</p></div><div class="header-actions"><button id="reportButton" class="secondary">匯出報告 <span id="issueCount">0</span></button><button id="folderButton" class="primary">＋ 選取遊戲資料夾</button></div></header>
+  <div class="source-bar"><span id="modeBadge" class="badge">範例模式</span><span id="scanStatus" role="status">內建素材可直接操作；實際結果請載入你的資料夾。</span><button id="demoButton" class="text-button">返回範例</button><button id="reloadButton" class="text-button" title="重新選取同一資料夾，讀取最新檔案">重新讀取 ↻</button></div>
+  <section id="assetWorkspace" class="workspace">
+    <section class="catalog-panel panel" aria-label="素材清單">
+      <div class="panel-heading"><h2>素材清單</h2><span id="filteredCount">0</span></div>
+      <input id="search" class="search" type="search" placeholder="搜尋名稱或檔案路徑…" aria-label="搜尋素材">
+      <div id="wardrobeKinds" class="segmented"><button data-kind="body" class="selected">衣服</button><button data-kind="hat">帽子</button><button data-kind="all">全部</button></div>
+      <label id="allFilesLabel" class="check-line" hidden><input type="checkbox" id="allFiles">顯示全部圖片（找不到時可開啟）</label>
+      <div id="assetList" class="asset-list"></div>
+      <div class="catalog-footer"><button id="prevPage" aria-label="上一頁">←</button><span id="pageNumber">1 / 1</span><button id="nextPage" aria-label="下一頁">→</button></div>
+    </section>
+    <section class="preview-panel panel">
+      <div class="panel-heading"><div><h2 id="previewTitle">穿搭預覽</h2><span id="previewHint">預覽調整不會修改遊戲</span></div><button id="screenshotButton" class="secondary compact">↓ 截圖</button></div>
+      <div class="stage-toolbar"><div id="backgroundChoices" class="swatches" aria-label="預覽背景"><button data-bg="sage" class="swatch sage selected" aria-label="森林灰綠背景"></button><button data-bg="white" class="swatch white" aria-label="白色背景"></button><button data-bg="dark" class="swatch dark" aria-label="深色背景"></button><button data-bg="checker" class="swatch checker" aria-label="棋盤格背景"></button></div><label class="check-line"><input id="guides" type="checkbox" checked>對位線</label><label class="zoom-label">縮放 <input id="zoom" type="range" min="50" max="180" value="100"><output id="zoomValue">100%</output></label></div>
+      <div class="stage"><canvas id="canvas" width="820" height="850" aria-label="素材合成畫布"></canvas><span id="stageTag" class="stage-tag">FOUR-LAYER OUTFIT</span></div>
+      <div id="wardrobeControls" class="preview-bottom"><button id="previousHat" class="secondary compact">← 上一頂</button><button id="cycleHats" class="secondary compact">自動換帽</button><button id="nextHat" class="secondary compact">下一頂 →</button><button id="removeHat" class="text-button">卸下帽子</button></div>
+      <div id="animationControls" class="animation-controls" hidden><div class="play-row"><button id="stepBack" class="secondary compact" aria-label="前一影格">◁</button><button id="playButton" class="primary compact">播放影格</button><button id="stepForward" class="secondary compact" aria-label="下一影格">▷</button><span id="frameLabel">影格 1 / 1</span><label>FPS <input id="fps" type="number" min="1" max="30" value="6"></label></div><input id="frameSlider" type="range" min="0" max="0" value="0" aria-label="影格位置"></div>
+    </section>
+    <aside class="inspector">
+      <section id="layersPanel" class="panel"><div class="panel-heading"><h2>圖層與對位</h2><button id="resetLayers" class="text-button">重設</button></div><p class="panel-note">下方繪製在前方。點選一層可調整。</p><div id="layerList" class="layer-list"></div><label class="field">替換選取圖層<select id="layerAsset"></select></label><div class="three-fields"><label>X 位移<input id="layerX" type="number" min="-1500" max="1500" step="5" value="0"></label><label>Y 位移<input id="layerY" type="number" min="-1500" max="1500" step="5" value="0"></label><label>比例 %<input id="layerScale" type="number" min="10" max="300" value="100"></label></div><p id="layerWarning" class="inline-note">舊服裝含人物與頭髮，不能只靠開關拆開。</p></section>
+      <section id="spritePanel" class="panel" hidden><div class="panel-heading"><h2>影格播放器</h2></div><label class="field">檢視方式<select id="spriteMode"><option value="whole">完整圖片</option><option value="grid">等格切片</option><option value="atlas">Atlas 影格</option></select></label><div id="gridFields"><div class="two-fields"><label>每列幾格<input id="columns" type="number" min="1" max="64" value="1"></label><label>共有幾列<input id="rows" type="number" min="1" max="64" value="1"></label></div><div class="two-fields"><label>起始格（從 0）<input id="startFrame" type="number" min="0" value="0"></label><label>結束格<input id="endFrame" type="number" min="0" value="0"></label></div></div><label id="atlasField" class="field" hidden>Atlas 動作／影格群組<select id="atlasGroup"></select></label><label class="check-line"><input id="flipX" type="checkbox">水平翻轉</label><p id="spriteNotice" class="inline-note">圖片播放不包含碰撞或技能判定。</p><div id="actionStatus" class="action-status">攻擊／大招判定：待接入遊戲邏輯</div></section>
+      <section class="panel"><div class="panel-heading"><h2>素材資訊</h2><button id="inspectButton" class="text-button">檢查</button></div><dl class="facts"><dt>名稱</dt><dd id="infoName">—</dd><dt>尺寸</dt><dd id="infoSize">—</dd><dt>透明背景</dt><dd id="infoAlpha">尚未檢查</dd><dt>資料來源</dt><dd id="infoOrigin">—</dd></dl><div id="infoPath" class="file-path">—</div></section>
+      <section class="panel issue-panel"><div class="panel-heading"><h2>記下待修項目</h2></div><textarea id="issueNote" rows="2" placeholder="例如：帽子擋到眼睛、尾羽位置太高…" aria-label="待修說明"></textarea><button id="addIssue" class="secondary full">＋ 加入驗收報告</button><p id="issueStatus" class="panel-note" role="status">記錄目前素材、圖層位置與影格。</p></section>
+    </aside>
+  </section>
+  <section id="gamesView" hidden><div class="games-intro"><div><h2>從遊戲列表出發</h2><p>先確認入口與關聯素材。各遊戲的隔離試玩將逐款接入。</p></div><span id="gameCount" class="badge"></span></div><div id="gameList" class="game-grid"></div></section>
+  <footer>FOREST ATELIER <span>本機唯讀 · 預覽調整僅存在驗收台 · 報告與截圖由你手動下載</span></footer>
+</main>
+<input id="folderInput" type="file" webkitdirectory multiple hidden>
+<div id="toast" role="status" class="toast" hidden></div>
+</body></html>

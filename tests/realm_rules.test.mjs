@@ -1,8 +1,108 @@
-import {test} from 'node:test';import assert from 'node:assert/strict';
-import {RealmJourney,heightAt,screenToWorld,SPOTS} from '../src/realm/RealmRules.js';
-function walk(j,x,z){for(let i=0;i<3000;i++){const dx=x-j.player.x,dz=z-j.player.z,l=Math.hypot(dx,dz);if(l<.12)return;const a={x:(dx-dz)*Math.SQRT1_2/l,y:(dx+dz)*Math.SQRT1_2/l};j.move(1/60,a);}throw new Error('unreachable '+x+','+z+' from '+JSON.stringify(j.player));}
-test('true elevation has continuous bridge and ramp; river and cliffs block movement',()=>{assert.equal(heightAt(0,5),null);assert(heightAt(0,0)>1);assert.equal(heightAt(10,-8),3);assert.equal(heightAt(10,0),1.5);const j=new RealmJourney();j.player={x:7.8,z:-8,y:0};for(let i=0;i<60;i++)j.move(1/60,{x:1,y:1});assert(j.player.x<8);});
-test('camera-relative movement, normalized diagonals, long-frame clamp',()=>{assert.deepEqual(screenToWorld(1,0),{x:Math.SQRT1_2,z:-Math.SQRT1_2});const a=new RealmJourney(),b=new RealmJourney();a.move(.05,{x:1,y:0});b.move(4,{x:1,y:0});assert.deepEqual(a.player,b.player);});
-test('quest cannot be advanced remotely or out of order',()=>{const j=new RealmJourney();assert(!j.act('valve').puzzle);assert.equal(j.stage,0);j.player={x:12,z:-10,y:3};assert(!j.rune('leaf').changed);assert.equal(j.stage,0);});
-test('full chapter using ordinary movement across bridge and elevated ramp, retry puzzle and shortcut',()=>{const j=new RealmJourney();walk(j,-10,5);assert(j.act('keeper').changed);walk(j,-11,0);walk(j,-11,-8);assert(!j.act('jam').changed);assert(j.act('jam',true).changed);assert(!j.act('jam',true).changed);walk(j,-5,-8);walk(j,-4,0);walk(j,4,0);walk(j,10.5,4.5);walk(j,10.5,-5);assert.equal(j.player.y,3);walk(j,10.2,-6.3);assert(j.act('valve').puzzle);assert(j.rune('star').wrong);assert.equal(j.steps.length,0);j.rune('leaf');j.rune('moon');assert(j.rune('star').changed);assert.equal(heightAt(0,10,j.shortcut),.12);walk(j,12,-5.5);assert(j.act('lift').travel);walk(j,-4.4,4);assert(j.act('mill').win);assert.equal(j.stage,4);assert(!j.act('mill').changed);});
-test('save schema is bounded, repeat collectibles idempotent, partial progress survives reload',()=>{const j=new RealmJourney({v:1,stage:99,found:[0,0,1,99,'2']});assert.equal(j.stage,4);assert.deepEqual(j.found,[0,1]);j.player={x:14,z:-13,y:3};assert(j.collect());assert(!j.collect());const k=new RealmJourney(j.export());assert(k.complete);assert.equal(k.found.length,3);assert.equal(k.player.y,0);});
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { RealmJourney, SPOTS, WORLD_SCALE, isWalkable } from '../src/realm/RealmRules.js';
+
+function place(journey, id) {
+  journey.player = { x: SPOTS[id].x, y: SPOTS[id].y };
+}
+
+test('星芽營地限制懸崖、建築、噴水池並保留主路', () => {
+  assert.equal(isWalkable(10, 10), false);
+  assert.equal(isWalkable(835 * WORLD_SCALE, 520 * WORLD_SCALE), false);
+  assert.equal(isWalkable(400 * WORLD_SCALE, 300 * WORLD_SCALE), false);
+  assert.equal(isWalkable(835 * WORLD_SCALE, 820 * WORLD_SCALE), true);
+  assert.equal(isWalkable(700 * WORLD_SCALE, 620 * WORLD_SCALE), true);
+  assert.equal(isWalkable(988 * WORLD_SCALE, 112 * WORLD_SCALE), true);
+});
+
+test('MAIN_01 必須依照奧爾登、晨露池、布隆克順序完成', () => {
+  const journey = new RealmJourney();
+  place(journey, 'bronc');
+  assert.equal(journey.act('bronc').changed, undefined);
+  assert.equal(journey.stage, 0);
+  place(journey, 'washPool');
+  assert.equal(journey.act('washPool').changed, undefined);
+  assert.equal(journey.stage, 0);
+  place(journey, 'alden');
+  assert.equal(journey.act('alden').changed, true);
+  assert.equal(journey.stage, 1);
+  place(journey, 'washPool');
+  assert.equal(journey.act('washPool').changed, true);
+  assert.equal(journey.stage, 2);
+  place(journey, 'bronc');
+  const reward = journey.act('bronc');
+  assert.equal(reward.win, true);
+  assert.equal(journey.stage, 3);
+  assert.equal(journey.robe, true);
+  assert.equal(journey.apples, 10);
+});
+
+test('任務標記隨進度移動且北門只在完成後開放', () => {
+  const journey = new RealmJourney();
+  assert.equal(journey.questMarker('alden'), '!');
+  place(journey, 'northGate');
+  assert.equal(journey.act('northGate').travel, undefined);
+  place(journey, 'alden');
+  journey.act('alden');
+  assert.equal(journey.questMarker('washPool'), '!');
+  place(journey, 'washPool');
+  journey.act('washPool');
+  assert.equal(journey.questMarker('bronc'), '?');
+  place(journey, 'bronc');
+  journey.act('bronc');
+  assert.equal(journey.questMarker('northGate'), '!');
+  place(journey, 'northGate');
+  assert.equal(journey.act('northGate').travel, true);
+});
+
+test('菲比對話可保存但不會跳過主線', () => {
+  const journey = new RealmJourney();
+  place(journey, 'phoebe');
+  assert.equal(journey.act('phoebe').changed, true);
+  assert.equal(journey.metPhoebe, true);
+  assert.equal(journey.stage, 0);
+  assert.equal(journey.act('phoebe').changed, false);
+});
+
+test('存檔結構限制範圍並正確恢復序章獎勵', () => {
+  const journey = new RealmJourney({ v: 2, stage: 99, metPhoebe: 1 });
+  assert.equal(journey.stage, 3);
+  assert.equal(journey.robe, true);
+  assert.equal(journey.apples, 10);
+  assert.equal(journey.metPhoebe, true);
+  assert.deepEqual(journey.export(), { v: 2, stage: 3, metPhoebe: true });
+});
+
+test('移動正規化、長幀限制及碰撞有效', () => {
+  const a = new RealmJourney();
+  const b = new RealmJourney();
+  a.move(.05, { x: 1, y: 0 });
+  b.move(9, { x: 1, y: 0 });
+  assert.deepEqual(a.player, b.player);
+  const before = { ...a.player };
+  a.player = { x: 835 * WORLD_SCALE, y: 590 * WORLD_SCALE };
+  for (let i = 0; i < 90; i += 1) a.move(1 / 60, { x: 0, y: -1 });
+  assert(a.player.y > 560 * WORLD_SCALE);
+  assert.notDeepEqual(before, a.player);
+});
+
+test('出生點與所有營地互動點位於同一個可行走連通區', () => {
+  const step = 24;
+  const queue = [{ x: 835 * WORLD_SCALE, y: 824 * WORLD_SCALE }];
+  const seen = new Set(['0,0']);
+  for (let i = 0; i < queue.length; i += 1) {
+    const point = queue[i];
+    for (const [dx, dy] of [[step, 0], [-step, 0], [0, step], [0, -step]]) {
+      const next = { x: point.x + dx, y: point.y + dy };
+      const key = Math.round((next.x - 835 * WORLD_SCALE) / step) + ',' + Math.round((next.y - 824 * WORLD_SCALE) / step);
+      if (!seen.has(key) && isWalkable(next.x, next.y)) {
+        seen.add(key);
+        queue.push(next);
+      }
+    }
+  }
+  for (const [id, spot] of Object.entries(SPOTS)) {
+    const nearest = queue.reduce((best, point) => Math.min(best, Math.hypot(point.x - spot.x, point.y - spot.y)), Infinity);
+    assert(nearest < (spot.radius || 92), id + ' 必須能從出生點走入互動範圍');
+  }
+});

@@ -1,4 +1,5 @@
-// v5.3 — unified paper doll, master-aligned headwear and map synchronization.
+import { ensureHomewear } from '../data/HomewearData.js';
+// v6.6 — neck overlap repair, clean reusable heads, corrected proportions and item thumbnails.
 import AudioSystem from '../systems/AudioSystem.js';
 import SaveSystem from '../systems/SaveSystem.js';
 import EquipmentSystem from '../systems/EquipmentSystem.js';
@@ -7,13 +8,15 @@ import { grantAllItemsForTesting } from '../systems/TestGrantSystem.js';
 import WardrobeAudio from '../systems/WardrobeAudio.js';
 import { ITEM_DB } from '../data/GameData.js';
 import { FAIRY_IDS, ensureFairyWardrobe } from '../data/FairyWardrobeData.js';
+import { resolveInventoryIcon, inventoryIconScale } from '../data/WardrobeIcons.js';
+import { renderPaperDoll } from '../systems/PaperDollRenderer.js';
 import {
     PAPER_DOLL_FILES,
     PAPER_DOLL_LAYOUT,
-    currentLook,
-    fitImage
+    currentLook
 } from '../data/PaperDollConfig.js';
 
+const PAGE_SIZE = 8;
 const CLIP = 'item_hat_daily_01';
 const SECRET = 'item_fullset_secret_guard';
 const NONE_HAT = '__none_hat__', NONE_ACCESSORY = '__none_accessory__';
@@ -23,6 +26,7 @@ const NONE_ITEMS = {
 };
 const C = { ink: '#3e5145', muted: '#788477', wood: 0x987454, cream: 0xf8f3e5, green: 0x557b60, gold: 0xe5bd72 };
 const FONT = '"Microsoft JhengHei", "Noto Sans CJK TC", Arial, sans-serif';
+const CUTE_FONT = '"DFKai-SB", "Microsoft JhengHei UI", "Microsoft JhengHei", sans-serif';
 
 export default class Collection extends Phaser.Scene {
     constructor() { super('Collection'); }
@@ -42,7 +46,9 @@ export default class Collection extends Phaser.Scene {
     }
     create() {
         AudioSystem.stopAllBgm(this);
-        if (ensureFairyWardrobe(this.registry)) this.save();
+        const fairyAdded=ensureFairyWardrobe(this.registry);
+        const homeAdded=ensureHomewear(this.registry);
+        if (fairyAdded || homeAdded) this.save();
         this.audio = new WardrobeAudio(this);
         this.input.setTopOnly(true);
         this.cabin();
@@ -57,8 +63,22 @@ export default class Collection extends Phaser.Scene {
         EquipmentSystem.applyBonusToRegistry(this.registry);
         this.render();
         this.input.on('pointerdown', this.unlockAudio, this);
+        this.swipeStart = null;
+        this.onSwipeStart = pointer => { this.swipeStart = !this.modal && pointer.x>=467 && pointer.x<=1229 && pointer.y>=184 && pointer.y<=424 ? {x:pointer.x,y:pointer.y,id:pointer.id} : null; };
+        this.onSwipeEnd = pointer => {
+            const start=this.swipeStart;this.swipeStart=null;if(!start || this.modal || start.id!==pointer.id)return;
+            const dx=pointer.x-start.x,dy=pointer.y-start.y;
+            if(Math.abs(dx)>65 && Math.abs(dx)>Math.abs(dy)*1.4){
+                const last=Math.max(0,Math.ceil(this.filtered().length/PAGE_SIZE)-1);
+                this.page=Math.max(0,Math.min(last,this.page+(dx<0?1:-1)));this.renderGrid();
+            }
+        };
+        this.input.on('pointerdown',this.onSwipeStart);
+        this.input.on('pointerup',this.onSwipeEnd);
         this.events.once('shutdown', () => {
             this.input.off('pointerdown', this.unlockAudio, this);
+            this.input.off('pointerdown',this.onSwipeStart);
+            this.input.off('pointerup',this.onSwipeEnd);
             this.clearWardrobeEffects(); this.audio.destroy(); this.modal = null;
         });
         this.time.delayedCall(350, () => this.checkMotherGuardReward());
@@ -99,8 +119,11 @@ export default class Collection extends Phaser.Scene {
         this.panel(null, 446, 106, 806, 552, 0xfdfaf2, 22);
         this.txt(null, 58, 132, '今日的小小冒險家', 22, C.ink, true);
         this.panel(null, 70, 200, 310, 394, C.cream, 70, 0xe5dbc6);
+        this.add.ellipse(225,390,275,365,0xffdf9b,.12);
+        this.add.ellipse(225,587,212,26,0xc7a781,.35);
+        this.add.ellipse(225,587,190,17,0xe9ce9b,.55);
         this.txt(null, 42, 686, 'FOREST ATELIER  /  小木屋衣櫃', 13, '#fff8e8');
-        this.txt(null, 1234, 686, 'v5.5 · 童話新裝 10 件', 13, '#fff8e8').setOrigin(1, 0);
+        this.txt(null, 1234, 686, '穿上喜歡的衣服，出發冒險吧！', 13, '#fff8e8').setOrigin(1, 0);
     }
     item(id) { return ITEM_DB[id] || NONE_ITEMS[id] || null; }
     owned() {
@@ -158,33 +181,33 @@ export default class Collection extends Phaser.Scene {
         tabs.forEach(([type, title], index) => this.button(this.grid, 467 + index * 126, 125, 119, 43, title, () => {
             this.selectedType = type; this.page = 0; this.armedId = null; this.previewId = null; this.render();
         }, this.selectedType === type ? C.green : 0xebe8dc, this.selectedType === type ? '#ffffff' : C.ink, `tab-${type}`));
-        const ids = this.filtered(), pages = Math.max(1, Math.ceil(ids.length / 6));
+        const ids = this.filtered(), pages = Math.max(1, Math.ceil(ids.length / PAGE_SIZE));
         this.page = Math.min(this.page, pages - 1);
         const unread = this.registry.get('new_items') || [];
-        ids.slice(this.page * 6, this.page * 6 + 6).forEach((id, i) => {
-            const cx = 469 + (i % 3) * 251, cy = 184 + Math.floor(i / 3) * 126, x = -117, y = -57, item = this.item(id);
-            const card = this.add.container(cx + 117, cy + 57); this.grid.add(card);
+        ids.slice(this.page * PAGE_SIZE, this.page * PAGE_SIZE + PAGE_SIZE).forEach((id, i) => {
+            const cx = 469 + (i % 4) * 190, cy = 184 + Math.floor(i / 4) * 122, x = -90, y = -57, item = this.item(id);
+            const card = this.add.container(cx + 90, cy + 57); this.grid.add(card);
             const quality = ITEM_DB[id] ? Upgrade.appearance(this.registry, id) : { color: 0xb9b9ab };
             const active = this.isEquipped(id), selected = this.selectedId === id;
             const fill = active ? 0xe1efe1 : selected ? 0xf2ead9 : 0xf5f1e7;
-            this.panel(card, x, y, 235, 114, fill, 14, active ? 0x3a9275 : selected ? 0xc89951 : quality.color, active ? 4 : 2);
-            this.drawIcon(card, id, x + 51, y + 54, 76, 75);
-            this.txt(card, x + 95, y + 34, item.name, 17, C.ink, true).setWordWrapWidth(130);
+            this.panel(card, x, y, 180, 114, fill, 14, active ? 0x3a9275 : selected ? 0xc89951 : quality.color, active ? 4 : 2);
+            this.drawIcon(card, id, x + 90, y + 42, 104, 76);
+            this.txt(card, x + 90, y + 80, item.name, 17, C.ink, true)
+                .setFontFamily(CUTE_FONT).setOrigin(.5, 0).setWordWrapWidth(170).setLineSpacing(-2);
             if (active) {
-                this.panel(card, x + 159, y + 5, 68, 23, 0x3a9275, 7);
-                this.txt(card, x + 165, y + 7, '已裝備', 13, '#ffffff', true);
+                this.panel(card, x + 148, y + 5, 26, 23, 0x3a9275, 7);
+                this.txt(card, x + 155, y + 7, '✓', 13, '#ffffff', true);
             }
-            this.txt(card, x + 95, y + 79, active ? (this.canUnequip(id) ? '再點一下卸下' : '基礎造型') : '點一下裝備', 13, active ? '#337b60' : C.muted);
             if (unread.includes?.(id)) this.txt(card, x + 12, y + 5, 'NEW', 12, '#b35d43', true);
-            const hit = this.add.rectangle(x + 117, y + 57, 235, 114, 0xffffff, .001)
+            const hit = this.add.rectangle(x + 90, y + 57, 180, 114, 0xffffff, .001)
                 .setInteractive({ useHandCursor: true }).setName(`item-${id}`);
             card.add(hit);
             hit.on('pointerover', () => { if (this.modal) return; this.tweens.killTweensOf(card); this.tweens.add({targets:card,scale:1.035,duration:140,ease:'Sine.easeOut'}); });
             hit.on('pointerout', () => { this.tweens.killTweensOf(card); this.tweens.add({targets:card,scale:1,duration:140,ease:'Sine.easeOut'}); });
-            hit.on('pointerdown', () => { if (!this.modal) this.selectItem(id); });
+            hit.on('pointerup', pointer => { if (!this.modal && pointer.getDistance()<18) this.selectItem(id); });
         });
         if (!ids.length) this.txt(this.grid, 850, 277, '這裡還空著，出發尋找新收藏吧！', 20, C.muted).setOrigin(.5);
-        this.txt(this.grid, 473, 444, `${ids.length} 個選項 · 綠框＝已裝備 · 點一下穿卸`, 14, C.muted);
+        this.txt(this.grid, 473, 444, `${ids.length} 件收藏　← 左右滑動 →`, 14, C.muted);
         this.button(this.grid, 1042, 432, 48, 39, '‹', () => { this.page = Math.max(0, this.page - 1); this.renderGrid(); }, 0xebe8dc, C.ink);
         this.txt(this.grid, 1138, 442, `${this.page + 1} / ${pages}`, 16, C.ink).setOrigin(.5, 0);
         this.button(this.grid, 1181, 432, 48, 39, '›', () => { this.page = Math.min(pages - 1, this.page + 1); this.renderGrid(); }, 0xebe8dc, C.ink);
@@ -251,16 +274,19 @@ export default class Collection extends Phaser.Scene {
             return ring;
         }
         if (id === CLIP) return this.drawClip(parent, x, y, maxW * .76);
-        const key = ITEM_DB[id]?.icon || ITEM_DB[id]?.texture;
-        if (!key || !this.textures.exists(key)) {
-            return this.txt(parent, x, y, ITEM_DB[id]?.type === 'hat' ? '帽' : ITEM_DB[id]?.type === 'collectible' ? '飾' : '衣', 28, '#a38c65', true).setOrigin(.5);
+        const key = resolveInventoryIcon(ITEM_DB[id], key => this.textures.exists(key));
+        if (!key) {
+            return this.txt(parent, x, y, '待補\n圖示', 14, '#a38c65', true).setOrigin(.5);
         }
         const img = this.add.image(x, y, key); parent.add(img);
-        img.setScale(Math.min(maxW / img.width, maxH / img.height)); return img;
+        img.setScale(inventoryIconScale(img.width, img.height, maxW, maxH)); return img;
     }
     qualityLine(id) {
         const item = ITEM_DB[id];
-        if (item?.cosmeticOnly) return '童話外觀 · 能力預留，尚未啟用';
+        if (item?.cosmeticOnly) {
+            const q = Upgrade.appearance(this.registry, id);
+            return `${q.label}品質 · 童話外觀，能力預留尚未啟用`;
+        }
         if (!item) return '點一下套用；再次點擊可卸下。';
         const q = Upgrade.appearance(this.registry, id);
         if (q.baseKey === 'base') return '基礎造型 · 不屬於品質裝備';
@@ -289,44 +315,36 @@ export default class Collection extends Phaser.Scene {
         this.panel(this.details, 467, 485, 762, 153, 0xeee9da, 16);
         const id = this.selectedId, item = this.item(id);
         if (!item) { this.txt(this.details, 491, 511, '點一下裝備，再點一下卸下。', 19); return; }
-        this.txt(this.details, 490, 501, item.name, 23, C.ink, true);
-        this.txt(this.details, 490, 537, this.qualityLine(id), 15, '#76674f');
-        this.txt(this.details, 490, 565, (item.desc || '森林裡的小小收藏。').split('\n')[0], 14, C.muted).setWordWrapWidth(700);
+        this.txt(this.details, 490, 497, item.name, 28, C.ink, true);
+        this.txt(this.details, 490, 542, (item.desc || '森林裡的小小收藏。').split('\n')[0], 14, C.muted).setWordWrapWidth(700);
         const abilities = this.abilityLines(item);
-        const abilityText = abilities.length ? `能力：${abilities.join('　')}` : '能力：純外觀造型，沒有額外能力';
-        this.txt(this.details, 490, 597, abilityText, 14, abilities.length ? '#557b60' : C.muted, abilities.length).setWordWrapWidth(700);
+        const abilityText = item.cosmeticOnly && item.futureAbility
+            ? `能力預告：${item.futureAbility}`
+            : (abilities.length ? `能力：${abilities.join('　')}` : '穿上喜歡的造型，讓每一天都不一樣。');
+        this.txt(this.details, 490, 582, abilityText, 18, item.futureAbility || abilities.length ? '#557b60' : C.muted, Boolean(item.futureAbility || abilities.length)).setWordWrapWidth(700);
         const actionText = this.isEquipped(id)
             ? (this.canUnequip(id)
-                ? '✓ 已裝備 · 點一下卸下'
+                ? '✓ 已裝備'
                 : '✓ 基礎服裝')
-            : '點一下裝備';
+            : '';
         this.txt(this.details, 1188, 505, actionText, 14, '#557b60', true).setOrigin(1, 0);
     }
     renderDoll() {
         this.mirror.removeAll(true);
         const layout = PAPER_DOLL_LAYOUT.wardrobe;
         const look = currentLook(this.registry, this.previewId);
-        const key = this.textures.exists(look.bodyTexture) ? look.bodyTexture : 'wardrobe_doll_daily_v50';
-        if (this.textures.exists(key)) {
-            const doll = this.add.image(layout.centerX, layout.centerY, key); this.mirror.add(doll);
-            fitImage(doll, layout.maxWidth, layout.maxHeight);
-        } else this.txt(this.mirror, 225, 365, '公仔素材載入失敗\n請檢查 assets/wardrobe_v50', 16, '#975b4b').setOrigin(.5);
-        const left = layout.centerX - layout.maxWidth / 2;
-        const top = layout.centerY - layout.maxHeight / 2;
-        const clipX = left + layout.maxWidth * layout.hatAnchorX;
-        const headY = top + layout.maxHeight * 0.2;
-        if (!look.hatSuppressed && look.hatId === CLIP) {
-            this.drawClip(this.mirror, clipX, headY, 33);
-        } else if (look.hatTexture && this.textures.exists(look.hatTexture)) {
-            const hat = this.add.image(layout.centerX, layout.centerY, look.hatTexture); this.mirror.add(hat);
-            fitImage(hat, layout.maxWidth, layout.maxHeight);
-        }
+        const result = renderPaperDoll(this, this.mirror, look, layout, {
+            drawClip: (...args) => this.drawClip(...args)
+        });
+        if (!result.hasBody) this.txt(this.mirror, 225, 365, '公仔素材載入失敗\n請檢查 assets/wardrobe_v50', 16, '#975b4b').setOrigin(.5);
         const fallback = !look.bodyIsConverted;
         const bodyItem = ITEM_DB[look.bodyId];
         const label = fallback ? `${bodyItem?.name || '此造型'}待統一繪製，暫顯示日常公仔` : (bodyItem?.name || '日常休閒裝');
         this.txt(this.mirror, 225, 606, label, 16, fallback ? '#977255' : C.ink).setOrigin(.5);
-        const hint = this.previewId ? '預覽中 · 再點同一張卡才會穿戴' : '目前正式穿戴造型';
-        this.txt(this.mirror, 225, 630, hint, 12, this.previewId ? '#9a6f32' : C.muted).setOrigin(.5);
+        const state = this.previewId ? '預覽中 · 再點同一張卡才會穿戴' : '目前正式穿戴造型';
+        const hint = result.usedFallback ? `${state} · 暫用原版` : result.layered ?
+            `${state} · 四層造型` : result.registered ? `${state} · 一層式衣服` : state;
+
     }
     equipItem(id, render = true) {
         let changed = false;

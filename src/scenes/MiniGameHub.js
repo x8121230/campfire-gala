@@ -5,7 +5,7 @@ import {
     MINI_GAME_CATEGORIES,
     getMiniGameCategory,
     getMiniGamesByCategory
-} from '../data/MiniGameCatalog.js';
+} from '../data/MiniGameCatalog.js?v=continuous093';
 
 const FONT = 'Microsoft JhengHei, Arial';
 const CARDS_PER_PAGE = 6;
@@ -105,7 +105,7 @@ export default class MiniGameHub extends Phaser.Scene {
             strokeThickness: 5
         }).setOrigin(0.5);
 
-        this.add.text(640, 72, `目前收錄 ${MINI_GAME_CATALOG.length} 款・選擇分類後直接測試`, {
+        this.add.text(640, 72, `目前收錄 ${MINI_GAME_CATALOG.length} 款・每款皆有獨立入口`, {
             fontFamily: FONT,
             fontSize: '17px',
             color: '#dff5df'
@@ -307,6 +307,7 @@ export default class MiniGameHub extends Phaser.Scene {
     }
 
     getRecordLabel(game) {
+        if (game.standaloneFolder) return '獨立入口：可直接遊玩';
         if (!game.stageId) return '測試入口：可直接遊玩';
         const stage = (this.registry.get('stage_progress') || {})[game.stageId];
         if (!stage?.cleared) return '正式紀錄：尚未通關';
@@ -324,6 +325,17 @@ export default class MiniGameHub extends Phaser.Scene {
     }
 
     launchGame(game) {
+        if (game.standaloneFolder) {
+            if (typeof window.openForestStandalone !== 'function') {
+                this.showToast(`「${game.title}」獨立入口尚未安裝。`, 0xa95c50);
+                return;
+            }
+            this.playClick();
+            this.registry.set('mini_game_hub_category', this.selectedCategory);
+            this.registry.set('mini_game_hub_page', this.currentPage);
+            window.openForestStandalone(game.standaloneFolder);
+            return;
+        }
         const availableScenes = this.scene?.manager?.keys || {};
         if (!availableScenes[game.scene]) {
             this.showToast(`「${game.title}」場景尚未接入。`, 0xa95c50);

@@ -2,6 +2,13 @@
 import AudioSystem from '../systems/AudioSystem.js';
 import SaveSystem from '../systems/SaveSystem.js';
 import ConfigManager from '../systems/ConfigManager.js';
+import WorldAtlas from './WorldAtlas.js';
+import FogUnlock from './FogUnlock.js';
+import RegionGuide from './RegionGuide.js';
+import SubmapGames from './SubmapGames.js';
+import FreeExplore from './FreeExplore.js';
+import RealmPortalTransition from './RealmPortalTransition.js';
+import RealmWorldGame from './RealmWorldGame.js';
 
 export default class Start extends Phaser.Scene {
     constructor() {
@@ -174,9 +181,22 @@ export default class Start extends Phaser.Scene {
             SaveSystem.saveFromRegistry(this.registry);
 
             this.time.delayedCall(140, () => {
-                this.scene.start('WorldMap', {
-                    mapID: '01'
+                // 防止舊 main.js 被瀏覽器快取，首頁會自行確認新版地圖場景都已註冊。
+                const requiredScenes = [
+                    ['WorldAtlas', WorldAtlas],
+                    ['FogUnlock', FogUnlock],
+                    ['RegionGuide', RegionGuide],
+                    ['SubmapGames', SubmapGames],
+                    ['FreeExplore', FreeExplore],
+                    ['RealmPortalTransition', RealmPortalTransition],
+                    ['RealmWorldGame', RealmWorldGame]
+                ];
+                requiredScenes.forEach(([key, SceneClass]) => {
+                    if (!this.scene.manager.keys[key]) {
+                        this.scene.manager.add(key, SceneClass, false);
+                    }
                 });
+                this.scene.start('WorldAtlas');
             });
         });
 

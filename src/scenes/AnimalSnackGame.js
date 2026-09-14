@@ -275,7 +275,15 @@ export default class AnimalSnackGame extends Phaser.Scene {
     tone(kind) {
         const ctx = this.sound.context;
         if (!this.soundOn || this.sound.mute || !ctx || ctx.state !== 'running') return;
-        const notes = ({send:[440], hint:[392, 440], correct:[523, 659, 784], finish:[523,659,784,1046]})[kind];
+        const notes = ({
+            send: [440],
+            hint: [392, 440],
+            correct: [523, 659, 784],
+            finish: [523, 659, 784, 1046],
+            wrong: [294, 247]
+        })[kind];
+        // A missing optional cue must never abort the scene's animation loop.
+        if (!Array.isArray(notes)) return;
         notes.forEach((freq, i) => {
             const osc = ctx.createOscillator(), gain = ctx.createGain(), at = ctx.currentTime + i * 0.12;
             osc.type = 'sine'; osc.frequency.value = freq;

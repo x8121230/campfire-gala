@@ -1,0 +1,31 @@
+{
+  "mode": "built-in image generation",
+  "assets": [
+    {
+      "id": "clover",
+      "path": "assets/forest-starflight/magic-v04/clover.png",
+      "prompt": "Use case: illustration-story. Asset type: one isolated 2D side-scrolling shooter sprite. A single glowing emerald-green magical four-leaf clover projectile, four heart-shaped leaves, delicate thin outline, short faint green wind tail trailing to the LEFT, travelling to the RIGHT. Compact silhouette, strong readable shape when shrunk to 18 pixels, minimal surrounding glow. Square canvas. Hand-painted whimsical Studio Ghibli-inspired fairy-tale animation aesthetic, soft flat cel shading, clean outline, NOT 3D, NOT isometric, NOT perspective tile. EXACTLY ONE sprite, no text, no grid, no labels, no scene. Background MUST be genuinely transparent alpha PNG, NOT white, NOT black, NOT a checkerboard drawn into image. Entire sprite and tiny glow fully in frame. Game-ready isolated asset."
+    },
+    {
+      "id": "beam",
+      "path": "assets/forest-starflight/magic-v04/beam.png",
+      "prompt": "Use case: illustration-story. Asset type: one isolated 2D side-scrolling shooter sprite. A single horizontal rainbow magical water laser beam projectile travelling to the RIGHT, pale aqua white core with pink gold green cyan rainbow rims, a few tiny star sparkles INSIDE the water. Straight level beam with a small rounded leading tip at RIGHT and trailing end at LEFT, no diagonal angle. Slim long silhouette centred with generous transparent margins; 4:1 beam aspect on a wide canvas. Clear middle section can be stretched horizontally. Hand-painted whimsical Studio Ghibli-inspired fairy-tale animation aesthetic, soft flat cel shading, clean outline, NOT 3D, NOT isometric, NOT perspective tile. EXACTLY ONE sprite, no text, no grid, no labels, no scene. Background MUST be genuinely transparent alpha PNG, NOT white, NOT black, NOT a checkerboard drawn into image. Entire sprite and tiny glow fully in frame. Game-ready isolated asset."
+    },
+    {
+      "id": "dandelion",
+      "path": "assets/forest-starflight/magic-v04/dandelion.png",
+      "prompt": "Use case: illustration-story. Asset type: one isolated 2D side-scrolling shooter sprite. A single glowing magical dandelion seed projectile flying horizontally to the RIGHT, a compact cream white fluffy seed head at RIGHT and short streamlined white airflow tail to LEFT, little golden seed core, readable directional silhouette at 24 pixels. Wide canvas. Hand-painted whimsical Studio Ghibli-inspired fairy-tale animation aesthetic, soft flat cel shading, clean outline, NOT 3D, NOT isometric, NOT perspective tile. EXACTLY ONE sprite, no text, no grid, no labels, no scene. Background MUST be genuinely transparent alpha PNG, NOT white, NOT black, NOT a checkerboard drawn into image. Entire sprite and tiny glow fully in frame. Game-ready isolated asset."
+    },
+    {
+      "id": "option",
+      "path": "assets/forest-starflight/magic-v04/option.png",
+      "prompt": "Use case: illustration-story. Asset type: one isolated 2D side-scrolling shooter sprite. A single tiny cute five-pointed golden STAR-shaped fairy, big kind eyes, little blush cheeks, two tiny translucent iridescent wings, tilted slightly as it flies horizontally toward the RIGHT. The body is a STAR, NOT a human girl. Warm yellow glow kept close to body, clean readable outline, adorable chibi proportions. Square canvas. Hand-painted whimsical Studio Ghibli-inspired fairy-tale animation aesthetic, soft flat cel shading, clean outline, NOT 3D, NOT isometric, NOT perspective tile. EXACTLY ONE sprite, no text, no grid, no labels, no scene. Background MUST be genuinely transparent alpha PNG, NOT white, NOT black, NOT a checkerboard drawn into image. Entire sprite and tiny glow fully in frame. Game-ready isolated asset."
+    },
+    {
+      "id": "bubble",
+      "path": "assets/forest-starflight/magic-v04/bubble.png",
+      "prompt": "Use case: illustration-story. Asset type: one isolated 2D side-scrolling shooter sprite. A single pearly WHITE glowing five-pointed magical star INSIDE a clear shiny soap bubble, circular bubble has thin pearlescent edge and tiny white highlights, star has readable five-point silhouette, neutral white-silver star so game can tint it green blue gold. Clear transparent bubble interior, small compact glow. Square canvas. Hand-painted whimsical Studio Ghibli-inspired fairy-tale animation aesthetic, soft flat cel shading, clean outline, NOT 3D, NOT isometric, NOT perspective tile. EXACTLY ONE sprite, no text, no grid, no labels, no scene. Background MUST be genuinely transparent alpha PNG, NOT white, NOT black, NOT a checkerboard drawn into image. Entire sprite and tiny glow fully in frame. Game-ready isolated asset."
+    }
+  ],
+  "processing": "Original RGBA PNG files retained. Transparent padding trimmed via runtime texture frame only; no offline pixel editing."
+}

@@ -67,6 +67,15 @@ export const DEFAULT_SAVE_DATA = {
     achievements: [],
     tutorial_flags: {},
 
+    world_progress: {
+        regions: {
+            forest: { unlocked: true, fogCleared: true }
+        },
+        stickers: [],
+        participation: {},
+        discoveredSubmaps: ['morning_camp']
+    },
+
     placed_decorations: [],
 
     equipped_hat: 'none',
