@@ -1,0 +1,336 @@
+{
+  "version": "6.4",
+  "requires": "6.3 Separate Sleepwear Epic",
+  "newIcons": 33,
+  "fairyItems": 61,
+  "bodyArtChanged": false,
+  "background": "opaque warm cream",
+  "dimensions": [
+    256,
+    256
+  ],
+  "items": [
+    {
+      "id": "item_cloth_fairytale_peach",
+      "name": "蜜桃精靈連身裝",
+      "file": "assets/wardrobe_v64_icons/icon_peach_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_dandelion",
+      "name": "蒲公英絨毛斗篷",
+      "file": "assets/wardrobe_v64_icons/icon_dandelion_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_acorn",
+      "name": "橡果工匠吊帶褲",
+      "file": "assets/wardrobe_v64_icons/icon_acorn_v64.png"
+    },
+    {
+      "id": "item_fullset_fairytale_raincoat",
+      "name": "大象水車雨衣",
+      "file": "assets/wardrobe_v64_icons/icon_raincoat_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_orbit",
+      "name": "夜空星軌法袍",
+      "file": "assets/wardrobe_v64_icons/icon_orbit_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_bear",
+      "name": "貪睡熊毛絨睡衣",
+      "file": "assets/wardrobe_v64_icons/icon_bear_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_sister",
+      "name": "妍妍的姐妹洋裝",
+      "file": "assets/wardrobe_v64_icons/icon_sister_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_squirrel",
+      "name": "蓬鬆松鼠連體衣",
+      "file": "assets/wardrobe_v64_icons/icon_squirrel_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_owl",
+      "name": "月光貓頭鷹披風",
+      "file": "assets/wardrobe_v64_icons/icon_owl_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_rainbow",
+      "name": "彩虹水滴畫畫衣",
+      "file": "assets/wardrobe_v64_icons/icon_rainbow_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_lily_valley",
+      "name": "鈴蘭花瓣層層裙",
+      "file": "assets/wardrobe_v64_icons/icon_lily_valley_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_pitcher_overalls",
+      "name": "豬籠草探險吊帶褲",
+      "file": "assets/wardrobe_v64_icons/icon_pitcher_overalls_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_maple_cloak",
+      "name": "秋楓精靈飛膜斗篷",
+      "file": "assets/wardrobe_v64_icons/icon_maple_cloak_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_moss_lantern",
+      "name": "發光苔蘚燈籠裙",
+      "file": "assets/wardrobe_v64_icons/icon_moss_lantern_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_alice_poker",
+      "name": "愛麗絲撲克圍裙洋裝",
+      "file": "assets/wardrobe_v64_icons/icon_alice_poker_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_crystal_rose_gown",
+      "name": "睡美人水晶刺繡禮服",
+      "file": "assets/wardrobe_v64_icons/icon_crystal_rose_gown_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_pumpkin_mage",
+      "name": "魔法南瓜法師袍",
+      "file": "assets/wardrobe_v64_icons/icon_pumpkin_mage_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_cloud_tutu",
+      "name": "軟綿綿雲朵澎澎裙",
+      "file": "assets/wardrobe_v64_icons/icon_cloud_tutu_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_clockwork_overalls",
+      "name": "古銅齒輪工裝服",
+      "file": "assets/wardrobe_v64_icons/icon_clockwork_overalls_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_aviator_jacket",
+      "name": "蒸汽飛行員皮夾克",
+      "file": "assets/wardrobe_v64_icons/icon_aviator_jacket_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_dynamo_coil",
+      "name": "發電線圈背包服",
+      "file": "assets/wardrobe_v64_icons/icon_dynamo_coil_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_tin_woodman",
+      "name": "錫人金屬拼接鎧甲",
+      "file": "assets/wardrobe_v64_icons/icon_tin_woodman_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_chameleon",
+      "name": "變色龍迷彩連身衣",
+      "file": "assets/wardrobe_v64_icons/icon_chameleon_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_peacock",
+      "name": "孔雀開屏華麗舞裙",
+      "file": "assets/wardrobe_v64_icons/icon_peacock_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_penguin_ice",
+      "name": "胖企鵝滑冰衣",
+      "file": "assets/wardrobe_v64_icons/icon_penguin_ice_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_lion_vest",
+      "name": "小獅王毛絨背心",
+      "file": "assets/wardrobe_v64_icons/icon_lion_vest_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_trex_stomp",
+      "name": "暴龍大腳丫連體衣",
+      "file": "assets/wardrobe_v64_icons/icon_trex_stomp_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_stegosaurus",
+      "name": "劍龍骨板防護背包裝",
+      "file": "assets/wardrobe_v64_icons/icon_stegosaurus_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_pterodactyl",
+      "name": "翼龍滑翔飛翼裝",
+      "file": "assets/wardrobe_v64_icons/icon_pterodactyl_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_triceratops",
+      "name": "三角龍重裝吊帶裙",
+      "file": "assets/wardrobe_v64_icons/icon_triceratops_v64.png"
+    },
+    {
+      "id": "item_cloth_fairytale_starlight_pillow",
+      "name": "星眠長抱枕睡衣",
+      "file": "assets/wardrobe_v64_icons/icon_starlight_pillow_v64.png"
+    },
+    {
+      "id": "item_cloth_daily_01",
+      "name": "休閒裝",
+      "file": "assets/wardrobe_v64_icons/icon_daily_v64.png"
+    },
+    {
+      "id": "item_fullset_pink_home_01",
+      "name": "粉色居家服",
+      "file": "assets/wardrobe_v64_icons/icon_pink_home_v64.png"
+    }
+  ],
+  "retainedHats": [
+    {
+      "id": "item_hat_fairytale_capybara",
+      "name": "水豚君橘子頂帽",
+      "icon": "wardrobe_icon_capybara_v55"
+    },
+    {
+      "id": "item_hat_fairytale_nightcap",
+      "name": "星光泡泡睡帽",
+      "icon": "wardrobe_icon_nightcap_v55"
+    },
+    {
+      "id": "item_hat_fairytale_lemon",
+      "name": "盛夏檸檬草帽",
+      "icon": "wardrobe_icon_lemon_v55"
+    },
+    {
+      "id": "item_hat_fairytale_pinecone",
+      "name": "螢光小松果髮夾",
+      "icon": "wardrobe_icon_pinecone_v55"
+    },
+    {
+      "id": "item_hat_fairytale_swan",
+      "name": "月冠天鵝絨帽",
+      "icon": "wardrobe_icon_swan_v55"
+    },
+    {
+      "id": "item_hat_fairytale_fox",
+      "name": "搗蛋狐狸耳罩",
+      "icon": "wardrobe_icon_fox_v56"
+    },
+    {
+      "id": "item_hat_fairytale_mushroom",
+      "name": "彈跳蘑菇貝雷帽",
+      "icon": "wardrobe_icon_mushroom_v56"
+    },
+    {
+      "id": "item_hat_fairytale_bunny",
+      "name": "垂耳兔偵探帽",
+      "icon": "wardrobe_icon_bunny_v56"
+    },
+    {
+      "id": "item_hat_fairytale_flower",
+      "name": "晨露花冠",
+      "icon": "wardrobe_icon_flower_v56"
+    },
+    {
+      "id": "item_hat_fairytale_antennae",
+      "name": "螢火蟲觸角髮箍",
+      "icon": "wardrobe_icon_antennae_v56"
+    },
+    {
+      "id": "item_hat_fairytale_lily_bell",
+      "name": "晨霧鈴蘭花帽",
+      "icon": "wardrobe_icon_lily_bell_v59"
+    },
+    {
+      "id": "item_hat_fairytale_pitcher_hood",
+      "name": "貪吃豬籠草頭套",
+      "icon": "wardrobe_icon_pitcher_hood_v59"
+    },
+    {
+      "id": "item_hat_fairytale_maple_parasol",
+      "name": "巨大楓葉遮陽傘",
+      "icon": "wardrobe_icon_maple_parasol_v59"
+    },
+    {
+      "id": "item_hat_fairytale_moss_bamboo",
+      "name": "魔法發光苔蘚笠",
+      "icon": "wardrobe_icon_moss_bamboo_v59"
+    },
+    {
+      "id": "item_hat_fairytale_alice_teacup",
+      "name": "愛麗絲的瘋狂茶杯帽",
+      "icon": "wardrobe_icon_alice_teacup_v59"
+    },
+    {
+      "id": "item_hat_fairytale_crystal_rose_crown",
+      "name": "睡美人水晶玫瑰冠",
+      "icon": "wardrobe_icon_crystal_rose_crown_v59"
+    },
+    {
+      "id": "item_hat_fairytale_pumpkin_carriage",
+      "name": "糖霜南瓜馬車帽",
+      "icon": "wardrobe_icon_pumpkin_carriage_v59"
+    },
+    {
+      "id": "item_hat_fairytale_dream_cloud",
+      "name": "夢境雲朵睡帽",
+      "icon": "wardrobe_icon_dream_cloud_v59"
+    },
+    {
+      "id": "item_hat_fairytale_clockwork_gear",
+      "name": "古銅發條齒輪帽",
+      "icon": "wardrobe_icon_clockwork_gear_v59"
+    },
+    {
+      "id": "item_hat_fairytale_steam_train",
+      "name": "蒸汽噗噗火車頭罩",
+      "icon": "wardrobe_icon_steam_train_v59"
+    },
+    {
+      "id": "item_hat_fairytale_radar_propeller",
+      "name": "偵察雷達螺旋槳帽",
+      "icon": "wardrobe_icon_radar_propeller_v59"
+    },
+    {
+      "id": "item_hat_fairytale_retro_tv",
+      "name": "復古電視機頭盔",
+      "icon": "wardrobe_icon_retro_tv_v59"
+    },
+    {
+      "id": "item_hat_fairytale_chameleon_hood",
+      "name": "貪玩變色龍頭套",
+      "icon": "wardrobe_icon_chameleon_hood_v59"
+    },
+    {
+      "id": "item_hat_fairytale_peacock_crown",
+      "name": "孔雀開屏寶石冠",
+      "icon": "wardrobe_icon_peacock_crown_v59"
+    },
+    {
+      "id": "item_hat_fairytale_penguin_diving",
+      "name": "胖胖企鵝潛水帽",
+      "icon": "wardrobe_icon_penguin_diving_v59"
+    },
+    {
+      "id": "item_hat_fairytale_lion_sunflower",
+      "name": "小獅王向日葵鬃毛",
+      "icon": "wardrobe_icon_lion_sunflower_v59"
+    },
+    {
+      "id": "item_hat_fairytale_trex_plush",
+      "name": "咬咬暴龍布偶帽",
+      "icon": "wardrobe_icon_trex_plush_v59"
+    },
+    {
+      "id": "item_hat_fairytale_stegosaurus_explorer",
+      "name": "劍龍骨板探險帽",
+      "icon": "wardrobe_icon_stegosaurus_explorer_v59"
+    },
+    {
+      "id": "item_hat_fairytale_pterodactyl_goggles",
+      "name": "飛行翼龍風鏡",
+      "icon": "wardrobe_icon_pterodactyl_goggles_v59"
+    },
+    {
+      "id": "item_hat_fairytale_triceratops_helmet",
+      "name": "堅硬三角龍角盔",
+      "icon": "wardrobe_icon_triceratops_helmet_v59"
+    }
+  ],
+  "remaining": [
+    "最新版遊戲各分頁實際驗收",
+    "其他 10 件舊服裝／套裝既有 icon 的最新版對照",
+    "獨立素材驗收台接入同一圖示設定"
+  ]
+}

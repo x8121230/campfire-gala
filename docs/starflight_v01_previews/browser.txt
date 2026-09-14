@@ -1,0 +1,23 @@
+movement {
+  mode: 'playing',
+  p: {
+    x: 263.0833333333332,
+    y: 240,
+    hp: 8,
+    maxHp: 8,
+    invuln: 1.7750000000000008,
+    dashCD: 0,
+    dashing: 0,
+    shotCD: 0.07833333333333334,
+    missileCD: 0,
+    shield: 0
+  },
+  time: 0.22499999999999998,
+  keys: []
+}
+cloud { status: 'playing', time: 48.00833333333125, hp: 8 }
+market { status: 'playing', time: 156.00833333335578, hp: 8 }
+arches { status: 'playing', time: 283.0083333332403, hp: 8 }
+boss { status: 'playing', time: 385.0083333331475, hp: 8 }
+boss phase three { status: 'playing', time: 430.0083333331066, hp: 8 }
+PASS: actual Phaser title, keyboard, all three acts, boss, victory, multitouch/cancel, orientation pause and exit/reentry. No runtime errors. Audio listening remains manual.

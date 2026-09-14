@@ -1,0 +1,13 @@
+✔ true elevation has continuous bridge and ramp; river and cliffs block movement (3.399899ms)
+✔ camera-relative movement, normalized diagonals, long-frame clamp (1.762036ms)
+✔ quest cannot be advanced remotely or out of order (0.616253ms)
+✔ full chapter using ordinary movement across bridge and elevated ramp, retry puzzle and shortcut (20.118793ms)
+✔ save schema is bounded, repeat collectibles idempotent, partial progress survives reload (0.5653ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 377.167532

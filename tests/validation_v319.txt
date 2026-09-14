@@ -1,0 +1,21 @@
+✔ fresh player has no skills; legacy automatic weapon is not a learned skill (2.098356ms)
+✔ mentor quest requires washing, awards slash and 3 apples once (0.748116ms)
+✔ old completed quest receives one migration grant without deleting existing materials (0.324669ms)
+✔ apple requires a full missing HP, consumes exactly one and cannot revive (0.29244ms)
+✔ auto-use requires assigned slot, handles duplicate slots once, paces healing (0.339871ms)
+✔ empty apple stack stays assigned and never reappears after save, reload or mentor visit (0.30575ms)
+✔ 4 slots accept owned consumables only, remove without consuming (0.164888ms)
+✔ five common equals two rare and one common; duplicate ID never scores twice (0.347403ms)
+✔ cumulative thresholds 5/15/30/50/75 retain souvenirs and cycle four bonuses (3.400215ms)
+✔ HP/SP survive map switch and SP regeneration respects increased maximum (0.552442ms)
+✔ actual combat methods gate unlearned slash and all arrow casting (0.623608ms)
+✔ actual camp and hills use/save methods share depleted inventory without restoring apples (1.578224ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 108.399734
+PASS: real inventory component, four slots, click assignment, use, removal, HUD artwork/count sync; DOM smoke only.

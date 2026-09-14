@@ -1,0 +1,8 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {MINI_GAME_CATALOG as games} from '../src/data/MiniGameCatalog.js';
+const source=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
+test('merged catalog keeps 23 unique games and one storybook entry',()=>{assert.equal(games.length,23);assert.equal(new Set(games.map(g=>g.id)).size,23);assert.equal(games.filter(g=>/PhantomRealm|PaperForest/.test(g.scene)).length,1);const game=games.find(g=>g.id==='phantom_realm');assert.equal(game.title,'幻界・星芽谷｜繪本版');assert.equal(game.scene,'PhantomRealmGame');assert.ok(games.find(g=>g.id==='forest_starflight'));assert.ok(!games.some(g=>/3D|B 版|A 版/.test(g.title+g.subtitle)));});
+test('all merged catalog scene keys are registered in main',()=>{const main=source('src/main.js');for(const g of games){assert.ok(main.includes(`import ${g.scene} from`),g.scene);assert.match(main,new RegExp('\\b'+g.scene+'\\s*[,\\n]'),g.scene);}assert.ok(main.includes('import PaperForestGame from'));});
+test('old scene key delegates to storybook and no active 3D switch remains',()=>{const phantom=source('src/scenes/PhantomRealmGame.js'),paper=source('src/scenes/PaperForestGame.js'),app=source('src/adventure/AdventureApp.js'),html=source('storybook-play.html');assert.match(phantom,/extends PaperForestGame/);assert.match(phantom,/super\('PhantomRealmGame'\)/);assert.match(paper,/constructor\(sceneKey='PaperForestGame'\)/);assert.match(paper,/adventure\/AdventureApp.js/);for(const text of [phantom,paper,app,html])assert.ok(!text.includes('StarForestApp.js')&&!text.includes('比較原 3D 版')&&!text.includes('onSwitch'));});

@@ -1,0 +1,23 @@
+檢查範圍：使用者提供的去除 assets ZIP，以及本工作區可用的 11 款獨立遊戲原始檔。
+
+確認問題
+1. START_WINDOWS.bat 指向 START_PREVIEW.py；該預覽啟動器開啟 wardrobe-preview.html。
+   新增 START_FOREST.cmd / START_FOREST.py 專門啟動主入口。
+2. index.html 重複宣告 main.js 模組；本包整理成一次宣告。
+3. src/data/BushExploreGenerator.js 第 70 行在 randomInt(0, 處截斷，語法不完整。
+   對 src 的文字搜尋沒有發現其他檔案引用此模組，目前保留原檔，沒有臆造剩餘邏輯。
+   未來要使用這個生成器，需補齊原始檔後再啟用。
+
+靜態檢查
+- 對主 src、新增模組及 11 款獨立遊戲的 JavaScript 執行語法檢查。
+- 唯一檢出的語法錯誤是上述原有 BushExploreGenerator.js。
+- 掃描 386 個相對 import 引用，未檢出主 src 的缺失引用。
+- 11 款獨立入口的 HTML 本地 src/href 目標存在。
+- audit.cjs 保留檢查邏輯；需以 Node.js 執行並傳入原專案資料夾路徑。
+  遇到上述既有錯誤會回傳非零狀態，不代表錯誤已修好。
+
+驗證限制
+- 沒有主系統 assets，未驗證完整貼圖、音效、碰撞或每個關卡。
+- Windows CMD 啟動器需在使用者電腦確認；本環境不是 Windows。
+- 尚未實機驗證 Phaser 場景暫停恢復及 iframe 遊戲切換的完整互動。
+- 不以檔案數推算遊戲總款數；仍需去除重複版本、工具及未掛入口的場景。

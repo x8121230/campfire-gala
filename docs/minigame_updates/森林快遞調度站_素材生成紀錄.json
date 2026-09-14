@@ -1,0 +1,13 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "path": "assets/forest-courier/sprites.png",
+      "prompt": "Use case: illustration-story. Asset type: forest courier puzzle game sprite atlas. Create one genuinely transparent RGBA PNG 1536x1024, exact 3 columns by 2 rows of equal 512x512 cells. One isolated centered object per cell with generous 18 percent transparent margin. Top left: adorable full-body RACCOON COURIER with teal cap, small orange neck scarf and canvas satchel, facing three-quarter front, no vehicle. Top middle: tiny cozy WOODEN POST OFFICE cottage with red mailbox and teal awning, no text, isometric storybook game building. Top right: RABBIT'S CARROT FARM cottage, carrot patch on either side, game building. Bottom left: SQUIRREL'S BAKERY cottage with small round bread basket, game building. Bottom middle: BEAR'S TREEHOUSE home with honey pots by door, game building. Bottom right: BEAVER'S WORKSHOP cottage with wheel, tools and logs, game building. Consistent polished painted 2D storybook forest videogame art, warm cream and honey wood, teal and rust accents, clean silhouettes readable at 64 pixels, cute for elementary children but not infant style. No scene backdrop, no roads, no grid, no lettering, no logos, no watermark. Real transparent background not checkerboard. All objects inside their own cells."
+    },
+    {
+      "path": "assets/forest-courier/dispatch.png",
+      "prompt": "Use case: illustration-story. Asset type: 16:9 backdrop for a forest courier route-planning videogame for elementary school children. A cozy woodland dispatch desk viewed from directly above. Warm cream parchment MAP with faint paper fibers covers the CENTRAL 85 percent of the image, kept completely EMPTY and very low detail, with gentle sage-green tint. Only at the far outer edges: wooden desk corners, a few leaves, a wax seal, rolled spare maps, a brass compass and one small postal satchel. Storybook handpainted 2D forest game aesthetic, teal, moss green, russet and honey wood palette, bright calm daylight, welcoming, visually polished. Do not draw actual routes, nodes, roads, buildings, labels, arrows, characters, letters, numbers or UI; those are drawn in code. No text, no logo, no watermark. Central map is a usable quiet flat background for a large interactive network diagram."
+    }
+  ]
+}

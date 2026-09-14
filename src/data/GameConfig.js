@@ -1,0 +1,110 @@
+export const GAME_CONFIG_STORAGE_KEY = 'forest_game_config_v1';
+
+export const DEFAULT_GAME_CONFIG = {
+    version: 13,
+
+    developer: {
+        gmEnabled: true
+    },
+
+    worldMap: {
+        unlockAllStages: true
+    },
+
+    bushMinesweeper: {
+        board: {
+            rows: 6,
+            cols: 6,
+            dangerCount: 6,
+            mistakeLimit: 2,
+            hintCount: 1,
+            solverAttempts: 600
+        },
+
+        visuals: {
+            bushSize: 68,
+            flagSize: 66,
+            dangerSize: 94,
+            sideDangerSize: 74,
+            goldBoardSize: 78,
+            goldResultSize: 138
+        },
+
+        goldGrass: {
+            rates: {
+                goldenGrass: 60,
+                rainbowGrass: 30,
+                mysteryGrass: 10
+            },
+            duplicatePity: 3
+        },
+
+        score: {
+            clearPoints: 60,
+            noDangerBonus: 30,
+            dangerPenaltyPerHit: 10,
+            noHintBonus: 10,
+            maxScore: 100
+        },
+
+        achievements: {
+            clearCountTarget: 3,
+            noHintClearTarget: 3,
+            perfectClearTarget: 3
+        },
+
+        hiddenGoldenBug: {
+            enabled: true,
+            chancePercent: 10,
+            pityMisses: 7,
+            bonusScore: 10
+        }
+    },
+
+    fireflyCatch: {
+        game: {
+            colorCount: 3
+        },
+
+        rhythm: {
+            bpm: 80,
+            travelBeats: 5,
+            perfectWindowMs: 300,
+            goodWindowMs: 650,
+            missWindowMs: 900,
+            musicVolumePercent: 42,
+            fireflySize: 100
+        },
+
+        score: {
+            accuracyPoints: 80,
+            comboPoints: 20,
+            maxScore: 100
+        }
+    },
+
+    constellation: {
+        game: {
+            roundCount: 3,
+            snapRadius: 76,
+            idleHintSeconds: 5,
+            branchHintMistakes: 2
+        },
+
+        score: {
+            wrongPenalty: 5,
+            maxWrongPenalty: 20,
+            hintPenalty: 10,
+            maxHintPenalty: 20,
+            minScore: 60,
+            maxScore: 100
+        },
+
+        presentation: {
+            toneVolumePercent: 42,
+            comboBurstEvery: 3,
+            rainbowChancePercent: 20,
+            interactionItemCount: 3
+        }
+    }
+};

@@ -1,0 +1,97 @@
+{
+  "worldWidth": 4728,
+  "worldHeight": 2664,
+  "fragments": [
+    {
+      "id": "0-0",
+      "width": 1177,
+      "height": 1337
+    },
+    {
+      "id": "0-1",
+      "width": 1176,
+      "height": 1337
+    },
+    {
+      "id": "1-0",
+      "width": 1177,
+      "height": 1337
+    },
+    {
+      "id": "1-1",
+      "width": 1180,
+      "height": 1333
+    },
+    {
+      "id": "2-0",
+      "width": 1177,
+      "height": 1336
+    },
+    {
+      "id": "2-1",
+      "width": 1177,
+      "height": 1336
+    },
+    {
+      "id": "3-0",
+      "width": 1177,
+      "height": 1336
+    },
+    {
+      "id": "3-1",
+      "width": 1177,
+      "height": 1337
+    },
+    {
+      "id": "4-0",
+      "width": 1177,
+      "height": 1336
+    },
+    {
+      "id": "4-1",
+      "width": 1181,
+      "height": 1332
+    },
+    {
+      "id": "5-0",
+      "width": 1177,
+      "height": 1336
+    },
+    {
+      "id": "5-1",
+      "width": 1178,
+      "height": 1335
+    },
+    {
+      "id": "6-0",
+      "width": 1176,
+      "height": 1338
+    },
+    {
+      "id": "6-1",
+      "width": 1177,
+      "height": 1337
+    },
+    {
+      "id": "7-0",
+      "width": 1177,
+      "height": 1336
+    },
+    {
+      "id": "7-1",
+      "width": 1181,
+      "height": 1332
+    },
+    {
+      "id": "8-0",
+      "width": 1178,
+      "height": 1335
+    },
+    {
+      "id": "8-1",
+      "width": 1099,
+      "height": 1431
+    }
+  ],
+  "edgeBlendWorldPixels": 22
+}

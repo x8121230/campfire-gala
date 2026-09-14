@@ -1,0 +1,1 @@
+PASS: actual Phaser render, equip badge/FX, hover/out tween, toggle and rapid-click FX cleanup. Audio preference disabled in automated browser test.

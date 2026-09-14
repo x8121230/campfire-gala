@@ -1,0 +1,13 @@
+{
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "file": "assets/forest-starflight/crew.png",
+      "prompt": "Use case: stylized-concept. Production game sprite atlas, a single square transparent PNG with exactly 4 columns by 2 rows of equally sized cells, each isolated subject centered inside its cell with 12% transparent padding; no cell borders, no labels, no words. Cute detailed hand-painted chibi fairy tale forest horizontal airborne shooter art, warm gold outlines, vivid mint/pink/lavender, readable silhouettes. Row1 left to right: (1) little black-haired chibi boy adventurer wearing green leaf cap riding a leaf-and-wood glider, facing RIGHT, (2) round lavender owl flying with tiny aviator goggles facing LEFT, (3) mischievous squirrel in a pink balloon basket facing LEFT, (4) blue beetle with tiny wings carrying a brass cannon facing LEFT. Row2 left to right: (1) cute wolf pilot in a red toy biplane facing LEFT, (2) peppermint snail with propeller shell facing LEFT, (3) smiling golden star fairy with flowing ribbon facing LEFT, (4) big flying storybook castle airship with bear captain, lavender turrets and winglike sails, facing LEFT. Full subjects, no cropping, true alpha transparency, no background scenery, no shadows outside subjects. Original designs."
+    },
+    {
+      "file": "assets/forest-starflight/sky.png",
+      "prompt": "Use case: illustration-story. Background asset for a horizontal side-scrolling fairy tale flying shooter. Wide 1536x1024 hand-painted storybook panorama of a pastel mint and lavender sky, fluffy cream peach clouds below, distant tiny floating forest islands with whimsical candy colored towers, hanging pennant garlands and a faraway flying castle in the upper right distance. Expansive calm open sky in the middle 65% for readable game action. Soft luminous afternoon atmosphere, charming polished chibi fantasy world, layered distant silhouettes. No foreground characters, no enemies, no interface, no words, no text. Left and right edges similar pale sky so horizontally repeated panorama is unobtrusive. Scenic art only."
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "method": "built-in image_gen",
+  "date": "2026-09-09",
+  "assets": [
+    {
+      "path": "assets/forest-fruit/orchard.png",
+      "width": 1672,
+      "height": 941,
+      "prompt": "Use case: illustration-story. Asset type: background for a children's forest fruit bubble-shooter game, landscape 16:9. An inviting magical orchard clearing, warm morning light, soft hand-painted children's-book style with clean charming game art. Large leafy fruit trees frame ONLY the far left and right, subtle tiny berries and golden leaves, little mushrooms and soft grasses along the bottom edge. A distant cozy wooden fruit cart at bottom left, a leafy arch and twinkling clearing. The central 60 percent is very calm pale mint-cream atmospheric negative space, no large props, no characters, suitable behind a tall aiming playfield. Rounded forms, muted jade, sage, warm peach, honey yellow palette, gentle dimensional lighting, polished cohesive whimsical forest game aesthetic. No text, no interface, no bubbles, no board, no borders, no logos."
+    },
+    {
+      "path": "assets/forest-fruit/sprites.png",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "cellSize": 512,
+      "frames": [
+        "松鼠隊長",
+        "果實發射台",
+        "救援小鳥",
+        "爆炸松果",
+        "古樹樹靈",
+        "可染色珍珠果實"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: production sprite atlas for cute children's forest fruit bubble shooter. EXACT 1536x1024 image, regular 3 columns x 2 rows of 512x512 cells, six separate sprites centered precisely in each cell, generous transparent padding at least 70 px each side. Genuine TRANSPARENT background, no ground rectangle, no checkerboard. Same polished softly painted storybook game style, round friendly shapes, clean readable silhouettes, soft dimensional shading. Top-left cell: cheerful upright squirrel orchard captain wearing sage green leaf hat and tiny peach neckerchief, holding one golden fruit. Top-middle cell: squat wooden acorn-shaped fruit cannon aiming vertically UP, frontal symmetrical, with little green leaves, one dark oval muzzle on top, no projectile. Top-right cell: adorable golden chick with small wings and moss-green rescue scarf, full body. Bottom-left cell: magical explosive pinecone, round brown pinecone with small gold star sparkle and tiny leaf fuse, friendly no face. Bottom-middle cell: chubby friendly ancient tree spirit, full body wooden trunk face, lush rounded leafy crown, amber eyes, four tiny glowing berries, no scary features. Bottom-right cell: one round pearly cream-colored fruit with a tiny green leaf and soft glossy highlight, simple neutral bright fruit suitable for color tinting, no face. No text, labels, panels, grid lines or interface. Each sprite entirely confined to its own 512 square cell. Do not merge sprites. Transparent alpha edges."
+    }
+  ],
+  "procedural": "果實顏色與圖案、藤圈、硬殼數字、警戒線與瞄準線由 Phaser 程式繪製。"
+}

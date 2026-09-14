@@ -1,0 +1,37 @@
+{
+  "date": "2026-09-10",
+  "checks": [
+    "NPC approach pauses world before dialogue",
+    "one task accepted and saved",
+    "standing by NPC does not reopen dialogue",
+    "keyboard movement changes position",
+    "held attack fires repeatedly without MP cost",
+    "skill button spends MP and creates honey",
+    "equipment UI changes defense without healing",
+    "loadout swapping preserves cooldown",
+    "portal really loads forest, preserves active lake quest",
+    "context task button collects once and hides",
+    "progress, equipment, loadout survive reload and legacy saves unchanged",
+    "controls fit 844x390",
+    "controls do not overlap 844x390",
+    "controls fit 667x375",
+    "controls do not overlap 667x375",
+    "portrait pauses with rotation prompt",
+    "blur cancels delayed NPC timers and stays paused",
+    "return portal loads moon again",
+    "dodge button reveals route even at zero MP",
+    "no browser runtime errors",
+    "unchanged game/src/realm/StarForestApp.js",
+    "unchanged game/src/realm/RealmWorld.js",
+    "unchanged game/src/realm/RealmApp.js",
+    "unchanged game/src/realm/StarForestWorld.js",
+    "unchanged game/src/realm/RealmRules.js",
+    "unchanged game/src/realm/StarForestRules.js",
+    "unchanged game/src/scenes/PhantomRealmGame.js"
+  ],
+  "errors": [],
+  "limitations": [
+    "Browser harness executes real adventure modules; original full Phaser host unavailable.",
+    "Physical mobile multitouch and audio loudness not validated."
+  ]
+}

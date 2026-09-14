@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>小木屋衣櫃 v5.0｜跨場景試玩</title>
+<style>html,body{margin:0;height:100%;background:#33473b;font-family:Arial,sans-serif}#game{width:100%;height:calc(100% - 34px)}footer{height:34px;display:flex;align-items:center;justify-content:center;gap:22px;color:#f8f3e5;font-size:13px}button{border:0;padding:5px 14px;border-radius:6px;cursor:pointer;background:#e6d6b4;color:#33473b}</style></head>
+<body><div id="game"></div><footer><span>獨立試玩存檔，不影響正式遊戲</span><button id="reset">重設試玩資料</button><button id="secret">模擬彩蛋已達成</button></footer>
+<script src="./phaser.js"></script><script type="module">
+import Collection from './src/scenes/Collection.js';
+import SaveSystem from './src/systems/SaveSystem.js';
+import PlatformStorage from './src/systems/PlatformStorage.js';
+import { SAVE_KEY } from './src/data/GameData.js';
+import { currentLook, fitImage } from './src/data/PaperDollConfig.js';
+const PREFIX = 'wardrobe_v50_preview:';
+PlatformStorage.useAdapter({getItem:k=>localStorage.getItem(PREFIX+k),setItem:(k,v)=>localStorage.setItem(PREFIX+k,v),removeItem:k=>localStorage.removeItem(PREFIX+k)});
+class PreviewBoot extends Phaser.Scene {
+ constructor(){super('PreviewBoot')}
+ preload(){for(const [key,file] of [['icon_guard','icon_guard.png'],['icon_collectible_pigtear','icon_collectible_pigtear.png'],['item_hat_tiara','item_hat_tiara.png'],['item_cloth_fairy','item_cloth_fairy.png']])this.load.image(key,'assets/'+file)}
+ create(){const saved=SaveSystem.load();
+ if(!localStorage.getItem(PREFIX+SAVE_KEY)){
+ saved.owned_items=['item_hat_daily_01','item_cloth_daily_01','item_fullset_pink_home_01','item_hat_tiara_global','item_cloth_fairy_01'];
+ saved.owned_collectibles=['item_collectible_scout_test_01'];saved.new_items=['item_fullset_pink_home_01','item_hat_tiara_global'];
+ saved.equipped_hat='item_hat_daily_01';saved.equipped_cloth='item_cloth_daily_01';saved.equipped_fullset='none';saved.user_crystals=0;saved.secret_state={};
+ } PlatformStorage.setItem(SAVE_KEY,JSON.stringify(saved));SaveSystem.applyToRegistry(this.registry);this.scene.start('Collection');}
+}
+class WorldMap extends Phaser.Scene { constructor(){super('WorldMap')} create(){
+ this.cameras.main.setBackgroundColor('#8fb98d');
+ this.add.rectangle(640,360,1280,720,0xdde9c7).setStrokeStyle(18,0x557b60);
+ this.add.text(640,48,'大地圖同步確認',{fontSize:32,color:'#3e5145',fontStyle:'bold'}).setOrigin(.5);
+ const look=currentLook(this.registry);const key=this.textures.exists(look.bodyTexture)?look.bodyTexture:'wardrobe_doll_daily_v50';
+ const doll=this.add.image(420,390,key);fitImage(doll,220,330);
+ this.add.text(420,585,`目前穿戴：${look.bodyId==='item_fullset_pink_home_01'?'粉色居家服':'日常休閒裝'}`,{fontSize:21,color:'#3e5145',backgroundColor:'#f8f3e5',padding:{x:14,y:8}}).setOrigin(.5);
+ this.add.text(790,285,'衣櫃與地圖使用同一張公仔母檔\n正式地圖只會縮放，不再換成舊版人物。',{fontSize:24,color:'#3e5145',align:'center',lineSpacing:10}).setOrigin(.5);
+ this.add.text(790,455,'← 回小木屋繼續換裝',{fontSize:25,color:'#ffffff',backgroundColor:'#557b60',padding:{x:24,y:16}}).setOrigin(.5).setInteractive({useHandCursor:true}).on('pointerdown',()=>this.scene.start('Collection'));
+ }}
+window.game=new Phaser.Game({type:Phaser.CANVAS,parent:'game',width:1280,height:720,backgroundColor:'#e7d6bc',scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},scene:[PreviewBoot,Collection,WorldMap]});
+document.querySelector('#reset').onclick=()=>{if(confirm('只重設本頁的試玩資料，確定嗎？')){localStorage.removeItem(PREFIX+SAVE_KEY);location.reload()}};
+document.querySelector('#secret').onclick=()=>{const s=game.scene.getScene('Collection');if(!s.scene.isActive())return;s.registry.set('secret_state',{motherGuardPendingReward:true});s.checkMotherGuardReward()};
+</script></body></html>

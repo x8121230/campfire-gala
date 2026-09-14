@@ -1,0 +1,11 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {DandelionHillsJourney,HILLS_MAP,HILLS_RESPAWN_SECONDS,hillsWalkable} from '../src/realm/DandelionHillsRules.js';
+import {pumpkinBossFrame} from '../src/realm/PumpkinBoss.js';
+const setup=()=>{const j=new DandelionHillsJourney();const b=j.mobs.find(m=>m.type==='rabbit');j.player={x:b.x,y:b.y+220};j.hitMob(b,1);return {j,b};};
+const step=(j,seconds)=>{for(let t=0;t<seconds;t+=1/60)j.update(1/60);};
+test('boss chases, telegraphs before striking, and slams for damage',()=>{const {j,b}=setup();const start=b.y;step(j,.5);assert(b.y>start);assert.equal(b.boss.phase,'chase');step(j,.3);assert.equal(b.boss.phase,'slamWindup');assert.equal(j.hp,3);j.shieldDurability=0;step(j,1.4);assert(j.hp<3);assert.equal(b.boss.phase,'recover');assert.equal(pumpkinBossFrame(b),7);});
+test('player can evade the locked slam location',()=>{const {j,b}=setup();step(j,.8);const target={...b.boss.target};j.player={x:target.x+190,y:target.y};step(j,1.6);assert.equal(j.hp,3);assert(Math.hypot(b.x-target.x,b.y-target.y)<10);});
+test('boss alternates slam with finite fan projectiles and returns home',()=>{const {j,b}=setup();j.invulnerable=100;step(j,4.7);assert(j.effects.some(e=>e.kind==='sound'&&e.name==='bossSeeds'));assert(j.projectiles.every(p=>p.life<=2.7));assert(j.projectiles.length<=5);j.player={x:2200,y:1000};step(j,5);assert.equal(b.aggro,false);assert.equal(b.hp,b.maxHp);assert(Math.hypot(b.x-b.homeX,b.y-b.homeY)<9);});
+test('boss death cancels skills; cooldown revives a clean state in the same slot',()=>{const {j,b}=setup();step(j,.8);j.hitMob(b,999);assert.equal(pumpkinBossFrame(b),11);const count=j.mobs.length;step(j,HILLS_RESPAWN_SECONDS.rabbit+.1);assert.equal(j.mobs.length,count);assert.equal(b.alive,true);assert.equal(b.boss.phase,'idle');assert.equal(b.boss.turn,0);assert.equal(b.aggro,false);});
+test('coherent island area doubles the original',()=>{assert(Math.abs(HILLS_MAP.width*HILLS_MAP.height/(3344*1882)-2)<.01);});

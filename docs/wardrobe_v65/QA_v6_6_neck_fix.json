@@ -1,0 +1,181 @@
+{
+  "version": "6.6",
+  "split_y": 500,
+  "items_checked": 31,
+  "outfit_bodies_fixed": 30,
+  "head_styles_fixed": 4,
+  "exceptions": {
+    "starlight_pillow": "v6.3 dedicated body retained",
+    "pterodactyl": "kept corrected-height v6.5 geometry; restored collar only"
+  },
+  "items": [
+    {
+      "item": "acorn",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 35482
+    },
+    {
+      "item": "alice_poker",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 38554
+    },
+    {
+      "item": "aviator_jacket",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "bear",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "chameleon",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "clockwork_overalls",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "cloud_tutu",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 34012
+    },
+    {
+      "item": "crystal_rose_gown",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 35486
+    },
+    {
+      "item": "dandelion",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 34850
+    },
+    {
+      "item": "dynamo_coil",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40311
+    },
+    {
+      "item": "lily_valley",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 35730
+    },
+    {
+      "item": "lion_vest",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "maple_cloak",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "moss_lantern",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 37503
+    },
+    {
+      "item": "orbit",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "owl",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 38160
+    },
+    {
+      "item": "peach",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "peacock",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "penguin_ice",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "pitcher_overalls",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 37709
+    },
+    {
+      "item": "pterodactyl",
+      "method": "corrected-master-collar",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "pumpkin_mage",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40213
+    },
+    {
+      "item": "rainbow",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 35730
+    },
+    {
+      "item": "raincoat",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "sister",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 35695
+    },
+    {
+      "item": "squirrel",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 39322
+    },
+    {
+      "item": "stegosaurus",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "tin_woodman",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 38062
+    },
+    {
+      "item": "trex_stomp",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 40500
+    },
+    {
+      "item": "triceratops",
+      "method": "original-overlap-from-y500",
+      "neck_opaque_pixels": 39664
+    }
+  ],
+  "heads": [
+    {
+      "file": "headstyle_elegant_braids_v65.png",
+      "removed_pixels": 14660
+    },
+    {
+      "file": "headstyle_explorer_braids_v65.png",
+      "removed_pixels": 13973
+    },
+    {
+      "file": "headstyle_neutral_braids_v65.png",
+      "removed_pixels": 11819
+    },
+    {
+      "file": "headstyle_night_waves_v65.png",
+      "removed_pixels": 14319
+    }
+  ]
+}

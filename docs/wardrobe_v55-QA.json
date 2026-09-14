@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "10 cosmetics added without inventory/currency/progress reset",
+    "15 textures loaded",
+    "cosmetic effects empty",
+    "real pointer equips/unequips",
+    "hood suppresses hat without deleting selection",
+    "removing clothing returns to base",
+    "save persists on reload without duplicates",
+    "real CharacterManager shares body and head alignment"
+  ],
+  "scope": "Real Collection, SaveSystem, EquipmentSystem, PaperDollConfig and CharacterManager; isolated boot/map harness using original v5.0/v5.3 dependency fixtures. Physical mobile and full original game startup not tested."
+}

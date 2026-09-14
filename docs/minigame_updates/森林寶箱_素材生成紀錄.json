@@ -1,0 +1,17 @@
+{
+  "tool": "imagegen",
+  "path": "assets/forest-chests/chests.png",
+  "prompt": "Use case: stylized-concept. Asset type: original fairy tale forest game treasure chest spritesheet. Exactly 1536x1024 pixels, 3 columns by 2 rows of 512x512 cells. Six independent centered objects, each occupies about 380x360 with 60px clear margins. Genuine transparent alpha background, no text, no grid, no watermark. Cozy hand-painted storybook style, warm wood grain, clean dark outlines, sage leaves, golden details, readable large mobile icons. Row major: 1 closed moss-covered oak treasure chest with tiny mushrooms and leaf lock; 2 closed cream wooden chest decorated with pastel geometric gemstones; 3 closed carved walnut chest with acorn motifs and brass lock; 4 closed midnight blue chest with crescent moon and small golden stars; 5 closed picnic wicker treasure chest with red gingham cloth and carrot-shaped clasp; 6 open oak treasure chest with lid raised and soft golden magical light and sparkles, empty enough to overlay a reward. Elevated three-quarter perspective, consistent sizes. No scenery, no floor, no characters, no words.",
+  "frames": [
+    "苔蘚寶箱",
+    "彩石寶箱",
+    "木雕寶箱",
+    "月光寶箱",
+    "野餐寶箱",
+    "打開的寶箱"
+  ],
+  "dimensions": [
+    1536,
+    1024
+  ]
+}

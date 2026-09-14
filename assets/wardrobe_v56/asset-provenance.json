@@ -1,0 +1,12 @@
+[
+  {"item":11,"name":"fox","source":"exec-5f00578c-d21c-4e2e-96fc-7eeff7517b2a.png","method":"generated headwear overlay; neutral matte cleanup"},
+  {"item":12,"name":"mushroom","source":"exec-25a8d255-25be-4721-a493-c7619eb5dae7.png","method":"generated headwear overlay; neutral matte cleanup"},
+  {"item":13,"name":"bunny","source":"exec-f22f15e5-03ae-4983-ba01-32ff7edfe102.png","method":"generated headwear overlay; neutral matte cleanup"},
+  {"item":14,"name":"flower","source":"exec-e01071aa-8c74-46bc-ba7e-b73c10f38140.png","method":"generated headwear overlay; neutral matte cleanup"},
+  {"item":15,"name":"antennae","source":"exec-bbd214fd-8b4a-45c3-88e6-438886648f1d.png","method":"generated headwear overlay; neutral matte cleanup"},
+  {"item":16,"name":"bear","source":"exec-137e8f23-bc45-40a2-b663-f675c97d328e.png","method":"identity-preserving paper-doll generation; neutral matte cleanup"},
+  {"item":17,"name":"sister","source":"exec-5b2db343-ca98-44c0-a8f1-0e019bd90633.png","method":"identity-preserving paper-doll generation; neutral matte cleanup"},
+  {"item":18,"name":"squirrel","source":"exec-502270b7-f58c-4f91-84f1-0f7949b71f1d.png","method":"identity-preserving paper-doll generation; neutral matte cleanup"},
+  {"item":19,"name":"owl","source":"exec-a8ae7b2e-c156-4f01-a9f4-58261f20382f.png","method":"identity-preserving paper-doll generation; neutral matte cleanup"},
+  {"item":20,"name":"rainbow","source":"exec-ed4f57bd-3fa7-404d-88cc-f4c35ec7e2a7.png","method":"identity-preserving paper-doll generation; neutral matte cleanup"}
+]

@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "character": "勇者阿晨晨",
+  "frameSize": { "width": 512, "height": 512 },
+  "atlas": { "file": "hero-movement-atlas-v2.png", "columns": 8, "rows": 5 },
+  "rows": {
+    "down": 0,
+    "up": 1,
+    "right": 2,
+    "downRight": 3,
+    "upRight": 4
+  },
+  "columns": {
+    "walk": [0, 1, 2, 3, 4, 5],
+    "idle": [6, 7]
+  },
+  "mirrors": {
+    "left": "right",
+    "downLeft": "downRight",
+    "upLeft": "upRight"
+  },
+  "playback": {
+    "walkFps": 9,
+    "idleFps": 1.8,
+    "footAnchor": { "x": 0.5, "y": 1.0 }
+  }
+}

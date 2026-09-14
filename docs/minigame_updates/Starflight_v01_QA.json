@@ -1,0 +1,36 @@
+{
+  "version": "0.1",
+  "catalog_games": 23,
+  "regression": {
+    "passed": 423,
+    "failed": 0
+  },
+  "browser": "Actual Phaser: catalogue launch, title, keyboard, 3 acts, 3-phase boss, victory, touch/cancel, portrait pause, retry checkpoint and exit/reentry passed",
+  "browser_known_warning": "Phaser non-cancelable touchcancel preventDefault warning under CDP; input release asserted successful",
+  "pilots": {
+    "normal_laser_seeds": [
+      98731,
+      12,
+      431
+    ],
+    "normal_laser_seconds": [
+      443,
+      443,
+      443
+    ],
+    "normal_double_seconds": 432,
+    "challenge_laser_seconds": 444,
+    "method": "fixed-step ordinary control inputs; no forced victory or invincibility"
+  },
+  "preserved_prior_source_assets": 108,
+  "intentional_prior_code_changes": [
+    "src/main.js",
+    "src/data/MiniGameCatalog.js"
+  ],
+  "assets": "2 newly generated raster assets; exact prompts included",
+  "limitations": [
+    "Needs existing full Forest game + wardrobe v5.3 base",
+    "No new permanent progress, formal chest reward, or paper-doll rendering",
+    "Physical mobile performance and audio listening pending"
+  ]
+}

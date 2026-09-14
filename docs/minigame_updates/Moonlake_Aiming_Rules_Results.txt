@@ -1,0 +1,24 @@
+✔ default equipment sets exactly attack 1, defense 1, range 5 (4.079246ms)
+✔ armor changes incoming damage and swap does not refill resources or cooldowns (0.737696ms)
+✔ hurt grace prevents stacked hits, low attacks still deal one, defeat keeps progress (0.59028ms)
+✔ wand respects range, interval, zero MP and removed weapon (2.952845ms)
+✔ honey only spends on valid casts, roots and pauses a pending attack (6.228592ms)
+✔ skills use MP and unlocked loadouts, swaps do not reset skill cooldown (0.305898ms)
+✔ dandelion remains free, reveals hidden pads and cannot cross unsupported water (0.682374ms)
+✔ walkable route connects both shores only after revealing pads; every step can be traversed (10.470897ms)
+✔ single task slot and sequential offers, contextual collection cannot occur out of quest (0.779362ms)
+✔ moon chain grants skills, preserves purification and opens a traversable ice shortcut (1.429911ms)
+✔ forest chain honors task-only clean and saves completed collectors (0.803755ms)
+✔ legacy B migration preserves prior progress and records without touching source (0.487965ms)
+✔ enemy telegraphs precede damage; basics cannot overlap a special action (0.651363ms)
+✔ angry animals never spawn on unsupported water and every type has complete stats (0.984366ms)
+✔ duck escort pauses when far, resumes without teleport and reaches home (14.57689ms)
+✔ gold acorn event coexists with one main task and ends after 30 seconds (44.322137ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 421.904082
