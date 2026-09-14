@@ -15,9 +15,9 @@ export const MINI_GAME_CATALOG = Object.freeze([
     },
     {
         id: 'fruit_counting', scene: 'FruitCountingGame', category: 'observation', icon: '🍎',
-        title: '水果數數', subtitle: '找水果・數 1 到 5',
-        description: '看指定水果與數量，一顆一顆放進果籃；點到別種水果只會獲得溫暖提示。',
-        status: '果園候選 v0.1・幼童試玩', accent: 0x73a45f, launchData: { mode: 'kids' }
+        title: '魔法果園：訂單大作戰', subtitle: '10 關訂單・連擊・記憶・限時挑戰',
+        description: '替森林客人完成混合數量、加減法、指定順序、成熟度與限時訂單；提防松鼠偷果，善用彩虹果並累積採收連擊。',
+        status: 'v2.0・成年玩法原型', accent: 0x73a45f, launchData: { mode: 'challenge' }
     },
     {
         id: 'starlight_firefly', scene: 'StarlightFireflyGame', category: 'matching', icon: '✨',
@@ -33,9 +33,9 @@ export const MINI_GAME_CATALOG = Object.freeze([
     },
     {
         id: 'water_flow_maze', scene: 'WaterFlowMazeGame', category: 'board', icon: '💧',
-        title: '水流迷宮', subtitle: '旋轉水道・澆灌花朵',
-        description: '旋轉 2～4 塊大型水道，讓小水滴沿著正確方向流到等待盛開的花朵。',
-        status: '水世界 v0.1・幼童試玩', accent: 0x4aa6b8, launchData: { mode: 'kids' }
+        title: '水精靈工坊：潮汐花園', subtitle: '真實水流・分流・水壓・十關機關',
+        description: '旋轉真正相接的管線，操作水閥、壓力泵、冰晶管與淨化石；避開蘑菇、應付青蛙，最後讓巨大潮汐樹甦醒。',
+        status: 'v2.0・十關完整挑戰', accent: 0x4aa6b8, launchData: { mode: 'challenge' }
     },
     {
         id: 'dinosaur_valley_kids', scene: 'DinosaurValleyGame', category: 'rhythm', icon: '🦕',

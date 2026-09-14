@@ -1,11 +1,7 @@
 export const STARSPROUT_INVENTORY_SAVE = 'forest_starsprout_inventory_v1';
 
 export const ITEM_CATALOG = Object.freeze({
-  '星光吹泡泡棒': { icon: '🪄', type: 'equipment', slot: 'weapon', rarity: 'uncommon', level: 1, description: '黃銅星形的童話手杖，可凝聚魔法斬與遠距水泡。' },
-  '橡果小木蓋': { icon: '🛡️', type: 'equipment', slot: 'shield', rarity: 'uncommon', level: 1, description: '輕巧的橡果木盾，格擋時會發出清脆咚聲。' },
-  '星芽旅行者套裝': { icon: '🥻', type: 'equipment', slot: 'outfit', rarity: 'uncommon', level: 1, description: '布隆克縫製的莓紅斗篷與星芽背帶裝。' },
-  '草莓棉拖鞋': { icon: '👟', type: 'equipment', slot: 'boots', rarity: 'uncommon', level: 1, description: '走過水窪會發出啪嘰聲的柔軟冒險鞋。' },
-  '幼鹿織花角圈': { icon: '🌸', type: 'equipment', slot: 'hat', rarity: 'epic', level: 12, description: '七彩神鹿首領戰的紀念頭飾。' },
+  '魔法劍': { icon: '✦', type: 'equipment', slot: 'weapon', rarity: 'uncommon', level: 1, description: 'SP 0｜星光棒凝聚藍色魔力劍，從上往前劈下。攻擊動作結束前無法移動或格擋。' },
   '微光星芽珠': { icon: '🔮', type: 'bead', rarity: 'uncommon', level: 4, description: '生命 +80，脫戰後持續恢復生命。' },
   '橡果迅捷珠': { icon: '💎', type: 'bead', rarity: 'rare', level: 3, description: '移速 +5%，擴大掉落物磁吸範圍。' },
   '輕羽漂浮珠': { icon: '🪽', type: 'bead', rarity: 'rare', level: 3, description: '墜落緩衝，跳躍高度 +10%。' },
@@ -30,12 +26,15 @@ export const ITEM_CATALOG = Object.freeze({
 });
 
 export const RARITY_ORDER = Object.freeze({ legendary: 6, epic: 5, rare: 4, uncommon: 3, quest: 2, common: 1 });
-export const TYPE_LABELS = Object.freeze({ all: '全部', equipment: '裝備／服飾', bead: '靈珠寶盒', consumable: '冒險消耗', material: '素材／任務' });
+export const TYPE_LABELS = Object.freeze({ all: '全部', equipment: '武器', bead: '靈珠', consumable: '消耗', material: '素材／任務' });
 export const STARSPROUT_QUICK_ITEMS = Object.freeze(['香脆橡果', '純淨星芽膠', '晨曦露水']);
+
+const RETIRED_EQUIPMENT = new Set(['橡果小木蓋', '星芽旅行者套裝', '草莓棉拖鞋', '幼鹿織花角圈']);
 
 function cleanItems(items) {
   const result = {};
   for (const [name, value] of Object.entries(items && typeof items === 'object' ? items : {})) {
+    if (RETIRED_EQUIPMENT.has(name) || name === '星光吹泡泡棒') continue;
     const count = Math.max(0, Math.min(99, Math.floor(Number(value) || 0)));
     if (count) result[name] = ITEM_CATALOG[name]?.type === 'equipment' || ITEM_CATALOG[name]?.type === 'bead' ? Math.min(count, 99) : count;
   }
@@ -45,8 +44,8 @@ function cleanItems(items) {
 export function defaultStarsproutInventory() {
   return {
     v: 1, capacity: 24, maxCapacity: 60, gold: 0,
-    items: { '星光吹泡泡棒': 1, '橡果小木蓋': 1, '草莓棉拖鞋': 1 },
-    equipped: { weapon: '星光吹泡泡棒', shield: '橡果小木蓋', hat: '', outfit: '', boots: '草莓棉拖鞋' },
+    items: { '魔法劍': 1 },
+    equipped: { weapon: '魔法劍' }, retiredEquipment: {},
     beads: ['', '', ''], unlockedBeadSlots: 1
   };
 }
@@ -57,10 +56,13 @@ export function normalizeStarsproutInventory(value) {
   const capacity = Math.max(24, Math.min(60, Math.floor(Number(value.capacity) / 6) * 6 || 24));
   const items = { ...base.items, ...cleanItems(value.items) };
   const equipped = { ...base.equipped };
-  for (const [slot, name] of Object.entries(value.equipped || {})) if (!name || (items[name] && ITEM_CATALOG[name]?.slot === slot)) equipped[slot] = name;
+  for (const [slot, name] of Object.entries(value.equipped || {})) if (slot === 'weapon' && name === '魔法劍' && items[name]) equipped[slot] = name;
   const unlockedBeadSlots = Math.max(1, Math.min(3, Math.floor(Number(value.unlockedBeadSlots) || 1)));
   const beads = [0, 1, 2].map((index) => index < unlockedBeadSlots && items[value.beads?.[index]] && ITEM_CATALOG[value.beads[index]]?.type === 'bead' ? value.beads[index] : '');
-  return { v: 1, capacity, maxCapacity: 60, gold: Math.max(0, Math.floor(Number(value.gold) || 0)), items, equipped, beads, unlockedBeadSlots };
+  const retiredEquipment = { ...(value.retiredEquipment || {}) };
+  for (const name of RETIRED_EQUIPMENT) if (Number(value.items?.[name]) > 0) retiredEquipment[name] = value.items[name];
+  items['魔法劍'] = 1;
+  return { v: 1, retiredEquipment, capacity, maxCapacity: 60, gold: Math.max(0, Math.floor(Number(value.gold) || 0)), items, equipped, beads, unlockedBeadSlots };
 }
 
 export function loadStarsproutInventory() {
@@ -89,4 +91,20 @@ export function sortedStarsproutItems(state, filter = 'all') {
 
 export function occupiedSlots(state) {
   return Object.entries(normalizeStarsproutInventory(state).items).reduce((sum, [name, count]) => sum + (['equipment', 'bead'].includes(ITEM_CATALOG[name]?.type) ? count : 1), 0);
+}
+
+const ITEM_ART = Object.freeze({
+  '魔法劍':'magic-sword', '魔法箭':'magic-arrow', '香脆橡果':'acorn', '蓬鬆絨毛':'fluff',
+  '純淨星芽膠':'sprout-gel', '鵝黃羽毛':'feather', '微光種子':'seed', '晨曦露水':'dew',
+  '肥沃泥土':'soil', '嫩草根':'roots', '甜蘋果':'apple', '清涼薄荷水':'mint', '微光燃油':'oil',
+  '金彩紙糖果袋':'candy', '手繪布偶飾品':'doll', '銀幣袋':'coins', '星光微風種子':'breeze-seed',
+  '微光星芽珠':'sprout-orb', '橡果迅捷珠':'acorn-orb', '輕羽漂浮珠':'feather-orb',
+  '露珠回響珠':'echo-orb', '綠指採集珠':'leaf-orb', '蜜糖貪食珠':'honey-orb', '晨曦蒲公英':'dandelion'
+});
+export function itemArtURL(name) {
+  return new URL(`../../assets/phantom-realm/items-v317/${ITEM_ART[name] || 'parcel'}.webp`, import.meta.url).href;
+}
+export function appendItemArt(parent, name, className = 'item-art') {
+  const image = document.createElement('img'); image.src = itemArtURL(name); image.alt = name;
+  image.className = className; image.draggable = false; parent.append(image); return image;
 }

@@ -48,7 +48,7 @@ import WaterFlowMazeGame from './scenes/WaterFlowMazeGame.js';
 import JumpClimbGame from './scenes/JumpClimbGame.js';
 import StarlightFireflyGame from './scenes/StarlightFireflyGame.js';
 import FruitCountingGame from './scenes/FruitCountingGame.js';
-import ForestStarflightGame from './scenes/ForestStarflightGame.js?v=star0122';
+import ForestStarflightGame from './scenes/ForestStarflightGame.js?v=star0123';
 import { LavaStepGame, CoolingWorkshopGame, LavaPipeGame, VolcanoEchoGame, LavaBridgeGame } from './scenes/VolcanoSeriesGames.js';
 import FireflyExplore from './scenes/FireflyExplore.js';
 import FireflyCatchGame from './scenes/FireflyCatchGame.js';

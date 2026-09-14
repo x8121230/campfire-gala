@@ -2,7 +2,7 @@ export function buildResourceIcons(parent) {
   const result = {};
   for (const [kind, label, color, shape] of [
     ['hp', '生命', '#ee5262', 'M24 41C17 35 4 26 4 16C4 4 19 2 24 12C29 2 44 4 44 16C44 26 31 35 24 41Z'],
-    ['mana', '魔力', '#40acff', 'M24 3C19 11 7 24 7 31A17 14 0 0 0 41 31C41 24 29 11 24 3Z']
+    ['mana', 'SP 魔力', '#40acff', 'M24 3C19 11 7 24 7 31A17 14 0 0 0 41 31C41 24 29 11 24 3Z']
   ]) {
     const group = document.createElement('div'); group.className = 'resource-group';
     group.setAttribute('role', 'img'); parent.append(group);

@@ -1,0 +1,7319 @@
+1.先用程式補質感，換一組更好的草叢圖， 3~4 張變體，草叢不要每格完全一樣，每格建立時加一點隨機值：scale: 0.56 ~ 0.63，angle: -2 ~ 2，y: -4 ~ +4，這個超有用。
+2. 格子底色再深一點，減少塑膠感，可以改成：更深一點的森林綠
+中間偏亮、邊緣偏暗，至少先把整體底色壓穩。
+3. 草叢底下補陰影
+在 grassTop 下再加一個很淡的橢圓陰影：深綠或深褐，alpha 低一點，讓草叢有「落在地上」的感覺，這個效果通常很好。
+4. "草"字刪掉
+5. 白框可改成：線條稍細，顏色沒那麼白，或只保留外框亮、內格框柔和。
+6. 挖開後的泥土換ICON、tile_dirt、gold、snake、thorn這些狀態素材一起統一風格。
+
+
+🟢 一、背景bg_bush_forest.jpg
+
+👉 建議：森林 / 草地 / 植物.不要太亮.不要太花
+
+🎵 二、音樂（BGM）
+bush_bgm.mp3
+👉 風格：森林'溫和'小孩友善
+
+🔊 三、音效（SFX）
+必備 5 個
+dig_grass_sfx.mp3        // 挖草
+ui_click_sfx.mp3         // 點擊
+answer_correct_sfx.mp3   // 答對
+answer_wrong_sfx.mp3     // 答錯
+
+🌿 四、草叢（之後要升級）
+
+建議你準備（下一步會用）
+icon_bush_1.png
+icon_bush_2.png
+icon_bush_3.png
+icon_bush_4.png
+
+👉 重點：
+
+不要完全一樣
+
+風格一致
+
+稍微不同形狀
+
+🟫 五、翻開後素材（之後要統一）
+tile_dirt.png
+tile_gold.png
+tile_snake.png
+tile_thorn.png
+tile_stone.png
+tile_spiderweb.png
+🧠 我幫你分優先順序（照這個做）
+第一優先（現在要）
+
+✔ bg_bush_forest.jpg
+✔ bush_bgm.mp3
+✔ dig_grass_sfx.mp3
+✔ ui_click_sfx.mp3
+✔ answer_correct_sfx.mp3
+✔ answer_wrong_sfx.mp3
+
+第二優先（下一步質感升級）
+
+✔ icon_bush_1~4
+
+第三優先（翻開一致性）
+
+✔ tile_dirt / snake / thorn / gold
+
+🔥 小結（現在狀態）
+
+你現在已經進入這個階段：
+
+👉 UI ✔
+👉 流程 ✔
+👉 音效開始補 ✔
+👉 背景開始補 ✔
+
+接下來就是：
+
+👉 視覺質感爆發期（草叢 + 素材統一）
+
+
+
+
+
+
+
+---
+---
+---------
+----
+DD
+一、基礎獎勵建議
+這是不算寶箱內容前的基礎值。
+失敗:水晶0，聲望0
+通關:水晶0，聲望1，
+找到金草叢追加:水晶1、聲望1。
+
+二、寶箱的定位要先分清楚
+1. 小寶箱：安慰獎 / 最低分過關保底(有拿到東西，但不是大賺)
+內容：30%水晶0、20%水晶1、23%聲望 1、20%聲望2、5%通用裝、2%稀有裝。
+
+2. 大寶箱：正常高價值獎勵 / 金草叢主獎(有賺，會期待，偶爾有裝備驚喜)
+內容：25%水晶 1、15%水晶2、25%聲望2、20%聲望3、10%通用裝備、5%稀有裝備。
+
+3.關卡寶箱(新追加):通關100%獲得:100%聲望+1 &  80%水晶0、5%通用裝備、5%稀有裝備。5%關卡限定裝、5%關卡限定裝。
+
+4 夢幻寶箱：很少見，但要明顯更爽
+內容：60%通用裝備、38.5%稀有裝備。1%夢幻裝、0.5%神話裝。
+這其實也很適合你遊戲的夢幻感。
+
+特殊寶箱:各關卡稀有出現例如國王蟲，10%機率出現，p3結算後額外35%機率出現夢幻裝備"小王冠"
+
+四、夢幻寶箱出現率建議:
+彩虹草出現100%。
+你現在有 fruit Lv 影響寶箱升級。這個很棒。低表現：5%、中表現：15%、高表現：25%。
+
+五、你這款遊戲最適合的平均體感:
+普通失敗拿到:0。不認真，滾出去
+1星通關平均拿到：水晶1~2 、聲望1 ~2，小寶箱保底。
+感受：有過關感、但知道還能更好
+2星通關平均拿到：水晶0~2 、聲望1~3、小寶箱保底。
+感受：很舒服、很適合小孩
+
+3.星通關(場上金草叢都要挖到才可能3星) 通關:平均拿到：水晶2~5、3~5 聲望，大寶箱寶底。
+感受：「這場超棒」
+
+
+
+
+EE
+
+
+📌 目前進度（我幫你整理好）
+🎮 核心系統
+
+✅ 草叢尋寶玩法（挖草 → 蟲 → 問答 → 結算）
+
+✅ P1 / P2 / P3 流程完整
+
+✅ 星級判定 + 關卡結算
+
+🎁 掉落系統
+
+✅ DropConfig（寶箱機率設計完成）
+
+✅ DropHelper（抽獎工具）
+
+✅ BushRewardSystem 已整合新掉落邏輯
+
+✅ 保底機制（1星 → 小寶箱）正常
+
+✅ 關卡寶箱（100%）正常
+
+👗 裝備系統
+
+✅ ITEM_DB 完整
+
+✅ 裝備稀有度：common / rare / epic / legendary
+
+✅ 裝備卡片動畫（已完成，含粒子/發光）
+
+💎 特殊設計
+
+✅ 彩蛋裝備「母上的守護」
+
+歸類：legendary
+
+來源：secret（不進寶箱池）
+
+已可取得 & 能力正常
+
+🔁 重複裝備
+
+✅ 重複 → +1 水晶（邏輯完成）
+
+⏳ 可視化提示（先保留，未做）
+
+🧠 當前設計方向（很重要）
+
+👉 遊戲核心已完成
+👉 目前進入「經濟系統 & 掉落體驗優化階段」
+
+🚀 下一步主線（你回來後接這個）
+👉 整理 DROP_TABLES（關鍵）
+
+把每個關卡補成：
+
+common / rare / epic / legendary
+
+👉 讓「關卡限定掉落」正式運作
+
+🧭 你現在的位置（幫你一句話總結）
+
+👉 已經不是新手階段
+👉 已進入「遊戲完成度 70% → 90% 打磨階段」🔥
+
+等你開新對話，我直接幫你接：
+
+👉 DROP_TABLES 完整最終版 + 對應寶箱掉落邏輯
+我們繼續下一步
+
+好，已接上 ✅
+
+你這份整理很完整，現在主線非常清楚：
+
+下一步就是把 DROP_TABLES 做成正式版，讓各關卡的限定掉落真正跑起來。
+
+我直接幫你接下去。
+
+下一步要做的東西
+《BushExplore 掉落表最終版》
+目標是把每一關都整理成這種結構：
+
+export const DROP_TABLES = {
+  bush_01: {
+    small: {
+      common: [...],
+      rare: [...],
+      epic: [...],
+      legendary: [...]
+    },
+    big: {
+      common: [...],
+      rare: [...],
+      epic: [...],
+      legendary: [...]
+    },
+    dream: {
+      common: [...],
+      rare: [...],
+      epic: [...],
+      legendary: [...]
+    }
+  },
+
+  bush_02: {
+    small: {
+      common: [...],
+      rare: [...],
+      epic: [...],
+      legendary: [...]
+    },
+    big: {
+      common: [...],
+      rare: [...],
+      epic: [...],
+      legendary: [...]
+    },
+    dream: {
+      common: [...],
+      rare: [...],
+      epic: [...],
+      legendary: [...]
+    }
+  }
+};
+這一步做完後，你的系統會得到什麼
+每關可以有自己的限定裝備池
+
+不同寶箱可以抽不同品質
+
+之後新增關卡會很快
+
+legendary 可以完全控管，不會亂掉
+
+secret 類型（母上的守護）可以永遠排除在寶箱池外
+
+我建議你現在採用的規則
+這版先不要搞太複雜，先穩穩落地：
+
+1. secret 類型永不進掉落池
+像：
+
+item_fullset_mother_secret
+
+這種就只能用彩蛋拿，不進任何寶箱。
+
+2. 寶箱只決定「抽哪個稀有度」
+例如：
+
+小寶箱：偏 common / rare
+
+大寶箱：偏 rare / epic
+
+夢幻寶箱：偏 epic / legendary
+
+然後抽到稀有度後，再去該關對應稀有度池裡抽裝備。
+
+這樣邏輯最乾淨。
+
+3. 關卡沒有某稀有度時，自動往下 fallback
+例如 bush_01 沒有 legendary：
+
+先抽到 legendary
+
+發現池子是空的
+
+自動降到 epic
+
+再沒有就 rare
+
+再沒有就 common
+
+這樣不會抽空。
+
+我建議你現在的資料拆法
+你接下來最好整理成這 2 層：
+
+A. ITEM_DB
+負責裝備本體資料
+
+item_hat_leaf_bush01: {
+  id: 'item_hat_leaf_bush01',
+  name: '小葉帽',
+  slot: 'hat',
+  rarity: 'common',
+  source: 'bush_01'
+}
+B. DROP_TABLES
+負責每關可掉哪些裝備
+
+bush_01: {
+  small: {
+    common: ['item_hat_leaf_bush01', 'item_cloth_seed_bush01'],
+    rare: ['item_hat_flower_bush01'],
+    epic: [],
+    legendary: []
+  }
+}
+這樣之後你改平衡時，不用去動 ITEM_DB 本體。
+
+我建議你的命名規則
+你前面已經定了：
+
+item_[slot]_[name]_[source or category]
+那現在掉落表就很好整理，例如：
+
+item_hat_leaf_bush01
+
+item_cloth_moss_bush01
+
+item_fullset_fairy_global
+
+item_hat_crown_global
+
+其中：
+
+bush_01 = 該關限定
+
+global = 全關共通池
+
+secret = 彩蛋，不進箱池
+
+最推薦的掉落策略
+你現在在 70%→90% 打磨期，我建議不要一開始就做超大表，先做：
+
+第一版先支援 2 種來源
+關卡限定
+source: 'bush_01'
+全域共通
+source: 'global'
+這樣抽裝時可以做：
+
+先抽 bush_01 池，不夠再補 global 池
+
+這會超好用。
+
+你下一個實作順序
+我幫你排成最順的做法：
+
+第 1 步
+先建立 / 整理：
+src/data/DropTables.js
+
+第 2 步
+把每關補成：
+
+small
+
+big
+
+dream
+
+每個箱子裡都有：
+
+common
+
+rare
+
+epic
+
+legendary
+
+第 3 步
+修改 BushRewardSystem
+讓它抽裝備時改成：
+
+先決定寶箱類型
+
+再決定稀有度
+
+再去 DROP_TABLES[stageId][chestType][rarity] 抽 item
+
+若空池，自動 fallback
+
+第 4 步
+確認 secret 不會被抽到
+
+第 5 步
+測試重複裝備 → 轉水晶流程是否仍正常
+
+你現在最該做的，不是更多特效
+而是先把這個基礎打穩：
+
+掉落表資料化
+→ 之後你要加新關卡、新裝備、新寶箱，全部都會輕鬆很多。
+
+我建議我們下一則就直接做這個
+我下一步可以直接幫你產出：
+
+src/data/DropTables.js 完整初版
+而且我會用你現在這個專案狀態，做成：
+
+可直接貼上
+
+有 bush_01
+
+預留 bush_02
+
+含 global 共通裝備概念
+
+排除 secret
+
+能直接接到 BushRewardSystem
+
+你下一句直接回我：
+
+「給我 DropTables.js 完整版」
+
+我就直接寫給你覆蓋。
+
+
+已上傳的圖像
+已上傳的圖像
+我先跟你確認~我沒有這檔案
+
+很好，你這張圖我看得很清楚 👌
+👉 你目前確實「沒有 DropTables.js」這個檔案（完全正常）
+
+✅ 結論（直接講重點）
+👉 我們現在要做的是：
+
+「新增一個全新檔案」
+
+src/data/DropTables.js
+不是修改舊的 👍
+
+🧱 為什麼要新開這個檔案？
+你現在是這樣分工：
+
+檔案	用途
+GameData.js	裝備資料（ITEM_DB）
+DropConfig.js	寶箱機率
+BushRewardSystem.js	抽獎邏輯
+👉 缺的就是：
+
+❗「每一關可以掉哪些裝備」
+
+所以我們要補一個：
+
+👉 DropTables.js（掉落池資料）
+
+🧭 你現在要做的動作（一步一步）
+第 1 步 👉 建立檔案
+在這個資料夾：
+
+src/data/
+👉 新增：
+
+DropTables.js
+第 2 步 👉 先貼「最小可運作版本」
+我先給你一個可以直接跑、不會爆炸的版本
+
+👉 複製貼上👇
+
+// src/data/DropTables.js
+
+/**
+ * 掉落表系統（Drop Tables）
+ * 
+ * 說明：
+ * - 每個關卡有自己的掉落池
+ * - 分為：small / big / dream 三種寶箱
+ * - 每個寶箱再分：common / rare / epic / legendary
+ * 
+ * ⚠️ secret 類型裝備（例如母上的守護）不會出現在這裡
+ */
+
+export const DROP_TABLES = {
+
+    bush_01: {
+
+        small: {
+            common: [
+                'item_hat_leaf_bush01',
+                'item_cloth_moss_bush01'
+            ],
+            rare: [
+                'item_hat_flower_bush01'
+            ],
+            epic: [],
+            legendary: []
+        },
+
+        big: {
+            common: [
+                'item_hat_leaf_bush01'
+            ],
+            rare: [
+                'item_hat_flower_bush01'
+            ],
+            epic: [
+                'item_cloth_fairy_bush01'
+            ],
+            legendary: []
+        },
+
+        dream: {
+            common: [],
+            rare: [
+                'item_hat_flower_bush01'
+            ],
+            epic: [
+                'item_cloth_fairy_bush01'
+            ],
+            legendary: [
+                'item_fullset_forest_legend'
+            ]
+        }
+    }
+
+};
+⚠️ 重要提醒（一定要看）
+1️⃣ 這些 item 必須存在於 ITEM_DB
+例如：
+
+'item_hat_leaf_bush01'
+👉 你 GameData.js 裡一定要有這個 id
+
+2️⃣ 「母上的守護」不要加進來 ❗
+因為你設計是：
+
+source: 'secret'
+👉 所以不能放進 DROP_TABLES
+
+3️⃣ 現在這版只是「先能跑」
+之後我們會再幫你升級：
+
+加 global 池
+
+自動 fallback
+
+權重抽法優化
+
+🚀 下一步（很重要）
+你做完這一步後，下一步就是：
+
+👉 修改 BushRewardSystem.js
+
+讓它從：
+
+❌ 舊的掉落方式
+➡️ 改成
+✅ 從 DROP_TABLES 抽
+
+🎯 你現在只要做這件事
+👉 新增 DropTables.js 並貼上剛剛那段
+
+完成後跟我說：
+
+👉 「我建好了」
+
+我下一步會直接幫你：
+
+🔥 改寫 BushRewardSystem（接上掉落表）
+
+
+「我建好了
+
+很好，接下來我們正式把它接進 BushRewardSystem.js。
+
+這一步做完後，你的流程會變成：
+
+寶箱類型 → 稀有度 → 去 DROP_TABLES 找可掉裝備 → 發裝備 / 重複轉水晶
+
+第一步：先在 BushRewardSystem.js 最上面加 import
+找到這行附近：
+
+import { ITEM_DB } from '../data/GameData.js';
+把 DROP_TABLES 一起補進去，變成：
+
+import { ITEM_DB } from '../data/GameData.js';
+import { DROP_TABLES } from '../data/DropTables.js';
+第二步：在 BushRewardSystem 裡新增這 3 個函式
+把下面這整段，加進 BushRewardSystem.js 的 class 裡面。
+通常可以放在 constructor 後面，或放在掉落相關函式上方。
+
+getStageDropTable(stageId, chestType) {
+    const stageTable = DROP_TABLES[stageId];
+    if (!stageTable) return null;
+
+    return stageTable[chestType] || null;
+}
+
+getFallbackRarityOrder(rarity) {
+    const orderMap = {
+        legendary: ['legendary', 'epic', 'rare', 'common'],
+        epic: ['epic', 'rare', 'common'],
+        rare: ['rare', 'common'],
+        common: ['common']
+    };
+
+    return orderMap[rarity] || ['common'];
+}
+
+pickItemFromDropTable(stageId, chestType, rarity) {
+    const chestTable = this.getStageDropTable(stageId, chestType);
+    if (!chestTable) return null;
+
+    const rarityOrder = this.getFallbackRarityOrder(rarity);
+
+    for (const rarityKey of rarityOrder) {
+        const pool = chestTable[rarityKey];
+
+        if (Array.isArray(pool) && pool.length > 0) {
+            const randomIndex = Phaser.Math.Between(0, pool.length - 1);
+            return pool[randomIndex];
+        }
+    }
+
+    return null;
+}
+這 3 個函式是在做什麼？
+簡單講：
+
+getStageDropTable(stageId, chestType)
+拿到某關某種寶箱的掉落表
+
+例如：
+
+bush_01 + dream
+就拿到：
+
+DROP_TABLES.bush_01.dream
+getFallbackRarityOrder(rarity)
+如果抽到的稀有度是空的，就往下找
+
+例如抽到 legendary，但這關沒有傳說裝，就改找：
+
+legendary → epic → rare → common
+pickItemFromDropTable(stageId, chestType, rarity)
+真正去掉落表抽裝備 id
+
+第三步：找到你原本「決定掉哪個 item」的地方
+你現在 BushRewardSystem.js 裡，一定有某段邏輯長得像這樣其中一種：
+
+直接從 ITEM_DB 過濾 rarity
+
+或 getRandomItemByRarity(...)
+
+或 rollEquipmentReward(...)
+
+或 createEquipmentReward(...)
+
+你要找的是：
+
+原本最後決定裝備 itemId 的地方
+
+第四步：把「抽 item」那段換成這種寫法
+你原本大概會有類似：
+
+const rarity = rolledRarity;
+const itemId = this.getRandomItemByRarity(rarity);
+把它改成：
+
+const rarity = rolledRarity;
+const itemId = this.pickItemFromDropTable(stageId, chestType, rarity);
+第五步：如果抽不到，要防呆
+接著補這段：
+
+if (!itemId) {
+    console.warn(`[BushRewardSystem] 找不到可掉落裝備`, {
+        stageId,
+        chestType,
+        rarity
+    });
+    return null;
+}
+最終你要的核心邏輯會長這樣
+假設你有一個函式是在處理寶箱裝備掉落，裡面可以整理成這種結構：
+
+rollEquipmentFromChest(stageId, chestType, rolledRarity) {
+    const itemId = this.pickItemFromDropTable(stageId, chestType, rolledRarity);
+
+    if (!itemId) {
+        console.warn('[BushRewardSystem] 無可掉落裝備', {
+            stageId,
+            chestType,
+            rolledRarity
+        });
+        return null;
+    }
+
+    const itemData = ITEM_DB[itemId];
+    if (!itemData) {
+        console.warn('[BushRewardSystem] ITEM_DB 找不到裝備資料', itemId);
+        return null;
+    }
+
+    return {
+        type: 'equipment',
+        itemId,
+        itemData,
+        rarity: itemData.rarity || rolledRarity
+    };
+}
+你現在最需要注意的事
+1. stageId 要真的有傳進來
+像：
+
+bush_01
+2. chestType 要一致
+你掉落表用的是：
+
+small
+
+big
+
+dream
+
+所以系統裡也要是這三種名字，不要變成：
+
+smallChest
+
+bigChest
+
+dreamChest
+
+不然會抓不到。
+
+3. rolledRarity 也要一致
+要是：
+
+common
+
+rare
+
+epic
+
+legendary
+
+你現在最省事的做法
+因為我還沒看到你目前的 BushRewardSystem.js 內容，
+所以我不想亂叫你整份覆蓋，避免把你現在已完成的東西洗掉。
+
+你現在直接把：
+
+src/systems/BushRewardSystem.js 完整貼給我
+
+我就幫你做成：
+
+可直接覆蓋版
+而且我會幫你保留你現在已完成的：
+
+保底
+
+關卡寶箱
+
+重複轉水晶
+
+裝備卡片資料結構
+
+這樣最安全。
+
+
+已上傳的圖像
+第一步就卡住
+
+
+已思考 20s
+有，我看到你卡住的點了。
+不是你做錯，是我前面叫你改 import 的方式，跟你現在專案原本的架構不一樣。
+
+你現在這份 BushRewardSystem.js 是走這條線：
+
+import { getDropTable } from '../data/GameData.js';
+也就是說：
+
+👉 你目前不是直接從 DropTables.js 取資料
+👉 而是 先透過 GameData.js 裡的 getDropTable() 去拿資料
+
+所以你第一步先不要改 BushRewardSystem.js 的 import，先改 GameData.js 就好。
+
+你現在正確要做的事
+去開 src/data/GameData.js
+找看看有沒有這種東西：
+
+export function getDropTable(...) {
+然後把它改成接你剛剛新建的 DropTables.js
+第 1 步：在 GameData.js 最上面加這行
+import { DROP_TABLES } from './DropTables.js';
+第 2 步：把 getDropTable 改成這版
+export function getDropTable(stageId, chestType) {
+    const stageTable = DROP_TABLES[stageId];
+    if (!stageTable) return null;
+
+    return stageTable[chestType] || null;
+}
+為什麼這樣改？
+因為你現在 BushRewardSystem.js 已經寫成：
+
+getDropTable(...)
+那我們就不要硬拆它。
+直接讓 getDropTable() 背後去讀 DropTables.js，這樣最穩、最不容易爆。
+
+所以你現在先不要動這行
+這行先留著：
+
+import { getDropTable } from '../data/GameData.js';
+這是正常的。
+
+你畫面上那個「卡住點」其實是這個
+你看到我前面說：
+
+import { DROP_TABLES } from '../data/DropTables.js';
+但你專案目前實作其實是：
+
+import { getDropTable } from '../data/GameData.js';
+兩種都能做，
+只是你現在這個專案更適合走：
+
+BushRewardSystem → GameData.getDropTable() → DropTables.js
+
+你現在只做這一步
+去 GameData.js：
+
+加上
+
+import { DROP_TABLES } from './DropTables.js';
+把 getDropTable() 改成我上面那版
+
+做完後，把 GameData.js 這段貼給我看，我就接著帶你改下一步，不會讓你亂掉。
+
+
+export const SAVE_KEY = 'forest_save_data';
+
+export const DEFAULT_STAGE_PROGRESS = {
+
+    bush_01: {
+        unlocked: true,
+        cleared: false,
+        stars: 0,
+        bestScore: 0,
+        firstClearRewardClaimed: false
+    },
+
+    campfire_01: {
+        unlocked: false,
+        cleared: false,
+        stars: 0,
+        bestScore: 0,
+        firstClearRewardClaimed: false
+    },
+
+    firefly_01: {
+        unlocked: false,
+        cleared: false,
+        stars: 0,
+        bestScore: 0,
+        firstClearRewardClaimed: false
+    },
+
+    constellation_01: {
+        unlocked: false,
+        cleared: false,
+        stars: 0,
+        bestScore: 0,
+        firstClearRewardClaimed: false
+    },
+
+    animals_01: {
+        unlocked: false,
+        cleared: false,
+        stars: 0,
+        bestScore: 0,
+        firstClearRewardClaimed: false
+    }
+
+};
+
+export const DEFAULT_SAVE_DATA = {
+    hearts: 3,
+    max_hearts: 3,
+    recovery_seconds: 7200,
+    next_heart_time: null,
+
+    user_crystals: 50,
+    reputation: 0,
+
+    owned_items: [
+        'item_hat_daily_01',
+        'item_cloth_daily_01',
+        'item_fullset_pink_home_01'
+    ],
+
+    placed_decorations: [],
+
+    equipped_hat: 'none',
+    equipped_cloth: 'none',
+    equipped_fullset: 'none',
+
+    minigame_stats: {
+        treasure: { playCount: 0, clearCount: 0, bestScore: 0 },
+        firefly: { playCount: 0, clearCount: 0, bestScore: 0 },
+        campfire: { playCount: 0, clearCount: 0, bestScore: 0 },
+        constellation: { playCount: 0, clearCount: 0, bestScore: 0 },
+        animals: { playCount: 0, clearCount: 0, bestScore: 0 }
+    },
+
+    bonus_play_counts: {},
+    bonus_reward_rates: {},
+    bonus_drop_rates: {},
+
+    secret_state: {
+        motherGuardUnlocked: false,
+        motherGuardPendingReward: false,
+        motherGuardSequence: [],
+        motherGuardSequenceStartTime: 0
+    },
+
+    stage_progress: JSON.parse(JSON.stringify(DEFAULT_STAGE_PROGRESS))
+};
+
+
+export const ITEM_DB = {
+    item_hat_daily_01: {
+        id: 'item_hat_daily_01',
+        name: '小髮夾',
+        category: 'equipment',
+        type: 'hat',
+        source: 'starter',
+        rarity: 'common',
+        texture: 'item_hat_daily_01',
+        icon: 'item_hat_daily_01',
+        placeable: false,
+        effects: {},
+        desc: '簡單可愛的小髮夾。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_cloth_daily_01: {
+        id: 'item_cloth_daily_01',
+        name: '休閒裝',
+        category: 'equipment',
+        type: 'cloth',
+        source: 'starter',
+        rarity: 'common',
+        texture: 'item_cloth_daily_01',
+        icon: 'item_cloth_daily_01',
+        placeable: false,
+        effects: {},
+        desc: '舒服的日常穿搭。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_fullset_pink_home_01: {
+        id: 'item_fullset_pink_home_01',
+        name: '粉色居家服',
+        category: 'equipment',
+        type: 'fullset',
+        source: 'starter',
+        rarity: 'common',
+        texture: 'fullset_pink_home_01',
+        icon: 'icon_fullset_pink_home_01',
+        placeable: false,
+        effects: {
+            rewardRate: 10,
+            dropRate: 5,
+            extraPlayCount: 1
+        },
+        desc: '舒服又可愛的粉色居家服。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_hat_tiara_common: {
+        id: 'item_hat_tiara_common',
+        name: '小皇冠',
+        category: 'equipment',
+        type: 'hat',
+        source: 'global',
+        rarity: 'rare',
+        texture: 'hat_tiara',
+        icon: 'item_hat_tiara',
+        placeable: false,
+        effects: {
+            rewardRate: 20
+        },
+        desc: '讓寶箱獎勵更豐富。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_cloth_fairy: {
+        id: 'item_cloth_fairy',
+        name: '小仙子洋裝',
+        category: 'equipment',
+        type: 'cloth',
+        source: 'firefly',
+        rarity: 'rare',
+        texture: 'cloth_fairy',
+        icon: 'item_cloth_fairy',
+        placeable: false,
+        effects: {
+            dropRate: 15
+        },
+        desc: '穿上後更容易找到好東西。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_hat_explore_01: {
+        id: 'item_hat_explore_01',
+        name: '探險遮陽帽',
+        category: 'equipment',
+        type: 'hat',
+        source: 'treasure',
+        rarity: 'rare',
+        texture: 'hat_explorer',
+        icon: 'icon_hat_explorer',
+        placeable: false,
+        effects: {
+            extraPlayCount: 1
+        },
+        desc: '探險時能多一次嘗試機會。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_cloth_explore_01: {
+        id: 'item_cloth_explore_01',
+        name: '多口袋背心',
+        category: 'equipment',
+        type: 'cloth',
+        source: 'treasure',
+        rarity: 'rare',
+        texture: 'cloth_explorer',
+        icon: 'icon_cloth_explorer',
+        placeable: false,
+        effects: {
+            dropRate: 10
+        },
+        desc: '身上掛滿各種探險口袋。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_fullset_explore_01: {
+        id: 'item_fullset_explore_01',
+        name: '野外小偵查',
+        category: 'equipment',
+        type: 'fullset',
+        source: 'treasure',
+        rarity: 'rare',
+        texture: 'fullset_explorer',
+        icon: 'icon_fullset_explorer',
+        placeable: false,
+        effects: {
+            revealHint: 1
+        },
+        desc: '一件充滿探險味道的衣服。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_hat_firefly_01: {
+        id: 'item_hat_firefly_01',
+        name: '螢光小帽',
+        category: 'equipment',
+        type: 'hat',
+        source: 'firefly',
+        rarity: 'rare',
+        texture: 'hat_firefly',
+        icon: 'icon_hat_firefly',
+        placeable: false,
+        effects: {
+            timeBonus: 3
+        },
+        desc: '夜晚的螢光會停留得更久。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_cloth_firefly_01: {
+        id: 'item_cloth_firefly_01',
+        name: '發光小背心',
+        category: 'equipment',
+        type: 'cloth',
+        source: 'firefly',
+        rarity: 'rare',
+        texture: 'cloth_firefly',
+        icon: 'icon_cloth_firefly',
+        placeable: false,
+        effects: {
+            rewardRate: 15
+        },
+        desc: '微微發光的小背心。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_fullset_firefly_01: {
+        id: 'item_fullset_firefly_01',
+        name: '森林精靈服',
+        category: 'equipment',
+        type: 'fullset',
+        source: 'firefly',
+        rarity: 'rare',
+        texture: 'fullset_firefly',
+        icon: 'icon_fullset_firefly',
+        placeable: false,
+        effects: {
+            extraMistake: 1
+        },
+        desc: '帶有森林魔法的精靈服。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_hat_campfire_01: {
+        id: 'item_hat_campfire_01',
+        name: '火焰廚師帽',
+        category: 'equipment',
+        type: 'hat',
+        source: 'campfire',
+        rarity: 'rare',
+        texture: 'hat_cook',
+        icon: 'icon_hat_cook',
+        placeable: false,
+        effects: {
+            timeBonus: 3
+        },
+        desc: '營火料理專用廚師帽。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_cloth_campfire_01: {
+        id: 'item_cloth_campfire_01',
+        name: '美味圍裙',
+        category: 'equipment',
+        type: 'cloth',
+        source: 'campfire',
+        rarity: 'rare',
+        texture: 'cloth_cook',
+        icon: 'icon_cloth_cook',
+        placeable: false,
+        effects: {
+            rewardRate: 20
+        },
+        desc: '料理時的必備圍裙。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_fullset_campfire_01: {
+        id: 'item_fullset_campfire_01',
+        name: '三星大廚袍',
+        category: 'equipment',
+        type: 'fullset',
+        source: 'campfire',
+        rarity: 'rare',
+        texture: 'fullset_cook',
+        icon: 'icon_fullset_cook',
+        placeable: false,
+        effects: {
+            extraMistake: 1
+        },
+        desc: '穿上就像營火料理大師。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_hat_constellation_01: {
+        id: 'item_hat_constellation_01',
+        name: '星辰魔法帽',
+        category: 'equipment',
+        type: 'hat',
+        source: 'constellation',
+        rarity: 'rare',
+        texture: 'hat_constellation',
+        icon: 'icon_hat_constellation',
+        placeable: false,
+        effects: {
+            timeBonus: 3
+        },
+        desc: '尖尖的藍色帽子，布滿小星星。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_cloth_constellation_01: {
+        id: 'item_cloth_constellation_01',
+        name: '銀河特工衣',
+        category: 'equipment',
+        type: 'cloth',
+        source: 'constellation',
+        rarity: 'rare',
+        texture: 'cloth_constellation',
+        icon: 'icon_cloth_constellation',
+        placeable: false,
+        effects: {
+            rewardRate: 15
+        },
+        desc: '深藍色的衣服上有銀線星座圖。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_fullset_constellation_01: {
+        id: 'item_fullset_constellation_01',
+        name: '小小太空人',
+        category: 'equipment',
+        type: 'fullset',
+        source: 'constellation',
+        rarity: 'rare',
+        texture: 'fullset_constellation',
+        icon: 'icon_fullset_constellation',
+        placeable: false,
+        effects: {
+            revealHint: 1
+        },
+        desc: '全白的探險裝，背後有星星氣瓶。',
+        status: 'ready',
+        notes: ''
+    },
+
+    item_fullset_secret_guard: {
+        id: 'item_fullset_secret_guard',
+        name: '母上的守護',
+        category: 'equipment',
+        type: 'fullset',
+        source: 'secret',
+        rarity: 'legendary',
+        texture: 'fullset_guard',
+        icon: 'icon_guard',
+        placeable: false,
+        effects: {
+            noHeartCost: 1,
+            ignoreReputationLock: 1
+        },
+        desc: '感受到了母親大人的愛意。\n進入關卡不消耗體力，並可無視聲望門檻。',
+        status: 'ready',
+        notes: '彩蛋裝備'
+    }
+};
+
+export const ITEM_LIST = Object.values(ITEM_DB);
+
+export const DROP_TABLES = {
+    treasure: {
+        common: [],
+        rare: [
+            'item_hat_explore_01',
+            'item_cloth_explore_01',
+            'item_fullset_explore_01',
+            'item_hat_tiara_common'
+        ],
+        epic: [],
+        legendary: []
+    },
+
+    firefly: {
+        common: [],
+        rare: [
+            'item_cloth_fairy',
+            'item_hat_firefly_01',
+            'item_cloth_firefly_01',
+            'item_fullset_firefly_01'
+        ],
+        epic: [],
+        legendary: []
+    },
+
+    campfire: {
+        common: [],
+        rare: [
+            'item_hat_campfire_01',
+            'item_cloth_campfire_01',
+            'item_fullset_campfire_01'
+        ],
+        epic: [],
+        legendary: []
+    },
+
+    constellation: {
+        common: [],
+        rare: [
+            'item_hat_constellation_01',
+            'item_cloth_constellation_01',
+            'item_fullset_constellation_01'
+        ],
+        epic: [],
+        legendary: []
+    },
+
+    animals: {
+        common: [],
+        rare: [],
+        epic: [],
+        legendary: []
+    }
+};
+
+export function getItemData(itemId) {
+    return ITEM_DB[itemId] || null;
+}
+
+export function getItemEffect(itemId, effectKey) {
+    const item = ITEM_DB[itemId];
+    if (!item || !item.effects) return 0;
+    return item.effects[effectKey] || 0;
+}
+
+export function getDropTable(gameKey, rarity = 'rare') {
+    return DROP_TABLES[gameKey]?.[rarity] || [];
+}
+
+export function isValidItemId(itemId) {
+    return !!ITEM_DB[itemId];
+}
+
+export function getItemsByType(type) {
+    return ITEM_LIST.filter(item => item.type === type);
+}
+
+export function getItemsBySource(source) {
+    return ITEM_LIST.filter(item => item.source === source);
+}
+
+export function getItemsByRarity(rarity) {
+    return ITEM_LIST.filter(item => item.rarity === rarity);
+}
+
+export function getOwnedItemDataList(ownedIds = []) {
+    return ownedIds
+        .map(id => ITEM_DB[id])
+        .filter(Boolean);
+}
+
+看到了，這樣就清楚了。
+你現在不是少 getDropTable()，而是你的 GameData.js 還停留在「舊版掉落表架構」。
+
+也就是目前這段：
+
+export const DROP_TABLES = {
+    treasure: {
+        common: [],
+        rare: [...],
+        epic: [],
+        legendary: []
+    }
+}
+這是 舊版：只有 gameKey + rarity
+但你新建的 DropTables.js 是 新版：stageId + chestType + rarity
+
+所以現在卡住的真正原因是：
+
+BushRewardSystem.js 還在吃舊格式，
+但你已經開始建立新格式了。
+
+先不要慌，這很正常
+我們現在做法要改成：
+
+✅ GameData.js 不再自己保存 DROP_TABLES
+而是改成：
+
+從 DropTables.js 匯入
+
+提供新的 getDropTable(stageId, chestType, rarity) 幫系統取資料
+
+你現在要改 GameData.js 的地方
+我直接講最安全版本。
+
+第 1 步：在 GameData.js 最上面加入這行
+放在最上面即可：
+
+import { DROP_TABLES } from './DropTables.js';
+第 2 步：把 GameData.js 裡這整段舊的 DROP_TABLES 刪掉
+也就是把這整段移除：
+
+export const DROP_TABLES = {
+    treasure: {
+        common: [],
+        rare: [
+            'item_hat_explore_01',
+            'item_cloth_explore_01',
+            'item_fullset_explore_01',
+            'item_hat_tiara_common'
+        ],
+        epic: [],
+        legendary: []
+    },
+
+    firefly: {
+        common: [],
+        rare: [
+            'item_cloth_fairy',
+            'item_hat_firefly_01',
+            'item_cloth_firefly_01',
+            'item_fullset_firefly_01'
+        ],
+        epic: [],
+        legendary: []
+    },
+
+    campfire: {
+        common: [],
+        rare: [
+            'item_hat_campfire_01',
+            'item_cloth_campfire_01',
+            'item_fullset_campfire_01'
+        ],
+        epic: [],
+        legendary: []
+    },
+
+    constellation: {
+        common: [],
+        rare: [
+            'item_hat_constellation_01',
+            'item_cloth_constellation_01',
+            'item_fullset_constellation_01'
+        ],
+        epic: [],
+        legendary: []
+    },
+
+    animals: {
+        common: [],
+        rare: [],
+        epic: [],
+        legendary: []
+    }
+};
+第 3 步：把 getDropTable 換成新版
+把原本這段：
+
+export function getDropTable(gameKey, rarity = 'rare') {
+    return DROP_TABLES[gameKey]?.[rarity] || [];
+}
+改成這段：
+
+export function getDropTable(stageId, chestType, rarity = null) {
+    const stageTable = DROP_TABLES[stageId];
+    if (!stageTable) return rarity ? [] : null;
+
+    const chestTable = stageTable[chestType];
+    if (!chestTable) return rarity ? [] : null;
+
+    if (!rarity) return chestTable;
+
+    return chestTable[rarity] || [];
+}
+改完後，GameData.js 會變成什麼意思？
+現在它會支援這兩種用法：
+
+1. 拿整個寶箱掉落表
+getDropTable('bush_01', 'dream')
+會拿到：
+
+{
+  common: [...],
+  rare: [...],
+  epic: [...],
+  legendary: [...]
+}
+2. 直接拿某個稀有度池
+getDropTable('bush_01', 'dream', 'epic')
+會拿到：
+
+['item_xxx', 'item_yyy']
+你現在先不要改的東西
+先不要動：
+
+ITEM_DB
+
+BushRewardSystem.js
+
+DropConfig.js
+
+我們先把 資料入口統一，這樣下一步才不會亂。
+
+但我要先提醒你一個更大的問題
+你現在 DropTables.js 裡我前面給你的示範 id，像這些：
+
+item_hat_leaf_bush01
+item_cloth_moss_bush01
+item_hat_flower_bush01
+item_fullset_forest_legend
+在你現在的 ITEM_DB 裡根本不存在。
+
+所以就算接好了，之後也會抽到不存在的 item。
+
+所以你接下來有兩條路
+路線 A：先讓系統能跑
+把 DropTables.js 裡的 item id 先改成你現在 ITEM_DB 已存在的 id
+
+像 bush_01 先暫時用：
+
+item_hat_explore_01
+item_cloth_explore_01
+item_fullset_explore_01
+item_hat_tiara_common
+這樣最穩。
+
+路線 B：先新增一批 bush 專用裝備
+這樣比較完整，但步驟會變多。
+
+我建議你現在走 A
+先讓系統通，再慢慢美化資料。
+
+你現在要做的事情，只有兩個
+1
+改 GameData.js：
+
+加 import { DROP_TABLES } from './DropTables.js';
+
+刪掉舊 export const DROP_TABLES = {...}
+
+換掉 getDropTable(...)
+
+2
+確認 DropTables.js 裡的 item id 都是 ITEM_DB 裡真的有的
+
+你改完後，把你現在的 DropTables.js 貼給我。
+我下一步直接幫你整理成 可跑版，然後再接 BushRewardSystem.js。
+
+
+// src/utils/DropHelper.js
+
+export function rollTable(table = []) {
+    if (!Array.isArray(table) || table.length <= 0) {
+        return null;
+    }
+
+    const totalWeight = table.reduce((sum, entry) => {
+        return sum + (entry.weight || 0);
+    }, 0);
+
+    if (totalWeight <= 0) {
+        return null;
+    }
+
+    let roll = Math.random() * totalWeight;
+
+    for (const entry of table) {
+        roll -= (entry.weight || 0);
+
+        if (roll <= 0) {
+            return entry;
+        }
+    }
+
+    return table[table.length - 1] || null;
+}
+
+很好，這個你貼的是：
+
+👉 DropHelper.js（加權抽獎工具）
+✔️ 完全正常
+✔️ 不用改
+✔️ 之後還會用到
+
+🚨 但現在重點不是這個
+你目前卡住的真正問題是：
+
+👉 掉落資料已經改成新系統（DropTables.js）
+👉 但 BushRewardSystem 還在用舊邏輯（寫死 item）
+
+你現在畫面這段👇就是問題核心：
+
+// 20% 掉裝備
+if (Math.random() < 0.2) {
+    extra.itemDrops.push('item_hat_leaf_01');
+}
+❗ 這是「寫死裝備」
+❗ 完全沒用到你剛剛做的 DROP_TABLES
+
+🎯 我們現在要做的事情（很關鍵）
+👉 把這段：
+
+extra.itemDrops.push('item_hat_leaf_01');
+改成：
+
+👉 從 DROP_TABLES 抽
+
+✅ 我直接幫你改「最小可運作版本」
+你照改就會動（不會炸）
+
+第一步：在 BushRewardSystem.js 加這個 import
+你現在有：
+
+import { getDropTable } from '../data/GameData.js';
+👉 再補這個：
+
+import { ITEM_DB } from '../data/GameData.js';
+第二步：在 class 裡新增這個函式（放最下面即可）
+static rollEquipment(stageId, chestType, rarity = 'rare') {
+    const pool = getDropTable(stageId, chestType, rarity);
+
+    if (!Array.isArray(pool) || pool.length === 0) {
+        console.warn('[Drop] 沒有可掉落裝備', { stageId, chestType, rarity });
+        return null;
+    }
+
+    const index = Phaser.Math.Between(0, pool.length - 1);
+    const itemId = pool[index];
+
+    if (!ITEM_DB[itemId]) {
+        console.warn('[Drop] ITEM_DB 不存在', itemId);
+        return null;
+    }
+
+    return itemId;
+}
+第三步：把你那段「寫死裝備」改掉
+找到這段：
+
+if (Math.random() < 0.2) {
+    extra.itemDrops.push('item_hat_leaf_01');
+}
+改成這樣👇（🔥重點）
+if (Math.random() < 0.2) {
+    const itemId = this.rollEquipment('bush_01', 'big', 'rare');
+
+    if (itemId) {
+        extra.itemDrops.push(itemId);
+    }
+}
+💡 為什麼先寫死 'bush_01'？
+因為你現在這個函式：
+
+applyChestRewards(reward)
+👉 還沒有 stageId 傳進來
+
+所以我們先讓它能跑：
+
+'bush_01'
+之後再升級（下一步我會幫你做）
+
+🧪 這一步完成後你會看到什麼
+👉 不再固定掉：
+
+item_hat_leaf_01 ❌
+👉 而是會從：
+
+DropTables.js → bush_01 → big → rare
+👉 隨機抽裝備
+
+⚠️ 一個你一定會踩的坑（先救你）
+你現在 DropTables 可能有這種：
+
+'item_hat_leaf_bush01'
+但你 ITEM_DB 裡沒有
+
+👉 會出現：
+
+[Drop] ITEM_DB 不存在
+✅ 解法（先這樣做）
+👉 DropTables 先改用你現有的：
+
+item_hat_explore_01
+item_cloth_explore_01
+item_fullset_explore_01
+item_hat_tiara_common
+🚀 下一步（等你這步完成）
+下一步我會幫你做：
+
+🔥 真正完整版（你會超有感）
+👉 不再寫死 'bush_01'
+👉 自動用 stageId
+👉 small / big / dream 全接上
+👉 rarity 自動用 DropConfig
+
+👉 你現在只做這 2 件事
+加 rollEquipment() 函式
+
+改掉那段 item_hat_leaf_01
+
+做完跟我說：
+
+👉「掉落有變了」
+
+我幫你直接進入下一個進化版本 🔥
+
+
+掉落有變了
+
+很好，代表主幹接通了 ✅
+現在我們做 第二階段升級：
+
+不要再寫死 'bush_01'，改成真正跟關卡走。
+
+你現在的狀態
+目前大概是這樣：
+
+const itemId = this.rollEquipment('bush_01', 'big', 'rare');
+這只能測試，不能正式用。
+
+下一步要做的目標
+把：
+
+stageId
+
+chestType
+
+rarity
+
+都改成 由 reward / 關卡流程自動決定
+
+第一步：先改 applyChestRewards 的參數
+你現在大概是：
+
+static applyChestRewards(reward) {
+改成：
+
+static applyChestRewards(reward, stageId = 'bush_01') {
+第二步：把寶箱類型整理出來
+在這個函式裡，先補一個小工具函式。
+加在 class 裡就好：
+
+static getChestRarityByType(chestType) {
+    switch (chestType) {
+        case 'small':
+            return 'rare';
+        case 'big':
+            return 'rare';
+        case 'dream':
+            return 'epic';
+        default:
+            return 'rare';
+    }
+}
+這版先簡化：
+
+小寶箱 → rare
+
+大寶箱 → rare
+
+夢幻寶箱 → epic
+
+之後再接 DropConfig 權重版。
+
+第三步：把三種寶箱掉裝都改成走 rollEquipment
+你現在 applyChestRewards(reward, stageId) 裡應該有三段：
+
+pityChest
+
+chest
+
+rareChest
+
+我們一段一段換。
+
+A. 小寶箱
+原本大概只有加水晶：
+
+if ((reward.pityChest || 0) > 0) {
+    extra.crystals += Phaser.Math.Between(2, 4);
+}
+改成：
+
+if ((reward.pityChest || 0) > 0) {
+    extra.crystals += Phaser.Math.Between(2, 4);
+
+    const chestType = 'small';
+    const rarity = this.getChestRarityByType(chestType);
+    const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+    if (itemId) {
+        extra.itemDrops.push(itemId);
+    }
+}
+B. 大寶箱
+把你現在那段：
+
+if ((reward.chest || 0) > 0) {
+    extra.crystals += Phaser.Math.Between(4, 8);
+
+    if (Math.random() < 0.2) {
+        const itemId = this.rollEquipment('bush_01', 'big', 'rare');
+
+        if (itemId) {
+            extra.itemDrops.push(itemId);
+        }
+    }
+}
+改成：
+
+if ((reward.chest || 0) > 0) {
+    extra.crystals += Phaser.Math.Between(4, 8);
+
+    const chestType = 'big';
+    const rarity = this.getChestRarityByType(chestType);
+    const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+    if (itemId) {
+        extra.itemDrops.push(itemId);
+    }
+}
+這樣就不再寫死，也不用 20% 了。
+因為你現在已經是「開到寶箱就抽表」。
+
+C. 夢幻寶箱
+如果你目前有這段：
+
+if ((reward.rareChest || 0) > 0) {
+就改成：
+
+if ((reward.rareChest || 0) > 0) {
+    extra.crystals += Phaser.Math.Between(8, 12);
+    extra.reputation += 1;
+
+    const chestType = 'dream';
+    const rarity = this.getChestRarityByType(chestType);
+    const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+    if (itemId) {
+        extra.itemDrops.push(itemId);
+    }
+}
+第四步：呼叫時把 stageId 傳進去
+你後面一定有地方在呼叫：
+
+BushRewardSystem.applyChestRewards(reward)
+現在要改成：
+
+BushRewardSystem.applyChestRewards(reward, this.stageId)
+或如果不是 scene 裡面，就是傳你當前關卡 id。
+
+這一步做完後會發生什麼
+現在就會變成：
+
+bush_01 開大寶箱 → 抽 DROP_TABLES.bush_01.big.rare
+
+bush_01 開夢幻寶箱 → 抽 DROP_TABLES.bush_01.dream.epic
+
+而不是固定測試值。
+
+你接下來很可能遇到的問題
+1. 同一場開兩個箱子，掉兩件裝
+這是正常的，因為現在是每個箱各抽一次。
+
+2. 抽不到東西
+表示你 DropTables.js 對應池子是空的。
+
+例如：
+
+bush_01 -> dream -> epic = []
+那就不會掉。
+
+3. 抽到 itemId，但卡片沒顯示
+那就不是掉落表問題，而是後面顯示 / inventory 流程要接。
+
+我建議你這一步先測這三件事
+小寶箱會不會掉裝
+
+大寶箱是不是不再固定同一件
+
+夢幻寶箱會不會正常掉
+
+你做完後直接貼 現在的 BushRewardSystem.js，我幫你進一步做：
+fallback 稀有度版
+也就是 legendary 沒東西 → 自動降 epic → rare → common。
+
+
+已上傳的圖像
+沒有看到耶~// src/systems/BushRewardSystem.js
+import { getDropTable } from '../data/GameData.js';
+import { ITEM_DB } from '../data/GameData.js';
+import { DROP_CONFIG } from '../data/DropConfig.js';
+import { rollTable } from '../utils/DropHelper.js';
+
+export default class BushRewardSystem {
+    static applyChestRewards(reward, stageId = 'bush_01') {
+    let extra = {
+        crystals: 0,
+        reputation: 0,
+        itemDrops: []
+    };
+
+    // 🧰 小寶箱
+    if ((reward.pityChest || 0) > 0) {
+        extra.crystals += Phaser.Math.Between(2, 4);
+
+        const chestType = 'small';
+        const rarity = this.getChestRarityByType(chestType);
+        const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+        if (itemId) {
+            extra.itemDrops.push(itemId);
+        }
+    }
+
+    // 🟡 大寶箱
+    if ((reward.chest || 0) > 0) {
+        extra.crystals += Phaser.Math.Between(4, 8);
+
+        const chestType = 'big';
+        const rarity = this.getChestRarityByType(chestType);
+        const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+        if (itemId) {
+            extra.itemDrops.push(itemId);
+        }
+    }
+
+    // 🌈 夢幻寶箱
+    if ((reward.rareChest || 0) > 0) {
+        extra.crystals += Phaser.Math.Between(8, 12);
+        extra.reputation += 1;
+
+        const chestType = 'dream';
+        const rarity = this.getChestRarityByType(chestType);
+        const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+        if (itemId) {
+            extra.itemDrops.push(itemId);
+        }
+    }
+
+    return extra;
+}
+    static buildClearReward(levelData, gameState) {
+        const reward = {
+            crystals: levelData.rewards.clearCrystal,
+            reputation: levelData.rewards.clearReputation,
+            chest: 0,
+            rareChest: 0,
+            pityChest: 0,
+            stageChest: 1,
+            gotGoldBush: gameState.gotGoldBush,
+            fruitTotalLv: 0,
+            rareChestChance: 0,
+            itemDrops: [],
+            chestLootLines: [],
+            chestBonusCrystals: 0,
+            chestBonusReputation: 0,
+            chestBonusItems: 0
+        };
+
+        if (gameState.gotGoldBush) {
+            reward.reputation += 1;
+        }
+
+        return reward;
+    }
+
+    static buildFailReward(levelData) {
+        return {
+            crystals: levelData.rewards.failCrystal,
+            reputation: levelData.rewards.failReputation,
+            chest: 0,
+            rareChest: 0,
+            pityChest: 1,
+            stageChest: 0,
+            gotGoldBush: false,
+            fruitTotalLv: 0,
+            rareChestChance: 0,
+            itemDrops: [],
+            chestLootLines: [],
+            chestBonusCrystals: 0,
+            chestBonusReputation: 0,
+            chestBonusItems: 0
+        };
+    }
+
+        static rollConfigTable(table = []) {
+            return rollTable(table);
+        }
+
+        static applyTableResult(reward, result, gameKey = 'treasure') {
+            if (!reward || !result) return reward;
+
+            reward.itemDrops = reward.itemDrops || [];
+            reward.chestLootLines = reward.chestLootLines || [];
+
+            if (result.type === 'crystals') {
+                reward.crystals = (reward.crystals || 0) + (result.amount || 0);
+                reward.chestBonusCrystals = (reward.chestBonusCrystals || 0) + (result.amount || 0);
+
+                if ((result.amount || 0) > 0) {
+                    reward.chestLootLines.push(💎 +${result.amount});
+                }
+                return reward;
+            }
+
+            if (result.type === 'reputation') {
+                reward.reputation = (reward.reputation || 0) + (result.amount || 0);
+                reward.chestBonusReputation = (reward.chestBonusReputation || 0) + (result.amount || 0);
+
+                if ((result.amount || 0) > 0) {
+                    reward.chestLootLines.push(⭐ +${result.amount});
+                }
+                return reward;
+            }
+
+            if (result.type === 'item') {
+                let itemPool = [];
+
+                if (result.rarity === 'common') {
+                    itemPool = getDropTable(gameKey, 'common');
+                } else if (result.rarity === 'rare') {
+                    itemPool = getDropTable(gameKey, 'rare');
+                } else if (result.rarity === 'epic') {
+                    itemPool = getDropTable(gameKey, 'epic');
+                } else if (result.rarity === 'legendary') {
+                    itemPool = getDropTable(gameKey, 'legendary');
+                } else if (result.rarity === 'stage') {
+                    itemPool = getDropTable(gameKey, 'stage');
+                }
+
+                if (itemPool.length > 0) {
+                    const itemId = Phaser.Utils.Array.GetRandom(itemPool);
+                    reward.itemDrops.push(itemId);
+                    reward.chestBonusItems = (reward.chestBonusItems || 0) + 1;
+                    reward.chestLootLines.push('🎀 +1');
+                }
+
+                return reward;
+            }
+
+            return reward;
+        }
+
+        static applyConfiguredChest(reward, configKey, gameKey = 'treasure') {
+            const chestConfig = DROP_CONFIG?.[configKey];
+            if (!chestConfig?.table) return reward;
+
+            const result = this.rollConfigTable(chestConfig.table);
+            return this.applyTableResult(reward, result, gameKey);
+        }
+
+    static getRareChestChanceByFruitLv(totalFruitLv = 0) {
+        if (totalFruitLv >= 10) return 0.30;
+        if (totalFruitLv >= 6) return 0.18;
+        return 0.08;
+    }
+
+    static applyFruitLvChestBonus(reward, gameState, scene = null) {
+        const totalFruitLv = scene?.calculateCollectedFruitLv
+            ? scene.calculateCollectedFruitLv()
+            : 0;
+
+        const rareChance = this.getRareChestChanceByFruitLv(totalFruitLv);
+
+        reward.fruitTotalLv = totalFruitLv;
+        reward.rareChestChance = rareChance;
+
+        const normalChestCount = reward.chest || 0;
+        let rareChestCount = 0;
+        let finalNormalChestCount = 0;
+
+        for (let i = 0; i < normalChestCount; i++) {
+            if (Math.random() < rareChance) {
+                rareChestCount += 1;
+            } else {
+                finalNormalChestCount += 1;
+            }
+        }
+
+        reward.chest = finalNormalChestCount;
+        reward.rareChest = rareChestCount;
+
+        return reward;
+    }
+
+    static resolveChestLoot(reward, gameKey = 'treasure') {
+        reward.itemDrops = reward.itemDrops || [];
+        reward.chestLootLines = reward.chestLootLines || [];
+
+        const stageChestCount = reward.stageChest || 0;
+        const normalChestCount = reward.chest || 0;
+        const rareChestCount = reward.rareChest || 0;
+        const pityChestCount = reward.pityChest || 0;
+
+        for (let i = 0; i < stageChestCount; i++) {
+            this.applyConfiguredChest(reward, 'stageChest', gameKey);
+        }
+
+        for (let i = 0; i < rareChestCount; i++) {
+            this.rollRareChestLoot(reward, gameKey);
+        }
+
+        for (let i = 0; i < pityChestCount; i++) {
+            this.rollPityChestLoot(reward, gameKey);
+        }
+
+        return reward;
+    }
+
+        static rollNormalChestLoot(reward, gameKey = 'treasure') {
+                return this.applyConfiguredChest(reward, 'normalChest', gameKey);
+            }
+
+            static rollRareChestLoot(reward, gameKey = 'treasure') {
+                return this.applyConfiguredChest(reward, 'rareChest', gameKey);
+            }
+
+            static rollPityChestLoot(reward, gameKey = 'treasure') {
+                return this.applyConfiguredChest(reward, 'pityChest', gameKey);
+            }
+        static rollEquipment(stageId, chestType, rarity = 'rare') {
+            const pool = getDropTable(stageId, chestType, rarity);
+
+            if (!Array.isArray(pool) || pool.length === 0) {
+                console.warn('[Drop] 沒有可掉落裝備', { stageId, chestType, rarity });
+                return null;
+            }
+
+            const index = Phaser.Math.Between(0, pool.length - 1);
+            const itemId = pool[index];
+
+            if (!ITEM_DB[itemId]) {
+                console.warn('[Drop] ITEM_DB 不存在', itemId);
+                return null;
+            }
+
+            return itemId;
+        }       
+
+        static getChestRarityByType(chestType) {
+            switch (chestType) {
+                case 'small':
+                    return 'rare';
+                case 'big':
+                    return 'rare';
+                case 'dream':
+                    return 'epic';
+                default:
+                    return 'rare';
+            }
+        }
+}
+
+有，我看到了。
+你不是「沒找到」，而是 你現在專案裡有兩套掉落流程同時存在，所以才會看起來對不上。
+
+你現在的 BushRewardSystem 有兩條路
+新路
+你剛加的這條：
+
+static applyChestRewards(reward, stageId = 'bush_01')
+這條有用到：
+
+stageId
+
+chestType
+
+rollEquipment()
+
+舊路
+下面這整串舊系統：
+
+applyConfiguredChest(...)
+applyTableResult(...)
+resolveChestLoot(...)
+rollRareChestLoot(...)
+rollPityChestLoot(...)
+這條還在用：
+
+getDropTable(gameKey, 'rare')
+也就是：
+
+gameKey = 'treasure'
+
+舊版 DROP_CONFIG
+
+舊版 GameData.js 掉落池概念
+
+所以你現在真正的情況是
+你加好的 applyChestRewards(reward, stageId) 可能根本還沒被呼叫到。
+
+也就是說，你找不到這行：
+
+BushRewardSystem.applyChestRewards(reward)
+很可能是因為目前場景其實在呼叫的是：
+
+BushRewardSystem.resolveChestLoot(...)
+而不是 applyChestRewards(...)。
+
+結論先講
+你現在不用找「第四步那個呼叫」
+因為目前主流程看起來 不是走 applyChestRewards。
+
+你現在真正該做的是：
+
+二選一
+A. 保留舊系統，慢慢改舊系統接 stageId
+或
+B. 直接停用舊系統，正式改走 applyChestRewards
+
+我建議你走 A：先穩
+因為你現在這份檔案裡，resolveChestLoot() 很明顯已經接在其他地方了。
+直接硬切成 applyChestRewards() 反而比較容易炸。
+
+所以我們現在應該改的是：
+
+讓舊系統也吃 stageId
+你這份檔案最明顯的問題
+這段：
+
+static applyTableResult(reward, result, gameKey = 'treasure')
+它還在用 gameKey
+
+以及這段：
+
+itemPool = getDropTable(gameKey, 'rare');
+這完全是舊版格式。
+
+正確改法
+我們要把這一條舊鏈改成：
+
+gameKey 改成 stageId
+
+再補 chestType
+
+然後從新 DropTables.js 抽
+
+你現在先做這個，最穩
+第 1 步：把這個函式簽名改掉
+把：
+
+static applyTableResult(reward, result, gameKey = 'treasure') {
+改成：
+
+static applyTableResult(reward, result, stageId = 'bush_01', chestType = 'big') {
+第 2 步：把裡面這大段舊邏輯換掉
+把這段：
+
+if (result.type === 'item') {
+    let itemPool = [];
+
+    if (result.rarity === 'common') {
+        itemPool = getDropTable(gameKey, 'common');
+    } else if (result.rarity === 'rare') {
+        itemPool = getDropTable(gameKey, 'rare');
+    } else if (result.rarity === 'epic') {
+        itemPool = getDropTable(gameKey, 'epic');
+    } else if (result.rarity === 'legendary') {
+        itemPool = getDropTable(gameKey, 'legendary');
+    } else if (result.rarity === 'stage') {
+        itemPool = getDropTable(gameKey, 'stage');
+    }
+
+    if (itemPool.length > 0) {
+        const itemId = Phaser.Utils.Array.GetRandom(itemPool);
+        reward.itemDrops.push(itemId);
+        reward.chestBonusItems = (reward.chestBonusItems || 0) + 1;
+        reward.chestLootLines.push('🎀 +1');
+    }
+
+    return reward;
+}
+整段替換成：
+
+if (result.type === 'item') {
+    const rarity = result.rarity === 'stage' ? 'rare' : (result.rarity || 'rare');
+    const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+    if (itemId) {
+        reward.itemDrops.push(itemId);
+        reward.chestBonusItems = (reward.chestBonusItems || 0) + 1;
+        reward.chestLootLines.push('🎀 +1');
+    }
+
+    return reward;
+}
+第 3 步：改 applyConfiguredChest
+把：
+
+static applyConfiguredChest(reward, configKey, gameKey = 'treasure') {
+改成：
+
+static applyConfiguredChest(reward, configKey, stageId = 'bush_01') {
+然後把最後一行：
+
+return this.applyTableResult(reward, result, gameKey);
+改成：
+
+let chestType = 'big';
+
+if (configKey === 'pityChest') chestType = 'small';
+if (configKey === 'rareChest') chestType = 'dream';
+if (configKey === 'stageChest') chestType = 'big';
+if (configKey === 'normalChest') chestType = 'big';
+
+return this.applyTableResult(reward, result, stageId, chestType);
+第 4 步：改 resolveChestLoot
+把：
+
+static resolveChestLoot(reward, gameKey = 'treasure') {
+改成：
+
+static resolveChestLoot(reward, stageId = 'bush_01') {
+然後裡面這幾行：
+
+this.applyConfiguredChest(reward, 'stageChest', gameKey);
+this.rollRareChestLoot(reward, gameKey);
+this.rollPityChestLoot(reward, gameKey);
+改成：
+
+this.applyConfiguredChest(reward, 'stageChest', stageId);
+this.rollRareChestLoot(reward, stageId);
+this.rollPityChestLoot(reward, stageId);
+第 5 步：改下面三個函式
+把：
+
+static rollNormalChestLoot(reward, gameKey = 'treasure') {
+    return this.applyConfiguredChest(reward, 'normalChest', gameKey);
+}
+
+static rollRareChestLoot(reward, gameKey = 'treasure') {
+    return this.applyConfiguredChest(reward, 'rareChest', gameKey);
+}
+
+static rollPityChestLoot(reward, gameKey = 'treasure') {
+    return this.applyConfiguredChest(reward, 'pityChest', gameKey);
+}
+改成：
+
+static rollNormalChestLoot(reward, stageId = 'bush_01') {
+    return this.applyConfiguredChest(reward, 'normalChest', stageId);
+}
+
+static rollRareChestLoot(reward, stageId = 'bush_01') {
+    return this.applyConfiguredChest(reward, 'rareChest', stageId);
+}
+
+static rollPityChestLoot(reward, stageId = 'bush_01') {
+    return this.applyConfiguredChest(reward, 'pityChest', stageId);
+}
+這樣改完代表什麼
+代表你現在真正接上的會是這條：
+
+resolveChestLoot → applyConfiguredChest → applyTableResult → rollEquipment
+
+也就是：
+舊主流程保留，但掉裝已經改接新 DropTables
+
+為什麼我現在不叫你改 scene 呼叫
+因為目前還沒看到 scene 裡的呼叫點。
+但從你這份檔案看起來，最可能被真正使用的是 resolveChestLoot()，不是 applyChestRewards()。
+
+所以先把主幹改對，比去找不存在的呼叫點有用。
+
+你這份檔案還有一個小提醒
+你現在有兩套會發裝的邏輯：
+
+applyChestRewards(...)
+
+resolveChestLoot(...)
+
+之後最好留一套就好，不然很容易重複發獎。
+但現在先不要刪，先讓系統穩定運作。
+
+你先照我上面這 5 步改。
+改完後把 DropTables.js 再貼給我，我順手幫你檢查 item id 有沒有對上 ITEM_DB。
+
+
+已上傳的圖像
+// src/systems/BushRewardSystem.js
+import { getDropTable } from '../data/GameData.js';
+import { ITEM_DB } from '../data/GameData.js';
+import { DROP_CONFIG } from '../data/DropConfig.js';
+import { rollTable } from '../utils/DropHelper.js';
+
+export default class BushRewardSystem {
+    static applyChestRewards(reward, stageId = 'bush_01') {
+    let extra = {
+        crystals: 0,
+        reputation: 0,
+        itemDrops: []
+    };
+
+    // 🧰 小寶箱
+    if ((reward.pityChest || 0) > 0) {
+        extra.crystals += Phaser.Math.Between(2, 4);
+
+        const chestType = 'small';
+        const rarity = this.getChestRarityByType(chestType);
+        const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+        if (itemId) {
+            extra.itemDrops.push(itemId);
+        }
+    }
+
+    // 🟡 大寶箱
+    if ((reward.chest || 0) > 0) {
+        extra.crystals += Phaser.Math.Between(4, 8);
+
+        const chestType = 'big';
+        const rarity = this.getChestRarityByType(chestType);
+        const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+        if (itemId) {
+            extra.itemDrops.push(itemId);
+        }
+    }
+
+    // 🌈 夢幻寶箱
+    if ((reward.rareChest || 0) > 0) {
+        extra.crystals += Phaser.Math.Between(8, 12);
+        extra.reputation += 1;
+
+        const chestType = 'dream';
+        const rarity = this.getChestRarityByType(chestType);
+        const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+        if (itemId) {
+            extra.itemDrops.push(itemId);
+        }
+    }
+
+    return extra;
+}
+    static buildClearReward(levelData, gameState) {
+        const reward = {
+            crystals: levelData.rewards.clearCrystal,
+            reputation: levelData.rewards.clearReputation,
+            chest: 0,
+            rareChest: 0,
+            pityChest: 0,
+            stageChest: 1,
+            gotGoldBush: gameState.gotGoldBush,
+            fruitTotalLv: 0,
+            rareChestChance: 0,
+            itemDrops: [],
+            chestLootLines: [],
+            chestBonusCrystals: 0,
+            chestBonusReputation: 0,
+            chestBonusItems: 0
+        };
+
+        if (gameState.gotGoldBush) {
+            reward.reputation += 1;
+        }
+
+        return reward;
+    }
+
+    static buildFailReward(levelData) {
+        return {
+            crystals: levelData.rewards.failCrystal,
+            reputation: levelData.rewards.failReputation,
+            chest: 0,
+            rareChest: 0,
+            pityChest: 1,
+            stageChest: 0,
+            gotGoldBush: false,
+            fruitTotalLv: 0,
+            rareChestChance: 0,
+            itemDrops: [],
+            chestLootLines: [],
+            chestBonusCrystals: 0,
+            chestBonusReputation: 0,
+            chestBonusItems: 0
+        };
+    }
+
+        static rollConfigTable(table = []) {
+            return rollTable(table);
+        }
+
+        static applyTableResult(reward, result, stageId = 'bush_01', chestType = 'big') {
+            if (!reward || !result) return reward;
+
+            reward.itemDrops = reward.itemDrops || [];
+            reward.chestLootLines = reward.chestLootLines || [];
+
+            if (result.type === 'crystals') {
+                reward.crystals = (reward.crystals || 0) + (result.amount || 0);
+                reward.chestBonusCrystals = (reward.chestBonusCrystals || 0) + (result.amount || 0);
+
+                if ((result.amount || 0) > 0) {
+                    reward.chestLootLines.push(💎 +${result.amount});
+                }
+                return reward;
+            }
+
+            if (result.type === 'reputation') {
+                reward.reputation = (reward.reputation || 0) + (result.amount || 0);
+                reward.chestBonusReputation = (reward.chestBonusReputation || 0) + (result.amount || 0);
+
+                if ((result.amount || 0) > 0) {
+                    reward.chestLootLines.push(⭐ +${result.amount});
+                }
+                return reward;
+            }
+
+            if (result.type === 'item') {
+                const rarity = result.rarity === 'stage' ? 'rare' : (result.rarity || 'rare');
+                const itemId = this.rollEquipment(stageId, chestType, rarity);
+
+                if (itemId) {
+                    reward.itemDrops.push(itemId);
+                    reward.chestBonusItems = (reward.chestBonusItems || 0) + 1;
+                    reward.chestLootLines.push('🎀 +1');
+                }
+
+                return reward;
+            }
+
+            return reward;
+        }
+
+        static applyConfiguredChest(reward, configKey, stageId = 'bush_01') {
+            const chestConfig = DROP_CONFIG?.[configKey];
+            if (!chestConfig?.table) return reward;
+
+            const result = this.rollConfigTable(chestConfig.table);
+            let chestType = 'big';
+
+            if (configKey === 'pityChest') chestType = 'small';
+            if (configKey === 'rareChest') chestType = 'dream';
+            if (configKey === 'stageChest') chestType = 'big';
+            if (configKey === 'normalChest') chestType = 'big';
+
+            return this.applyTableResult(reward, result, stageId, chestType);
+        }
+
+    static getRareChestChanceByFruitLv(totalFruitLv = 0) {
+        if (totalFruitLv >= 10) return 0.30;
+        if (totalFruitLv >= 6) return 0.18;
+        return 0.08;
+    }
+
+    static applyFruitLvChestBonus(reward, gameState, scene = null) {
+        const totalFruitLv = scene?.calculateCollectedFruitLv
+            ? scene.calculateCollectedFruitLv()
+            : 0;
+
+        const rareChance = this.getRareChestChanceByFruitLv(totalFruitLv);
+
+        reward.fruitTotalLv = totalFruitLv;
+        reward.rareChestChance = rareChance;
+
+        const normalChestCount = reward.chest || 0;
+        let rareChestCount = 0;
+        let finalNormalChestCount = 0;
+
+        for (let i = 0; i < normalChestCount; i++) {
+            if (Math.random() < rareChance) {
+                rareChestCount += 1;
+            } else {
+                finalNormalChestCount += 1;
+            }
+        }
+
+        reward.chest = finalNormalChestCount;
+        reward.rareChest = rareChestCount;
+
+        return reward;
+    }
+
+    static resolveChestLoot(reward, stageId = 'bush_01') {
+        reward.itemDrops = reward.itemDrops || [];
+        reward.chestLootLines = reward.chestLootLines || [];
+
+        const stageChestCount = reward.stageChest || 0;
+        const normalChestCount = reward.chest || 0;
+        const rareChestCount = reward.rareChest || 0;
+        const pityChestCount = reward.pityChest || 0;
+
+        for (let i = 0; i < stageChestCount; i++) {
+            this.applyConfiguredChest(reward, 'stageChest', gameKey);
+        }
+
+        for (let i = 0; i < rareChestCount; i++) {
+            this.rollRareChestLoot(reward, gameKey);
+        }
+
+        for (let i = 0; i < pityChestCount; i++) {
+            this.rollPityChestLoot(reward, gameKey);
+        }
+
+        return reward;
+    }
+
+        static rollNormalChestLoot(reward, gameKey = 'treasure') {
+                return this.applyConfiguredChest(reward, 'normalChest', gameKey);
+            }
+
+            static rollRareChestLoot(reward, gameKey = 'treasure') {
+                return this.applyConfiguredChest(reward, 'rareChest', gameKey);
+            }
+
+            static rollPityChestLoot(reward, gameKey = 'treasure') {
+                return this.applyConfiguredChest(reward, 'pityChest', gameKey);
+            }
+        static rollEquipment(stageId, chestType, rarity = 'rare') {
+            const pool = getDropTable(stageId, chestType, rarity);
+
+            if (!Array.isArray(pool) || pool.length === 0) {
+                console.warn('[Drop] 沒有可掉落裝備', { stageId, chestType, rarity });
+                return null;
+            }
+
+            const index = Phaser.Math.Between(0, pool.length - 1);
+            const itemId = pool[index];
+
+            if (!ITEM_DB[itemId]) {
+                console.warn('[Drop] ITEM_DB 不存在', itemId);
+                return null;
+            }
+
+            return itemId;
+        }       
+
+        static getChestRarityByType(chestType) {
+            switch (chestType) {
+                case 'small':
+                    return 'rare';
+                case 'big':
+                    return 'rare';
+                case 'dream':
+                    return 'epic';
+                default:
+                    return 'rare';
+            }
+        }
+}
+
+我又炸了~先不要做~!我們聊聊~這種模式之後還要改新版的是嘛?
+
+對，你這種模式之後還是要改新版。
+而且你剛剛會炸，很正常，因為現在是：
+
+舊主流程還在跑 + 你又插了一半新系統進去
+所以變成半新半舊，最容易亂。
+
+你現在先停下來是對的。
+
+先直接回答你
+是，之後還要改新版嗎？
+要。
+
+但不是現在這種「邊跑邊補」的改法。
+現在比較好的方式是：
+
+方案 A：維持舊系統到底
+先把遊戲做完
+
+掉落先能用就好
+
+之後再重構
+
+方案 B：現在就正式重構掉落系統
+把舊的 gameKey 流程整個淘汰
+
+統一改成 stageId + chestType + rarity
+
+但會需要一口氣整理比較多地方
+
+我看你目前專案狀態，最適合的是
+先走 A，比較穩
+原因很簡單：
+
+你現在已經有很多東西都接好了：
+
+DROP_CONFIG
+
+resolveChestLoot()
+
+applyConfiguredChest()
+
+applyTableResult()
+
+這一套雖然舊，但它已經接在主流程裡。
+現在硬把核心抽掉，很容易連結算、保底、掉落文字一起炸。
+
+你剛剛炸掉的本質是什麼
+你現在這裡：
+
+static resolveChestLoot(reward, stageId = 'bush_01') {
+但裡面還寫：
+
+this.applyConfiguredChest(reward, 'stageChest', gameKey);
+this.rollRareChestLoot(reward, gameKey);
+this.rollPityChestLoot(reward, gameKey);
+問題不是觀念錯
+而是：
+
+你把函式參數改成 stageId 了，但裡面還留著 gameKey
+所以這一定炸。
+
+也就是說，這不是系統設計錯，是改到一半。
+
+我們先不要繼續改 code
+你現在最需要的是先決定「路線」。
+
+我幫你把兩條路講白
+路線 1：先完成遊戲，再重構掉落
+這條最穩。
+
+做法
+保留目前舊系統
+
+DROP_CONFIG 照跑
+
+GameData.js 的舊 DROP_TABLES 也先留著
+
+新建的 DropTables.js 先放著不用
+
+等遊戲主體完成 90% 再重構
+
+優點
+不容易炸
+
+你現在可以繼續做內容、關卡、UI、掉落體驗
+
+不會卡死在系統工程
+
+缺點
+之後還是要重整一次
+
+會有一點技術債
+
+路線 2：現在就把掉落系統重構到底
+這條會比較乾淨，但比較累。
+
+做法
+BushRewardSystem 全部統一改成新格式
+
+gameKey 全消失
+
+DropTables.js 成為唯一掉落資料來源
+
+GameData.js 只保留 ITEM_DB
+
+DROP_CONFIG 只管機率，不管 item 池
+
+優點
+結構乾淨
+
+之後擴關卡最舒服
+
+符合你現在要做「關卡限定掉落」
+
+缺點
+短期比較容易爆
+
+你現在新手階段做這種重構，挫折感會高
+
+我真心建議你現在選哪條？
+選 路線 1
+因為你現在真正缺的不是「最漂亮架構」，
+而是：
+
+把遊戲先做成一個完整、能玩、能掉裝、能結算、能進下一關的版本。
+
+你的進度其實已經很不錯了，現在如果一直卡在底層重構，會很傷節奏。
+
+我建議的實際策略
+現在：
+先回退到穩定版
+也就是：
+
+BushRewardSystem.js 恢復成原本能跑的版本
+
+掉落先用舊 gameKey
+
+新版 DropTables.js 先保留，不接主流程
+
+之後：
+等你把下面這些先完成，再回來重構：
+
+關卡掉落內容完整
+
+UI 收尾
+
+重複裝備提示 UI
+
+經濟平衡
+
+關卡限定掉落需求更明確
+
+換句話說
+你現在不是不能做新版，
+而是 現在做新版的時機不好。
+
+這種「系統重構」最適合在：
+
+主玩法穩了
+
+資料也差不多定型了
+
+你知道自己真的要什麼格式了
+
+你現在雖然知道方向，但資料跟流程其實還在變，這時候硬重構，很容易做兩次工。
+
+我給你的最務實建議
+現在先做這個順序
+把 BushRewardSystem 回退到能跑版
+
+先用舊掉落系統把內容填滿
+
+完成遊戲 90%
+
+再做「掉落系統 v2 重構」
+
+而且你現在的新版目標，我幫你講成一句話
+之後真正要重構的版本是：
+
+DROP_CONFIG 決定抽到什麼類型獎勵；DropTables 決定這一關這個寶箱可以掉哪些裝備。
+
+這個方向是對的。
+只是現在先不用硬接。
+
+我建議你下一步就做這個
+你先把目前 BushRewardSystem.js 回退到上一次能跑的版本。
+然後我們不要碰掉落底層了，直接改做：
+
+整理目前舊版掉落池內容
+也就是先把：
+
+treasure
+
+firefly
+
+campfire
+
+constellation
+
+這些掉落內容補完整。
+
+這樣最穩。
+
+
+照你建議的繼續吧?  從我炸掉的地方開始~我沒經驗你不能跳太快~能給我直接貼上最好
+
+
+已思考 21s
+可以，我這次不跳快。
+我們先做一個**「止血版」：先把你炸掉的地方修回穩定可跑**，先不要碰新版重構。
+
+你現在直接把 src/systems/BushRewardSystem.js 全部覆蓋 成下面這版。
+
+// src/systems/BushRewardSystem.js
+import { ITEM_DB } from '../data/GameData.js';
+import { DROP_CONFIG } from '../data/DropConfig.js';
+import { rollTable } from '../utils/DropHelper.js';
+
+export default class BushRewardSystem {
+    static buildClearReward(levelData, gameState) {
+        const reward = {
+            crystals: levelData.rewards.clearCrystal,
+            reputation: levelData.rewards.clearReputation,
+            chest: 0,
+            rareChest: 0,
+            pityChest: 0,
+            stageChest: 1,
+            gotGoldBush: gameState.gotGoldBush,
+            fruitTotalLv: 0,
+            rareChestChance: 0,
+            itemDrops: [],
+            chestLootLines: [],
+            chestBonusCrystals: 0,
+            chestBonusReputation: 0,
+            chestBonusItems: 0
+        };
+
+        if (gameState.gotGoldBush) {
+            reward.reputation += 1;
+        }
+
+        return reward;
+    }
+
+    static buildFailReward(levelData) {
+        return {
+            crystals: levelData.rewards.failCrystal,
+            reputation: levelData.rewards.failReputation,
+            chest: 0,
+            rareChest: 0,
+            pityChest: 1,
+            stageChest: 0,
+            gotGoldBush: false,
+            fruitTotalLv: 0,
+            rareChestChance: 0,
+            itemDrops: [],
+            chestLootLines: [],
+            chestBonusCrystals: 0,
+            chestBonusReputation: 0,
+            chestBonusItems: 0
+        };
+    }
+
+    static rollConfigTable(table = []) {
+        return rollTable(table);
+    }
+
+    static getRareChestChanceByFruitLv(totalFruitLv = 0) {
+        if (totalFruitLv >= 10) return 0.30;
+        if (totalFruitLv >= 6) return 0.18;
+        return 0.08;
+    }
+
+    static applyFruitLvChestBonus(reward, gameState, scene = null) {
+        const totalFruitLv = scene?.calculateCollectedFruitLv
+            ? scene.calculateCollectedFruitLv()
+            : 0;
+
+        const rareChance = this.getRareChestChanceByFruitLv(totalFruitLv);
+
+        reward.fruitTotalLv = totalFruitLv;
+        reward.rareChestChance = rareChance;
+
+        const normalChestCount = reward.chest || 0;
+        let rareChestCount = 0;
+        let finalNormalChestCount = 0;
+
+        for (let i = 0; i < normalChestCount; i++) {
+            if (Math.random() < rareChance) {
+                rareChestCount += 1;
+            } else {
+                finalNormalChestCount += 1;
+            }
+        }
+
+        reward.chest = finalNormalChestCount;
+        reward.rareChest = rareChestCount;
+
+        return reward;
+    }
+
+    // 先用舊系統邏輯，但不要依賴 GameData 裡舊 DROP_TABLES，直接從 ITEM_DB 篩
+    static getItemPoolByGameKey(gameKey = 'treasure', rarity = 'rare') {
+        const pool = Object.values(ITEM_DB)
+            .filter(item => item.category === 'equipment')
+            .filter(item => item.rarity === rarity)
+            .filter(item => item.source !== 'secret')
+            .filter(item => {
+                // global 裝可共通掉落
+                if (item.source === 'global') return true;
+                return item.source === gameKey;
+            })
+            .map(item => item.id);
+
+        return pool;
+    }
+
+    static applyTableResult(reward, result, gameKey = 'treasure') {
+        if (!reward || !result) return reward;
+
+        reward.itemDrops = reward.itemDrops || [];
+        reward.chestLootLines = reward.chestLootLines || [];
+
+        if (result.type === 'crystals') {
+            reward.crystals = (reward.crystals || 0) + (result.amount || 0);
+            reward.chestBonusCrystals = (reward.chestBonusCrystals || 0) + (result.amount || 0);
+
+            if ((result.amount || 0) > 0) {
+                reward.chestLootLines.push(`💎 +${result.amount}`);
+            }
+            return reward;
+        }
+
+        if (result.type === 'reputation') {
+            reward.reputation = (reward.reputation || 0) + (result.amount || 0);
+            reward.chestBonusReputation = (reward.chestBonusReputation || 0) + (result.amount || 0);
+
+            if ((result.amount || 0) > 0) {
+                reward.chestLootLines.push(`⭐ +${result.amount}`);
+            }
+            return reward;
+        }
+
+        if (result.type === 'item') {
+            let rarity = result.rarity || 'rare';
+
+            // 舊 stage 類型先暫時當 rare 處理，避免炸掉
+            if (rarity === 'stage') {
+                rarity = 'rare';
+            }
+
+            const itemPool = this.getItemPoolByGameKey(gameKey, rarity);
+
+            if (itemPool.length > 0) {
+                const itemId = Phaser.Utils.Array.GetRandom(itemPool);
+                reward.itemDrops.push(itemId);
+                reward.chestBonusItems = (reward.chestBonusItems || 0) + 1;
+                reward.chestLootLines.push('🎀 +1');
+            } else {
+                console.warn('[BushRewardSystem] 找不到可掉落裝備池', { gameKey, rarity });
+            }
+
+            return reward;
+        }
+
+        return reward;
+    }
+
+    static applyConfiguredChest(reward, configKey, gameKey = 'treasure') {
+        const chestConfig = DROP_CONFIG?.[configKey];
+        if (!chestConfig?.table) return reward;
+
+        const result = this.rollConfigTable(chestConfig.table);
+        return this.applyTableResult(reward, result, gameKey);
+    }
+
+    static resolveChestLoot(reward, gameKey = 'treasure') {
+        reward.itemDrops = reward.itemDrops || [];
+        reward.chestLootLines = reward.chestLootLines || [];
+
+        const stageChestCount = reward.stageChest || 0;
+        const normalChestCount = reward.chest || 0;
+        const rareChestCount = reward.rareChest || 0;
+        const pityChestCount = reward.pityChest || 0;
+
+        for (let i = 0; i < stageChestCount; i++) {
+            this.applyConfiguredChest(reward, 'stageChest', gameKey);
+        }
+
+        for (let i = 0; i < normalChestCount; i++) {
+            this.rollNormalChestLoot(reward, gameKey);
+        }
+
+        for (let i = 0; i < rareChestCount; i++) {
+            this.rollRareChestLoot(reward, gameKey);
+        }
+
+        for (let i = 0; i < pityChestCount; i++) {
+            this.rollPityChestLoot(reward, gameKey);
+        }
+
+        return reward;
+    }
+
+    static rollNormalChestLoot(reward, gameKey = 'treasure') {
+        return this.applyConfiguredChest(reward, 'normalChest', gameKey);
+    }
+
+    static rollRareChestLoot(reward, gameKey = 'treasure') {
+        return this.applyConfiguredChest(reward, 'rareChest', gameKey);
+    }
+
+    static rollPityChestLoot(reward, gameKey = 'treasure') {
+        return this.applyConfiguredChest(reward, 'pityChest', gameKey);
+    }
+}
+接著只做兩件事。
+
+第一件，先不要再動 DropTables.js。
+它先留著，但現在先不接主流程。
+
+第二件，去測試：
+
+進關後結算會不會報錯
+
+小寶箱 / 大寶箱 / 夢幻寶箱有沒有正常出獎勵
+
+itemDrops 有沒有正常拿到裝備
+
+你這版如果能跑，代表我們先把系統穩住了。
+你測完只要回我一句：「已恢復能跑」 或 把報錯截圖貼給我。
+
+
+已恢復能跑
+
+太好了，先穩住最重要 ✅
+
+你現在的狀態是：
+
+BushRewardSystem 已回到可跑版
+
+掉落系統先用穩定舊流程
+
+DropTables.js 先保留，暫時不接主流程
+
+目前不再卡在底層重構
+
+下一步最適合做什麼
+照剛剛的策略，現在不要再碰系統重構，改做：
+
+整理目前舊版掉落內容
+也就是把現有這些 gameKey 的裝備池補完整：
+
+treasure
+
+firefly
+
+campfire
+
+constellation
+
+animals
+
+因為你現在 BushRewardSystem 已經會用這個規則抽：
+
+來源 = 該 gameKey
+
+允許 global
+
+排除 secret
+
+依 rarity 過濾
+
+所以接下來你只要把 ITEM_DB 的內容補好，舊系統就能穩穩跑。
+
+你現在的實際問題
+你目前 ITEM_DB 裡大多數裝備都是：
+
+rare
+
+某些小遊戲來源已經有
+
+epic / legendary 很少
+
+animals 幾乎空
+
+所以就會出現：
+
+有些箱子抽 epic 時可能沒東西
+
+某些遊戲池太小，掉落感不夠豐富
+
+我建議的最穩順序
+第 1 步
+先不要新增新檔案，直接整理 ITEM_DB
+
+目標不是一次做很大，而是先讓每個 gameKey 至少都有：
+
+2~4 件 rare
+
+1 件 epic（之後可補）
+
+legendary 先可空著
+
+secret 繼續只留給彩蛋
+
+我會怎麼帶你做
+最不容易炸的方式是：
+
+先從 treasure 開始補池
+因為你現在主玩法最完整的就是草叢尋寶 / treasure 系列。
+
+我們先把 treasure 變成比較完整：
+
+rare：維持現有
+
+epic：補 1~2 件
+
+global：保留共通件
+
+不碰 secret
+
+你現在最適合的下一個任務
+我建議直接做：
+
+補 ITEM_DB 的 treasure 掉落內容
+也就是我幫你直接寫一批可貼上的裝備資料，讓你：
+
+掉落池更完整
+
+寶箱更有期待感
+
+不動主系統
+
+風險最低
+
+建議你現在這樣接
+下一則我可以直接給你：
+
+《GameData.js 可直接貼上的 treasure 裝備補強版》
+內容會是：
+
+新增 1~2 件 treasure 的 epic
+
+補 1 件 global 的 epic
+
+命名與你現在資料風格一致
+
+不破壞現有系統
+
+你直接貼進 ITEM_DB 就能用。
+你回我：
+
+「先補 treasure 掉落池」
+
+我就直接給你可貼上的那段。
+
+
+forest equipment export readyREADME
+
+
+這份資料能用嗎? 命名可能有誤? 幫我修改 ，tool先不管她，之後預計做收藏品，還是你有好建議?
+
+
+已思考 1m 36s
+可以用，但建議先做一輪命名統一，不然之後擴充掉落表、收藏品、匯出 JSON 時會越來越亂。
+
+我幫你看過這份表，整體架構其實不錯，已經有：
+
+equipment_master 主資料表
+
+export_ready 匯出表
+
+lookups 下拉選單
+
+field_map 說明
+
+這些都能繼續用。問題主要是少數 id 命名和稀有度字串不一致。
+
+我先幫你改好一份。
+
+下載這份修正版：
+forest_equipment_export_ready_corrected.xlsx
+
+
+
+README
+lookups
+equipment_master
+export_ready
+field_map
+
+我改了這幾個地方：
+
+item_hat_common_tiara → item_hat_tiara_global
+
+item_cloth_common_fairy → item_cloth_fairy_firefly
+
+item_fullset_secret_guard → item_fullset_guard_secret
+
+legend → legendary
+
+這幾個是最明顯會影響你後續一致性的地方。
+
+你現在這份資料表可以繼續當主表使用，原因是：
+
+欄位設計夠完整
+
+exportEnabled 很實用
+
+sortOrder、gameKey 也適合後續整理
+
+你之後要接 ITEM_DB、匯出 JSON 都方便
+
+不過我建議你之後把命名規則固定成這一條，不要再飄：
+
+item_[slot]_[name]_[source]
+例如：
+
+item_hat_tiara_global
+
+item_cloth_fairy_firefly
+
+item_fullset_guard_secret
+
+這樣比把 rarity 寫進 id 穩很多，因為rarity 會改，source 比較穩。
+
+你問到 tool，我建議現在先不要硬塞進裝備系統。
+比較好的方向是：
+
+裝備 和 收藏品 之後分開。
+
+我會建議你未來拆成：
+
+equipment：真的會裝備上去，會影響能力
+
+collectible：圖鑑、紀念物、彩蛋、成就獎勵
+
+tool：若以後會有功能道具，再獨立一類；若只是展示感收藏，乾脆併到 collectible
+
+也就是說，你現在表裡的 tool 欄位先留著可以，但未來很可能會搬去 collectible 系統。這樣會比現在直接硬接裝備池更乾淨。
+
+我對你現在的建議是：
+
+先用我修好的這份繼續整理裝備資料。
+
+tool 先保留資料，但先不要接掉落主流程。
+
+等你開始做圖鑑時，再新增一份 collectible_master，不要跟 equipment_master 混在一起。
+
+你要的話，我下一步可以直接幫你規劃一份**《equipment / collectible 分表設計》**，讓你之後不會再重整一次。
+
+
+好的~下一步
+
+很好，這一步我們不要再碰系統🔥
+我們來做一個超關鍵但安全的升級：資料結構升級（未來不會再炸）
+
+🎯 這一步的目標
+👉 讓你之後可以同時支援：
+
+👗 裝備（equipment）
+
+📖 收藏品（collectible）
+
+🧰 工具（tool，可選）
+
+而且不會再動到 BushRewardSystem
+
+🧠 核心觀念（你先理解這個就夠）
+現在你的系統其實是：
+
+ITEM_DB → 所有東西都混在一起
+之後會變成：
+
+ITEM_DB → 只放「裝備」
+COLLECTIBLE_DB → 放收藏品
+(未來) TOOL_DB → 放功能道具
+👉 分表，而不是硬塞一張表
+
+🚀 我帶你做「最小升級版」（不會炸）
+我們只做一件事：
+
+👉 新增一個檔案：CollectibleData.js
+📁 第一步：建立檔案
+在這裡：
+
+src/data/
+新增：
+
+CollectibleData.js
+📄 第二步：直接貼這段（可用版）
+// src/data/CollectibleData.js
+
+/**
+ * 收藏品系統（圖鑑 / 彩蛋 / 紀念物）
+ * 
+ * 與裝備分離，不影響戰鬥或掉落平衡
+ */
+
+export const COLLECTIBLE_DB = {
+
+    col_bug_leaf_01: {
+        id: 'col_bug_leaf_01',
+        name: '小葉蟲',
+        category: 'collectible',
+        group: 'bush',
+        rarity: 'common',
+        icon: 'col_bug_leaf_01',
+        desc: '躲在草叢裡的小蟲。',
+    },
+
+    col_bug_red_01: {
+        id: 'col_bug_red_01',
+        name: '紅色小蟲',
+        category: 'collectible',
+        group: 'bush',
+        rarity: 'rare',
+        icon: 'col_bug_red_01',
+        desc: '顏色鮮豔的小蟲。',
+    },
+
+    col_bug_big_01: {
+        id: 'col_bug_big_01',
+        name: '大蟲',
+        category: 'collectible',
+        group: 'bush',
+        rarity: 'epic',
+        icon: 'col_bug_big_01',
+        desc: '比較少見的大型蟲。',
+    }
+
+};
+
+/**
+ * 工具函式
+ */
+
+export function getCollectibleData(id) {
+    return COLLECTIBLE_DB[id] || null;
+}
+
+export function getAllCollectibles() {
+    return Object.values(COLLECTIBLE_DB);
+}
+
+export function getCollectiblesByGroup(group) {
+    return Object.values(COLLECTIBLE_DB).filter(c => c.group === group);
+}
+🧠 為什麼這一步很重要
+因為你現在已經有：
+
+掉落系統
+
+裝備系統
+
+關卡系統
+
+👉 下一個會爆的點一定是：
+
+「東西越來越多 → 全塞 ITEM_DB → 爆炸」
+
+我們現在提前拆掉這顆炸彈💣
+
+🎮 這會帶來什麼玩法（很重要🔥）
+你之後可以做：
+
+1️⃣ 草叢蟲 → 收藏圖鑑
+玩家挖到蟲
+
+記錄進 COLLECTIBLE_DB
+
+不影響數值（適合小孩）
+
+👉 完美符合你原本設計
+
+2️⃣ 彩蛋收藏
+例如：
+
+發現隱藏物
+
+特殊條件取得
+
+👉 不會污染裝備池
+
+3️⃣ 未來成就系統
+收集 10 種蟲 → 獎勵
+
+收集全部 → 解鎖裝備
+
+⚠️ 很重要（你現在不要做的事）
+先不要：
+
+❌ 把 collectible 接到掉落系統
+❌ 改 BushRewardSystem
+❌ 改 DropConfig
+
+👉 我們現在只是「鋪地基」
+
+✅ 你現在只要做
+建 CollectibleData.js
+
+貼上我給你的內容
+
+🚀 下一步（會很好玩）
+我下一步會幫你做：
+
+👉 「蟲 → 自動進圖鑑」系統（超簡單版）
+
+也就是：
+
+挖到蟲
+
+自動記錄
+
+UI 之後再做
+
+你先完成這一步，然後回我：
+
+👉「收藏系統建好了」
+
+我直接帶你接「圖鑑解鎖系統」（這個會讓遊戲質感直接提升一階🔥）
+
+
+收藏系統建好了
+
+太好了 ✅
+現在我們接最簡單、最安全的下一步：
+
+下一步目標
+挖到蟲 → 自動記錄進收藏圖鑑
+
+先不做 UI，先做「資料有存進去」。
+
+這一步會做什麼
+之後當你在草叢尋寶裡挖到蟲時，可以順手呼叫一個函式：
+
+CollectibleSystem.unlock(this.registry, 'col_bug_leaf_01');
+它就會把這個收藏品記進存檔。
+
+第一步：新增系統檔
+在這裡建立新檔案：
+
+src/systems/CollectibleSystem.js
+把下面整段直接貼上：
+
+// src/systems/CollectibleSystem.js
+import { COLLECTIBLE_DB } from '../data/CollectibleData.js';
+
+export default class CollectibleSystem {
+    static getOwnedCollectibles(registry) {
+        return registry.get('owned_collectibles') || [];
+    }
+
+    static saveOwnedCollectibles(registry, list) {
+        registry.set('owned_collectibles', list);
+    }
+
+    static hasCollectible(registry, collectibleId) {
+        const owned = this.getOwnedCollectibles(registry);
+        return owned.includes(collectibleId);
+    }
+
+    static unlock(registry, collectibleId) {
+        if (!COLLECTIBLE_DB[collectibleId]) {
+            console.warn('[CollectibleSystem] 找不到收藏品資料:', collectibleId);
+            return false;
+        }
+
+        const owned = this.getOwnedCollectibles(registry);
+
+        if (owned.includes(collectibleId)) {
+            return false;
+        }
+
+        owned.push(collectibleId);
+        this.saveOwnedCollectibles(registry, owned);
+
+        console.log('[CollectibleSystem] 解鎖收藏品:', collectibleId);
+        return true;
+    }
+
+    static getOwnedCollectibleDataList(registry) {
+        const owned = this.getOwnedCollectibles(registry);
+        return owned
+            .map(id => COLLECTIBLE_DB[id])
+            .filter(Boolean);
+    }
+}
+第二步：補存檔預設值
+去 src/data/GameData.js
+
+找到 DEFAULT_SAVE_DATA，在 owned_items 附近補一行：
+
+owned_collectibles: [],
+變成像這樣：
+
+owned_items: [
+    'item_hat_daily_01',
+    'item_cloth_daily_01',
+    'item_fullset_pink_home_01'
+],
+
+owned_collectibles: [],
+
+placed_decorations: [],
+第三步：先做最簡單測試
+你現在先不要急著接蟲系統。
+先找一個你方便測試的地方，例如 BushExplore.js 的 create() 裡，暫時加這兩行測試：
+
+import CollectibleSystem from '../systems/CollectibleSystem.js';
+然後在 create() 裡先暫時加：
+
+CollectibleSystem.unlock(this.registry, 'col_bug_leaf_01');
+console.log('目前收藏品：', this.registry.get('owned_collectibles'));
+這一步測到什麼算成功
+進場後 console 看到像這樣就對了：
+
+目前收藏品： ['col_bug_leaf_01']
+而且重進後不會一直重複新增。
+
+這一步做完後
+代表你的基礎圖鑑系統已經成立了：
+
+有資料表
+
+有解鎖系統
+
+有存檔欄位
+
+可查詢已擁有收藏
+
+先提醒你
+這兩行只是測試用：
+
+CollectibleSystem.unlock(this.registry, 'col_bug_leaf_01');
+console.log('目前收藏品：', this.registry.get('owned_collectibles'));
+測完之後我們會再拔掉，換成真正「挖到蟲才記錄」。
+
+你現在照這三步做。
+做完後回我：
+
+「收藏解鎖測試成功了」
+
+我下一步就直接帶你把它接到「挖到蟲」的流程裡。
+
+
+// src/systems/CollectibleSystem.js
+import { COLLECTIBLE_DB } from '../data/CollectibleData.js';
+
+export default class CollectibleSystem {
+    static getOwnedCollectibles(registry) {
+        return registry.get('owned_collectibles') || [];
+    }
+
+    static saveOwnedCollectibles(registry, list) {
+        registry.set('owned_collectibles', list);
+    }
+
+    static hasCollectible(registry, collectibleId) {
+        const owned = this.getOwnedCollectibles(registry);
+        return owned.includes(collectibleId);
+    }
+
+    static unlock(registry, collectibleId) {
+        if (!COLLECTIBLE_DB[collectibleId]) {
+            console.warn('[CollectibleSystem] 找不到收藏品資料:', collectibleId);
+            return false;
+        }
+
+        const owned = this.getOwnedCollectibles(registry);
+
+        if (owned.includes(collectibleId)) {
+            return false;
+        }
+
+        owned.push(collectibleId);
+        this.saveOwnedCollectibles(registry, owned);
+
+        console.log('[CollectibleSystem] 解鎖收藏品:', collectibleId);
+        return true;
+    }
+
+    static getOwnedCollectibleDataList(registry) {
+        const owned = this.getOwnedCollectibles(registry);
+        return owned
+            .map(id => COLLECTIBLE_DB[id])
+            .filter(Boolean);
+    }
+}
+
+這份 CollectibleSystem.js 完全正確 ✅
+結構、邏輯、命名都沒問題，可以放心用。
+
+👍 我幫你快速確認（讓你安心）
+這份已經具備：
+
+✔ 基本能力
+讀取收藏：getOwnedCollectibles
+
+寫入收藏：saveOwnedCollectibles
+
+判斷是否擁有：hasCollectible
+
+解鎖：unlock
+
+轉成資料列表：getOwnedCollectibleDataList
+
+✔ 防呆也有
+不存在的 id 會 warning
+
+重複解鎖不會重複加入
+
+👉 這已經是可上線等級的寫法了
+
+🎯 你現在只差一個「關鍵步驟」
+👉 還沒測試！
+
+📌 請做這一步（很重要）
+去 BushExplore.js
+1️⃣ 上面加 import
+import CollectibleSystem from '../systems/CollectibleSystem.js';
+2️⃣ 在 create() 裡加測試（暫時用）
+CollectibleSystem.unlock(this.registry, 'col_bug_leaf_01');
+
+console.log('目前收藏品：', this.registry.get('owned_collectibles'));
+🧪 你要看到的結果
+打開遊戲 → console 出現：
+
+[CollectibleSystem] 解鎖收藏品: col_bug_leaf_01
+目前收藏品： ['col_bug_leaf_01']
+👉 再進一次遊戲：
+
+不會再重複解鎖
+
+陣列不會一直變長
+
+⚠️ 如果你看到問題，會長這樣
+我先幫你預判：
+
+❌ 狀況1：一直重複加入
+👉 代表 registry 沒存住（存檔沒套用）
+
+❌ 狀況2：undefined
+👉 代表你沒加 owned_collectibles 到 DEFAULT_SAVE_DATA
+
+🧠 小提醒（很重要）
+你現在做的這一步，其實是在建立：
+
+👉 「長期成長系統」
+
+之後可以做：
+
+🐛 收集蟲 → 圖鑑
+
+📖 收集數量 → 解鎖裝備
+
+🌟 全收集 → 彩蛋
+
+而且完全不會干擾數值平衡（這點超關鍵）
+
+🚀 下一步預告（會很好玩）
+等你測試成功，我下一步會幫你做：
+
+👉 「挖到蟲 → 自動解鎖收藏」
+
+也就是：
+
+不是寫死 unlock
+
+而是接到你現有的「蟲系統」
+
+你現在只要測試完，回我一句：
+
+👉 「收藏解鎖測試成功了」
+
+我直接幫你接到真正玩法裡 🔥
+
+
+// src/scenes/BushExplore.js
+
+import AudioSystem from '../systems/AudioSystem.js';
+import { getStageData } from '../data/StageData.js';
+import { BUSH_EXPLORE_LEVELS } from '../data/BushExploreData.js';
+
+import BushMapSystem from '../systems/BushMapSystem.js';
+import BushDangerSystem from '../systems/BushDangerSystem.js';
+import BushBugSystem from '../systems/BushBugSystem.js';
+import BushQuestionSystem from '../systems/BushQuestionSystem.js';
+import BushRewardSystem from '../systems/BushRewardSystem.js';
+
+import { ITEM_DB } from '../data/GameData.js';
+
+export default class BushExplore extends Phaser.Scene {
+    constructor() {
+        super('BushExplore');
+    }
+
+    init(data) {
+        this.stageId = data?.stageId || 'bush_01';
+        this.returnScene = data?.returnScene || 'WorldMap';
+        this.returnData = data?.returnData || {};
+    }
+
+    create() {
+        this.cameras.main.setBackgroundColor('#214c33');
+
+        const levelData = BUSH_EXPLORE_LEVELS[this.stageId] || BUSH_EXPLORE_LEVELS.bush_01;
+        this.levelData = levelData;
+
+        this.gameState = {
+            phase: 'searching',
+
+            levelId: levelData.id,
+            stamina: levelData.startStamina,
+            maxStamina: levelData.startStamina,
+
+            digLimit: levelData.digLimit,
+            digsUsed: 0,
+
+            nextDigBlocked: false,
+
+            gotGoldBush: false,
+            questionAnswered: false,
+            questionCorrect: false,
+
+            mapTiles: [],
+            currentQuestion: null,
+            questionQueue: [],
+            questionIndex: 0,
+            totalQuestions: 0,
+            correctAnswers: 0,
+            questionTimeLeft: 0,
+            questionTimeLimit: 0,
+
+            combo: 0,
+            highestCombo: 0,
+            hintsShown: [],
+            dangerousTilesTriggered: 0,
+            bugsCollected: 0,
+
+            flagLimit: 2,
+            flagsUsed: 0,
+
+            goldBonusCrystals: 0,
+            goldBonusQuestionTime: 0,
+            foundKingBug: false,
+            gotLittleCrown: false,
+
+            resultGranted: false
+        };
+
+        this.popupLock = false;
+        this.activePopup = null;
+        this.messageTween = null;
+
+        this.digCooldownMs = 600;
+        this.nextDigTime = 0;
+
+        this.longPressMs = 400;
+        this.longPressTimer = null;
+        this.longPressTriggered = false;
+        this.pressingTile = null;
+        this.questionTimerEvent = null;
+
+        this.answerButtons = [];
+        this.answerBreathTween = null;
+        this.boardFloatTween = null;
+        this.boardGlowTween = null;
+        this.tileHoverTweens = new Map();
+
+        // UI v3.2
+        this.boardScaleSearching = 1.04;
+        this.boardScaleQuestion = 0.83;
+        this.boardShiftYQuestion = 92;
+        this.boardShiftXQuestion = -58;
+
+
+        // BushExplore 專用 BGM
+        if (this.cache.audio.exists('bush_bgm')) {
+            AudioSystem.playBgm(this, 'bush_bgm', 0.28);
+        } else if (this.cache.audio.exists('forest_music')) {
+            AudioSystem.playBgm(this, 'forest_music', 0.28);
+        }
+        this.applyEquipmentBonus();
+        this.gameState.mapTiles = BushMapSystem.createLevelMap(this.levelData);
+        this.setupGoldBushTypes();
+        this.createBackgroundDecor();
+        this.createUI();
+        this.createBoard();
+        this.refreshHUD();
+
+        this.showMessage(🍃 開始探索 ${levelData.name}！, 1500);
+        console.log('目前關卡進度 stage_progress =', this.getStageProgressData());
+    }
+
+    getStageProgressData() {
+        const progress = this.registry.get('stage_progress') || {};
+        return { ...progress };
+    }
+
+    playSfxSafe(key, volume = 0.5) {
+        try {
+            if (this.cache.audio.exists(key)) {
+                this.sound.play(key, { volume });
+            }
+        } catch (error) {
+            console.warn([BushExplore] 播放音效失敗: ${key}, error);
+        }
+    }
+
+    calculateStars() {
+        if (this.gameState.phase === 'failed') return 1;
+        if (!this.gameState.questionAnswered) return 1;
+
+        const total = this.gameState.totalQuestions || 1;
+        const correct = this.gameState.correctAnswers || 0;
+
+        if (correct <= 0) return 1;
+        if (correct < total) return 2;
+        if (this.gameState.gotGoldBush) return 3;
+
+        return 3;
+    }
+
+    calculateScore() {
+        let score = 0;
+
+        score += this.gameState.digsUsed * 10;
+        score += this.gameState.bugsCollected * 20;
+        score += this.gameState.highestCombo * 30;
+        score += (this.gameState.correctAnswers || 0) * 100;
+
+        if (this.gameState.gotGoldBush) {
+            score += 80;
+        }
+
+        score += Math.max(0, this.gameState.stamina) * 25;
+
+        const flagResult = this.calculateFlagResult();
+        score += flagResult.scoreBonus;
+
+        return Math.max(0, score);
+    }
+
+    isDangerTileType(tileType) {
+        return ['snake', 'thorn', 'boar', 'spiderweb'].includes(tileType);
+    }
+
+    calculateFlagResult() {
+        let placedFlags = 0;
+        let correctFlags = 0;
+        let wrongFlags = 0;
+
+        for (const tile of this.gameState.mapTiles) {
+            if (!tile.isFlagged) continue;
+
+            placedFlags += 1;
+
+            if (this.isDangerTileType(tile.tileType)) {
+                correctFlags += 1;
+            } else {
+                wrongFlags += 1;
+            }
+        }
+
+        const reputationBonus = correctFlags;
+        const crystalBonus = (placedFlags >= 2 && wrongFlags === 0 && correctFlags > 0) ? 1 : 0;
+        const scoreBonus = correctFlags * 25 - wrongFlags * 15;
+
+        return {
+            placedFlags,
+            correctFlags,
+            wrongFlags,
+            reputationBonus,
+            crystalBonus,
+            scoreBonus
+        };
+    }
+
+    applyFlagRewardToRewardData(reward) {
+        const flagResult = this.calculateFlagResult();
+        this.flagResultData = flagResult;
+
+        reward.reputation = (reward.reputation || 0) + flagResult.reputationBonus;
+        reward.crystals = (reward.crystals || 0) + flagResult.crystalBonus;
+
+        return reward;
+    }
+
+    applyGoldBushTypeReward(reward) {
+        if (!this.gameState.gotGoldBush) return reward;
+
+        const goldTile = this.gameState.mapTiles.find(
+            tile => tile.tileType === 'gold' && tile.isRevealed
+        );
+
+        if (!goldTile) return reward;
+
+        reward.goldType = goldTile.goldType || 'goldenGrass';
+        reward.goldEventType = goldTile.goldEventType || null;
+
+        switch (goldTile.goldType) {
+            case 'goldenGrass':
+                reward.chest = (reward.chest || 0) + 1;
+                reward.crystals = (reward.crystals || 0) + 2;
+                reward.reputation = (reward.reputation || 0) + 1;
+                break;
+
+            case 'rainbowGrass':
+                reward.chest = (reward.chest || 0) + 1;
+                reward.reputation = (reward.reputation || 0) + 2;
+                reward.rainbowBonus = true;
+                break;
+
+            case 'randomEvent':
+                reward.eventBonus = true;
+                reward.crystals = (reward.crystals || 0) + (this.gameState.goldBonusCrystals || 0);
+                break;
+
+            case 'kingBug':
+                reward.chest = (reward.chest || 0) + 1;
+                reward.reputation = (reward.reputation || 0) + 3;
+                reward.kingBugFound = true;
+
+                // 國王蟲 -> 1/3 機率得到小王冠
+                if (Math.random() < (1 / 3)) {
+                    reward.littleCrown = true;
+                    this.gameState.gotLittleCrown = true;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        return reward;
+    }
+
+    applyStageResult() {
+        const stageId = this.gameState.levelId;
+        const progress = this.getStageProgressData();
+
+        const oldStageData = progress[stageId] || {
+            unlocked: true,
+            cleared: false,
+            stars: 0,
+            bestScore: 0,
+            firstClearRewardClaimed: false
+        };
+
+        const stars = this.calculateStars();
+        const score = this.calculateScore();
+
+        const newStageData = {
+            ...oldStageData,
+            unlocked: true,
+            cleared: oldStageData.cleared || this.gameState.questionCorrect,
+            stars: Math.max(oldStageData.stars || 0, stars),
+            bestScore: Math.max(oldStageData.bestScore || 0, score)
+        };
+
+        progress[stageId] = newStageData;
+
+        const stageData = getStageData(stageId);
+        if (stageData?.nextStage && newStageData.cleared) {
+            const nextStageId = stageData.nextStage;
+
+            if (!progress[nextStageId]) {
+                progress[nextStageId] = {
+                    unlocked: true,
+                    cleared: false,
+                    stars: 0,
+                    bestScore: 0,
+                    firstClearRewardClaimed: false
+                };
+            } else {
+                progress[nextStageId].unlocked = true;
+            }
+        }
+
+        this.registry.set('stage_progress', progress);
+
+        return {
+            stars,
+            score,
+            stageData: newStageData,
+            wasFirstClear: !oldStageData.cleared && this.gameState.questionCorrect
+        };
+    }
+
+    applyEquipmentBonus() {
+        const bonusDig = this.registry.get('bonus_bush_dig') || 0;
+        const bonusStamina = this.registry.get('bonus_bush_stamina') || 0;
+        const bonusFlag = this.registry.get('bonus_bush_flag') || 0;
+
+        this.gameState.digLimit += bonusDig;
+        this.gameState.stamina += bonusStamina;
+        this.gameState.maxStamina += bonusStamina;
+        this.gameState.flagLimit += bonusFlag;
+    }
+
+    setupGoldBushTypes() {
+        for (const tile of this.gameState.mapTiles) {
+            if (tile.tileType !== 'gold') continue;
+
+            const roll = Math.random();
+
+            if (roll < 0.30) {
+                tile.goldType = 'goldenGrass';     // 黃金草
+            } else if (roll < 0.60) {
+                tile.goldType = 'rainbowGrass';    // 彩虹草
+            } else if (roll < 0.90) {
+                tile.goldType = 'randomEvent';     // 隨機事件
+            } else {
+                tile.goldType = 'kingBug';         // 國王蟲
+            }
+        }
+    }
+
+    getRandomBushTexture() {
+        const candidates = [
+            'icon_bush_1',
+            'icon_bush_2',
+            'icon_bush_3',
+            'icon_bush_4'
+        ].filter(key => this.textures.exists(key));
+
+        if (candidates.length <= 0) {
+            return 'icon_bush';
+        }
+
+        return Phaser.Utils.Array.GetRandom(candidates);
+    }
+
+    createBackgroundDecor() {
+        // 最底：森林 JPG
+        if (this.textures.exists('bg_bush_forest')) {
+            this.add.image(640, 360, 'bg_bush_forest')
+                .setDisplaySize(1280, 720)
+                .setAlpha(0.72)
+                .setDepth(-20);
+        }
+
+        // 中層：深綠遮罩，改淡一點
+        this.add.rectangle(640, 360, 1280, 720, 0x0f2f1f, 0.04)
+            .setDepth(-19);
+
+        // 原本整面底色也改淡，避免把背景整個蓋掉
+        this.add.rectangle(640, 360, 1280, 720, 0x214c33, 0.04)
+            .setDepth(-18);
+
+        // 柔和背景裝飾
+        this.add.circle(110, 92, 88, 0x3f875a, 0.14);
+        this.add.circle(1178, 98, 96, 0x3f875a, 0.12);
+        this.add.circle(88, 640, 118, 0x3f875a, 0.10);
+        this.add.circle(1178, 626, 128, 0x3f875a, 0.10);
+
+        // 上方 HUD
+        this.topPanelShadow = this.add.rectangle(646, 88, 1168, 92, 0x000000, 0.18);
+        this.topPanel = this.add.rectangle(640, 82, 1168, 92, 0x163624, 0.92)
+            .setStrokeStyle(4, 0xdff4bf);
+
+        // 左側資訊框（維持 v3.2a 基準）
+        this.leftPanelShadow = this.add.rectangle(150, 356, 198, 346, 0x000000, 0.18);
+        this.leftPanel = this.add.rectangle(144, 350, 198, 346, 0x183524, 0.90)
+            .setStrokeStyle(4, 0xdff4bf);
+
+        // 棋盤舞台（維持 v3.2a 基準）
+        this.boardAreaShadow = this.add.rectangle(834, 376, 780, 542, 0x000000, 0.10);
+        this.boardAreaPanel = this.add.rectangle(826, 370, 780, 542, 0x1a3d29, 0.36)
+            .setStrokeStyle(2, 0xe6f7cf, 0.18);
+    }
+
+    createUI() {
+        // 左上小標，取代原本置中大標題
+        this.stageSmallTitle = this.add.text(68, 34, this.levelData.name || '初探草叢 Lv.1', {
+            fontSize: '24px',
+            color: '#f7ffe8',
+            fontStyle: 'bold',
+            stroke: '#163221',
+            strokeThickness: 5
+        }).setOrigin(0, 0.5);
+
+        // 上方 HUD
+        this.topStatCardLeft = this.add.rectangle(404, 64, 180, 48, 0x2b5636, 0.96)
+            .setStrokeStyle(2, 0xe7f8d3);
+
+        this.topStatCardMid = this.add.rectangle(606, 64, 180, 48, 0x2b5636, 0.96)
+            .setStrokeStyle(2, 0xe7f8d3);
+
+        this.topStatCardRight = this.add.rectangle(808, 64, 180, 48, 0x2b5636, 0.96)
+            .setStrokeStyle(2, 0xe7f8d3);
+
+        this.comboBadge = this.add.rectangle(1050, 64, 220, 52, 0x355f3d, 0.98)
+            .setStrokeStyle(3, 0xe6f7cf);
+
+        this.topStaminaText = this.add.text(404, 64, '', {
+            fontSize: '21px',
+            color: '#fffdf4',
+            fontStyle: 'bold',
+            stroke: '#28412e',
+            strokeThickness: 4
+        }).setOrigin(0.5);
+
+        this.topDigText = this.add.text(606, 64, '', {
+            fontSize: '21px',
+            color: '#fffdf4',
+            fontStyle: 'bold',
+            stroke: '#28412e',
+            strokeThickness: 4
+        }).setOrigin(0.5);
+
+        this.topFlagText = this.add.text(808, 64, '', {
+            fontSize: '21px',
+            color: '#fffdf4',
+            fontStyle: 'bold',
+            stroke: '#28412e',
+            strokeThickness: 4
+        }).setOrigin(0.5);
+
+        this.comboText = this.add.text(1050, 64, '', {
+            fontSize: '20px',
+            color: '#fff6cc',
+            fontStyle: 'bold',
+            stroke: '#23402d',
+            strokeThickness: 5
+        }).setOrigin(0.5);
+
+        // 左側資訊卡（精簡）
+        this.phaseText = this.add.text(64, 232, '', {
+            fontSize: '22px',
+            color: '#ffffff',
+            fontStyle: 'bold'
+        });
+
+        this.bugCountText = this.add.text(64, 278, '', {
+            fontSize: '22px',
+            color: '#ffffff',
+            fontStyle: 'bold'
+        });
+
+        this.goldBushText = this.add.text(64, 324, '', {
+            fontSize: '22px',
+            color: '#ffe88e',
+            fontStyle: 'bold'
+        });
+
+        this.flagText = this.add.text(64, 370, '', {
+            fontSize: '22px',
+            color: '#ffd7a8',
+            fontStyle: 'bold'
+        });
+
+        this.goalText = this.add.text(64, 422, '🏆 目標：努力觀察並答對問題', {
+            fontSize: '18px',
+            color: '#d7f2ba',
+            fontStyle: 'bold',
+            wordWrap: { width: 170 }
+        });
+
+        // 望遠鏡按鈕：移到靠近棋盤右側
+        this.observeBtnShadow = this.add.rectangle(926, 572, 178, 64, 0x000000, 0.20)
+            .setAngle(0)
+            .setVisible(true);
+
+        this.observeBtn = this.add.rectangle(920, 566, 178, 64, 0x89cc73, 0.98)
+            .setStrokeStyle(3, 0xffffff)
+            .setInteractive({ useHandCursor: true });
+
+        this.observeBtnIcon = this.add.text(868, 566, '🔍', {
+            fontSize: '28px'
+        }).setOrigin(0.5);
+
+        this.observeBtnText = this.add.text(940, 566, '觀察果實', {
+            fontSize: '24px',
+            color: '#ffffff',
+            fontStyle: 'bold',
+            stroke: '#2f4a25',
+            strokeThickness: 4
+        }).setOrigin(0.5);
+
+        this.observeBtn.on('pointerover', () => {
+            if (!this.canEnterQuestionPhase()) return;
+            this.observeBtn.setScale(1.04);
+            this.observeBtnIcon.setScale(1.04);
+            this.observeBtnText.setScale(1.04);
+        });
+
+        this.observeBtn.on('pointerout', () => {
+            this.observeBtn.setScale(1);
+            this.observeBtnIcon.setScale(1);
+            this.observeBtnText.setScale(1);
+        });
+
+        this.observeBtn.on('pointerdown', () => {
+            if (!this.canEnterQuestionPhase()) return;
+            this.playSfxSafe('ui_click_sfx', 0.42);
+            this.showQuestionConfirmPopup();
+        });
+
+        // P2 題目區：放大成主角
+        this.questionHeader = this.add.container(0, 0);
+        this.questionHeader.setVisible(false);
+
+        this.questionHeaderShadow = this.add.rectangle(928, 188, 520, 176, 0x000000, 0.18);
+        this.questionHeaderPanel = this.add.rectangle(922, 182, 520, 176, 0xf6ffe8, 0.98)
+            .setStrokeStyle(4, 0x97c36f);
+
+        this.questionProgressText = this.add.text(724, 120, '', {
+            fontSize: '22px',
+            color: '#5f714f',
+            fontStyle: 'bold'
+        }).setOrigin(0, 0.5);
+
+        this.questionTimerText = this.add.text(1122, 120, '', {
+            fontSize: '22px',
+            color: '#b45b3c',
+            fontStyle: 'bold'
+        }).setOrigin(1, 0.5);
+
+        this.questionPromptText = this.add.text(922, 190, '', {
+            fontSize: '34px',
+            color: '#27421f',
+            fontStyle: 'bold',
+            align: 'center',
+            wordWrap: { width: 430 },
+            lineSpacing: 10
+        }).setOrigin(0.5);
+
+        this.questionHeader.add([
+            this.questionHeaderShadow,
+            this.questionHeaderPanel,
+            this.questionProgressText,
+            this.questionTimerText,
+            this.questionPromptText
+        ]);
+
+        // P2 答案區：改成右側直排
+        this.answerContainer = this.add.container(0, 0);
+        this.answerContainer.setVisible(false);
+
+        // 左下提示條：縮短、上移、字變大
+        this.messagePanelShadow = this.add.rectangle(222, 610, 360, 70, 0x000000, 0.18);
+        this.messagePanel = this.add.rectangle(216, 604, 360, 70, 0x10291a, 0.97)
+            .setStrokeStyle(3, 0xd7f5c0);
+
+        this.messageIcon = this.add.text(68, 604, '🍃', {
+            fontSize: '28px'
+        }).setOrigin(0.5);
+
+        this.messageText = this.add.text(98, 604, '', {
+            fontSize: '25px',
+            color: '#ffffff',
+            wordWrap: { width: 230 }
+        }).setOrigin(0, 0.5);
+
+        // 右下提示：只在 P1 顯示
+        this.tipText = this.add.text(1176, 680, '短按挖草｜長按插旗', {
+            fontSize: '20px',
+            color: '#d2f1b8',
+            fontStyle: 'bold'
+        }).setOrigin(1, 0.5);
+    }
+
+    createBoard() {
+        const gridSize = this.levelData.gridSize;
+        const tileSize = 92;
+        const gap = 10;
+
+        const boardWidth = gridSize * tileSize + (gridSize - 1) * gap;
+        const boardHeight = gridSize * tileSize + (gridSize - 1) * gap;
+
+        this.boardContainer = this.add.container(0, 0);
+        this.boardContainer.setScale(this.boardScaleSearching);
+        this.boardContainer.setPosition(0, 0);
+
+        // P1 棋盤往左移
+        const boardCenterX = 654;
+        const boardCenterY = 392;
+
+        const startX = boardCenterX - boardWidth / 2 + tileSize / 2;
+        const startY = boardCenterY - boardHeight / 2 + tileSize / 2;
+
+        // ===== 棋盤浮起來效果：底層陰影 + 外發光 =====
+        this.boardShadowFar = this.add.rectangle(
+            boardCenterX + 18,
+            boardCenterY + 24,
+            boardWidth + 110,
+            boardHeight + 110,
+            0x000000,
+            0.22
+        );
+
+        this.boardShadow = this.add.rectangle(
+            boardCenterX + 8,
+            boardCenterY + 12,
+            boardWidth + 68,
+            boardHeight + 68,
+            0x08140d,
+            0.42
+        );
+
+        this.boardGlow = this.add.rectangle(
+            boardCenterX,
+            boardCenterY,
+            boardWidth + 94,
+            boardHeight + 94,
+            0xe5ffcf,
+            0.16
+        ).setStrokeStyle(5, 0xf3ffe5, 0.38);
+
+        this.boardFrame = this.add.rectangle(
+            boardCenterX,
+            boardCenterY,
+            boardWidth + 42,
+            boardHeight + 42,
+            0x2f6840,
+            0.99
+        ).setStrokeStyle(6, 0xf4ffe8, 1);
+
+        this.boardInner = this.add.rectangle(
+            boardCenterX,
+            boardCenterY,
+            boardWidth + 16,
+            boardHeight + 16,
+            0x214c33,
+            0.42
+        ).setStrokeStyle(2, 0xcfe8a9, 0.45);
+
+        this.boardContainer.add([
+            this.boardShadowFar,
+            this.boardShadow,
+            this.boardGlow,
+            this.boardFrame,
+            this.boardInner
+        ]);
+
+        for (const tile of this.gameState.mapTiles) {
+            const x = startX + tile.col * (tileSize + gap);
+            const y = startY + tile.row * (tileSize + gap);
+
+            tile.isRevealed = !!tile.isRevealed;
+            tile.isFlagged = !!tile.isFlagged;
+
+            const hoverGlow = this.add.rectangle(x, y, tileSize + 12, tileSize + 12, 0xe7ffd2, 0.00)
+                .setStrokeStyle(2, 0xf4ffe9, 0.0)
+                .setOrigin(0.5);
+
+            const shadow = this.add.rectangle(x + 4, y + 5, tileSize, tileSize, 0x000000, 0.20)
+                .setOrigin(0.5);
+
+            const bg = this.add.rectangle(x, y, tileSize, tileSize, 0x2d5f33)
+                .setStrokeStyle(2, 0xd9ebc8, 0.85)
+                .setInteractive({ useHandCursor: true });
+
+            const innerGlow = this.add.rectangle(x, y, tileSize - 10, tileSize - 10, 0x3b7a41, 0.18)
+                .setStrokeStyle(1, 0xbfd8a8, 0.18);
+
+            const bushScale = Phaser.Math.FloatBetween(0.56, 0.63);
+            const bushAngle = Phaser.Math.FloatBetween(-2, 2);
+            const bushOffsetX = Phaser.Math.Between(-3, 3);
+            const bushOffsetY = Phaser.Math.Between(-4, 4);
+
+            const bushShadow = this.add.ellipse(
+                x + bushOffsetX,
+                y + 18,
+                54,
+                18,
+                0x1a2418,
+                0.24
+            ).setOrigin(0.5);
+
+            const bushTexture = this.getRandomBushTexture();
+
+            const grassTop = this.add.image(x + bushOffsetX, y - 6 + bushOffsetY, bushTexture)
+                .setScale(bushScale)
+                .setAngle(bushAngle);
+
+            const label = this.add.text(x, y + 18, '', {
+                fontSize: '20px',
+                color: '#ffffff',
+                fontStyle: 'bold',
+                stroke: '#2a4d2e',
+                strokeThickness: 4
+            }).setOrigin(0.5);
+
+            const dangerText = this.add.text(x - 28, y - 28, '', {
+                fontSize: '16px',
+                color: '#fff6c7',
+                fontStyle: 'bold',
+                stroke: '#2a2a2a',
+                strokeThickness: 3,
+                backgroundColor: '#5b5b5b',
+                padding: { left: 4, right: 4, top: 2, bottom: 2 }
+            }).setOrigin(0.5).setVisible(false);
+
+            bg.on('pointerover', () => {
+                if (this.popupLock) return;
+                if (tile.isRevealed) return;
+                if (this.gameState.phase !== 'searching') return;
+                this.startTileHoverEffect(tile);
+            });
+
+            bg.on('pointerout', () => {
+                this.stopTileHoverEffect(tile);
+                this.cancelTilePress(tile);
+            });
+
+            bg.on('pointerdown', () => {
+                this.playSfxSafe('ui_click_sfx', 0.42);
+                this.startTilePress(tile);
+            });
+
+            bg.on('pointerup', () => {
+                this.endTilePress(tile);
+            });
+
+            bg.on('pointerupoutside', () => {
+                this.stopTileHoverEffect(tile);
+                this.cancelTilePress(tile);
+            });
+
+            tile.view = {
+                hoverGlow,
+                shadow,
+                bg,
+                innerGlow,
+                bushShadow,
+                grassTop,
+                label,
+                dangerText,
+                bushTexture,
+                baseBushScale: bushScale,
+                baseBushAngle: bushAngle,
+                dirt: null,
+                bugSprite: null,
+                goldSparkle: null,
+                flagSprite: null
+            };
+
+            this.boardContainer.add([
+                hoverGlow,
+                shadow,
+                bg,
+                innerGlow,
+                bushShadow,
+                grassTop,
+                label,
+                dangerText
+            ]);
+
+            this.refreshTile(tile);
+        }
+
+        this.startBoardFloatEffect();
+
+    }
+
+         
+
+    startBoardFloatEffect() {
+        if (this.boardFloatTween) {
+            this.boardFloatTween.stop();
+            this.boardFloatTween = null;
+        }
+
+        if (this.boardGlowTween) {
+            this.boardGlowTween.stop();
+            this.boardGlowTween = null;
+        }
+
+        if (this.boardShadowFar && this.boardShadow) {
+            this.boardFloatTween = this.tweens.add({
+                targets: [this.boardShadowFar, this.boardShadow],
+                y: '+=2',
+                duration: 2600,
+                yoyo: true,
+                repeat: -1,
+                ease: 'Sine.InOut'
+            });
+        }
+
+        if (this.boardGlow) {
+            this.boardGlowTween = this.tweens.add({
+                targets: this.boardGlow,
+                alpha: { from: 0.14, to: 0.18 },
+                scaleX: 1.012,
+                scaleY: 1.012,
+                duration: 2000,
+                yoyo: true,
+                repeat: -1,
+                ease: 'Sine.InOut'
+            });
+        }
+    }
+
+    startTileHoverEffect(tile) {
+        if (!tile?.view) return;
+
+        const { hoverGlow, shadow, bg, innerGlow, grassTop, label } = tile.view;
+
+        this.stopTileHoverEffect(tile);
+
+        hoverGlow.setFillStyle(0xe7ffd2, 0.12);
+        hoverGlow.setStrokeStyle(2, 0xf4ffe9, 0.42);
+
+        const tween = this.tweens.add({
+            targets: [bg, innerGlow, hoverGlow, grassTop, label],
+            scaleX: 1.035,
+            scaleY: 1.035,
+            duration: 520,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.InOut'
+        });
+
+        const shadowTween = this.tweens.add({
+            targets: shadow,
+            scaleX: 1.05,
+            scaleY: 1.05,
+            alpha: 0.28,
+            duration: 520,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.InOut'
+        });
+
+        this.tileHoverTweens.set(tile.id ?? ${tile.row}_${tile.col}, {
+            tween,
+            shadowTween
+        });
+    }
+
+    stopTileHoverEffect(tile) {
+        if (!tile?.view) return;
+
+        const key = tile.id ?? ${tile.row}_${tile.col};
+        const tweenData = this.tileHoverTweens.get(key);
+
+        if (tweenData?.tween) tweenData.tween.stop();
+        if (tweenData?.shadowTween) tweenData.shadowTween.stop();
+
+        this.tileHoverTweens.delete(key);
+
+        const { hoverGlow, shadow, bg, innerGlow, grassTop, label } = tile.view;
+
+        hoverGlow.setScale(1);
+        hoverGlow.setFillStyle(0xe7ffd2, 0.00);
+        hoverGlow.setStrokeStyle(2, 0xf4ffe9, 0.0);
+
+        shadow.setScale(1);
+        shadow.setAlpha(0.20);
+
+        bg.setScale(1);
+        innerGlow.setScale(1);
+        label.setScale(1);
+
+        if (!tile.isFlagged && !tile.isRevealed) {
+            grassTop.setScale(tile.view.baseBushScale || 0.6);
+        }
+    }
+
+
+
+    refreshHUD() {
+        this.phaseText.setText(📘 階段：${this.getPhaseLabel(this.gameState.phase)});
+        this.bugCountText.setText(🍎 果實：${this.gameState.bugsCollected}/10);
+        this.goldBushText.setText(🌟 金草叢：${this.gameState.gotGoldBush ? '已找到' : '未找到'});
+        this.flagText.setText(🚩 旗子：${this.gameState.flagsUsed}/${this.gameState.flagLimit});
+
+        this.topStaminaText.setText(❤️ ${this.gameState.stamina}/${this.gameState.maxStamina});
+        this.topDigText.setText(⛏️ ${this.gameState.digsUsed}/${this.gameState.digLimit});
+        this.topFlagText.setText(🚩 ${this.gameState.flagsUsed}/${this.gameState.flagLimit});
+        this.comboText.setText(✨ Combo：${this.gameState.combo} / 最高 ${this.gameState.highestCombo});
+
+        const isQuestion = this.gameState.phase === 'question';
+
+        // P2 弱化 HUD
+        this.stageSmallTitle.setAlpha(isQuestion ? 0.52 : 1);
+        this.topDigText.setAlpha(isQuestion ? 0.42 : 1);
+        this.topFlagText.setAlpha(isQuestion ? 0.42 : 1);
+        this.phaseText.setAlpha(isQuestion ? 0.45 : 1);
+        this.bugCountText.setAlpha(isQuestion ? 0.45 : 1);
+        this.goldBushText.setAlpha(isQuestion ? 0.45 : 1);
+        this.flagText.setAlpha(isQuestion ? 0.45 : 1);
+        this.goalText.setAlpha(isQuestion ? 0.25 : 1);
+
+        this.tipText.setVisible(!isQuestion);
+
+        this.refreshObserveButton();
+    }
+
+    refreshObserveButton() {
+        if (!this.observeBtn) return;
+
+        const canUse = this.canEnterQuestionPhase();
+        const visible = this.gameState.phase === 'searching';
+
+        this.observeBtn.setVisible(visible);
+        this.observeBtnIcon.setVisible(visible);
+        this.observeBtnText.setVisible(visible);
+        this.observeBtnShadow.setVisible(visible);
+
+        if (!visible) return;
+
+        if (canUse) {
+            this.observeBtn.setFillStyle(0x89cc73, 0.98);
+            this.observeBtn.setAlpha(1);
+            this.observeBtnText.setAlpha(1);
+            this.observeBtnIcon.setAlpha(1);
+            this.observeBtnText.setText('觀察果實');
+        } else {
+            const minDig = this.levelData?.minDigBeforeQuestion ?? 1;
+            const remain = Math.max(0, minDig - this.gameState.digsUsed);
+
+            this.observeBtn.setFillStyle(0x5a5a5a, 0.82);
+            this.observeBtn.setAlpha(0.75);
+            this.observeBtnText.setAlpha(0.75);
+            this.observeBtnIcon.setAlpha(0.75);
+            this.observeBtnText.setText(remain > 0 ? 再挖 ${remain} 次 : '觀察果實');
+        }
+    }
+
+    getPhaseLabel(phase) {
+        const map = {
+            searching: '探索中',
+            question: '答題中',
+            result: '結算',
+            failed: '失敗'
+        };
+        return map[phase] || phase;
+    }
+
+    calculateCollectedFruitLv() {
+        let totalLv = 0;
+
+        for (const tile of this.gameState.mapTiles) {
+            if (!tile.bugId) continue;
+
+            // P2 補出的 LV0 果實不算進去
+            if (tile.isVirtualBug) continue;
+
+            if (tile.bugId === 'green') totalLv += 1;
+            else if (tile.bugId === 'red') totalLv += 1;
+            else if (tile.bugId === 'blue') totalLv += 1;
+            else if (tile.bugId === 'big') totalLv += 2;
+            else if (tile.bugId === 'poison') totalLv += 2;
+        }
+
+        return totalLv;
+    }
+
+    buildQuestionQueue() {
+        const totalLv = this.calculateCollectedFruitLv();
+        let questionCount = 1;
+
+        if (totalLv >= 9) {
+            questionCount = 3;
+        } else if (totalLv >= 5) {
+            questionCount = 2;
+        }
+
+        const queue = [];
+        const usedQuestionTypes = new Set();
+        let safety = 0;
+
+        while (queue.length < questionCount && safety < 20) {
+            safety += 1;
+
+            const question = BushQuestionSystem.createQuestion(
+                this.levelData,
+                this.gameState.mapTiles
+            );
+
+            if (!question || !question.type) continue;
+
+            if (usedQuestionTypes.has(question.type)) {
+                continue;
+            }
+
+            usedQuestionTypes.add(question.type);
+            queue.push(question);
+        }
+
+        // 如果題型真的不夠，至少補滿
+        while (queue.length < questionCount) {
+            queue.push(
+                BushQuestionSystem.createQuestion(this.levelData, this.gameState.mapTiles)
+            );
+        }
+
+        return queue;
+    }
+
+    showNextQuestion() {
+        if (this.gameState.questionIndex >= this.gameState.totalQuestions) {
+            this.enterResultPhase(0);
+            return;
+        }
+
+        this.gameState.currentQuestion = this.gameState.questionQueue[this.gameState.questionIndex];
+        this.gameState.questionTimeLimit = this.getQuestionTimeLimitByIndex(this.gameState.questionIndex);
+        this.gameState.questionTimeLeft = this.gameState.questionTimeLimit;
+
+        this.refreshHUD();
+        this.showQuestionUI(this.gameState.currentQuestion);
+        this.startQuestionTimer();
+    }
+
+    updateQuestionProgressText() {
+        if (!this.gameState.currentQuestion) return '';
+        return 第 ${this.gameState.questionIndex + 1} / ${this.gameState.totalQuestions} 題;
+    }
+
+    getQuestionTimeLimitByIndex(index) {
+        let baseTime = 10;
+
+        if (index <= 0) baseTime = 30;
+        else if (index === 1) baseTime = 20;
+        else baseTime = 10;
+
+        return baseTime + (this.gameState.goldBonusQuestionTime || 0);
+    }
+
+    clearQuestionTimer() {
+        if (this.questionTimerEvent) {
+            this.questionTimerEvent.remove(false);
+            this.questionTimerEvent = null;
+        }
+    }
+
+    startQuestionTimer() {
+        this.clearQuestionTimer();
+
+        this.gameState.questionTimeLimit = this.getQuestionTimeLimitByIndex(this.gameState.questionIndex);
+        this.gameState.questionTimeLeft = this.gameState.questionTimeLimit;
+
+        this.questionTimerEvent = this.time.addEvent({
+            delay: 1000,
+            loop: true,
+            callback: () => {
+                if (this.gameState.phase !== 'question') {
+                    this.clearQuestionTimer();
+                    return;
+                }
+
+                this.gameState.questionTimeLeft -= 1;
+
+                if (this.questionHeader.visible) {
+                    this.questionTimerText.setText(⏰ ${this.gameState.questionTimeLeft} 秒);
+                }
+
+                if (this.gameState.questionTimeLeft <= 0) {
+                    this.clearQuestionTimer();
+                    this.handleQuestionTimeout();
+                }
+            }
+        });
+    }
+
+    handleQuestionTimeout() {
+        if (this.gameState.phase !== 'question') return;
+
+        this.playSfxSafe('answer_wrong_sfx', 0.45);
+
+        const penalty = BushQuestionSystem.applyWrongAnswerPenalty(
+            this,
+            this.gameState.mapTiles
+        );
+
+        this.refreshHUD();
+
+        this.hideQuestionUI();
+        this.gameState.questionAnswered = false;
+        this.gameState.questionCorrect = false;
+
+        this.enterResultPhase(penalty);
+    }
+
+    canEnterQuestionPhase() {
+        if (this.popupLock) return false;
+        if (this.gameState.phase !== 'searching') return false;
+
+        const minDig = this.levelData?.minDigBeforeQuestion ?? 1;
+        if (this.gameState.digsUsed < minDig) return false;
+
+        return true;
+    }
+    animateBoardToQuestionMode() {
+        if (!this.boardContainer) return;
+
+        this.tweens.add({
+            targets: this.boardContainer,
+            scaleX: this.boardScaleQuestion,
+            scaleY: this.boardScaleQuestion,
+            x: this.boardShiftXQuestion,
+            y: this.boardShiftYQuestion,
+            duration: 220,
+            ease: 'Sine.Out'
+        });
+    }
+
+    animateBoardToSearchingMode() {
+        if (!this.boardContainer) return;
+
+        this.tweens.add({
+            targets: this.boardContainer,
+            scaleX: this.boardScaleSearching,
+            scaleY: this.boardScaleSearching,
+            x: 0,
+            y: 0,
+            duration: 220,
+            ease: 'Sine.Out'
+        });
+    }
+
+    showQuestionUI(question) {
+        this.questionProgressText.setText(this.updateQuestionProgressText());
+        this.questionTimerText.setText(⏰ ${this.gameState.questionTimeLeft} 秒);
+        this.questionPromptText.setText(question.text || '');
+
+        this.questionHeader.setVisible(true);
+        this.answerContainer.setVisible(true);
+
+        this.clearAnswerButtons();
+
+        const choices = question.choices || [];
+        const choiceYs = [360, 468, 576];
+
+        choices.forEach((choice, index) => {
+            const y = choiceYs[index] || 576;
+            const btn = this.createPopupButton(
+                930,
+                y,
+                360,
+                76,
+                String(choice),
+                () => {
+                    this.submitAnswer(choice);
+                },
+                0x8ccf74
+            );
+
+            this.answerButtons.push(...btn);
+            this.answerContainer.add(btn);
+        });
+
+        this.questionHeader.setAlpha(0);
+        this.answerContainer.setAlpha(0);
+
+        this.tweens.add({
+            targets: this.questionHeader,
+            alpha: 1,
+            duration: 140
+        });
+
+        this.tweens.add({
+            targets: this.answerContainer,
+            alpha: 1,
+            duration: 140,
+            onComplete: () => {
+                this.startAnswerBreathing();
+            }
+        });
+    }
+
+    hideQuestionUI() {
+        this.stopAnswerBreathing();
+        this.clearAnswerButtons();
+        if (this.questionHeader) this.questionHeader.setVisible(false);
+        if (this.answerContainer) this.answerContainer.setVisible(false);
+    }
+
+    clearAnswerButtons() {
+        if (!this.answerButtons) {
+            this.answerButtons = [];
+            return;
+        }
+
+        this.answerButtons.forEach((obj) => {
+            if (obj?.destroy) obj.destroy();
+        });
+
+        this.answerButtons = [];
+    }
+
+    startAnswerBreathing() {
+        this.stopAnswerBreathing();
+
+        if (!this.answerButtons || this.answerButtons.length <= 0) return;
+
+        this.answerBreathTween = this.tweens.add({
+            targets: this.answerButtons,
+            scaleX: 1.02,
+            scaleY: 1.02,
+            duration: 780,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.InOut'
+        });
+    }
+
+    stopAnswerBreathing() {
+        if (this.answerBreathTween) {
+            this.answerBreathTween.stop();
+            this.answerBreathTween = null;
+        }
+
+        if (this.answerButtons && this.answerButtons.length > 0) {
+            this.answerButtons.forEach((obj) => {
+                if (obj?.setScale) obj.setScale(1);
+            });
+        }
+    }
+
+    updateDangerHint(tile) {
+        if (!tile?.view?.dangerText) return;
+
+        const dangerCount = tile.nearbyDangerCount || 0;
+
+        if (dangerCount > 0) {
+            tile.view.dangerText.setText(⚠${dangerCount});
+            tile.view.dangerText.setVisible(true);
+        } else {
+            tile.view.dangerText.setText('');
+            tile.view.dangerText.setVisible(false);
+        }
+    }
+
+    updateFlagView(tile) {
+        if (!tile?.view) return;
+
+        const x = tile.view.bg.x;
+        const y = tile.view.bg.y;
+
+        if (tile.isFlagged) {
+            if (!tile.view.flagSprite) {
+                tile.view.flagSprite = this.add.text(x, y - 4, '🚩', {
+                    fontSize: '30px'
+                }).setOrigin(0.5);
+
+                this.boardContainer.add(tile.view.flagSprite);
+            } else {
+                tile.view.flagSprite.setVisible(true);
+            }
+        } else if (tile.view.flagSprite) {
+            tile.view.flagSprite.setVisible(false);
+        }
+    }
+
+    toggleFlag(tile) {
+        if (!tile) return;
+        if (this.popupLock) return;
+        if (this.gameState.phase !== 'searching') return;
+        if (tile.isRevealed) return;
+
+        if (tile.isFlagged) {
+            tile.isFlagged = false;
+            this.gameState.flagsUsed = Math.max(0, this.gameState.flagsUsed - 1);
+            this.refreshTile(tile);
+            this.refreshHUD();
+            this.showMessage('🚩 收回小旗子', 1000);
+            return;
+        }
+
+        if (this.gameState.flagsUsed >= this.gameState.flagLimit) {
+            this.showMessage('🚩 小旗子用完了', 1000);
+            return;
+        }
+
+        tile.isFlagged = true;
+        this.gameState.flagsUsed += 1;
+        this.refreshTile(tile);
+        this.refreshHUD();
+        this.showMessage('🚩 插上小旗子', 1000);
+    }
+
+    startTilePress(tile) {
+        if (!tile) return;
+        if (this.popupLock) return;
+        if (this.gameState.phase !== 'searching') return;
+        if (tile.isRevealed) return;
+
+        this.cancelLongPressTimer();
+        this.longPressTriggered = false;
+        this.pressingTile = tile;
+
+        this.longPressTimer = this.time.delayedCall(this.longPressMs, () => {
+            if (this.pressingTile !== tile) return;
+            this.longPressTriggered = true;
+            this.toggleFlag(tile);
+        });
+    }
+
+    endTilePress(tile) {
+        if (!tile) return;
+
+        this.cancelLongPressTimer();
+
+        if (this.longPressTriggered) {
+            this.longPressTriggered = false;
+            this.pressingTile = null;
+            return;
+        }
+
+        this.pressingTile = null;
+
+        if (tile.isFlagged) {
+            this.showMessage('🚩 這格已插旗，長按可收回', 1000);
+            return;
+        }
+
+        this.onClickTile(tile);
+    }
+
+    cancelTilePress(tile) {
+        if (this.pressingTile !== tile) return;
+        this.cancelLongPressTimer();
+        this.longPressTriggered = false;
+        this.pressingTile = null;
+    }
+
+    cancelLongPressTimer() {
+        if (this.longPressTimer) {
+            this.longPressTimer.remove(false);
+            this.longPressTimer = null;
+        }
+    }
+
+    refreshTile(tile) {
+        if (!tile?.view) return;
+
+        if (tile.isRevealed || tile.isFlagged) {
+            this.stopTileHoverEffect(tile);
+        }
+
+        this.updateFlagView(tile);
+
+        const { bg, grassTop, label, dangerText } = tile.view;
+
+        if (!tile.isRevealed) {
+            if (tile.view.dirt) {
+                tile.view.dirt.destroy();
+                tile.view.dirt = null;
+            }
+
+            if (tile.view.bugSprite) {
+                tile.view.bugSprite.destroy();
+                tile.view.bugSprite = null;
+            }
+
+            if (tile.view.goldSparkle) {
+                tile.view.goldSparkle.destroy();
+                tile.view.goldSparkle = null;
+            }
+
+            bg.setVisible(true);
+            bg.setFillStyle(0x2d5f33);
+            bg.setStrokeStyle(2, 0xd9ebc8, 0.85);
+
+            if (tile.view.innerGlow) {
+                tile.view.innerGlow.setVisible(true);
+            }
+
+            if (tile.view.bushShadow) {
+                tile.view.bushShadow.setVisible(!tile.isFlagged);
+            }
+
+            if (tile.view.bushTexture) {
+                grassTop.setTexture(tile.view.bushTexture);
+            }
+
+            grassTop
+                .setVisible(!tile.isFlagged)
+                .setScale(tile.view.baseBushScale || 0.6)
+                .setAngle(tile.view.baseBushAngle || 0);
+
+            label.setText('');
+            label.setColor('#ffffff');
+            label.setAlpha(1);
+            label.setScale(1);
+
+            dangerText.setVisible(false);
+            return;
+        }
+
+        grassTop.setVisible(false);
+
+        if (tile.view.flagSprite) {
+            tile.view.flagSprite.setVisible(false);
+        }
+
+        if (tile.view.bushShadow) {
+            tile.view.bushShadow.setVisible(false);
+        }
+
+        if (tile.view.innerGlow) {
+            tile.view.innerGlow.setVisible(false);
+        }
+
+        switch (tile.tileType) {
+            case 'normal':
+                bg.setVisible(false);
+
+                if (!tile.view.dirt) {
+                    tile.view.dirt = this.add.image(bg.x, bg.y, 'tile_dirt').setScale(0.72);
+                    this.boardContainer.add(tile.view.dirt);
+                    this.boardContainer.sendToBack(tile.view.dirt);
+                }
+
+                label.setText('');
+                label.setColor('#ffffff');
+
+                if (tile.bugId) {
+                let textureKey = null;
+
+                if (tile.bugId === 'green') textureKey = 'bug_green';
+                else if (tile.bugId === 'red') textureKey = 'bug_red';
+
+                const isVirtualBug = !!tile.isVirtualBug;
+                const fruitAlpha = isVirtualBug ? 0.58 : 1;
+                const fruitScale = isVirtualBug ? 0.50 : 0.55;
+
+                if (textureKey) {
+                    if (!tile.view.bugSprite) {
+                        tile.view.bugSprite = this.add.image(bg.x, bg.y, textureKey)
+                            .setScale(fruitScale)
+                            .setAlpha(fruitAlpha);
+
+                        this.boardContainer.add(tile.view.bugSprite);
+                    } else {
+                        tile.view.bugSprite
+                            .setTexture(textureKey)
+                            .setVisible(true)
+                            .setScale(fruitScale)
+                            .setAlpha(fruitAlpha);
+                    }
+                } else {
+                    label
+                        .setText(this.getBugEmoji(tile.bugId))
+                        .setColor('#ffffff')
+                        .setAlpha(fruitAlpha)
+                        .setScale(isVirtualBug ? 0.9 : 1);
+                }
+            }
+                break;
+
+            case 'gold':
+                bg.setVisible(true);
+                bg.setFillStyle(0xd9b441);
+                bg.setStrokeStyle(3, 0xfff2b5);
+
+                if (tile.goldType === 'goldenGrass') {
+                    label.setText('黃').setColor('#fffef2');
+                } else if (tile.goldType === 'rainbowGrass') {
+                    label.setText('彩').setColor('#fffef2');
+                } else if (tile.goldType === 'randomEvent') {
+                    label.setText('秘').setColor('#fffef2');
+                } else if (tile.goldType === 'kingBug') {
+                    label.setText('王').setColor('#fffef2');
+                } else {
+                    label.setText('金').setColor('#fffef2');
+                }
+
+                if (!tile.view.goldSparkle) {
+                    tile.view.goldSparkle = this.add.image(bg.x, bg.y - 12, 'sparkle_gold').setScale(0.4);
+                    this.boardContainer.add(tile.view.goldSparkle);
+
+                    this.tweens.add({
+                        targets: tile.view.goldSparkle,
+                        alpha: 0.5,
+                        scaleX: 0.46,
+                        scaleY: 0.46,
+                        duration: 500,
+                        yoyo: true,
+                        repeat: -1
+                    });
+                }
+                break;
+
+            case 'snake':
+                bg.setVisible(true);
+                bg.setFillStyle(0x6a1b1a);
+                bg.setStrokeStyle(3, 0xeaa39f);
+                label.setText('蛇').setColor('#fff1f1');
+                break;
+
+            case 'thorn':
+                bg.setVisible(true);
+                bg.setFillStyle(0x556b2f);
+                bg.setStrokeStyle(3, 0xd2e5a4);
+                label.setText('刺').setColor('#f8fff0');
+                break;
+
+            case 'boar':
+                bg.setVisible(true);
+                bg.setFillStyle(0x5d4037);
+                bg.setStrokeStyle(3, 0xe1c0b4);
+                label.setText('豬').setColor('#fff5f0');
+                break;
+
+            case 'stone':
+                bg.setVisible(true);
+                bg.setFillStyle(0x777777);
+                bg.setStrokeStyle(3, 0xe0e0e0);
+                label.setText('石').setColor('#ffffff');
+                break;
+
+            case 'spiderweb':
+                bg.setVisible(true);
+                bg.setFillStyle(0x8a8a8a);
+                bg.setStrokeStyle(3, 0xf5f5f5);
+                label.setText('網').setColor('#ffffff');
+                break;
+
+            default:
+                bg.setVisible(true);
+                bg.setFillStyle(0x8d6e63);
+                bg.setStrokeStyle(3, 0xf0d9c6);
+                label.setText('?').setColor('#ffffff');
+                break;
+        }
+
+        this.updateDangerHint(tile);
+    }
+
+    getBugEmoji(bugId) {
+        const map = {
+            green: '🟢',
+            red: '🔴',
+            blue: '🔵',
+            big: '🍎',
+            poison: '☠️'
+        };
+        return map[bugId] || '果';
+    }
+
+    getDangerEmoji(tileType) {
+        const map = {
+            snake: '🐍',
+            thorn: '🌵',
+            boar: '🐗',
+            stone: '🪨',
+            spiderweb: '🕸️'
+        };
+
+        return map[tileType] || '⚠️';
+    }
+
+    getGoldBushRevealText(tile) {
+        if (!tile || tile.tileType !== 'gold') return '金草叢';
+
+        const map = {
+            goldenGrass: '黃金草',
+            rainbowGrass: '彩虹草',
+            randomEvent: '神祕金草',
+            kingBug: '國王蟲'
+        };
+
+        return map[tile.goldType] || '神祕金草';
+    }
+
+    getRandomGoldEventType() {
+        const eventPool = [
+            'windReveal',     // 森林微風吹過
+            'goodSmell',      // 香香氣味飄來
+            'forestBlessing', // 森林祝福
+            'inspiration',    // 靈感一閃
+            'bonusCrystal'    // 亮晶晶發現
+        ];
+
+        return Phaser.Utils.Array.GetRandom(eventPool);
+    }
+
+    applyGoldBushImmediateEffect(tile) {
+        if (!tile || tile.tileType !== 'gold') return;
+
+        const goldType = tile.goldType;
+
+        if (goldType === 'randomEvent') {
+            const eventType = this.getRandomGoldEventType();
+            tile.goldEventType = eventType;
+
+            switch (eventType) {
+                case 'windReveal':
+                    this.showMessage('🍃 森林微風吹過！附近線索變清楚了！', 1800);
+                    break;
+
+                case 'goodSmell':
+                    this.showMessage('🌸 香香氣味飄來！附近好像有稀有果實！', 1800);
+                    break;
+
+                case 'forestBlessing':
+                    this.gameState.stamina = Math.min(
+                        this.gameState.maxStamina,
+                        this.gameState.stamina + 1
+                    );
+                    this.refreshHUD();
+                    this.showMessage('✨ 森林祝福！體力 +1', 1800);
+                    break;
+
+                case 'inspiration':
+                    this.gameState.goldBonusQuestionTime = (this.gameState.goldBonusQuestionTime || 0) + 5;
+                    this.showMessage('💡 靈感一閃！答題時間 +5 秒', 1800);
+                    break;
+
+                case 'bonusCrystal':
+                    this.gameState.goldBonusCrystals = (this.gameState.goldBonusCrystals || 0) + 1;
+                    this.showMessage('💎 亮晶晶發現！結算時額外水晶 +1', 1800);
+                    break;
+
+                default:
+                    this.showMessage('🍀 神祕事件發生了！', 1800);
+                    break;
+            }
+        }
+
+        if (goldType === 'kingBug') {
+            this.gameState.foundKingBug = true;
+            this.showMessage('👑 發現國王蟲！結算時有機會得到小王冠！', 1900);
+        }
+    }
+
+    onClickTile(tile) {
+        const now = this.time.now;
+
+        if (this.popupLock) return;
+        if (now < this.nextDigTime) return;
+        if (this.gameState.phase !== 'searching') return;
+        if (!tile || tile.isRevealed) return;
+        if (tile.isFlagged) {
+            this.showMessage('🚩 這格有小旗子，長按可收回', 1000);
+            return;
+        }
+
+        if (this.gameState.nextDigBlocked) {
+            this.nextDigTime = this.time.now + this.digCooldownMs;
+
+            this.gameState.nextDigBlocked = false;
+            this.gameState.digsUsed += 1;
+            this.gameState.combo = 0;
+
+            tile.isRevealed = true;
+            this.refreshTile(tile);
+            this.playTileShake(tile);
+            this.showMessage('🕸️ 被蜘蛛網纏住，這次不能挖', 1600);
+
+            this.checkSearchPhaseEnd();
+            this.refreshHUD();
+            return;
+        }
+
+        this.nextDigTime = this.time.now + this.digCooldownMs;
+
+        tile.isRevealed = true;
+        this.gameState.digsUsed += 1;
+
+        if (tile.tileType === 'normal') {
+            BushBugSystem.assignBugToDugNormalTile(tile, this.levelData);
+
+            this.gameState.combo += 1;
+            this.gameState.highestCombo = Math.max(
+                this.gameState.highestCombo,
+                this.gameState.combo
+            );
+            this.gameState.bugsCollected += tile.bugId ? 1 : 0;
+
+            this.refreshTile(tile);
+            this.playTileReveal(tile);
+            this.showTileBug(tile);
+        } else if (tile.tileType === 'gold') {
+            this.gameState.gotGoldBush = true;
+            this.gameState.combo += 1;
+            this.gameState.highestCombo = Math.max(
+                this.gameState.highestCombo,
+                this.gameState.combo
+            );
+
+            this.refreshTile(tile);
+            this.playGoldReveal(tile);
+
+            const goldText = this.getGoldBushRevealText(tile);
+
+            if (tile.goldType === 'goldenGrass') {
+                this.showMessage(🌟 找到${goldText}！穩穩有賺！, 1800);
+            } else if (tile.goldType === 'rainbowGrass') {
+                this.showMessage(🌈 找到${goldText}！感覺有好事要發生了！, 1800);
+            } else if (tile.goldType === 'randomEvent') {
+                this.showMessage(🍀 找到${goldText}！神祕事件發生中！, 1800);
+            } else if (tile.goldType === 'kingBug') {
+                this.showMessage(👑 找到${goldText}！超稀有！, 1800);
+            } else {
+                this.showMessage(🌟 找到${goldText}！, 1800);
+            }
+
+            this.applyGoldBushImmediateEffect(tile);
+        } else {
+            const effect = BushDangerSystem.applyDanger(this, tile);
+
+            // 危險格 / 石頭 / 蜘蛛網 都會中斷 Combo
+            this.gameState.combo = 0;
+
+            this.refreshTile(tile);
+            this.playDangerReveal(tile);
+
+            if (effect) {
+                this.showMessage(⚠️ ${effect.resultText}, 1800);
+            }
+        }
+
+        this.refreshHUD();
+
+        if (BushDangerSystem.checkFail(this)) {
+            this.enterFailPhase();
+            return;
+        }
+
+        this.showNearbyHint(tile);
+        this.checkSearchPhaseEnd();
+    }
+
+    playTileReveal(tile) {
+        if (!tile?.view?.bg) return;
+
+        this.spawnLeafBurst(tile);
+
+        this.tweens.add({
+            targets: [tile.view.bg, tile.view.label],
+            scaleX: 1.10,
+            scaleY: 1.10,
+            duration: 110,
+            yoyo: true
+        });
+
+        if (this.cache.audio.exists('dig_grass_sfx')) {
+            this.playSfxSafe('dig_grass_sfx', 0.38);
+        } else if (this.cache.audio.exists('dig_sfx')) {
+            this.playSfxSafe('dig_sfx', 0.35);
+        }
+    }
+
+    spawnLeafBurst(tile) {
+        if (!tile?.view?.bg) return;
+
+        const centerX = tile.view.bg.x;
+        const centerY = tile.view.bg.y;
+
+        for (let i = 0; i < 6; i++) {
+            const leaf = this.add.image(centerX, centerY - 8, 'leaf_particle')
+                .setScale(0.18 + Math.random() * 0.08)
+                .setAlpha(0.95);
+
+            this.boardContainer.add(leaf);
+
+            const offsetX = Phaser.Math.Between(-42, 42);
+            const offsetY = Phaser.Math.Between(-48, -10);
+            const rotate = Phaser.Math.Between(-120, 120);
+
+            this.tweens.add({
+                targets: leaf,
+                x: centerX + offsetX,
+                y: centerY + offsetY,
+                angle: rotate,
+                alpha: 0,
+                duration: 320,
+                ease: 'Cubic.Out',
+                onComplete: () => leaf.destroy()
+            });
+        }
+    }
+
+    playGoldReveal(tile) {
+        if (!tile?.view?.bg) return;
+
+        this.tweens.add({
+            targets: [tile.view.bg, tile.view.label],
+            angle: 8,
+            scaleX: 1.12,
+            scaleY: 1.12,
+            duration: 140,
+            yoyo: true,
+            repeat: 1
+        });
+    }
+
+    playDangerReveal(tile) {
+        if (!tile?.view?.bg) return;
+
+        this.tweens.add({
+            targets: tile.view.bg,
+            x: tile.view.bg.x + 6,
+            duration: 45,
+            yoyo: true,
+            repeat: 3
+        });
+    }
+
+    playTileShake(tile) {
+        if (!tile?.view?.bg) return;
+
+        this.tweens.add({
+            targets: [tile.view.bg, tile.view.label],
+            x: '+=5',
+            duration: 40,
+            yoyo: true,
+            repeat: 3
+        });
+    }
+
+    showTileBug(tile) {
+        if (!tile.bugId) {
+            this.showMessage('🍃 這格沒有找到果實', 1300);
+            return;
+        }
+
+        const fruitNameMap = {
+            green: '綠果',
+            red: '紅果',
+            blue: '藍果',
+            big: '大果',
+            poison: '毒果'
+        };
+
+        this.showMessage(🍎 發現 ${fruitNameMap[tile.bugId]}！, 1300);
+    }
+
+    showNearbyHint(tile) {
+        if (!tile.nearbyHints || tile.nearbyHints.length <= 0) return;
+
+        const hint = Phaser.Utils.Array.GetRandom(tile.nearbyHints);
+        this.gameState.hintsShown.push(hint);
+
+        this.time.delayedCall(350, () => {
+            if (this.gameState.phase !== 'searching') return;
+            this.showMessage(⚠️ ${hint}, 1500);
+        });
+    }
+
+    checkSearchPhaseEnd() {
+        if (this.gameState.stamina <= 0) {
+            this.enterFailPhase();
+            return;
+        }
+
+        if (this.gameState.digsUsed >= this.gameState.digLimit) {
+            this.enterQuestionPhase();
+        }
+    }
+
+    showQuestionConfirmPopup() {
+        const { container } = this.createPopupBase(560, 300, {
+            overlayAlpha: 0.30
+        });
+
+        const title = this.add.text(640, 248, '🔍 開始觀察？', {
+            fontSize: '34px',
+            color: '#4d7f34',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        const text = this.add.text(640, 320, '要結束探索，進入觀察答題嗎？\n進入後就不能再繼續挖草喔！', {
+            fontSize: '26px',
+            color: '#314927',
+            align: 'center',
+            lineSpacing: 10
+        }).setOrigin(0.5);
+
+        const cancelBtn = this.createPopupButton(
+            530,
+            425,
+            160,
+            58,
+            '再看看',
+            () => {
+                this.closeActivePopup();
+            },
+            0x9a9a9a
+        );
+
+        const confirmBtn = this.createPopupButton(
+            750,
+            425,
+            180,
+            58,
+            '開始觀察',
+            () => {
+                this.closeActivePopup();
+                this.time.delayedCall(120, () => {
+                    this.enterQuestionPhase();
+                });
+            },
+            0x79ba63
+        );
+
+        container.add([
+            title,
+            text,
+            ...cancelBtn,
+            ...confirmBtn
+        ]);
+    }
+
+    spawnLv0FruitsFromUndugGrass() {
+        const chance = this.levelData?.lv0FruitChanceFromUndugGrass ?? 0;
+
+        if (chance <= 0) return;
+
+        const normalFruitPool = ['green', 'red', 'blue'];
+
+        for (const tile of this.gameState.mapTiles) {
+            // 只處理：未挖過 + 普通草
+            if (tile.isRevealed) continue;
+            if (tile.tileType !== 'normal') continue;
+
+            // 已經有內容就跳過
+            if (tile.bugId) continue;
+
+            if (Math.random() < chance) {
+                tile.bugId = Phaser.Utils.Array.GetRandom(normalFruitPool);
+                tile.isVirtualBug = true; // P2 補出的果實
+            }
+        }
+    }
+
+    enterQuestionPhase() {
+        if (this.gameState.phase !== 'searching') return;
+
+        this.gameState.phase = 'question';
+        this.showMessage('👀 開始觀察棋盤，準備回答問題', 1500);
+        this.playSfxSafe('ui_click_sfx', 0.40);
+
+        this.spawnLv0FruitsFromUndugGrass();
+
+        BushBugSystem.spawnSpecialBugsFromUndugGrass(
+            this.gameState.mapTiles,
+            this.levelData
+        );
+
+        if (!this.gameState.gotGoldBush) {
+            BushBugSystem.spawnGuaranteedSpecialBugIfGoldMissed(this.gameState.mapTiles);
+        }
+
+        this.revealAllBugs();
+        this.animateBoardToQuestionMode();
+
+        this.gameState.questionQueue = this.buildQuestionQueue();
+        this.gameState.questionIndex = 0;
+        this.gameState.totalQuestions = this.gameState.questionQueue.length;
+        this.gameState.correctAnswers = 0;
+        this.gameState.currentQuestion = null;
+        this.gameState.questionAnswered = false;
+        this.gameState.questionCorrect = false;
+
+        this.refreshHUD();
+
+        this.time.delayedCall(230, () => {
+            if (this.gameState.phase !== 'question') return;
+            this.showNextQuestion();
+        });
+    }
+
+    revealAllBugs() {
+        for (const tile of this.gameState.mapTiles) {
+            if (tile.bugId) {
+                tile.isRevealed = true;
+                this.refreshTile(tile);
+            }
+        }
+    }
+
+    submitAnswer(playerAnswer) {
+        if (this.gameState.phase !== 'question') return;
+
+        this.clearQuestionTimer();
+        this.stopAnswerBreathing();
+
+        const currentQuestion = this.gameState.currentQuestion;
+        const isCorrect = BushQuestionSystem.checkAnswer(currentQuestion, playerAnswer);
+
+        // 🔊 播音效（正確 / 錯誤）
+        if (isCorrect) {
+            this.playSfxSafe('answer_correct_sfx', 0.48);
+        } else {
+            this.playSfxSafe('answer_wrong_sfx', 0.45);
+        }
+
+        // ===== 正確 =====
+        if (isCorrect) {
+            this.gameState.correctAnswers += 1;
+
+            this.gameState.questionIndex += 1;
+            this.hideQuestionUI();
+
+            if (this.gameState.questionIndex >= this.gameState.totalQuestions) {
+                this.gameState.questionAnswered = true;
+                this.gameState.questionCorrect = true;
+                this.enterResultPhase(0);
+                return;
+            }
+
+            this.time.delayedCall(180, () => {
+                if (this.gameState.phase !== 'question') return;
+                this.showNextQuestion();
+            });
+
+            return;
+        }
+
+        // ===== 錯誤 =====
+        const penalty = BushQuestionSystem.applyWrongAnswerPenalty(
+            this,
+            this.gameState.mapTiles
+        );
+
+        this.refreshHUD();
+
+        if (this.gameState.stamina <= 0) {
+            this.gameState.questionAnswered = true;
+            this.gameState.questionCorrect = false;
+            this.hideQuestionUI();
+            this.enterFailPhase();
+            return;
+        }
+
+        this.hideQuestionUI();
+        this.gameState.questionAnswered = true;
+        this.gameState.questionCorrect = false;
+        this.enterResultPhase(penalty);
+    }
+
+    enterResultPhase(extraPenalty = 0) {
+        this.clearQuestionTimer();
+        this.hideQuestionUI();
+        this.gameState.phase = 'result';
+
+        let reward;
+
+        if (this.gameState.questionCorrect) {
+            reward = BushRewardSystem.buildClearReward(this.levelData, this.gameState);
+        } else {
+            reward = BushRewardSystem.buildFailReward(this.levelData);
+        }
+
+        reward = this.applyFlagRewardToRewardData(reward);
+        reward = this.applyGoldBushTypeReward(reward);
+        reward = BushRewardSystem.applyFruitLvChestBonus(reward, this.gameState, this);
+
+        const stageResult = this.applyStageResult();
+        this.stageResultData = stageResult;
+
+        // 最低分通關保底：成功通關且只有 1 星，而且不能和大寶箱重疊
+        const hasGoldChest =
+            (reward.chest || 0) > 0 ||
+            (reward.rareChest || 0) > 0 ||
+            (reward.stageChest || 0) > 0;
+
+        if (this.gameState.questionCorrect && stageResult.stars === 1 && !hasGoldChest) {
+            reward.pityChest = Math.max(reward.pityChest || 0, 1);
+        }
+
+        // 最後才真正開寶箱
+        reward = BushRewardSystem.resolveChestLoot(reward, 'treasure');
+
+
+        this.grantRewardOnce(reward);
+        this.refreshHUD();
+        this.saveGameData();
+
+        console.log('📘 [BushExplore] 關卡結算結果', stageResult);
+        console.log('🚩 [BushExplore] 旗子結算結果', this.flagResultData);
+
+        this.showResultPopup(reward, extraPenalty);
+        
+    }
+
+    enterFailPhase() {
+        if (this.gameState.phase === 'failed') return;
+
+        this.clearQuestionTimer();
+        this.hideQuestionUI();
+        this.gameState.phase = 'failed';
+
+        let reward = BushRewardSystem.buildFailReward(this.levelData);
+
+        // 失敗時如果有找到金草叢，仍然要保底給大寶箱
+        if (this.gameState.gotGoldBush) {
+            reward.chest = Math.max(reward.chest || 0, 1);
+            reward.goldGuaranteedChest = true;
+        }
+
+        // 失敗時不給保底小寶箱
+        reward.pityChest = 0;
+
+        const stageResult = this.applyStageResult();
+        this.stageResultData = stageResult;
+
+        // 失敗時若有寶箱，也要真的開箱
+        reward = BushRewardSystem.resolveChestLoot(reward, 'treasure');
+
+        this.grantRewardOnce(reward);
+        this.refreshHUD();
+        this.saveGameData();
+
+        console.log('📘 [BushExplore] 失敗結算結果', stageResult);
+        console.log('🎁 [BushExplore] 失敗獎勵', reward);
+        console.log('🎁 最終 reward =', reward);///////////////
+        this.showFailPopup(reward);
+    }
+
+    grantRewardOnce(reward) {
+        if (this.gameState.resultGranted) return;
+        this.gameState.resultGranted = true;
+        this.grantReward(reward);
+    }
+
+    grantReward(reward) {
+        const currentCrystals = this.registry.get('user_crystals') || 0;
+        const currentReputation = this.registry.get('reputation') || 0;
+        const ownedItems = [...(this.registry.get('owned_items') || [])];
+
+        this.registry.set('user_crystals', currentCrystals + (reward.crystals || 0));
+        this.registry.set('reputation', currentReputation + (reward.reputation || 0));
+
+        if (reward.itemDrops && reward.itemDrops.length > 0) {
+            for (const itemId of reward.itemDrops) {
+                const alreadyOwned = ownedItems.includes(itemId);
+
+                if (alreadyOwned) {
+                    // 重複裝備轉水晶
+                    // 先簡單寫：全部 +1
+                    this.registry.set(
+                        'user_crystals',
+                        (this.registry.get('user_crystals') || 0) + 1
+                    );
+                } else {
+                    ownedItems.push(itemId);
+                }
+            }
+
+            this.registry.set('owned_items', ownedItems);
+        }
+    }
+
+    saveGameData() {
+        const dataToSave = {
+            hearts: this.registry.get('hearts'),
+            max_hearts: this.registry.get('max_hearts'),
+            recovery_seconds: this.registry.get('recovery_seconds'),
+            next_heart_time: this.registry.get('next_heart_time'),
+
+            user_crystals: this.registry.get('user_crystals'),
+            reputation: this.registry.get('reputation'),
+
+            owned_items: this.registry.get('owned_items'),
+            placed_decorations: this.registry.get('placed_decorations'),
+
+            equipped_hat: this.registry.get('equipped_hat'),
+            equipped_cloth: this.registry.get('equipped_cloth'),
+            equipped_fullset: this.registry.get('equipped_fullset'),
+
+            minigame_stats: this.registry.get('minigame_stats'),
+            bonus_play_counts: this.registry.get('bonus_play_counts'),
+            bonus_reward_rates: this.registry.get('bonus_reward_rates'),
+            bonus_drop_rates: this.registry.get('bonus_drop_rates'),
+
+            stage_progress: this.registry.get('stage_progress')
+        };
+
+        localStorage.setItem('forest_save_data', JSON.stringify(dataToSave));
+        console.log('💾 [BushExplore] 關卡結果已存檔！');
+    }
+
+    showMessage(text, duration = 1400) {
+        this.messageText.setText(text);
+
+        if (this.messageTween) {
+            this.messageTween.remove();
+            this.messageTween = null;
+        }
+
+        this.messageText.setAlpha(1);
+        this.messageIcon.setAlpha(1);
+
+        this.messageTween = this.tweens.add({
+            targets: [this.messageText, this.messageIcon],
+            alpha: 0.96,
+            duration: duration,
+            onComplete: () => {
+                this.messageText.setAlpha(1);
+                this.messageIcon.setAlpha(1);
+            }
+        });
+    }
+
+    createPopupBase(width = 760, height = 420, options = {}) {
+        const centerX = options.centerX ?? 640;
+        const centerY = options.centerY ?? 360;
+        const overlayAlpha = options.overlayAlpha ?? 0.40;
+        const panelColor = options.panelColor ?? 0xf6ffe8;
+        const strokeColor = options.strokeColor ?? 0x5b8f55;
+
+        this.popupLock = true;
+
+        const container = this.add.container(0, 0);
+
+        const overlay = this.add.rectangle(640, 360, 1280, 720, 0x000000, overlayAlpha)
+            .setInteractive();
+
+        const panelShadow = this.add.rectangle(centerX + 6, centerY + 6, width, height, 0x000000, 0.22);
+        const panel = this.add.rectangle(centerX, centerY, width, height, panelColor, 1)
+            .setStrokeStyle(5, strokeColor);
+
+        container.add([overlay, panelShadow, panel]);
+
+        container.setAlpha(0);
+        container.setScale(0.94);
+
+        this.tweens.add({
+            targets: container,
+            alpha: 1,
+            scaleX: 1,
+            scaleY: 1,
+            duration: 160,
+            ease: 'Back.Out'
+        });
+
+        this.activePopup = container;
+        return { container, overlay, panel, centerX, centerY };
+    }
+
+    closeActivePopup() {
+        if (!this.activePopup) {
+            this.popupLock = false;
+            return;
+        }
+
+        const popup = this.activePopup;
+        this.activePopup = null;
+
+        this.tweens.add({
+            targets: popup,
+            alpha: 0,
+            scaleX: 0.94,
+            scaleY: 0.94,
+            duration: 120,
+            onComplete: () => {
+                popup.destroy(true);
+            }
+        });
+
+        this.popupLock = false;
+    }
+
+    createPopupButton(x, y, width, height, text, onClick, fillColor = 0x7bbf65, textColor = '#ffffff') {
+        const bg = this.add.rectangle(x, y, width, height, fillColor)
+            .setStrokeStyle(3, 0xffffff)
+            .setInteractive({ useHandCursor: true });
+
+        const label = this.add.text(x, y, text, {
+            fontSize: width >= 300 ? '28px' : '24px',
+            color: textColor,
+            fontStyle: 'bold',
+            align: 'center',
+            wordWrap: { width: width - 36 }
+        }).setOrigin(0.5);
+
+        bg.on('pointerover', () => {
+            bg.setScale(1.04);
+            label.setScale(1.04);
+        });
+
+        bg.on('pointerout', () => {
+            bg.setScale(1);
+            label.setScale(1);
+        });
+
+        bg.on('pointerdown', () => {
+            this.playSfxSafe('ui_click_sfx', 0.42);
+            onClick?.();
+        });
+
+        return [bg, label];
+    }
+
+    getItemDisplayIcon(itemData, itemId = '') {
+        const id = itemId || itemData?.id || '';
+        const slot = itemData?.slot || '';
+
+        if (id.includes('crown') || id.includes('tiara')) return '👑';
+        if (id.includes('wand')) return '🪄';
+        if (id.includes('leaf')) return '🍃';
+        if (id.includes('fairy')) return '🧚';
+
+        if (slot === 'hat' || id.includes('hat')) return '👒';
+        if (slot === 'cloth' || id.includes('cloth') || id.includes('dress')) return '👗';
+        if (slot === 'fullset' || id.includes('fullset') || id.includes('set')) return '🎀';
+
+        return '✨';
+    }
+
+    showItemDropSequence(itemIds = [], onComplete = null) {
+        const list = [...itemIds];
+
+        if (list.length <= 0) {
+            onComplete?.();
+            return;
+        }
+
+        const showNext = () => {
+            if (list.length <= 0) {
+                onComplete?.();
+                return;
+            }
+
+            const itemId = list.shift();
+            this.showItemDropPopup(itemId, showNext);
+        };
+
+        showNext();
+    }
+
+    showItemDropPopup(itemId, onClose = null) {
+        const itemData = ITEM_DB[itemId];
+
+        if (!itemData) {
+            console.warn('[BushExplore] 找不到裝備資料:', itemId);
+            onClose?.();
+            return;
+        }
+
+        const rarityMap = {
+            common: {
+                label: '普通',
+                color: 0xb8b8b8,
+                glow: 0xf3f3f3,
+                accent: '#6f6f6f',
+                panel: 0xfffbf8,
+                particleCount: 2,
+                pulseScale: 1.01
+            },
+            rare: {
+                label: '稀有',
+                color: 0x7eb6ff,
+                glow: 0xe8f3ff,
+                accent: '#4d7fd6',
+                panel: 0xf8fbff,
+                particleCount: 4,
+                pulseScale: 1.03
+            },
+            epic: {
+                label: '夢幻',
+                color: 0xd69cff,
+                glow: 0xf7eaff,
+                accent: '#9a59c7',
+                panel: 0xfff8ff,
+                particleCount: 6,
+                pulseScale: 1.05
+            },
+            legendary: {
+                label: '傳說',
+                color: 0xffc76b,
+                glow: 0xfff1cf,
+                accent: '#d68a1f',
+                panel: 0xfffcf6,
+                particleCount: 9,
+                pulseScale: 1.08
+            }
+        };
+
+        const rarityInfo = rarityMap[itemData.rarity] || rarityMap.common;
+
+        const { container } = this.createPopupBase(720, 560, {
+            panelColor: 0xfffafc,
+            strokeColor: rarityInfo.color,
+            overlayAlpha: 0.50
+        });
+
+        const centerX = 640;
+        const centerY = 360;
+
+        // ===== 大背景光 =====
+        const backGlow = this.add.circle(centerX, centerY - 10, 150, rarityInfo.color, 0.18)
+            .setAlpha(0)
+            .setScale(0.6);
+
+        const backGlow2 = this.add.circle(centerX, centerY - 10, 210, rarityInfo.color, 0.08)
+            .setAlpha(0)
+            .setScale(0.6);
+
+        // ===== 卡片陰影 =====
+        const cardShadow = this.add.rectangle(centerX + 10, centerY + 12, 360, 430, 0x000000, 0.28)
+            .setOrigin(0.5)
+            .setAlpha(0);
+
+        // ===== 卡片外光 =====
+        const cardGlow = this.add.rectangle(centerX, centerY, 372, 442, rarityInfo.glow, 0.36)
+            .setStrokeStyle(5, rarityInfo.color, 0.45)
+            .setOrigin(0.5)
+            .setAlpha(0)
+            .setScale(0.72);
+
+        // ===== 卡片本體 =====
+        const card = this.add.rectangle(centerX, centerY, 348, 418, rarityInfo.panel, 1)
+            .setStrokeStyle(6, rarityInfo.color, 1)
+            .setOrigin(0.5)
+            .setAlpha(0)
+            .setScale(0.72);
+
+        const cardInner = this.add.rectangle(centerX, centerY + 6, 312, 378, 0xffffff, 0.72)
+            .setStrokeStyle(2, rarityInfo.color, 0.35)
+            .setOrigin(0.5)
+            .setAlpha(0)
+            .setScale(0.72);
+
+        // ===== 標題 =====
+        const title = this.add.text(centerX, 108, '✨ 發現新裝備！', {
+            fontSize: '40px',
+            color: rarityInfo.accent,
+            fontStyle: 'bold',
+            stroke: '#fff7fb',
+            strokeThickness: 6
+        }).setOrigin(0.5).setAlpha(0).setScale(0.8);
+
+        // ===== 稀有度標籤 =====
+        const rarityBadge = this.add.rectangle(centerX, 176, 140, 42, rarityInfo.color, 0.95)
+            .setStrokeStyle(3, 0xffffff, 0.9)
+            .setAlpha(0)
+            .setScale(0.75);
+
+        const rarityText = this.add.text(centerX, 176, ✦ ${rarityInfo.label}, {
+            fontSize: '22px',
+            color: '#ffffff',
+            fontStyle: 'bold'
+        }).setOrigin(0.5).setAlpha(0).setScale(0.75);
+
+        // ===== icon 區 =====
+        const iconHalo = this.add.circle(centerX, 264, 64, rarityInfo.color, 0.18)
+            .setStrokeStyle(4, rarityInfo.color, 0.45)
+            .setAlpha(0)
+            .setScale(0.55);
+
+        const iconPlate = this.add.circle(centerX, 264, 50, 0xffffff, 0.95)
+            .setStrokeStyle(4, rarityInfo.color, 0.9)
+            .setAlpha(0)
+            .setScale(0.55);
+
+        // 之後若正式裝備圖，可改成 image
+        const itemIcon = this.getItemDisplayIcon(itemData, itemId);
+        let iconFontSize = '62px';
+
+        if (itemIcon === '👑') iconFontSize = '58px';
+        else if (itemIcon === '🪄') iconFontSize = '56px';
+        else if (itemIcon === '🎀') iconFontSize = '58px';
+        else if (itemIcon === '✨') iconFontSize = '54px';
+
+        const itemIconText = this.add.text(centerX, 264, itemIcon, {
+            fontSize: iconFontSize
+        }).setOrigin(0.5).setAlpha(0).setScale(0.35);
+
+        // ===== 名稱 =====
+        const itemNameText = this.add.text(centerX, 352, itemData.name || itemId, {
+            fontSize: '30px',
+            color: '#563f4e',
+            fontStyle: 'bold',
+            align: 'center',
+            wordWrap: { width: 270 }
+        }).setOrigin(0.5).setAlpha(0).setScale(0.85);
+
+        // ===== 祝福 / 描述 =====
+        const descText = this.add.text(
+            centerX,
+            418,
+            itemData.blessing || itemData.description || '得到了一件很特別的裝備！',
+            {
+                fontSize: '22px',
+                color: '#6b5d67',
+                align: 'center',
+                wordWrap: { width: 280 },
+                lineSpacing: 8
+            }
+        ).setOrigin(0.5).setAlpha(0);
+
+        // ===== 提示 =====
+        const tipText = this.add.text(centerX, 486, '收下這份閃亮的祝福吧！', {
+            fontSize: '20px',
+            color: rarityInfo.accent,
+            fontStyle: 'bold'
+        }).setOrigin(0.5).setAlpha(0);
+
+        const okBtn = this.createPopupButton(
+            centerX,
+            560,
+            230,
+            64,
+            '收下裝備',
+            () => {
+                this.closeActivePopup();
+                this.time.delayedCall(140, () => {
+                    onClose?.();
+                });
+            },
+            rarityInfo.color,
+            '#ffffff'
+        );
+
+        container.add([
+            backGlow,
+            backGlow2,
+            cardShadow,
+            cardGlow,
+            card,
+            cardInner,
+            title,
+            rarityBadge,
+            rarityText,
+            iconHalo,
+            iconPlate,
+            itemIconText,
+            itemNameText,
+            descText,
+            tipText,
+            ...okBtn
+        ]);
+
+        // ===== 入場動畫 =====
+        this.tweens.add({
+            targets: [backGlow, backGlow2],
+            alpha: { from: 0, to: 1 },
+            scaleX: 1,
+            scaleY: 1,
+            duration: 320,
+            ease: 'Sine.Out'
+        });
+
+        this.tweens.add({
+            targets: [cardShadow, cardGlow, card, cardInner],
+            alpha: 1,
+            scaleX: 1,
+            scaleY: 1,
+            duration: 360,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: title,
+            alpha: 1,
+            scaleX: 1,
+            scaleY: 1,
+            y: 116,
+            duration: 260,
+            delay: 100,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: [rarityBadge, rarityText],
+            alpha: 1,
+            scaleX: 1,
+            scaleY: 1,
+            duration: 220,
+            delay: 220,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: [iconHalo, iconPlate],
+            alpha: 1,
+            scaleX: 1,
+            scaleY: 1,
+            duration: 260,
+            delay: 320,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: itemIconText,
+            alpha: 1,
+            scaleX: 1,
+            scaleY: 1,
+            angle: { from: -8, to: 0 },
+            duration: 340,
+            delay: 360,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: itemNameText,
+            alpha: 1,
+            y: 346,
+            duration: 220,
+            delay: 520,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: descText,
+            alpha: 1,
+            duration: 220,
+            delay: 650
+        });
+
+        this.tweens.add({
+            targets: tipText,
+            alpha: 1,
+            duration: 220,
+            delay: 760
+        });
+
+        // ===== 持續浮動 =====
+        this.tweens.add({
+            targets: [cardGlow, iconHalo],
+            scaleX: rarityInfo.pulseScale || 1.01,
+            scaleY: rarityInfo.pulseScale || 1.01,
+            duration: 1400,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.InOut'
+        });
+
+        this.tweens.add({
+            targets: [iconPlate, itemIconText],
+            y: '-=6',
+            duration: 1100,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.InOut'
+        });
+
+        this.tweens.add({
+            targets: backGlow,
+            alpha: 0.12,
+            duration: 1000,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.InOut'
+        });
+
+        // ===== 閃光粒子 =====
+        const sparkleCount = rarityInfo.particleCount || 2;
+
+        for (let i = 0; i < sparkleCount; i++) {
+            const sparkle = this.add.text(
+                centerX + Phaser.Math.Between(-130, 130),
+                centerY + Phaser.Math.Between(-150, 120),
+                Phaser.Math.Between(0, 1) === 0 ? '✨' : '✦',
+                {
+                    fontSize: ${Phaser.Math.Between(18, 30)}px
+                }
+            ).setOrigin(0.5).setAlpha(0);
+
+            container.add(sparkle);
+
+            this.tweens.add({
+                targets: sparkle,
+                alpha: { from: 0, to: 1 },
+                y: sparkle.y - Phaser.Math.Between(14, 34),
+                x: sparkle.x + Phaser.Math.Between(-12, 12),
+                duration: 420,
+                delay: 180 + i * 55,
+                yoyo: true,
+                hold: 200,
+                ease: 'Sine.Out',
+                onComplete: () => sparkle.destroy()
+            });
+        }
+
+        // ===== 稀有度額外強光 =====
+        if (['epic', 'legendary'].includes(itemData.rarity)) {
+            const flashRing = this.add.circle(centerX, 264, 86, rarityInfo.color, 0)
+                .setStrokeStyle(5, rarityInfo.color, 0.8)
+                .setScale(0.4);
+
+            container.add(flashRing);
+
+            this.tweens.add({
+                targets: flashRing,
+                alpha: { from: 0.9, to: 0 },
+                scaleX: 1.45,
+                scaleY: 1.45,
+                duration: 600,
+                ease: 'Cubic.Out',
+                onComplete: () => flashRing.destroy()
+            });
+        }
+
+        // ===== 音效 =====
+        if (itemData.rarity === 'legendary' || itemData.rarity === 'epic') {
+            this.playSfxSafe('reward_rare_sfx', 0.55);
+        } else {
+            this.playSfxSafe('reward_item_sfx', 0.5);
+        }
+    }
+
+    playChestRewardShowcase(container, reward) {
+        const centerX = 640;
+        const chestY = 255;
+
+        const normalChestCount = reward.chest || 0;
+        const rareChestCount = reward.rareChest || 0;
+        const hasItemDrop = Array.isArray(reward.itemDrops) && reward.itemDrops.length > 0;
+
+        // ===== 稀有寶箱提示 =====
+        if (rareChestCount > 0) {
+            const rareGlow = this.add.circle(centerX, chestY, 72, 0xfff4a8, 0.22);
+            const rareText = this.add.text(centerX, chestY, '🌈', {
+                fontSize: '64px'
+            }).setOrigin(0.5);
+
+            const rareLabel = this.add.text(centerX, chestY + 62, '閃亮寶箱！', {
+                fontSize: '28px',
+                color: '#c97f00',
+                fontStyle: 'bold',
+                stroke: '#fff6d6',
+                strokeThickness: 4
+            }).setOrigin(0.5);
+
+            container.add([rareGlow, rareText, rareLabel]);
+
+            rareGlow.setScale(0.6);
+            rareGlow.setAlpha(0);
+            rareText.setScale(0.6);
+            rareText.setAlpha(0);
+            rareLabel.setScale(0.8);
+            rareLabel.setAlpha(0);
+
+            this.tweens.add({
+                targets: [rareGlow, rareText, rareLabel],
+                alpha: 1,
+                duration: 220
+            });
+
+            this.tweens.add({
+                targets: [rareGlow, rareText],
+                scaleX: 1.08,
+                scaleY: 1.08,
+                duration: 280,
+                yoyo: true,
+                ease: 'Back.Out'
+            });
+
+            this.tweens.add({
+                targets: rareGlow,
+                alpha: 0.12,
+                scaleX: 1.14,
+                scaleY: 1.14,
+                duration: 900,
+                yoyo: true,
+                repeat: -1,
+                ease: 'Sine.InOut'
+            });
+
+            this.playSfxSafe('reward_rare_sfx', 0.5);
+
+            // 額外稀有提示字
+            const rarePopup = this.add.text(centerX, chestY - 92, '✨ 稀有發現！', {
+                fontSize: '30px',
+                color: '#ffe066',
+                fontStyle: 'bold',
+                stroke: '#7a5200',
+                strokeThickness: 5
+            }).setOrigin(0.5);
+
+            rarePopup.setAlpha(0);
+            rarePopup.setScale(0.75);
+            container.add(rarePopup);
+
+            this.tweens.add({
+                targets: rarePopup,
+                alpha: 1,
+                scaleX: 1,
+                scaleY: 1,
+                y: chestY - 102,
+                duration: 260,
+                ease: 'Back.Out'
+            });
+
+            this.tweens.add({
+                targets: rarePopup,
+                alpha: 0,
+                delay: 1100,
+                duration: 380
+            });
+        }
+
+        // ===== 普通寶箱提示 =====
+        if (rareChestCount <= 0 && normalChestCount > 0) {
+            const chestText = this.add.text(centerX, chestY, '🧰', {
+                fontSize: '58px'
+            }).setOrigin(0.5);
+
+            const chestLabel = this.add.text(centerX, chestY + 58, '寶箱！', {
+                fontSize: '26px',
+                color: '#7a5a2f',
+                fontStyle: 'bold',
+                stroke: '#fff4d8',
+                strokeThickness: 4
+            }).setOrigin(0.5);
+
+            container.add([chestText, chestLabel]);
+
+            chestText.setScale(0.7);
+            chestText.setAlpha(0);
+            chestLabel.setAlpha(0);
+
+            this.tweens.add({
+                targets: [chestText, chestLabel],
+                alpha: 1,
+                duration: 180
+            });
+
+            this.tweens.add({
+                targets: chestText,
+                scaleX: 1.04,
+                scaleY: 1.04,
+                duration: 260,
+                yoyo: true,
+                ease: 'Back.Out'
+            });
+
+            this.tweens.add({
+                targets: chestText,
+                y: chestY - 4,
+                duration: 850,
+                yoyo: true,
+                repeat: -1,
+                ease: 'Sine.InOut'
+            });
+
+            this.playSfxSafe('reward_chest_sfx', 0.42);
+        }
+
+        // ===== 裝備掉落提示 =====
+        if (hasItemDrop) {
+            const itemPopup = this.add.text(centerX, chestY + 118, '🎀 獲得新裝備！', {
+                fontSize: '32px',
+                color: '#ff6fa5',
+                fontStyle: 'bold',
+                stroke: '#fff0f6',
+                strokeThickness: 5
+            }).setOrigin(0.5);
+
+            itemPopup.setAlpha(0);
+            itemPopup.setScale(0.72);
+            container.add(itemPopup);
+
+            this.tweens.add({
+                targets: itemPopup,
+                alpha: 1,
+                scaleX: 1,
+                scaleY: 1,
+                y: chestY + 108,
+                duration: 280,
+                ease: 'Back.Out'
+            });
+
+            this.tweens.add({
+                targets: itemPopup,
+                alpha: 0,
+                delay: 1300,
+                duration: 420
+            });
+
+            // 小閃光粒子
+            for (let i = 0; i < 6; i++) {
+                const sparkle = this.add.text(
+                    centerX + Phaser.Math.Between(-70, 70),
+                    chestY + Phaser.Math.Between(-30, 60),
+                    '✨',
+                    { fontSize: '24px' }
+                ).setOrigin(0.5);
+
+                sparkle.setAlpha(0);
+                container.add(sparkle);
+
+                this.tweens.add({
+                    targets: sparkle,
+                    alpha: 1,
+                    y: sparkle.y - Phaser.Math.Between(16, 36),
+                    duration: 220,
+                    yoyo: true,
+                    ease: 'Sine.Out',
+                    delay: i * 60,
+                    onComplete: () => sparkle.destroy()
+                });
+            }
+
+            this.playSfxSafe('reward_item_sfx', 0.5);
+        }
+    }
+
+    showResultPopup(reward, extraPenalty = 0) {
+        const { container } = this.createPopupBase(760, 500);
+
+        const title = this.add.text(640, 175, '挑戰成功！', {
+            fontSize: '38px',
+            color: '#4d7f34',
+            fontStyle: 'bold'
+        }).setOrigin(0.5).setAlpha(0);
+
+        const starCount = this.stageResultData?.stars || 0;
+        const starText = this.add.text(640, 255, '⭐'.repeat(starCount), {
+            fontSize: '50px'
+        }).setOrigin(0.5).setAlpha(0);
+
+        const rewardText = this.add.text(
+            640,
+            325,
+            💎 +${reward.crystals || 0}    ⭐ +${reward.reputation || 0},
+            {
+                fontSize: '32px',
+                color: '#314927',
+                fontStyle: 'bold'
+            }
+        ).setOrigin(0.5).setAlpha(0);
+
+        let chestLabel = '';
+        let chestColor = '#7a5a2f';
+
+        if ((reward.rareChest || 0) > 0) {
+            chestLabel = '🌈 夢幻寶箱！';
+            chestColor = '#c97f00';
+        } else if ((reward.chest || 0) > 0 || (reward.stageChest || 0) > 0) {
+            chestLabel = '🟡 大寶箱！';
+            chestColor = '#9a6a00';
+        } else if ((reward.pityChest || 0) > 0) {
+            chestLabel = '🧰 小寶箱！';
+            chestColor = '#7a5a2f';
+        } else {
+            chestLabel = '🍃 本次沒有寶箱';
+            chestColor = '#6f7b63';
+        }
+
+        const chestText = this.add.text(640, 390, chestLabel, {
+            fontSize: '34px',
+            color: chestColor,
+            fontStyle: 'bold'
+        }).setOrigin(0.5).setAlpha(0);
+
+        let vibeTextStr = '';
+
+        if ((reward.rareChest || 0) > 0) {
+            vibeTextStr = '今天超幸運！';
+        } else if ((reward.chest || 0) > 0) {
+            vibeTextStr = '這次收穫很不錯！';
+        } else if ((reward.pityChest || 0) > 0) {
+            vibeTextStr = '雖然驚險，還是有保底獎勵！';
+        } else if (starCount === 3) {
+            vibeTextStr = '表現超棒！';
+        } else if (starCount === 2) {
+            vibeTextStr = '很不錯！';
+        } else {
+            vibeTextStr = '再試一次會更好！';
+        }
+
+        const vibeText = this.add.text(640, 450, vibeTextStr, {
+            fontSize: '26px',
+            color: '#556b2f'
+        }).setOrigin(0.5).setAlpha(0);
+
+        const lootLines = [];
+
+        if ((reward.chestBonusCrystals || 0) > 0) {
+            lootLines.push(💎 +${reward.chestBonusCrystals});
+        }
+
+        if ((reward.chestBonusReputation || 0) > 0) {
+            lootLines.push(⭐ +${reward.chestBonusReputation});
+        }
+
+        if ((reward.chestBonusItems || 0) > 0) {
+            lootLines.push(🎀 +${reward.chestBonusItems});
+        }
+
+        const lootTextStr = lootLines.length > 0
+            ? lootLines.join('   ')
+            : '🍃';
+
+        const lootText = this.add.text(640, 505, lootTextStr, {
+            fontSize: '30px',
+            color: '#5b6b4e',
+            align: 'center'
+        }).setOrigin(0.5).setAlpha(0);
+
+        const okBtn = this.createPopupButton(
+            640,
+            620,
+            220,
+            62,
+            '返回地圖',
+            () => {
+                const itemDrops = [...(reward.itemDrops || [])];
+
+                this.closeActivePopup();
+
+                this.time.delayedCall(140, () => {
+                    this.showItemDropSequence(itemDrops, () => {
+                        this.scene.start(this.returnScene, this.returnData);
+                    });
+                });
+            },
+            0x79ba63
+        );
+
+        container.add([
+            title,
+            starText,
+            rewardText,
+            chestText,
+            vibeText,
+            lootText,
+            ...okBtn
+        ]);
+
+        this.tweens.add({
+            targets: title,
+            alpha: 1,
+            duration: 180
+        });
+
+        this.tweens.add({
+            targets: starText,
+            alpha: 1,
+            scaleX: 1.12,
+            scaleY: 1.12,
+            duration: 260,
+            delay: 120,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: rewardText,
+            alpha: 1,
+            y: 318,
+            delay: 280,
+            duration: 220,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: chestText,
+            alpha: 1,
+            y: 384,
+            delay: 440,
+            duration: 220,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: vibeText,
+            alpha: 1,
+            y: 444,
+            delay: 620,
+            duration: 220
+        });
+
+        this.tweens.add({
+            targets: lootText,
+            alpha: 1,
+            y: 498,
+            delay: 760,
+            duration: 220
+        });
+    }
+
+
+    showFailPopup(reward) {
+        const { container } = this.createPopupBase(760, 500, {
+            panelColor: 0xfffbf6,
+            strokeColor: 0xb9896f,
+            overlayAlpha: 0.34
+        });
+
+        const hasGoldBush = this.gameState.gotGoldBush;
+        const hasGoldChest = hasGoldBush || (reward.goldGuaranteedChest === true);
+
+        // 標題
+        const title = this.add.text(640, 168, '探險失敗…', {
+            fontSize: '40px',
+            color: '#8b4a3c',
+            fontStyle: 'bold',
+            stroke: '#fff2eb',
+            strokeThickness: 6
+        }).setOrigin(0.5).setAlpha(0);
+
+        // 副標
+        const subTitle = this.add.text(640, 214, '這次草叢有點危險，但你已經很努力了！', {
+            fontSize: '24px',
+            color: '#7a5a4d',
+            align: 'center'
+        }).setOrigin(0.5).setAlpha(0);
+
+        // 中央表情
+        const failFace = this.add.text(640, 292, '😵‍💫', {
+            fontSize: '72px'
+        }).setOrigin(0.5).setAlpha(0).setScale(0.8);
+
+        // 失敗訊息框
+        const msgBox = this.add.rectangle(640, 388, 590, hasGoldChest ? 132 : 102, 0xfff3ea)
+            .setStrokeStyle(4, 0xe0b59d)
+            .setAlpha(0);
+
+        let mainText = '體力用完了，先回去休息一下吧。';
+        if (this.gameState.phase === 'failed' || this.gameState.stamina <= 0) {
+            mainText = '體力已經降到 0 了，先休息一下再挑戰吧。';
+        }
+
+        const msgText = this.add.text(640, hasGoldChest ? 368 : 388, mainText, {
+            fontSize: '26px',
+            color: '#5b3429',
+            align: 'center',
+            wordWrap: { width: 500 },
+            lineSpacing: 8
+        }).setOrigin(0.5).setAlpha(0);
+
+        let goldChestText = null;
+        let failButtonY = 560;
+
+        if (hasGoldChest) {
+            goldChestText = this.add.text(640, 418, '🎁 你有找到金草叢，獲得保底大寶箱！', {
+                fontSize: '24px',
+                color: '#9a6a00',
+                fontStyle: 'bold',
+                align: 'center',
+                stroke: '#fff8df',
+                strokeThickness: 4
+            }).setOrigin(0.5).setAlpha(0);
+        }
+
+        const failLootParts = [];
+
+        if ((reward.chestBonusCrystals || 0) > 0) {
+            failLootParts.push(💎 +${reward.chestBonusCrystals});
+        }
+
+        if ((reward.chestBonusReputation || 0) > 0) {
+            failLootParts.push(⭐ +${reward.chestBonusReputation});
+        }
+
+        if ((reward.chestBonusItems || 0) > 0) {
+            failLootParts.push(🎀 +${reward.chestBonusItems});
+        }
+
+        let failLootText = null;
+
+        if (failLootParts.length > 0) {
+            failButtonY = 610;
+
+            failLootText = this.add.text(640, hasGoldChest ? 466 : 430, failLootParts.join('   '), {
+                fontSize: '28px',
+                color: '#6a5848',
+                align: 'center'
+            }).setOrigin(0.5).setAlpha(0);
+        }
+
+        // 返回按鈕
+        const okBtn = this.createPopupButton(
+            640,
+            failButtonY,
+            220,
+            62,
+            '返回地圖',
+            () => {
+                const itemDrops = [...(reward.itemDrops || [])];
+
+                this.closeActivePopup();
+
+                this.time.delayedCall(140, () => {
+                    this.showItemDropSequence(itemDrops, () => {
+                        this.scene.start(this.returnScene, this.returnData);
+                    });
+                });
+            },
+            0xc77e62
+        );
+
+        const addList = [
+            title,
+            subTitle,
+            failFace,
+            msgBox,
+            msgText
+        ];
+
+        if (goldChestText) {
+            addList.push(goldChestText);
+        }
+
+        if (failLootText) {
+            addList.push(failLootText);
+        }
+
+        addList.push(...okBtn);
+
+        container.add(addList);
+
+        this.tweens.add({
+            targets: title,
+            alpha: 1,
+            duration: 180
+        });
+
+        this.tweens.add({
+            targets: subTitle,
+            alpha: 1,
+            y: 220,
+            delay: 100,
+            duration: 180
+        });
+
+        this.tweens.add({
+            targets: failFace,
+            alpha: 1,
+            scaleX: 1,
+            scaleY: 1,
+            delay: 180,
+            duration: 260,
+            ease: 'Back.Out'
+        });
+
+        this.tweens.add({
+            targets: msgBox,
+            alpha: 1,
+            delay: 280,
+            duration: 180
+        });
+
+        this.tweens.add({
+            targets: msgText,
+            alpha: 1,
+            y: hasGoldChest ? 362 : 382,
+            delay: 360,
+            duration: 220,
+            ease: 'Back.Out'
+        });
+
+        if (goldChestText) {
+            this.tweens.add({
+                targets: goldChestText,
+                alpha: 1,
+                y: 412,
+                delay: 500,
+                duration: 220,
+                ease: 'Back.Out'
+            });
+        }
+
+        if (failLootText) {
+            this.tweens.add({
+                targets: failLootText,
+                alpha: 1,
+                y: hasGoldChest ? 460 : 424,
+                delay: 620,
+                duration: 220,
+                ease: 'Back.Out'
+            });
+        }
+
+        this.tweens.add({
+            targets: failFace,
+            y: 298,
+            duration: 900,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.InOut'
+        });
+    }
+}
+
+有，我看到你的 BushExplore.js 了。
+你現在這份檔案裡，還沒把 CollectibleSystem 接進去。
+
+我直接用你這份檔案告訴你要貼哪裡，照貼就好。
+
+第一步：加 import
+找到這段：
+
+import BushQuestionSystem from '../systems/BushQuestionSystem.js';
+import BushRewardSystem from '../systems/BushRewardSystem.js';
+
+import { ITEM_DB } from '../data/GameData.js';
+改成這樣：
+
+import BushQuestionSystem from '../systems/BushQuestionSystem.js';
+import BushRewardSystem from '../systems/BushRewardSystem.js';
+import CollectibleSystem from '../systems/CollectibleSystem.js';
+
+import { ITEM_DB } from '../data/GameData.js';
+第二步：在 create() 先加測試
+找到 create() 裡這段最後面：
+
+        this.showMessage(`🍃 開始探索 ${levelData.name}！`, 1500);
+        console.log('目前關卡進度 stage_progress =', this.getStageProgressData());
+改成這樣：
+
+        this.showMessage(`🍃 開始探索 ${levelData.name}！`, 1500);
+
+        CollectibleSystem.unlock(this.registry, 'col_bug_leaf_01');
+        console.log('目前收藏品 =', this.registry.get('owned_collectibles'));
+
+        console.log('目前關卡進度 stage_progress =', this.getStageProgressData());
+第三步：確認 GameData.js 有這行
+去 DEFAULT_SAVE_DATA 裡確認有沒有這行：
+
+owned_collectibles: [],
+位置放在 owned_items 後面最剛好，像這樣：
+
+    owned_items: [
+        'item_hat_daily_01',
+        'item_cloth_daily_01',
+        'item_fullset_pink_home_01'
+    ],
+
+    owned_collectibles: [],
+
+    placed_decorations: [],
+你現在測試後，console 應該會看到
+第一次進場大概會出現：
+
+[CollectibleSystem] 解鎖收藏品: col_bug_leaf_01
+目前收藏品 = ['col_bug_leaf_01']
+第二次再進去：
+
+不會一直重複新增
+
+owned_collectibles 不會越來越長
+
+你先不要做的事
+先不要把它接到「挖到蟲」那裡。
+先確認這個測試能跑。
+
+你測完後直接回我：
+
+「收藏解鎖測試成功了」
+
+我下一步就直接幫你接到真正的挖蟲流程，而且也是直接告訴你貼哪裡。
+
+
+已上傳的圖像
+「收藏解鎖測試成功了。先等等~我們目前要做的內容進度請告訴我
+
+很好，這一步你其實已經跨過一個很關鍵的里程碑了 👍
+我幫你把目前整個專案「真實進度」整理給你（不是理想，是你現在真的做到的）
+
+🌲《森林益智樂園》目前進度總覽（你的版本）
+🟢 一、核心玩法（已完成）
+✔ 草叢尋寶主循環
+5x5 地圖
+
+挖掘次數（體力共用）
+
+金草叢機制
+
+危險提示（蛇嘶聲）
+
+插旗系統（短按 / 長按）
+
+Combo / 挖掘流程
+
+👉 這塊已經是「可以玩」的遊戲了
+
+🟢 二、答題系統（已完成）
+多題型題組
+
+第 X / 總題數
+
+倒數計時
+
+三選一 UI
+
+submit → result 流程
+
+👉 已經有「益智性」，不是純運氣
+
+🟢 三、獎勵系統（很完整）
+✔ 已完成
+DropConfig（權重掉落）
+
+DropHelper（rollTable）
+
+BushRewardSystem（整合）
+
+寶箱類型：
+
+小寶箱
+
+大寶箱
+
+夢幻寶箱
+
+關卡掉落（stageId 已接）
+
+👉 這其實已經是「商業級設計」了
+
+🟢 四、裝備系統（已完成）
+ITEM_DB
+
+稀有度（common / rare / epic / legendary）
+
+裝備掉落
+
+重複 → +1 水晶（邏輯完成）
+
+彩蛋裝備「母上的守護」
+
+👉 只差 UI 提示（你也有記住）
+
+🟢 五、P3 結算畫面（完成）
+成功 / 失敗分流
+
+星星
+
+水晶 / 聲望
+
+寶箱顯示
+
+vibe 文案
+
+👉 玩家回饋已經成立
+
+🟢 六、UI 系統（高完成度）
+P1 / P2 分離設計
+
+棋盤主角化
+
+問答主角化
+
+HUD 弱化
+
+座標已精調（v3.2a）
+
+👉 這是你專案最強的地方之一
+
+🟢 七、收藏系統（剛完成🔥）
+CollectibleSystem
+
+owned_collectibles 存檔
+
+unlock / has / list
+
+已成功寫入 registry
+
+👉 這是「長期目標系統」的起點
+
+🟡 八、目前「正在做的主線」
+你現在卡的地方其實是這條👇
+
+👉「收藏系統 → 接入玩法」
+目前狀態：
+
+功能	狀態
+收藏資料結構	✅
+存檔	✅
+測試解鎖	✅
+實際遊戲觸發	❌（下一步）
+🔥 下一步（很關鍵）
+👉 把「收藏」接到這裡：
+🎯 挖到蟲 → 解鎖收藏
+也就是：
+
+挖草 → 出現蟲 → 解鎖圖鑑
+🧠 為什麼這步很重要？
+因為這會讓你的遊戲從：
+
+👉 小遊戲
+變成
+👉 有長期目標的遊戲
+
+玩家會開始：
+
+想收集全部蟲
+
+想解鎖稀有
+
+想重複玩
+
+🟣 再下一步（提前讓你知道）
+接完收藏後，你會進入：
+
+✨「Meta 系統階段」
+收藏 UI（圖鑑）
+
+稀有度展示
+
+未解鎖遮罩（？？？）
+
+收集進度 %
+
+👉 這時候遊戲會「升級一個檔次」
+
+🧭 你現在的位置（很誠實講）
+你現在不是新手了，你在這裡：
+
+🟢 進階開發者（系統整合階段）
+
+👉 我建議下一步（直接做）
+我們不要亂跳，照順序來：
+
+✅ 下一步我會帶你做：
+👉 「挖到蟲 → 解鎖收藏」完整接線
+
+而且會：
+
+不改你現有架構
+
+不破壞系統
+
+直接告訴你貼哪裡
+
+你只要回我一句：
+
+👉 「開始接蟲收藏」
+
+我就會直接帶你貼 code（一樣保證你能跑）🚀
+
+
+
+
+
+---
+--
+-
+-
+-ICON 設計建議（很重要）
+
+你現在不要追求「很精緻」，要先統一風格：
+
+👉 建議風格：
+
+扁平 + 可愛（類似你的 UI）
+
+白邊 or 淡描邊
+
+顏色飽和但柔和（不要太刺）
+
+👉 尺寸：
+
+128x128（之後縮放）
+
+🛠 工具推薦（快）
+
+Canva（最快）
+
+Figma（可控）
+
+或直接 AI 生成（你要我可以幫你出一整套風格）
+
+🔊 二、音效（第二優先）
+🎯 原則
+
+👉 不要多，先做「有感的 6 個」
+
+必做音效（照重要度）
+1️⃣ 挖草
+dig_grass_sfx
+2️⃣ 發現果實
+get_fruit_sfx
+3️⃣ 危險受傷
+damage_sfx
+4️⃣ 答對
+answer_correct_sfx
+5️⃣ 答錯
+answer_wrong_sfx
+6️⃣ UI 點擊
+ui_click_sfx
+
+
+
+
+
+

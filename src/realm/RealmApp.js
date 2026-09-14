@@ -1,7 +1,8 @@
+import { loadSkillResource, saveSkillResource, regenerateSkillResource } from './RealmSkillResource.js';
 import { FootstepClock, safeCue } from './RealmSoundEffects.js';
 import { RealmWorld } from './RealmWorld.js';
 import { RealmJourney, SPOTS, WORLD_SCALE, addCampCollisionMark, collisionStrokePoints, disableCampObstaclesAt, eraseCampCollisionMarks, getCampCollisionPaint, setCampCollisionPaint } from './RealmRules.js';
-import { ITEM_CATALOG, STARSPROUT_QUICK_ITEMS, loadStarsproutInventory, mergeStarsproutItems, saveStarsproutInventory } from './StarsproutInventory.js';
+import { appendItemArt, ITEM_CATALOG, STARSPROUT_QUICK_ITEMS, loadStarsproutInventory, mergeStarsproutItems, saveStarsproutInventory } from './StarsproutInventory.js';
 import { StarsproutInventoryPanel } from './StarsproutInventoryPanel.js';
 
 const SAVE = 'forest_starsprout_camp_v2';
@@ -38,6 +39,7 @@ export class RealmApp {
       // the corrected v2 geometry instead of disabling the wrong new shape.
       setCampCollisionPaint(collisionSaved.v === COLLISION_LAYOUT_VERSION ? collisionSaved : { ...collisionSaved, disabled: [] });
     } catch { setCampCollisionPaint({}); }
+    this.skillResource = loadSkillResource();
     this.inventoryState = mergeStarsproutItems(loadStarsproutInventory(), { '甜蘋果': this.journey.apples, ...(this.journey.robe ? { '星芽旅行者套裝': 1 } : {}) });
     this.inventoryState = saveStarsproutInventory(this.inventoryState);
     if (entry === 'northGate') this.journey.player = { x: SPOTS.northGate.x, y: SPOTS.northGate.y + 96 };
@@ -101,6 +103,7 @@ export class RealmApp {
 
     const bottom = this.el('div', 'bottom');
     this.inventory = this.el('div', 'inventory', '', bottom);
+    this.spStatus = this.el('div', 'sp-status', '', bottom);
     this.el('div', '', 'WASD／左搖桿移動 · E／互動 · Shift／快走', bottom);
     this.toast = this.el('div', 'toast');
     this.context = this.el('div', 'context');
@@ -110,8 +113,9 @@ export class RealmApp {
     const actions = this.el('div', 'actions');
     this.runButton = this.button('快走', () => {}, actions);
     this.interactButton = this.button('互動', () => this.interact(), actions, 'interact');
+    style.textContent += '.quickslot img.icon{width:46px;height:46px;object-fit:contain;margin:auto;border-radius:8px}';
     this.quickbar = this.el('div', 'quickbar');
-    this.quickSlots = STARSPROUT_QUICK_ITEMS.map((name, index) => { const slot = this.button('', () => this.itemDetails(name), this.quickbar, 'quickslot'); this.el('span', 'key', String(index + 1), slot); this.el('span', 'icon', ITEM_CATALOG[name]?.icon || '🎒', slot); this.el('span', 'count', '0', slot); slot.title = name; return slot; });
+    this.quickSlots = STARSPROUT_QUICK_ITEMS.map((name, index) => { const slot = this.button('', () => this.itemDetails(name), this.quickbar, 'quickslot'); this.el('span', 'key', String(index + 1), slot); appendItemArt(slot, name, 'icon'); this.el('span', 'count', '0', slot); slot.title = name; return slot; });
     this.collisionTools = this.el('div', 'collision-tools'); this.el('div', 'collision-note', '橙線＝既有阻擋\n橡皮擦可刪除', this.collisionTools); this.collisionButtons = {};
     for (const [mode, label] of [['block', '紅色阻擋筆'], ['pass', '綠色通行筆'], ['erase', '橡皮擦']]) this.collisionButtons[mode] = this.button(label, () => this.setCollisionMode(mode), this.collisionTools);
     this.button('筆刷－', () => this.changeCollisionRadius(-16), this.collisionTools); this.collisionSize = this.el('span', 'collision-note', '', this.collisionTools); this.button('筆刷＋', () => this.changeCollisionRadius(16), this.collisionTools); this.button('匯出JSON', () => this.exportCollision(), this.collisionTools); this.button('全部還原', () => this.clearCollision(), this.collisionTools); this.button('完成／試走', () => this.closeCollisionEditor(), this.collisionTools);
@@ -247,6 +251,7 @@ export class RealmApp {
     let axis = { x: 0, y: 0 };
     let moving = false;
     if (!this.paused) {
+      if (regenerateSkillResource(this.skillResource, dt)) this.save();
       axis = {
         x: this.axis.x + (this.keys.has('KeyD') || this.keys.has('ArrowRight') ? 1 : 0) - (this.keys.has('KeyA') || this.keys.has('ArrowLeft') ? 1 : 0),
         y: this.axis.y + (this.keys.has('KeyS') || this.keys.has('ArrowDown') ? 1 : 0) - (this.keys.has('KeyW') || this.keys.has('ArrowUp') ? 1 : 0)
@@ -276,6 +281,8 @@ export class RealmApp {
   }
 
   hud() {
+    const sp = this.skillResource;
+    this.spStatus.textContent = `SP ${sp.mana}/3${sp.mana < 3 ? ' · ' + (5-sp.spRegenElapsed).toFixed(1) + ' 秒後回復' : ' · 魔力充足'}`;
     this.objective.textContent = this.journey.objective();
     this.inventory.textContent = (this.journey.robe ? '星芽旅行者套裝 ✓' : '星芽旅行者套裝 —') + ' · 甜蘋果 ' + this.journey.apples + '/10';
     const id = this.journey.nearby();
@@ -296,6 +303,7 @@ export class RealmApp {
 
   save() {
     try {
+      saveSkillResource(this.skillResource);
       localStorage.setItem(SAVE, JSON.stringify(this.journey.export()));
       this.inventoryState = mergeStarsproutItems(this.inventoryState, { '甜蘋果': this.journey.apples, ...(this.journey.robe ? { '星芽旅行者套裝': 1 } : {}) });
       this.inventoryState = saveStarsproutInventory(this.inventoryState);

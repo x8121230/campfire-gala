@@ -9,6 +9,12 @@ import SubmapGames from './SubmapGames.js';
 import FreeExplore from './FreeExplore.js';
 import RealmPortalTransition from './RealmPortalTransition.js';
 import RealmWorldGame from './RealmWorldGame.js';
+import {
+    FULLSCREEN_EVENT,
+    fullscreenState,
+    installMobileFullscreenListeners,
+    toggleMobileFullscreen
+} from '../systems/MobileFullscreen.js?v=mobile-fullscreen100';
 
 export default class Start extends Phaser.Scene {
     constructor() {
@@ -16,6 +22,7 @@ export default class Start extends Phaser.Scene {
     }
 
     create() {
+        installMobileFullscreenListeners();
         // 🔥 先停掉其他場景音樂
         AudioSystem.stopBgm(this);
 
@@ -230,29 +237,32 @@ export default class Start extends Phaser.Scene {
             });
         });
 
-        fullscreenBtn.on('pointerdown', () => {
-            console.log('點擊全螢幕');
+        const updateFullscreenLabel = () => {
+            const state = fullscreenState();
+            fullscreenText.setText(
+                state === 'standalone' ? '已全螢幕' : state === 'windowed' ? '全螢幕' : '退出全螢幕'
+            );
+        };
 
-            if (this.scale.isFullscreen) {
-                this.scale.stopFullscreen();
-            } else {
-                this.scale.startFullscreen();
+        const onFullscreenChange = () => updateFullscreenLabel();
+        window.addEventListener(FULLSCREEN_EVENT, onFullscreenChange);
+        this.events.once('shutdown', () => {
+            window.removeEventListener(FULLSCREEN_EVENT, onFullscreenChange);
+        });
+
+        fullscreenBtn.on('pointerdown', async () => {
+            this.sound.play('click_sfx', { volume: 0.6 });
+            const target = document.getElementById('game-container') || document.documentElement;
+            const result = await toggleMobileFullscreen(target);
+            updateFullscreenLabel();
+            this.scale.refresh();
+
+            if (result.needsInstallHelp) {
+                this.showIOSFullscreenHelp();
             }
         });
 
-        this.scale.on('enterfullscreen', () => {
-            console.log('✅ 已進入全螢幕');
-            fullscreenText.setText('退出');
-        });
-
-        this.scale.on('leavefullscreen', () => {
-            console.log('↩️ 已離開全螢幕');
-            fullscreenText.setText('全螢幕');
-        });
-
-        this.scale.on('fullscreenfailed', (e) => {
-            console.error('❌ fullscreen失敗', e);
-        });
+        updateFullscreenLabel();
 
         // ===== 設定按鈕 =====
         const settingBtn = this.add.image(1180, 60, 'btn_setting')
@@ -378,6 +388,46 @@ export default class Start extends Phaser.Scene {
     openGMPanel() {
         this.sound.play('click_sfx', { volume: 0.6 });
         this.scene.start('GMPanel', { returnScene: 'Start' });
+    }
+
+    showIOSFullscreenHelp() {
+        if (this.fullscreenHelp) return;
+
+        const shade = this.add.rectangle(640, 360, 1280, 720, 0x07150f, 0.76)
+            .setDepth(5000)
+            .setInteractive();
+        const panel = this.add.rectangle(640, 356, 820, 390, 0xfff8df, 0.98)
+            .setDepth(5001)
+            .setStrokeStyle(6, 0xe0a64d);
+        const title = this.add.text(640, 232, 'iPhone 全畫面開啟方式', {
+            fontFamily: 'Microsoft JhengHei, Arial',
+            fontSize: '34px',
+            fontStyle: 'bold',
+            color: '#244a3a'
+        }).setOrigin(0.5).setDepth(5002);
+        const body = this.add.text(640, 342,
+            'Safari 點下方「分享」\n→ 選擇「加入主畫面」\n→ 從桌面開啟《森林益智樂園》\n\n之後就能隱藏網址列，以全畫面遊玩。', {
+                fontFamily: 'Microsoft JhengHei, Arial',
+                fontSize: '27px',
+                align: 'center',
+                lineSpacing: 10,
+                color: '#3c493f'
+            }).setOrigin(0.5).setDepth(5002);
+        const closeBg = this.add.rectangle(640, 508, 230, 62, 0x3f8a68, 1)
+            .setDepth(5002)
+            .setInteractive({ useHandCursor: true });
+        const closeText = this.add.text(640, 508, '我知道了', {
+            fontFamily: 'Microsoft JhengHei, Arial',
+            fontSize: '26px',
+            fontStyle: 'bold',
+            color: '#ffffff'
+        }).setOrigin(0.5).setDepth(5003);
+
+        this.fullscreenHelp = [shade, panel, title, body, closeBg, closeText];
+        closeBg.on('pointerdown', () => {
+            this.fullscreenHelp.forEach(object => object.destroy());
+            this.fullscreenHelp = null;
+        });
     }
 
     createMiniGameButton(x, y, text, callback) {

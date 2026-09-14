@@ -1,3 +1,4 @@
+import { regenerateSkillResource } from './RealmSkillResource.js';
 import { NEW_HILLS_SIZE, NEW_HILLS_OBSTACLES, HILLS_OUTER, islandPoint, HILLS_BRIDGES } from './HillsMapV316.js';
 import { updatePumpkinBoss } from './PumpkinBoss.js';
 import { MANA_SLASH } from './ManaSlashTiming.js';
@@ -184,7 +185,8 @@ export class DandelionHillsJourney {
     this.hp = 3;
     this.maxHp = 3;
     this.maxMana = 3;
-    this.mana = 3;
+    this.mana = Number.isFinite(data.mana) ? Math.max(0, Math.min(3, Math.floor(data.mana))) : 3;
+    this.spRegenElapsed = 0;
     this.invulnerable = 0;
     this.blind = 0;
     this.speedBuff = 0;
@@ -230,7 +232,7 @@ export class DandelionHillsJourney {
   }
 
   export() {
-    return { v: 1, questStage: this.questStage, mouseProgress: this.mouseProgress, inventory: { ...this.inventory }, tutorialLoot: this.tutorialLoot, met: [...this.met], rng: this.rng, shieldDurability: this.shieldDurability };
+    return { v: 1, questStage: this.questStage, mouseProgress: this.mouseProgress, inventory: { ...this.inventory }, tutorialLoot: this.tutorialLoot, met: [...this.met], rng: this.rng, mana: this.mana, shieldDurability: this.shieldDurability };
   }
 
   say(text, sound = '') { this.messages.push({ text, sound }); }
@@ -295,7 +297,7 @@ export class DandelionHillsJourney {
 
   attack() {
     if (this.downed) return false;
-    if (this.attackCooldown > 0 || this.blind > 0 || this.stunned > 0) return false;
+    if (this.attackWindow > 0 || this.attackCooldown > 0 || this.blind > 0 || this.stunned > 0) return false;
     const target = this.nearestMob(HILLS_COMBAT.slashRange);
     if (target) {
       const d = distance(this.player, target) || 1;
@@ -305,6 +307,22 @@ export class DandelionHillsJourney {
     this.attackWindow = HILLS_COMBAT.attackDuration;
     this.activeSlash = { id: ++this.slashSerial, start: this.time, x: this.player.x, y: this.player.y, dx: this.facing.x, dy: this.facing.y, resolved: false };
     this.effect('slash', { ...this.activeSlash });
+    return true;
+  }
+
+  castMagicArrow() {
+    if (this.downed || this.attackWindow > 0 || this.attackCooldown > 0 || this.blind > 0 || this.stunned > 0) return false;
+    if (this.mana < 1) { this.say('SP 不足，再等一下就會回復！'); return false; }
+    const length = Math.hypot(this.facing.x, this.facing.y) || 1;
+    const dx = this.facing.x / length, dy = this.facing.y / length;
+    this.mana -= 1;
+    this.attackCooldown = HILLS_COMBAT.attackCooldown;
+    this.attackWindow = .45;
+    this.gather = null;
+    // Ground coordinates drive collision; the renderer alone raises the magic arrow.
+    this.projectiles.push({ kind: 'magicArrow', friendly: true, x: this.player.x, y: this.player.y,
+      dx, dy, speed: 430, power: 1, life: 520 / 430, maxLife: 520 / 430 });
+    this.effect('sound', { name: 'bubbleCast' }); this.dirty = true;
     return true;
   }
 
@@ -472,7 +490,7 @@ export class DandelionHillsJourney {
   revive() {
     if (!this.downed || this.downTime < 1.2) return false;
     this.downed = false; this.downTime = 0; this.revivePrompted = false;
-    this.hp = this.maxHp; this.mana = this.maxMana;
+    this.hp = this.maxHp; this.mana = this.maxMana; this.spRegenElapsed = 0;
     this.shieldDurability = this.shieldMax; this.attackCooldown = 0;
     this.invulnerable = 3; Object.assign(this.player, HILLS_ENTRY);
     this.projectiles = []; this.traps = [];
@@ -487,7 +505,17 @@ export class DandelionHillsJourney {
         this.effect('projectileEnd', { x: shot.x, y: shot.y, type: shot.kind });
         continue;
       }
-      if (shot.friendly) {
+      if (shot.kind === 'magicArrow') {
+        // Substeps check walls before targets, so fast arrows cannot jump through a fence.
+        const steps = Math.max(1, Math.ceil(shot.speed * dt / 6));
+        for (let i = 0; i < steps && shot.life > 0; i++) {
+          shot.x += shot.dx * shot.speed * dt / steps; shot.y += shot.dy * shot.speed * dt / steps;
+          if (!hillsWalkable(shot.x, shot.y, 0)) { shot.life = 0; break; }
+          const target = this.mobs.find(mob => mob.alive && distance(shot, mob) < (mob.type === 'rabbit' ? 52 : 28));
+          if (target) { this.hitMob(target, shot.power); shot.life = 0; }
+        }
+        if (shot.life <= 0) this.effect('projectileEnd', { x: shot.x, y: shot.y, type: shot.kind });
+      } else if (shot.friendly) {
         const target = this.mobs.find((mob) => mob.id === shot.target && mob.alive);
         if (!target) { shot.life = 0; continue; }
         const d = distance(shot, target) || 1;
@@ -591,7 +619,7 @@ export class DandelionHillsJourney {
   }
 
   update(dt, axis = { x: 0, y: 0 }, attacking = false, dodge = false) {
-    dt = Math.max(0, Math.min(.05, dt));
+    dt = Number.isFinite(dt) ? Math.max(0, Math.min(.05, dt)) : 0;
     this.time += dt;
     if (this.downed) {
       this.downTime += dt;
@@ -600,6 +628,7 @@ export class DandelionHillsJourney {
       }
       return false;
     }
+    if (regenerateSkillResource(this, dt)) this.dirty = true;
     this.invulnerable = Math.max(0, this.invulnerable - dt);
     this.blind = Math.max(0, this.blind - dt);
     this.speedBuff = Math.max(0, this.speedBuff - dt);

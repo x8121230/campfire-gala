@@ -6,7 +6,13 @@ const ASSETS = 'assets/animal-snack/';
 
 // Self-contained trial scene. Does not grant items or mutate formal progress.
 export default class AnimalSnackGame extends Phaser.Scene {
-    constructor(key = 'AnimalSnackGame') { super(key); }
+    constructor(key = 'AnimalSnackGame') {
+        super(key);
+        // This scene is also used as a UI/audio helper by many independent
+        // mini-games. Only the actual snack-delivery scene owns the ship,
+        // drifters and guest state consumed by its frame loop.
+        this.usesAnimalSnackLoop = key === 'AnimalSnackGame';
+    }
     init(data = {}) { this.returnScene = data.returnScene || 'MiniGameHub'; }
     preload() {
         ['rabbit', 'monkey', 'panda', 'carrot', 'banana', 'bamboo', 'airship'].forEach(id => {
@@ -207,6 +213,7 @@ export default class AnimalSnackGame extends Phaser.Scene {
         this.tone('send');
     }
     update(_time, delta) {
+        if (!this.usesAnimalSnackLoop) return;
         if (this.mode !== 'playing') return;
         const dt = Math.max(0, Math.min(delta / 1000, 0.05));
         this.elapsed += dt;

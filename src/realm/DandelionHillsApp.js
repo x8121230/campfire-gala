@@ -1,8 +1,9 @@
+import { loadSkillResource, saveSkillResource } from './RealmSkillResource.js';
 import { buildResourceIcons, updateResourceIcons } from './RealmResourceHUD.js';
 import { FootstepClock, safeCue } from './RealmSoundEffects.js';
 import { DandelionHillsJourney, HILLS_SCALE, MOB_TYPES, addHillsCollisionMark, disableHillsObstaclesAt, eraseHillsCollisionMarks, getHillsCollisionPaint, setHillsCollisionPaint } from './DandelionHillsRules.js';
 import { DandelionHillsWorld } from './DandelionHillsWorld.js';
-import { ITEM_CATALOG, STARSPROUT_QUICK_ITEMS, loadStarsproutInventory, mergeStarsproutItems, saveStarsproutInventory } from './StarsproutInventory.js';
+import { appendItemArt, ITEM_CATALOG, STARSPROUT_QUICK_ITEMS, loadStarsproutInventory, mergeStarsproutItems, saveStarsproutInventory } from './StarsproutInventory.js';
 import { StarsproutInventoryPanel } from './StarsproutInventoryPanel.js';
 
 const SAVE = 'forest_dawn_dandelion_hills_v1';
@@ -24,7 +25,7 @@ export class DandelionHillsApp {
     this.joyId = null;
     this.dead = false;
     this.paused = true;
-    this.attacking = false;
+    this.attacking = false; this.arrowRequested = false;
     this.dodgeRequested = false;
     this.traveling = false;
     this.requireCampExit = true;
@@ -37,6 +38,7 @@ export class DandelionHillsApp {
     try { saved = JSON.parse(localStorage.getItem(SAVE) || 'null'); } catch {}
     try { setHillsCollisionPaint(JSON.parse(localStorage.getItem(COLLISION_SAVE) || 'null') || {}); } catch { setHillsCollisionPaint({}); }
     this.journey = new DandelionHillsJourney(saved);
+    Object.assign(this.journey, loadSkillResource(this.journey));
     this.inventoryState = mergeStarsproutItems(loadStarsproutInventory(), this.journey.inventory);
     this.inventoryState.unlockedBeadSlots = Math.max(this.inventoryState.unlockedBeadSlots, this.journey.questStage >= 2 ? 2 : 1);
     this.inventoryState = saveStarsproutInventory(this.inventoryState);
@@ -67,12 +69,18 @@ export class DandelionHillsApp {
     this.el('div', 'eyebrow', '幻界 · 微光星芽谷', brand); this.el('h1', '', '晨曦蒲公英丘陵', brand); this.objective = this.el('div', 'objective', '', brand);
     const nav = this.el('div', 'nav', '', top); this.button('手帳', () => this.journal(), nav); this.button('背包', () => this.backpack(), nav); this.button('碰撞', () => this.openCollisionEditor(), nav); this.mapButton = this.button('鳥瞰', () => { if (!this.world) return; this.world.overview = !this.world.overview; this.mapButton.textContent = this.world.overview ? '跟隨' : '鳥瞰'; }, nav); this.button('暫停', () => this.pause(), nav);
     this.joy = this.el('div', 'joy'); this.knob = this.el('div', 'knob', '', this.joy); this.el('div', 'joylabel', '拖曳移動', this.joy);
-    const actions = this.el('div', 'actions'); this.dodgeButton = this.button('✧\n閃步', () => { this.dodgeRequested = true; }, actions, 'dodge'); this.interactButton = this.button('互動', () => this.interact(), actions, 'interact'); this.attackButton = this.button('✦\n魔法斬', () => {}, actions, 'attack');
+    const actions = this.el('div', 'actions'); this.dodgeButton = this.button('✧\n閃步', () => { this.dodgeRequested = true; }, actions, 'dodge'); this.interactButton = this.button('互動', () => this.interact(), actions, 'interact'); this.attackButton = this.button('', () => {}, actions, 'attack');
+    appendItemArt(this.attackButton, '魔法劍', 'skill-icon'); this.swordLabel = this.el('span', 'skill-label', '魔法劍 SP 0', this.attackButton);
+    this.arrowButton = this.button('', () => { if (!this.paused) this.arrowRequested = true; }, actions, 'arrow');
+    appendItemArt(this.arrowButton, '魔法箭', 'skill-icon'); this.arrowLabel = this.el('span', 'skill-label', '魔法箭 SP −1', this.arrowButton);
+    style.textContent += '.hills-app .arrow{left:0;top:0;background:#336b85!important;border:2px solid #ace5ff!important;width:82px!important;height:82px!important}.hills-app .skill-icon{display:block;width:44px;height:44px;border-radius:50%;margin:0 auto 2px}.hills-app .skill-label{display:block;font-size:14px;line-height:1.15}.hills-app .actions .attack{padding:5px}.hills-app .attack .skill-icon{width:53px;height:53px}.hills-app .attack .skill-label{font-size:16px}.hills-app .sp-status{font-size:14px;margin-top:4px;color:#356a83}@media(max-height:520px){.hills-app .actions{height:180px;width:190px}.hills-app .attack .skill-icon{width:39px;height:39px}.hills-app .attack .skill-label{font-size:14px}.hills-app .actions .dodge{width:70px;height:70px}}';
     const vitals = this.el('div', 'vitals'); this.hearts = this.el('div', 'resource-row', '', vitals); this.resourceIcons = buildResourceIcons(this.hearts); this.shield = this.el('div', 'bag', '', vitals); this.bag = this.el('div', 'bag', '', vitals); this.bag.style.display = 'none'; this.gatherBar = this.el('div', 'gather', '', vitals); this.gatherFill = this.el('span', '', '', this.gatherBar);
+    style.textContent += '.quickslot img.icon{width:46px;height:46px;object-fit:contain;margin:auto;border-radius:8px}';
+    this.spStatus = this.el('div', 'sp-status', 'SP 3/3', this.vitals || this.shield.parentElement);
     this.quickbar = this.el('div', 'quickbar');
     this.quickSlots = QUICK_ITEMS.map((name, index) => {
       const slot = this.button('', () => this.itemDetails(name), this.quickbar, 'quickslot');
-      this.el('span', 'key', String(index + 1), slot); this.el('span', 'icon', ITEM_META[name]?.[0] || '🎒', slot); this.el('span', 'count', '0', slot);
+      this.el('span', 'key', String(index + 1), slot); appendItemArt(slot, name, 'icon'); this.el('span', 'count', '0', slot);
       slot.title = name; return slot;
     });
     this.collisionTools = this.el('div', 'collision-tools');
@@ -112,6 +120,7 @@ export class DandelionHillsApp {
       if (event.code === 'KeyM' && !event.repeat && this.world && !this.collisionEditing) { this.world.overview = !this.world.overview; this.mapButton.textContent = this.world.overview ? '跟隨' : '鳥瞰'; return; }
       if (/^Digit[1-3]$/.test(event.code) && !this.collisionEditing) { this.itemDetails(QUICK_ITEMS[Number(event.code.slice(-1)) - 1]); return; }
       if (this.paused) return;
+      if (event.code === 'KeyK' && !event.repeat) this.arrowRequested = true;
       this.keys.add(event.code);
       if (event.code === 'KeyE') this.interact();
       if ((event.code === 'ShiftLeft' || event.code === 'ShiftRight') && !event.repeat) this.dodgeRequested = true;
@@ -122,7 +131,7 @@ export class DandelionHillsApp {
 
   joystick(event) { const rect = this.joy.getBoundingClientRect(), dx = event.clientX - rect.left - rect.width / 2, dy = event.clientY - rect.top - rect.height / 2, length = Math.hypot(dx, dy), max = rect.width * .34; this.axis = length < 6 ? { x: 0, y: 0 } : { x: dx / Math.max(max, length), y: dy / Math.max(max, length) }; this.knob.style.transform = `translate(${this.axis.x * max}px,${this.axis.y * max}px)`; }
   resetJoystick() { this.joyId = null; this.axis = { x: 0, y: 0 }; this.knob.style.transform = ''; }
-  clearInput() { this.resetJoystick(); this.keys.clear(); this.attacking = false; this.attackId = null; this.dodgeRequested = false; }
+  clearInput() { this.resetJoystick(); this.keys.clear(); this.attacking = false; this.attackId = null; this.dodgeRequested = false; this.arrowRequested = false; }
   resize() { const rect = this.root.getBoundingClientRect(); this.world?.resize(rect.width, rect.height); const portrait = rect.height > rect.width; this.rotate.style.display = portrait ? 'grid' : 'none'; if (portrait) { this.paused = true; this.clearInput(); } }
 
   async start() {
@@ -154,10 +163,11 @@ export class DandelionHillsApp {
     let axis = { x: 0, y: 0 }, moving = false;
     if (!this.paused) {
       axis = { x: this.axis.x + Number(this.keys.has('KeyD') || this.keys.has('ArrowRight')) - Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft')), y: this.axis.y + Number(this.keys.has('KeyS') || this.keys.has('ArrowDown')) - Number(this.keys.has('KeyW') || this.keys.has('ArrowUp')) };
-      if (this.world.overview && (Math.hypot(axis.x,axis.y)>.12 || this.attacking || this.keys.has('KeyJ') || this.keys.has('Space'))) {
+      if (this.world.overview && (Math.hypot(axis.x,axis.y)>.12 || this.attacking || this.keys.has('KeyJ') || this.keys.has('Space') || this.arrowRequested)) {
         this.world.overview=false;this.mapButton.textContent='鳥瞰';
         this.world.camera={x:this.journey.player.x,y:this.journey.player.y-70};
       }
+      if (this.arrowRequested) { this.journey.castMagicArrow(); this.arrowRequested = false; }
       moving = this.journey.update(dt, axis, this.attacking || this.keys.has('KeyJ') || this.keys.has('Space'), this.dodgeRequested); this.dodgeRequested = false;
       this.flush(); if (this.journey.dirty || time - (this.lastSave || 0) > 5000) { this.save(); this.journey.dirty = false; this.lastSave = time; } this.hud();
       const camp = this.journey.nearby();
@@ -204,7 +214,10 @@ export class DandelionHillsApp {
     this.shield.textContent = j.stunned > 0 ? `💥 破防暈眩 ${j.stunned.toFixed(1)}秒` : `🛡 盾牌耐久 ${Math.ceil(j.shieldDurability)}/${j.shieldMax}${j.attackWindow > 0 ? ' · 攻擊中無法防禦' : ''}`;
     this.bag.textContent = `橡果 ${j.itemCount('香脆橡果')} · 星芽膠 ${j.itemCount('純淨星芽膠')} · 靈珠 ${Object.keys(j.inventory).filter((key) => key.includes('珠')).reduce((sum, key) => sum + j.itemCount(key), 0)}`;
     this.dodgeButton.textContent = `✧\n閃步${j.dodgeCooldown > 0 ? ' ' + Math.ceil(j.dodgeCooldown) : ''}`;
-    this.attackButton.textContent = `✦\n魔法斬${j.attackCooldown > 0 ? ' ' + j.attackCooldown.toFixed(1) : ''}`;
+    this.swordLabel.textContent = `魔法劍 SP 0${j.attackCooldown > 0 ? '\n' + j.attackCooldown.toFixed(1) + 's' : ''}`;
+    this.arrowLabel.textContent = `魔法箭 SP −1${j.attackCooldown > 0 ? '\n' + j.attackCooldown.toFixed(1) + 's' : ''}`;
+    this.arrowButton.style.opacity = j.mana < 1 || j.attackCooldown > 0 || j.stunned > 0 || j.blind > 0 ? '.5' : '1';
+    this.spStatus.textContent = `SP ${j.mana}/3${j.mana < 3 ? ' · ' + Math.max(0, 5 - j.spRegenElapsed).toFixed(1) + ' 秒後回復' : ' · 魔力充足'}`;
     this.attackButton.style.opacity = j.blind > 0 || j.stunned > 0 || j.attackCooldown > 0 ? '.45' : '1';
     const nearby = j.nearby(); this.context.style.display = nearby ? 'block' : 'none'; this.context.textContent = nearby ? `E／互動 · ${nearby.name}` : '';
     this.interactButton.textContent = nearby?.kind === 'gather' ? '採集' : nearby?.kind === 'portal' ? '前往' : '互動';
@@ -290,7 +303,7 @@ export class DandelionHillsApp {
     this.dialog(`${icon} ${name} ×${count}`, count ? description : `${description}\n\n目前尚未取得。`, [['查看完整背包', () => this.backpack()], ['繼續冒險', () => this.close()]]);
   }
 
-  save() { try { localStorage.setItem(SAVE, JSON.stringify(this.journey.export())); this.inventoryState = mergeStarsproutItems(this.inventoryState, this.journey.inventory); this.inventoryState.unlockedBeadSlots = Math.max(this.inventoryState.unlockedBeadSlots, this.journey.questStage >= 2 ? 2 : 1); this.inventoryState = saveStarsproutInventory(this.inventoryState); } catch { this.notify('目前無法保存進度，請先不要關閉頁面。'); } }
+  save() { try { saveSkillResource(this.journey); localStorage.setItem(SAVE, JSON.stringify(this.journey.export())); this.inventoryState = mergeStarsproutItems(this.inventoryState, this.journey.inventory); this.inventoryState.unlockedBeadSlots = Math.max(this.inventoryState.unlockedBeadSlots, this.journey.questStage >= 2 ? 2 : 1); this.inventoryState = saveStarsproutInventory(this.inventoryState); } catch { this.notify('目前無法保存進度，請先不要關閉頁面。'); } }
   travelTo(target) { if (this.journey.downed || this.traveling || this.journey.attackWindow > 0 || this.journey.stunned > 0) return; this.traveling = true; this.paused = true; this.clearInput(); this.save(); this.onTravel(target); }
   notify(text) { this.toast.textContent = text; this.toast.style.opacity = '1'; this.toastUntil = performance.now() + 3800; }
   dialog(title, text, choices) { this.paused = true; this.clearInput(); this.modal?.remove(); this.modal = this.el('div', 'modal'); const card = this.el('div', 'card', '', this.modal); this.el('h2', '', title, card); this.el('div', 'body', text, card); const buttons = this.el('div', 'choices', '', card); for (const choice of choices) this.button(choice[0], choice[1], buttons); return card; }
@@ -310,7 +323,7 @@ export class DandelionHillsApp {
   journal() {
     if (this.loading) return;
     const j = this.journey, species = Object.entries(MOB_TYPES).map(([id, mob]) => `${mob.elite ? '★' : '•'} ${mob.name}｜${mob.level}`).join('\n');
-    this.dialog('晨曦丘陵探險手帳', `${j.objective()}\n\n戰鬥\n魔法斬會朝面前劈下；斬擊完整結束前不能移動或防禦。不攻擊時面向敵方攻擊即可自動格擋，盾牌耐久歸零會破防並原地暈眩2秒。Shift／閃步可短暫避開攻擊。\n\n警戒圈\n黃色＝被動或尚未敵對；紅色＝正在攻擊你。\n\n掉落\n光團彈跳兩次後懸浮；靠近1.5格會自動磁吸。柔白＝普通、明黃＝任務、星藍＝稀有靈珠。\n\n生物\n${species}\n\n蒲公英大遷徙期間，晨曦蒲公英採集量加倍。`, [['回到探索', () => this.close()], ['重玩丘陵任務', () => this.dialog('重新開始丘陵進度？', '只重設丘陵任務與素材，不影響星芽營地。', [['取消', () => this.journal()], ['確認重玩', () => { this.journey = new DandelionHillsJourney(); this.save(); this.hud(); this.close(); }]])]]);
+    this.dialog('晨曦丘陵探險手帳', `${j.objective()}\n\n戰鬥\n魔法劍（J／空白鍵）不耗 SP；魔法箭（K）消耗 1 SP，命中第一隻怪物後消散。SP 每 5 秒回復 1 點，上限 3 點。魔法劍會朝面前劈下；斬擊完整結束前不能移動或防禦。不攻擊時面向敵方攻擊即可自動格擋，盾牌耐久歸零會破防並原地暈眩2秒。Shift／閃步可短暫避開攻擊。\n\n警戒圈\n黃色＝被動或尚未敵對；紅色＝正在攻擊你。\n\n掉落\n光團彈跳兩次後懸浮；靠近1.5格會自動磁吸。柔白＝普通、明黃＝任務、星藍＝稀有靈珠。\n\n生物\n${species}\n\n蒲公英大遷徙期間，晨曦蒲公英採集量加倍。`, [['回到探索', () => this.close()], ['重玩丘陵任務', () => this.dialog('重新開始丘陵進度？', '只重設丘陵任務與素材，不影響星芽營地。', [['取消', () => this.journal()], ['確認重玩', () => { this.journey = new DandelionHillsJourney(); this.save(); this.hud(); this.close(); }]])]]);
   }
 
   dispose() { this.dead = true; cancelAnimationFrame(this.frame); this.abort.abort(); this.clearInput(); if (this.inventoryPanel) { this.inventoryPanel.style.remove(); this.inventoryPanel.overlay.remove(); this.inventoryPanel = null; } this.world?.dispose(); this.root.remove(); }

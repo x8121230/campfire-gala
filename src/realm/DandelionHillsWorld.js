@@ -369,6 +369,18 @@ export class DandelionHillsWorld {
 
   drawProjectiles(ctx, journey) {
     for (const shot of journey.projectiles) {
+      if (shot.kind === 'magicArrow') {
+        ctx.save(); ctx.translate(shot.x, shot.y - 42); ctx.rotate(Math.atan2(shot.dy, shot.dx));
+        ctx.globalAlpha = Math.min(1, Math.max(0, shot.life / .16));
+        const trail = ctx.createLinearGradient(-68,0,18,0); trail.addColorStop(0,'#62ccff00');trail.addColorStop(1,'#bdfaff');
+        ctx.strokeStyle=trail;ctx.lineWidth=8;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-68,0);ctx.lineTo(14,0);ctx.stroke();
+        ctx.shadowColor='#40baff';ctx.shadowBlur=15;ctx.strokeStyle='#ecffff';ctx.lineWidth=2.5;
+        ctx.beginPath();ctx.moveTo(-29,0);ctx.lineTo(15,0);ctx.stroke();ctx.fillStyle='#53bfff';
+        ctx.beginPath();ctx.moveTo(28,0);ctx.lineTo(9,-10);ctx.lineTo(13,0);ctx.lineTo(9,10);ctx.closePath();ctx.fill();ctx.stroke();
+        for (const side of [-1,1]) {ctx.beginPath();ctx.moveTo(-22,0);ctx.lineTo(-33,side*9);ctx.lineTo(-16,side*4);ctx.stroke();}
+        ctx.restore();continue;
+      }
+
       const p = Math.max(0, Math.min(1, 1 - shot.life / (shot.maxLife || 2.2)));
       const mud = shot.kind === 'mud', r = mud ? 10 : 12;
       const lift = mud ? 22 + Math.sin(p * Math.PI) * 32 : 42 + Math.sin(this.time * 5) * 3;

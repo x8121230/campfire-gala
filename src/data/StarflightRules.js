@@ -1,12 +1,12 @@
-import {getStarCraft} from './StarflightCrafts.js?v=star0122';
-import {CARNIVAL_ENEMIES,carnivalTimeline,carnivalEvent,carnivalEnemy,carnivalHazard,carnivalDefeat,carnivalHit} from './StarflightCarnival.js?v=star0122';
-import {LAKE_ENEMIES,lakeTimeline,lakeEvent,lakeEnemy,lakeHazard,lakeDefeat,lakeHit} from './StarflightLake.js?v=star0122';
-import {CAVE_ENEMIES,caveTimeline,caveEvent,caveEnemy,caveHazard,caveDefeat,caveHit} from './StarflightCave.js?v=star0122';
-import {ICE_ENEMIES,iceTimeline,iceEvent,iceEnemy,iceHazard,iceDefeat,iceHit} from './StarflightIce.js?v=star0122';
-import {WETLAND_ENEMIES,wetlandTimeline,wetlandEvent,wetlandEnemy,wetlandHazard,wetlandDefeat,wetlandHit} from './StarflightWetland.js?v=star0122';
-import {MAGMA_ENEMIES,magmaTimeline,magmaEvent,magmaEnemy,magmaHazard,magmaDefeat,magmaHit} from './StarflightMagma.js?v=star0122';
-import {FOREST_ENEMIES,forestTimeline,forestEvent,forestEnemy,forestHazard,forestDefeat,forestHit} from './StarflightForest.js?v=star0122';
-import {TRANSIT_ENEMIES,transitTimeline,transitEvent,transitEnemy,transitHazard,transitDefeat} from './StarflightTransit.js?v=star0122';
+import {getStarCraft} from './StarflightCrafts.js?v=star0123';
+import {CARNIVAL_ENEMIES,carnivalTimeline,carnivalEvent,carnivalEnemy,carnivalHazard,carnivalDefeat,carnivalHit} from './StarflightCarnival.js?v=star0123';
+import {LAKE_ENEMIES,lakeTimeline,lakeEvent,lakeEnemy,lakeHazard,lakeDefeat,lakeHit} from './StarflightLake.js?v=star0123';
+import {CAVE_ENEMIES,caveTimeline,caveEvent,caveEnemy,caveHazard,caveDefeat,caveHit} from './StarflightCave.js?v=star0123';
+import {ICE_ENEMIES,iceTimeline,iceEvent,iceEnemy,iceHazard,iceDefeat,iceHit} from './StarflightIce.js?v=star0123';
+import {WETLAND_ENEMIES,wetlandTimeline,wetlandEvent,wetlandEnemy,wetlandHazard,wetlandDefeat,wetlandHit} from './StarflightWetland.js?v=star0123';
+import {MAGMA_ENEMIES,magmaTimeline,magmaEvent,magmaEnemy,magmaHazard,magmaDefeat,magmaHit,spawnMagmaMeteor} from './StarflightMagma.js?v=star0123';
+import {FOREST_ENEMIES,forestTimeline,forestEvent,forestEnemy,forestHazard,forestDefeat,forestHit} from './StarflightForest.js?v=star0123';
+import {TRANSIT_ENEMIES,transitTimeline,transitEvent,transitEnemy,transitHazard,transitDefeat} from './StarflightTransit.js?v=star0123';
 // Horizontal flight simulation. World units match the 1280 × 480 playfield.
 export const STAR_REGION_SECONDS=48;
 export const starRegionDuration=index=>index===0?60:48;
@@ -26,7 +26,7 @@ export const STAR_SPECIALS=[
  {id:'explosive',name:'炸裂彈',short:'炸裂',cd:4,charge:0,color:0xffc87b,tip:'直射種子彈，命中後爆開、安撫附近敵人'},
  {id:'shotgun',name:'幸運草散彈',short:'散彈',cd:3,charge:0,color:0x83ed99,tip:'七向扇形散射，適合靠近大型敵人使用'}
 ];
-export const STAR_PHASE1={version:'0.10.17',craftId:'swift-vanguard',craftName:'巡天雨燕',normalShotCooldown:.5,chargeSeconds:2,playerSpeed:245,visualScale:1.05,launchSeconds:3,guardianSeconds:3};
+export const STAR_PHASE1={version:'0.10.23',craftId:'swift-vanguard',craftName:'巡天雨燕',normalShotCooldown:.5,chargeSeconds:2,playerSpeed:245,visualScale:1.05,launchSeconds:3,guardianSeconds:3};
 export const STAR_TUNING=[
  {id:'playerSpeed',name:'玩家移動速度',default:245,min:120,max:450,step:12.5,digits:1,unit:''},
  {id:'shotCooldown',name:'普攻發射間隔',default:.5,min:.2,max:1.2,step:.1,digits:1,unit:'秒'},
@@ -165,7 +165,7 @@ export class StarflightSession{
   this.route=checkpoint?.route?.map(m=>({...m}))||buildStarRoute(this.seed);const initialPhase=resolveStarPhase(this.time);this.segment=initialPhase.kind==='boss'?STAR_ROUTE_LENGTH:initialPhase.index;this.stage=this.segment;this.travelPhase=initialPhase.kind;
   if(!checkpoint){const candy=this.route.find(m=>m.type==='sky');if(candy)candy.carnivalScenario=skyScenario;}
   this.timeline=buildStarTimeline(this.route,this.seed);this.eventIndex=this.timeline.findIndex(e=>e.at>=this.time);if(this.eventIndex<0)this.eventIndex=this.timeline.length;
-  this.status='playing';this.paused=false;this.accumulator=0;this.id=0;this.craft=getStarCraft(checkpoint?.craftId||craftId);this.hurtbox=this.craft.hurtbox;this.hitRadius=this.hurtbox.ry;const hp=this.craft.hp;this.velocity={x:0,y:0};this.guardFeathers=0;this.owlCounter=0;this.guardTime=0;this.cruise=0;this.breezeCD=0;
+  this.status='playing';this.paused=false;this.accumulator=0;this.id=0;this.craft=getStarCraft(checkpoint?.craftId||craftId);this.hurtbox=this.craft.hurtbox;this.hitRadius=this.hurtbox.ry;const hp=this.craft.hp;this.velocity={x:0,y:0};this.guardFeathers=0;this.owlOrbitCD=0;this.guardTime=0;this.cruise=0;this.breezeCD=0;
   this.tuning=Object.fromEntries(STAR_TUNING.map(item=>[item.id,checkpoint?.tuning?.[item.id]??item.default]));this.gmUsed=checkpoint?.gmUsed??false;if(!checkpoint?.tuning){this.tuning.playerSpeed=this.craft.speed;this.tuning.shotCooldown=this.craft.cd;}
   this.player={x:210,y:240,hp,maxHp:hp,invuln:2,dashCD:0,dashing:0,shotCD:0,traitCD:0,shield:0,powerBoost:0};
   this.weapon='clover';
@@ -176,7 +176,7 @@ export class StarflightSession{
   this.bombs=0;this.score=checkpoint?.score||0;this.chain=0;this.chainLife=0;
   this.stats={cleared:0,rescued:0,hits:0,bombs:0,weaponChoices:0,upgrades:0,graze:0,branches:0,gmChanges:0,...checkpoint?.stats};
   this.events=[];this.enemies=[];this.shots=[];this.bullets=[];this.pickups=[];this.gates=[];this.hazards=[];this.warnings=[];this.branchOffer=null;this.environmentSlow=1;this.boss=null;this.last={};this.pending={};
-  this.notice='自動普攻 · I 專屬技能 · U 衝刺 · J 特殊武器';this.noticeLife=4;this.nextBossGift=STAR_FIELD.bossAt+12;this.checkpoint=this.snapshot();
+  this.notice='按住攻擊 · 能量滿後按大招 · U 加速';this.noticeLife=4;this.nextBossGift=STAR_FIELD.bossAt+12;this.checkpoint=this.snapshot();
  }
  get currentMap(){return this.segment<STAR_ROUTE_LENGTH?this.route[this.segment]:this.boss?this.route[STAR_ROUTE_LENGTH-1]:null;}
  get inTransit(){return this.travelPhase==='transit';}
@@ -251,7 +251,7 @@ export class StarflightSession{
   this.stats.traits=(this.stats.traits||0)+1;p.traitCD=4;
   if(this.craft.id==='swift'){for(const a of [-.3,-.15,0,.15,.3])this.craftShot(a,'leaf',12,2);}
   if(this.craft.id==='falcon'){p.dashing=.28;p.invuln=Math.max(p.invuln,.3);this.craftShot(0,'laser',45,12,1550);}
-  if(this.craft.id==='owl'){if(this.guardFeathers){for(let i=0;i<this.guardFeathers;i++)this.craftShot((i-1.5)*.16,'leaf',18,3);this.guardFeathers=0;this.guardTime=0;p.traitCD=4;}else{this.guardFeathers=4;this.guardTime=5;p.traitCD=.5;}}
+  if(this.craft.id==='owl'){return false;}
   if(this.craft.id==='ancient'){p.shield=1;this.guardTime=2;this.craftShot(0,'explosive',55,3,620);p.traitCD=6;}
   if(this.craft.id==='starwing'){const targets=this.enemies.filter(e=>!e.dead&&e.x>p.x).sort((a,b)=>distance(a,p)-distance(b,p)).slice(0,4);if(!targets.length)this.craftShot(0,'laser',35,4);else targets.forEach((e,i)=>this.craftShot((i-1.5)*.25,'homing',26,1,740,e));p.traitCD=5;this.emit('lock',p.x,p.y,{targets:targets.map(e=>({x:e.x,y:e.y}))});}
   this.emit('traitFire');return true;
@@ -259,9 +259,9 @@ export class StarflightSession{
 
  explode(shot,target){if(shot.ancientShell){const radius=shot.blastRadius;this.ancientArea(target.x,target.y,radius,shot.damage*.45,target);this.ancientWaves.push({x:target.x,y:target.y,radius:radius+25,damage:shot.damage*.30,delay:.25});this.ancientRicochet(shot,target);this.emit('ancientBlast',target.x,target.y,{radius});return;}this.emit('burst',target.x,target.y);for(const e of this.enemies)if(e!==target&&!e.dead&&!e.exit&&distance(e,target)<105){e.hp-=16*this.attackMultiplier();carnivalHit(this,e);lakeHit(this,e);caveHit(this,e,16*this.attackMultiplier());iceHit(this,e,16*this.attackMultiplier());wetlandHit(this,e,16*this.attackMultiplier());magmaHit(this,e,16*this.attackMultiplier());forestHit(this,e,16*this.attackMultiplier());e.flash=.06;this.gainEnergy(1);if(e.hp<=0)this.defeat(e);}}
  triggerUltimate(){if(this.paused||this.phase!=='combat'||this.ultimateEnergy<100)return false;
-  this.ultimateEnergy=0;this.player.invuln=Math.max(this.player.invuln,1);this.bullets=this.bullets.filter(b=>distance(b,this.player)>180);this.emit('breeze',this.player.x,this.player.y);this.phase='ultimate';this.phaseTime=0;this.charging=null;this.stats.bombs++;this.emit('ultimateStart');return true;
+  if(this.craft.id==='owl')this.owlUltimateImpact();this.ultimateEnergy=0;this.player.invuln=Math.max(this.player.invuln,1);this.bullets=this.bullets.filter(b=>distance(b,this.player)>180);this.emit('breeze',this.player.x,this.player.y);this.phase='ultimate';this.phaseTime=0;this.charging=null;this.stats.bombs++;this.emit('ultimateStart');return true;
  }
- finishUltimate(){this.bullets=[];for(const e of this.enemies){e.hp-=130*this.attackMultiplier();if(e.hp<=0)this.defeat(e);}if(this.boss?.age>2)this.boss.hp-=200*this.attackMultiplier();
+ finishUltimate(){if(this.craft.id==='owl'){this.phase='combat';this.phaseTime=0;this.player.invuln=Math.max(this.player.invuln,1);this.last={};this.pending={};return;}this.bullets=[];for(const e of this.enemies){e.hp-=130*this.attackMultiplier();if(e.hp<=0)this.defeat(e);}if(this.boss?.age>2)this.boss.hp-=200*this.attackMultiplier();
   this.phase='combat';this.phaseTime=0;this.player.invuln=Math.max(this.player.invuln,1);this.last={};this.pending={};this.emit('bomb');}
  findSafeRespawn(){const x=155,candidates=[240,140,340,75,405];return candidates.map(y=>({x,y})).find(p=>this.gates.every(g=>Math.abs(p.x-g.x)>=g.w/2+40||(p.y>=g.gapY-g.gap/2+28&&p.y<=g.gapY+g.gap/2-28)))||null;}
  finishGuardian(){return false;}
@@ -335,12 +335,27 @@ export class StarflightSession{
  }
  shootOwl(){const p=this.player,rank=this.weaponRanks.clover,lv=this.bellLevels.upgrade,count=3+lv*2+(rank-1)*2;
   for(let i=0;i<count;i++){this.craftShot((i-(count-1)/2)*.105,'leaf',2.5,1,440);this.shots.at(-1).owlFeather=true;}
-  if(this.owlCounter>0){const n=Math.min(this.owlCounter,p.powerBoost>0?2:1);for(let i=0;i<n;i++){this.craftShot((i-(n-1)/2)*.16,'leaf',12+this.bellLevels.special*3,3,920);this.shots.at(-1).owlCounter=true;}this.owlCounter-=n;this.emit('owlCounter',p.x,p.y);}
+
   p.shotCD=this.tuning.shotCooldown/(1+(rank-1)*.25)/(p.powerBoost>0?1.6:1);this.emit('shot');
+ }
+ launchOwlOrbit(){
+  const p=this.player,lv=this.bellLevels.special;if(this.craft.id!=='owl'||lv<=0||this.owlOrbitCD>0)return false;
+  this.owlOrbitCD=1;
+  // A new volley starts in the four feather quadrants; each has its own life/hit set.
+  for(let i=0;i<4;i++){const angle=-Math.PI/4+i*Math.PI/2;
+   this.shots.push({id:++this.id,kind:'leaf',owlOrbit:true,orbitStart:angle,age:0,angle,x:p.x+Math.cos(angle)*55,y:p.y+Math.sin(angle)*55,vx:0,vy:0,r:9,damage:(8+2*lv)*this.attackMultiplier(),life:1,pierce:1,hit:new Set(),rank:this.weaponRanks.clover});
+  }this.emit('owlOrbit',p.x,p.y);return true;
+ }
+ owlUltimateRadius(){return this.hurtbox.rx*2*5;}
+ owlUltimateImpact(){const p=this.player,radius=this.owlUltimateRadius();this.owlUltimateCenter={x:p.x,y:p.y,radius};
+  this.bullets=this.bullets.filter(b=>distance(b,p)>radius+(b.r||0));
+  for(const e of this.enemies)if(!e.dead&&!e.exit&&distance(e,p)<=radius+e.r){e.hp-=130*this.attackMultiplier();e.flash=.1;if(e.hp<=0)this.defeat(e);}
+  if(this.boss?.age>2&&distance(this.boss,p)<=radius+this.boss.r){this.boss.hp-=200*this.attackMultiplier();this.boss.flash=.1;}
+  this.emit('owlNova',p.x,p.y,{radius});
  }
  blockOwlBullet(b,ox=b.x,oy=b.y){if(this.craft.id!=='owl'||this.guardFeathers<=0||b.life<=0||b.heavy||(b.visualRadius||b.r||8)>12)return false;
   const p=this.player,dx=b.x-ox,dy=b.y-oy,t=clamp(((p.x-ox)*dx+(p.y-oy)*dy)/(dx*dx+dy*dy||1),0,1),x=ox+dx*t,y=oy+dy*t;if(Math.hypot(x-p.x,y-p.y)>58)return false;
-  b.life=0;this.guardFeathers--;if(this.bellLevels.special)this.owlCounter=Math.min(2+this.bellLevels.special,this.owlCounter+1);this.emit('owlBlock',x,y);return true;
+  b.life=0;this.guardFeathers--;this.emit('owlBlock',x,y);return true;
  }
  shootSwift(){const p=this.player,rank=Math.max(1,Math.min(3,this.weaponRanks.clover)),lv=this.bellLevels.upgrade;
   // Crystal: denser central stream. Blue bells: wider independent wing fans.
@@ -376,7 +391,7 @@ export class StarflightSession{
  advance(seconds,input={}){if(this.paused||this.status!=='playing')return 0;this.accumulator+=clamp(seconds,0,.1);let steps=0;
   for(const key of ['special','bomb','trait','dash']){if(input[key]&&!this.last[key])this.pending[key]=true;this.last[key]=!!input[key];}
   const edge={dash:false,special:false,bomb:false,trait:false,...this.pending};while(this.accumulator+1e-9>=STAR_FIELD.step){this.stepPhase(STAR_FIELD.step,{...input,...(steps===0?edge:{dash:false,special:false,bomb:false,trait:false})});this.accumulator-=STAR_FIELD.step;this.pending={};steps++;if(this.status!=='playing'||this.paused){this.accumulator=0;break;}}return steps;}
- stepPhase(dt,input){if(this.phase==='ultimate'){this.phaseTime+=dt;if(this.phaseTime>=3)this.finishUltimate();return;}
+ stepPhase(dt,input){if(this.phase==='ultimate'){this.phaseTime+=dt;if(this.phaseTime>=(this.craft.id==='owl'?.9:3))this.finishUltimate();return;}
   if(this.phase==='guardian'){this.phaseTime+=dt;if(this.phaseTime>=STAR_PHASE1.guardianSeconds)this.finishGuardian();return;}
   if(this.phase==='falling'){this.phaseTime+=dt;if(this.phaseTime>=1){this.status='lost';this.emit('end');}return;}
   if(input.bomb&&this.triggerUltimate())return;
@@ -415,7 +430,7 @@ export class StarflightSession{
   if(e.type==='rockfall'){this.hazards.push({id:++this.id,kind:'rock',x:650+this.random()*500,y:-30,r:22,age:0,life:4.2,warn:1,vy:0,hit:false});this.message('洞頂星塵落下 · 留意落石預警！');}
   if(e.type==='icefall'){this.hazards.push({id:++this.id,kind:'icicle',x:560+this.random()*620,y:-35,r:18,age:0,life:4,warn:.9,vy:0,hit:false});this.message('冰晶發出亮光 · 冰柱即將掉落！');}
   if(e.type==='marsh'){this.hazards.push({id:++this.id,kind:'marsh',x:1380,y:100+this.random()*280,r:120,age:0,life:14});this.message('濕地泡泡霧 · 進入會稍微減速');}
-  if(e.type==='ember'){this.hazards.push({id:++this.id,kind:'ember',x:720+this.random()*470,y:-35,r:20,age:0,life:4.5,warn:.75,vx:-75-this.random()*70,vy:0,hit:false});this.message('岩漿亮起紅圈 · 火山星石即將噴出！');}
+  if(e.type==='ember'){spawnMagmaMeteor(this,20);this.message('火山落石 · 上方箭頭預警2秒');}
   if(e.type==='canopy'){this.addTerrain(1440,150+this.random()*180,225,false);this.message('古木枝幹交錯 · 尋找發光缺口！');}
   if(e.type==='warning'){const boss=STAR_REGION_BOSSES[this.route[this.route.length-1].type];this.message('前方大型反應！'+boss.name+'甦醒了');this.emit('warning');}
   if(e.type==='boss')this.startBoss();
@@ -444,7 +459,7 @@ export class StarflightSession{
   p.x=clamp(p.x+x/n*speed*playerDt,30,1225);p.y=clamp(p.y+(y/n*speed+drift)*playerDt,22,458);
   this.optionTrail.push({x:p.x,y:p.y});if(this.optionTrail.length>85)this.optionTrail.shift();
   this.optionPositions=this.craft.id==='starwing'?Array.from({length:this.options},(_,i)=>({x:p.x-40,y:clamp(p.y+(i===0?-1:1)*(this.starOverclock>0?57:36),18,462)})):Array.from({length:this.options},(_,i)=>{const a=this.optionTrail[Math.max(0,this.optionTrail.length-1-25*(i+1))]||p;return {x:a.x-45*(i+1),y:a.y};});
-  this.updateStarLocks(playerDt);if(input.fire&&p.shotCD<=0)this.shoot();
+  this.owlOrbitCD=Math.max(0,this.owlOrbitCD-playerDt);if(input.fire)this.launchOwlOrbit();this.updateStarLocks(playerDt);if(input.fire&&p.shotCD<=0)this.shoot();
   while(this.eventIndex<this.timeline.length&&this.time>=this.timeline[this.eventIndex].at)this.timelineEvent(this.timeline[this.eventIndex++]);
   if(this.boss)this.stepBoss(dt);
   for(const gate of this.gates){gate.x-=STAR_FIELD.scrollSpeed*dt;
@@ -469,9 +484,9 @@ export class StarflightSession{
   for(const shot of this.shots){const ox=shot.x,oy=shot.y;if(shot.targetId){const target=this.enemies.find(e=>e.id===shot.targetId&&!e.dead);if(target){const a=Math.atan2(target.y-shot.y,target.x-shot.x),v=Math.hypot(shot.vx,shot.vy);shot.vx=Math.cos(a)*v;shot.vy=Math.sin(a)*v;}}
    if(shot.kind==='homing'){if(shot.starMissile&&shot.target&&!this.starTargets().includes(shot.target))shot.target=null;if(!shot.target||shot.target.dead||shot.target.exit||shot.target.hp<=0)shot.target=shot.starMissile?this.starTargets()[0]||null:this.enemies.filter(e=>!e.dead&&!e.exit&&e.x>shot.x-40).sort((a,b)=>distance(a,shot)-distance(b,shot))[0]||(this.boss?.age>2?this.boss:null);
     const target=shot.target;if(target){const a=Math.atan2(target.y-shot.y,target.x-shot.x),velocity=shot.homingSpeed||this.tuning.playerBulletSpeed*.693;shot.vx+=(Math.cos(a)*velocity-shot.vx)*dt*5;shot.vy+=(Math.sin(a)*velocity-shot.vy)*dt*5;}}
-   if(shot.guided){const target=this.enemies.find(e=>!e.dead&&!e.exit&&e.x>shot.x)||(this.boss?.age>2?this.boss:null);if(target){const a=Math.atan2(target.y-shot.y,target.x-shot.x),v=840;shot.vx+=(Math.cos(a)*v-shot.vx)*Math.min(1,playerDt*1.8);shot.vy+=(Math.sin(a)*v-shot.vy)*Math.min(1,playerDt*1.8);}}shot.x+=shot.vx*playerDt;shot.y+=shot.vy*playerDt;shot.life-=playerDt;
+   if(shot.guided){const target=this.enemies.find(e=>!e.dead&&!e.exit&&e.x>shot.x)||(this.boss?.age>2?this.boss:null);if(target){const a=Math.atan2(target.y-shot.y,target.x-shot.x),v=840;shot.vx+=(Math.cos(a)*v-shot.vx)*Math.min(1,playerDt*1.8);shot.vy+=(Math.sin(a)*v-shot.vy)*Math.min(1,playerDt*1.8);}}if(shot.owlOrbit){shot.age+=playerDt;shot.angle=shot.orbitStart+shot.age*Math.PI*2;const radius=55+shot.age*80;shot.x=p.x+Math.cos(shot.angle)*radius;shot.y=p.y+Math.sin(shot.angle)*radius;}else{shot.x+=shot.vx*playerDt;shot.y+=shot.vy*playerDt;}shot.life-=playerDt;
    if(shot.kind==='gravity'){if(shot.deployX!==undefined?shot.x>=shot.deployX:shot.life<=1.95){this.gravityFields.push({x:Math.min(1200,shot.x),y:shot.y,age:0,level:shot.gravityLevel,damage:shot.damage});shot.life=0;}continue;}
-   for(const item of this.pickups)if(item.kind==='weapon'&&item.life>0&&shot.life>0&&starSweep(ox,oy,shot.x,shot.y,item.x,item.y,item.r+shot.r)){this.cycleStarbud(item);shot.life=0;break;}
+   for(const item of this.pickups)if(!shot.owlOrbit&&item.kind==='weapon'&&item.life>0&&shot.life>0&&starSweep(ox,oy,shot.x,shot.y,item.x,item.y,item.r+shot.r)){this.cycleStarbud(item);shot.life=0;break;}
    for(const gate of this.gates)if(shot.x>gate.x-gate.w/2&&ox<gate.x+gate.w/2&&(shot.y<gate.gapY-gate.gap/2||shot.y>gate.gapY+gate.gap/2))shot.life=0;
    if(shot.life<=0)continue;
    for(const e of (shot.falconBeam?[...this.enemies].sort((a,b)=>a.x-b.x):this.enemies))if(!e.dead&&!e.exit&&!shot.hit.has(e.id)&&starSweep(ox,oy,shot.x,shot.y,e.x,e.y,e.r+shot.r)){
@@ -510,7 +525,7 @@ export class StarflightSession{
    if(b.cycle%4===0){
     if(b.attack==='rockfall')this.hazards.push({id:++this.id,kind:'rock',x:520+this.random()*620,y:-30,r:24,age:0,life:4.2,warn:1,vy:0,hit:false});
     if(b.attack==='icefall')this.hazards.push({id:++this.id,kind:'icicle',x:520+this.random()*620,y:-35,r:20,age:0,life:4,warn:.9,vy:0,hit:false});
-    if(b.attack==='ember')this.hazards.push({id:++this.id,kind:'ember',x:620+this.random()*500,y:-35,r:22,age:0,life:4.5,warn:.75,vx:-90-this.random()*60,vy:0,hit:false});
+    if(b.attack==='ember')spawnMagmaMeteor(this,22);
     if(b.attack==='mist')this.hazards.push({id:++this.id,kind:'mist',x:1380,y:100+this.random()*280,r:95,age:0,life:10});
     if(b.attack==='marsh')this.hazards.push({id:++this.id,kind:'marsh',x:1380,y:100+this.random()*280,r:105,age:0,life:11});
     if(b.attack==='canopy')this.addTerrain(1440,150+this.random()*180,250,false);

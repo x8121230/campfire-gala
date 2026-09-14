@@ -1,55 +1,97 @@
-import { ITEM_CATALOG, TYPE_LABELS, normalizeStarsproutInventory, occupiedSlots, sortedStarsproutItems } from './StarsproutInventory.js';
+import { ITEM_CATALOG, TYPE_LABELS, normalizeStarsproutInventory, occupiedSlots, sortedStarsproutItems, appendItemArt } from './StarsproutInventory.js';
 
-const HERO = '../../assets/phantom-realm/hero-achenchen/hero-down.png';
-const SLOT_NAMES = Object.freeze({ hat: '頭飾', weapon: '手杖', shield: '盾牌', outfit: '服裝', boots: '短靴' });
-
+// Shared by camp and hills. All selectors are scoped to avoid game HUD button rules.
 export class StarsproutInventoryPanel {
   constructor(host, { state, onChange = () => {}, onClose = () => {}, onNotice = () => {} } = {}) {
-    this.host = host; this.state = normalizeStarsproutInventory(state); this.onChange = onChange; this.onClose = onClose; this.onNotice = onNotice; this.filter = 'all'; this.selected = '';
+    Object.assign(this, { host, onChange, onClose, onNotice });
+    this.state = normalizeStarsproutInventory(state); this.filter = 'all'; this.selected = '';
     this.build(); this.render();
   }
-
-  el(tag, cls = '', text = '', parent = this.overlay || this.host) { const node = document.createElement(tag); node.className = cls; if (text) node.textContent = text; parent.append(node); return node; }
-  button(text, fn, parent, cls = '') { const node = this.el('button', cls, text, parent); node.type = 'button'; node.addEventListener('click', fn); return node; }
-
+  el(tag, cls = '', text = '', parent = this.overlay || this.host) {
+    const node = document.createElement(tag); node.className = cls; node.textContent = text; parent.append(node); return node;
+  }
+  button(text, fn, parent, cls = '') {
+    const node = this.el('button', cls, text, parent); node.type = 'button'; node.addEventListener('click', fn); return node;
+  }
   build() {
     this.style = this.el('style'); this.style.textContent = `
-      .sprout-inv{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:#173c35b8;backdrop-filter:blur(5px);font-family:"Microsoft JhengHei",sans-serif;color:#4a3824}
-      .sprout-inv *{box-sizing:border-box}.sprout-book{position:relative;width:min(1120px,97vw);height:min(690px,94vh);display:grid;grid-template-columns:42% 58%;overflow:hidden;border:4px solid #7e512c;border-radius:28px;background:linear-gradient(90deg,#f5dfad 0 41.7%,#ead09a 42%,#fff0c8 43%,#f7e4b5 100%);box-shadow:0 22px 90px #102d28aa,inset 0 0 45px #9f713733}
-      .sprout-book:before{content:"";position:absolute;inset:9px;border:2px dashed #ad7540;border-radius:20px;pointer-events:none}.sprout-left,.sprout-right{position:relative;padding:24px 27px;min-width:0}.sprout-left{border-right:4px double #a8733d}.sprout-title{margin:0 0 10px;text-align:center;font:900 27px Georgia,"Microsoft JhengHei";color:#604328}.sprout-close{position:absolute;z-index:3;right:18px;top:14px;width:43px;height:43px;border:2px solid #8b5c31;border-radius:50%;background:#fff1c8;color:#704823;font-size:24px;cursor:pointer}
-      .sprout-doll{position:relative;height:375px;margin:3px auto 8px}.sprout-hero{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);height:315px;max-width:60%;object-fit:contain;filter:drop-shadow(0 10px 7px #5c432955)}.sprout-equip{position:absolute;width:104px;min-height:54px;padding:5px;border:2px solid #b48650;border-radius:15px;background:#fff6d7e8;color:#604328;font-weight:800;font-size:12px;text-align:center}.sprout-equip b{display:block;font-size:22px}.sprout-equip.hat{top:10px;left:50%;transform:translateX(-50%)}.sprout-equip.weapon{left:2px;top:135px}.sprout-equip.shield{right:2px;top:135px}.sprout-equip.outfit{left:8px;bottom:38px}.sprout-equip.boots{right:8px;bottom:38px}
-      .sprout-beads{display:flex;gap:12px;justify-content:center}.sprout-bead{width:82px;height:82px;border:3px solid #b58752;border-radius:50%;background:#fff4d1;color:#604328;font-size:12px;font-weight:800}.sprout-bead b{display:block;font-size:27px}.sprout-bead.locked{filter:grayscale(1);opacity:.58}.sprout-bead.filled{box-shadow:0 0 18px #79bfff}
-      .sprout-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:4px 48px 12px 0}.sprout-tabs button,.sprout-tools button{border:2px solid #a87943;border-radius:12px;background:#f6e1ad;color:#654427;padding:8px 11px;font-weight:800;cursor:pointer}.sprout-tabs button.active{background:#795a32;color:#fff4d1}.sprout-grid{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:93px;gap:7px;height:400px;overflow-y:auto;padding-right:4px}.sprout-slot{position:relative;min-width:0;border:3px solid #c8b38e;border-radius:13px;background:linear-gradient(#fff9e8,#ead9b6);color:#523b26;box-shadow:inset 0 -5px 11px #9d784a22;cursor:pointer}.sprout-slot .ico{display:block;font-size:31px;line-height:35px}.sprout-slot .name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-weight:800}.sprout-slot .qty{position:absolute;right:5px;bottom:3px;padding:1px 4px;border-radius:7px;background:#4a3824d9;color:#fff;font-size:10px}.sprout-slot.empty{opacity:.48;cursor:default}.sprout-slot.common{border-color:#d5d1c6}.sprout-slot.quest{border-color:#e7b841;box-shadow:0 0 9px #ffd75d}.sprout-slot.uncommon{border-color:#65c899}.sprout-slot.rare{border-color:#64aef1;box-shadow:0 0 10px #6bc5ff88}.sprout-slot.epic{border-color:#aa72e9;box-shadow:0 0 12px #bd80ff}.sprout-slot.legendary{border-color:#e5a928;box-shadow:0 0 13px #ffd458}.sprout-slot.selected{outline:4px solid #fff;transform:translateY(-2px)}
-      .sprout-detail{height:62px;margin-top:10px;padding:8px 12px;border-radius:12px;background:#e5c98d88;font-size:12px;line-height:1.45}.sprout-footer{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-top:9px;font-weight:800}.sprout-tools{display:flex;gap:7px}.sprout-tools button:disabled{opacity:.45}.sprout-cap{white-space:nowrap}
-      @media(max-height:560px){.sprout-book{height:96vh}.sprout-left,.sprout-right{padding:12px 18px}.sprout-title{font-size:20px}.sprout-doll{height:245px}.sprout-hero{height:220px}.sprout-equip{width:82px;min-height:44px;font-size:9px}.sprout-equip b{font-size:17px}.sprout-equip.weapon,.sprout-equip.shield{top:90px}.sprout-grid{height:285px}.sprout-slot .ico{font-size:23px;line-height:27px}.sprout-bead{width:58px;height:58px}.sprout-bead b{font-size:19px}.sprout-detail{height:45px;padding:5px 9px;font-size:10px}.sprout-footer{font-size:11px}.sprout-tabs button,.sprout-tools button{padding:5px 7px;font-size:10px}}
-    `;
-    this.overlay = this.el('div', 'sprout-inv', '', this.host); this.book = this.el('div', 'sprout-book'); this.button('×', () => this.close(), this.book, 'sprout-close');
-    const left = this.el('section', 'sprout-left', '', this.book); this.el('h2', 'sprout-title', '小勇者紙娃娃', left); this.doll = this.el('div', 'sprout-doll', '', left);
-    const hero = this.el('img', 'sprout-hero', '', this.doll); hero.src = new URL(HERO, import.meta.url).href; hero.alt = '勇者阿晨晨目前穿搭';
-    this.equipNodes = {}; for (const slot of ['hat', 'weapon', 'shield', 'outfit', 'boots']) { const node = this.button('', () => this.unequip(slot), this.doll, `sprout-equip ${slot}`); node.dataset.slot = slot; this.equipNodes[slot] = node; }
-    this.el('h3', 'sprout-title', '◎ 靈珠插槽', left); this.beads = this.el('div', 'sprout-beads', '', left);
-    const right = this.el('section', 'sprout-right', '', this.book); this.el('h2', 'sprout-title', '手繪皮扣探險包', right); const tabs = this.el('div', 'sprout-tabs', '', right); this.tabButtons = {};
-    for (const [type, label] of Object.entries(TYPE_LABELS)) this.tabButtons[type] = this.button(label, () => { this.filter = type; this.render(); }, tabs);
-    this.grid = this.el('div', 'sprout-grid', '', right); this.detail = this.el('div', 'sprout-detail', '點選物品查看故事與用途。', right); const footer = this.el('div', 'sprout-footer', '', right); this.capacity = this.el('div', 'sprout-cap', '', footer); const tools = this.el('div', 'sprout-tools', '', footer);
-    this.button('整理', () => { this.selected = ''; this.render(); this.onNotice('已依品質、類型與等級整理。'); }, tools); const dismantle = this.button('批量分解', () => {}, tools); dismantle.disabled = true; dismantle.title = '完成裝備詞條系統後開放';
+.sprout-inv{position:absolute;inset:0;z-index:30;display:grid;place-items:center;padding:14px;background:#163e37bb;backdrop-filter:blur(5px);font-family:"Microsoft JhengHei",sans-serif;color:#533c29}
+.sprout-inv *{box-sizing:border-box}
+.sprout-inv.sprout-inv button{position:static;transform:none;min-height:44px;width:auto;height:auto;margin:0;white-space:normal;line-height:1.3;letter-spacing:normal;font:700 16px/1.3 "Microsoft JhengHei",sans-serif;color:#533c29;background:#fff5dc;border:2px solid #bf985e;border-radius:14px;padding:9px;cursor:pointer;box-shadow:none}
+.sprout-inv button:focus-visible{outline:3px solid #25788c;outline-offset:3px}
+.sprout-inv .sprout-book{position:relative;display:grid;grid-template-columns:32% 68%;width:min(1180px,100%);height:min(760px,96%);border:4px solid #956432;border-radius:28px;background:#fff0ca;overflow:hidden;box-shadow:0 20px 65px #10282088}
+.sprout-inv .sprout-book:before{content:"";position:absolute;inset:8px;border:2px dashed #bb8a4b;border-radius:20px;pointer-events:none;z-index:1}
+.sprout-inv .sprout-left{padding:26px 22px 24px;background:linear-gradient(120deg,#f4d99f,#ffecc3);border-right:3px double #bb8a4b;overflow:auto}
+.sprout-inv .sprout-right{padding:26px 25px 22px;display:flex;flex-direction:column;min-width:0;min-height:0}
+.sprout-inv .sprout-title{font-size:25px;font-weight:900;margin:0 0 12px;line-height:1.25;color:#67452a;text-align:center}
+.sprout-inv .sprout-right>.sprout-title{padding-right:35px}
+.sprout-inv.sprout-inv .sprout-close{position:absolute;top:15px;right:15px;width:44px;height:44px;padding:0;border-radius:50%;z-index:2;font-size:27px}
+.sprout-inv .sprout-hero{display:block;height:185px;max-width:100%;object-fit:contain;margin:0 auto 12px;filter:drop-shadow(0 6px 6px #76562933)}
+.sprout-inv .sprout-caption{margin:7px 0 14px;text-align:center;font-size:15px;line-height:1.5;color:#765a3e}
+.sprout-inv.sprout-inv .sprout-skill{width:100%;display:flex;align-items:center;gap:12px;margin:8px 0;text-align:left;background:#fff8e8;min-height:82px}
+.sprout-inv .sprout-skill img{width:62px;height:62px;object-fit:contain;border-radius:10px;flex-shrink:0}
+.sprout-inv .sprout-skill strong{display:block;font-size:19px;color:#4b6c70}.sprout-inv .sprout-skill small{display:block;font-size:15px;margin-top:4px}
+.sprout-inv .sprout-bead-title{font-size:18px;text-align:center;margin:20px 0 10px}
+.sprout-inv .sprout-beads{display:flex;gap:10px;justify-content:center}
+.sprout-inv.sprout-inv .sprout-bead{flex:1;min-width:0;max-width:88px;min-height:80px;border-radius:20px;padding:6px;font-size:14px;background:#fff6df}
+.sprout-inv .sprout-bead img{display:block;width:48px;height:48px;margin:auto;border-radius:50%}.sprout-inv .sprout-bead .orb-symbol{display:block;font-size:26px}.sprout-inv .sprout-bead.locked{background:#e4d4b3;color:#7b705e}
+.sprout-inv .sprout-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 14px;flex-shrink:0}
+.sprout-inv.sprout-inv .sprout-tabs button{flex:1;white-space:nowrap;padding:8px 10px;background:#f2deb2}
+.sprout-inv.sprout-inv .sprout-tabs button.active{background:#42665a;color:#fff4d7;border-color:#42665a}
+.sprout-inv .sprout-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:148px;gap:10px;overflow:auto;flex:1;min-height:148px;padding:4px 7px 9px 3px;align-content:start;scrollbar-color:#b79159 #f5e6c8}
+.sprout-inv.sprout-inv .sprout-slot{position:relative;min-width:0;height:148px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px 5px 17px;border:3px solid #d5c8ad;background:#fff7e5;border-radius:18px}
+.sprout-inv .sprout-slot img{display:block;width:91px;height:91px;max-width:100%;object-fit:contain;border-radius:12px}
+.sprout-inv .sprout-slot .name{display:block;font-size:16px;line-height:1.25;text-align:center;overflow-wrap:anywhere}
+.sprout-inv .sprout-slot .qty{position:absolute;right:5px;bottom:4px;min-width:25px;text-align:center;padding:1px 5px;border-radius:9px;background:#795937;color:#fff8e7;font-size:15px}
+.sprout-inv .sprout-slot .badge{position:absolute;left:5px;top:4px;border-radius:8px;background:#42665a;color:#fff;font-size:12px;padding:2px 5px}
+.sprout-inv.sprout-inv .sprout-slot.empty{background:#f2e4c7;border:2px dashed #d8c59e;cursor:default;opacity:.65}
+.sprout-inv.sprout-inv .sprout-slot.quest{border-color:#dfb340}.sprout-inv.sprout-inv .sprout-slot.uncommon{border-color:#75b692}.sprout-inv.sprout-inv .sprout-slot.rare{border-color:#6babe0}.sprout-inv.sprout-inv .sprout-slot.epic{border-color:#ad80ce}.sprout-inv.sprout-inv .sprout-slot.legendary{border-color:#d49a27}
+.sprout-inv.sprout-inv .sprout-slot.selected{outline:3px solid #43695c;outline-offset:1px}
+.sprout-inv .sprout-detail{flex-shrink:0;min-height:76px;margin:10px 0 0;padding:10px 12px;border-radius:14px;background:#ecd7a6;font-size:16px;line-height:1.5;display:flex;align-items:center;gap:10px}
+.sprout-inv .sprout-detail-text{flex:1;min-width:0}.sprout-inv .sprout-detail strong{display:block}.sprout-inv .sprout-footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;margin-top:10px;font-size:16px;font-weight:700;flex-shrink:0}
+@media(max-height:560px){.sprout-inv{padding:6px}.sprout-inv .sprout-book{height:98%;border-radius:18px}.sprout-inv .sprout-left{padding:18px 15px}.sprout-inv .sprout-right{padding:17px 19px}.sprout-inv .sprout-hero{height:115px}.sprout-inv .sprout-title{font-size:21px}.sprout-inv .sprout-grid{grid-auto-rows:130px;min-height:130px}.sprout-inv.sprout-inv .sprout-slot{height:130px}.sprout-inv .sprout-slot img{width:72px;height:72px}.sprout-inv .sprout-detail{min-height:62px;font-size:15px}.sprout-inv .sprout-bead-title{margin-top:12px}}
+@media(max-width:650px){.sprout-inv .sprout-book{grid-template-columns:1fr;overflow:auto}.sprout-inv .sprout-left{border-right:0;border-bottom:2px solid #bb8a4b}.sprout-inv .sprout-hero{height:130px}.sprout-inv .sprout-right{overflow:visible}.sprout-inv .sprout-grid{flex:none;height:420px;grid-template-columns:repeat(3,minmax(0,1fr))}.sprout-inv .sprout-title{font-size:22px}}
+`;
+    this.overlay=this.el('div','sprout-inv'); this.overlay.setAttribute('role','dialog'); this.overlay.setAttribute('aria-modal','true'); this.overlay.setAttribute('aria-label','冒險行囊');
+    this.book=this.el('div','sprout-book'); this.button('×',()=>this.close(),this.book,'sprout-close').setAttribute('aria-label','關閉背包');
+    const left=this.el('section','sprout-left','',this.book); this.el('h2','sprout-title','阿晨晨的魔法手帳',left);
+    const hero=this.el('img','sprout-hero','',left);hero.src=new URL('../../assets/phantom-realm/hero-achenchen/hero-down.png',import.meta.url).href;hero.alt='勇者阿晨晨';
+    for(const [name,cost,description] of [['魔法劍','SP 0','近距斬擊・J／空白鍵'],['魔法箭','SP −1','遠距射擊・K']]) {
+      const card=this.button('',()=>this.showSkill(name),left,'sprout-skill');appendItemArt(card,name);const text=this.el('span','','',card);this.el('strong','',name+'　'+cost,text);this.el('small','',description,text);
+    }
+    this.el('p','sprout-caption','SP 上限 3 點，每 5 秒回復 1 點。\n營地為安全區，技能於野外使用。',left);
+    this.el('h3','sprout-bead-title','靈珠插槽',left);this.beads=this.el('div','sprout-beads','',left);
+    const right=this.el('section','sprout-right','',this.book);this.el('h2','sprout-title','冒險行囊',right);const tabs=this.el('div','sprout-tabs','',right);this.tabButtons={};
+    for(const [type,label] of Object.entries(TYPE_LABELS))this.tabButtons[type]=this.button(label,()=>{this.filter=type;this.render();},tabs);
+    this.grid=this.el('div','sprout-grid','',right);this.detail=this.el('div','sprout-detail','點選道具，看看它的小故事與用途。',right);
+    const footer=this.el('div','sprout-footer','',right);this.capacity=this.el('div','sprout-cap','',footer);this.button('整理行囊',()=>{this.selected='';this.render();this.detail.textContent='已依品質、類型與等級整理。';this.onNotice('行囊整理好了！');},footer);
   }
-
-  render() {
-    this.state = normalizeStarsproutInventory(this.state);
-    for (const [slot, node] of Object.entries(this.equipNodes)) { const name = this.state.equipped[slot]; const item = ITEM_CATALOG[name]; node.innerHTML = `<b>${item?.icon || '＋'}</b>${SLOT_NAMES[slot]}${name ? `<br>${name}` : ''}`; }
-    this.beads.replaceChildren();
-    for (let index = 0; index < 3; index += 1) { const unlocked = index < this.state.unlockedBeadSlots, name = this.state.beads[index], item = ITEM_CATALOG[name]; const node = this.button('', () => this.unequipBead(index), this.beads, `sprout-bead ${unlocked ? '' : 'locked'} ${name ? 'filled' : ''}`); node.innerHTML = unlocked ? `<b>${item?.icon || '◇'}</b>${name || `空槽 ${index + 1}`}` : '<b>🔒</b>尚未解鎖'; node.addEventListener('dragover', (event) => { if (unlocked) event.preventDefault(); }); node.addEventListener('drop', (event) => { event.preventDefault(); this.equip(event.dataTransfer.getData('text/plain'), index); }); }
-    for (const [type, button] of Object.entries(this.tabButtons)) button.classList.toggle('active', type === this.filter);
-    const items = sortedStarsproutItems(this.state, this.filter); this.grid.replaceChildren();
-    for (let index = 0; index < this.state.capacity; index += 1) { const item = items[index]; if (!item) { this.el('div', 'sprout-slot empty', '', this.grid); continue; } const node = this.button('', () => this.select(item.name), this.grid, `sprout-slot ${item.rarity} ${this.selected === item.name ? 'selected' : ''}`); node.draggable = item.type === 'equipment' || item.type === 'bead'; node.addEventListener('dragstart', (event) => event.dataTransfer.setData('text/plain', item.name)); node.innerHTML = `<span class="ico">${item.icon}</span><span class="name">${item.name}</span><span class="qty">${item.count}</span>`; }
-    this.capacity.textContent = `容量：${occupiedSlots(this.state)}/${this.state.capacity}　💰 金幣：${this.state.gold.toLocaleString('zh-TW')}`;
-    if (this.selected) { const item = ITEM_CATALOG[this.selected]; this.detail.textContent = `${item?.icon || '🎒'} ${this.selected}｜${item?.description || '星芽谷的冒險物品。'}${item?.type === 'bead' ? '（點一下或拖到左側圓槽即可裝備）' : item?.type === 'equipment' ? '（點一下即可穿戴）' : ''}`; }
+  render(){
+    this.state=normalizeStarsproutInventory(this.state);this.beads.replaceChildren();
+    for(let i=0;i<3;i++){
+      const unlocked=i<this.state.unlockedBeadSlots,name=this.state.beads[i];
+      const node=this.button('',()=>this.unequipBead(i),this.beads,`sprout-bead ${unlocked?'':'locked'}`);
+      if(name)appendItemArt(node,name);else this.el('span','orb-symbol',unlocked?'◇':'⌑',node);
+      this.el('span','',name?'取下':unlocked?'空槽':'未解鎖',node);node.title=name||'隨主線任務解鎖';
+      node.addEventListener('dragover',e=>{if(unlocked)e.preventDefault();});node.addEventListener('drop',e=>{e.preventDefault();this.equip(e.dataTransfer.getData('text/plain'),i);});
+    }
+    for(const [type,button] of Object.entries(this.tabButtons))button.classList.toggle('active',type===this.filter);
+    const items=sortedStarsproutItems(this.state,this.filter);this.grid.replaceChildren();
+    for(let i=0;i<Math.max(this.state.capacity,items.length);i++){
+      const item=items[i];if(!item){this.el('div','sprout-slot empty','',this.grid);continue;}
+      const node=this.button('',()=>this.select(item.name),this.grid,`sprout-slot ${item.rarity} ${this.selected===item.name?'selected':''}`);
+      node.title=item.name;appendItemArt(node,item.name);this.el('span','name',item.name,node);this.el('span','qty',String(item.count),node);
+      if(item.name==='魔法劍')this.el('span','badge','SP 0',node);
+      node.draggable=item.type==='bead';node.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',item.name));
+    }
+    this.capacity.textContent=`${occupiedSlots(this.state)} / ${this.state.capacity} 格　｜　金幣 ${this.state.gold.toLocaleString('zh-TW')}`;
+    if(this.selected)this.showDetail(this.selected);
   }
-
-  select(name) { this.selected = name; const item = ITEM_CATALOG[name]; if (item?.type === 'equipment' || item?.type === 'bead') this.equip(name); else this.render(); }
-  equip(name, requestedIndex = -1) { const item = ITEM_CATALOG[name]; if (!item || !this.state.items[name]) return; if (item.type === 'equipment') this.state.equipped[item.slot] = name; else if (item.type === 'bead') { let index = requestedIndex; if (index < 0) index = this.state.beads.findIndex((value, i) => i < this.state.unlockedBeadSlots && !value); if (index < 0) index = 0; if (index >= this.state.unlockedBeadSlots) return; this.state.beads[index] = name; } this.changed(); }
-  unequip(slot) { if (this.state.equipped[slot]) { this.state.equipped[slot] = ''; this.changed(); } }
-  unequipBead(index) { if (index < this.state.unlockedBeadSlots && this.state.beads[index]) { this.state.beads[index] = ''; this.changed(); } }
-  changed() { this.state = normalizeStarsproutInventory(this.state); this.onChange(this.state); this.render(); }
-  close() { this.onClose(this.state); this.style.remove(); this.overlay.remove(); }
+  showSkill(name){this.selected='';this.detail.replaceChildren();this.el('div','sprout-detail-text',name==='魔法劍'?'魔法劍｜SP 0。近距離向前斬擊，收勢結束前無法移動或格擋。':'魔法箭｜SP −1。向前射出魔力箭，命中第一隻怪物或飛行 520 距離後消散。SP 每 5 秒回復 1 點。',this.detail);}
+  showDetail(name){const item=ITEM_CATALOG[name];this.detail.replaceChildren();const text=this.el('div','sprout-detail-text','',this.detail);this.el('strong','',name,text);this.el('span','',item?.description||'星芽谷旅途中取得的冒險物品。',text);if(item?.type==='bead')this.button('裝備靈珠',()=>this.equip(name),this.detail);}
+  select(name){this.selected=name;this.render();}
+  equip(name,requestedIndex=-1){const item=ITEM_CATALOG[name];if(item?.type!=='bead'||!this.state.items[name])return;let index=requestedIndex;if(index<0)index=this.state.beads.findIndex((v,i)=>i<this.state.unlockedBeadSlots&&!v);if(index<0)index=0;if(index>=this.state.unlockedBeadSlots)return;this.state.beads[index]=name;this.changed();}
+  unequipBead(index){if(index<this.state.unlockedBeadSlots&&this.state.beads[index]){this.state.beads[index]='';this.changed();}}
+  changed(){this.state=normalizeStarsproutInventory(this.state);this.onChange(this.state);this.render();}
+  close(){this.onClose(this.state);this.style.remove();this.overlay.remove();}
 }
