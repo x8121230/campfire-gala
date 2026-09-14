@@ -4,13 +4,11 @@ export function drawTransitEnemy(scene,g,e,live){
  if(e.kind!==TRANSIT_ENEMY_KIND)return false;
  const id='transit-'+e.id;let v=scene.views.get(id);
  if(!v){v=scene.add.container(e.x,e.y);scene.entities.add(v);scene.views.set(id,v);
-  const wing=scene.add.graphics();wing.fillStyle(0xdaf5ff,.92).fillEllipse(-30,-4,50,24).fillEllipse(22,-7,43,21);wing.lineStyle(3,0x8fc9dc,.9).strokeEllipse(-30,-4,50,24).strokeEllipse(22,-7,43,21);
-  const body=scene.add.graphics();body.fillStyle(0xffd978).fillEllipse(0,0,55,36).fillStyle(0xfff4cf).fillCircle(18,-8,15).fillStyle(0x45526b).fillCircle(22,-11,3).fillStyle(0xf09a66).fillTriangle(31,-7,44,-2,31,1);
-  body.fillStyle(0x9a6a42).fillRoundedRect(-24,10,42,28,7).lineStyle(3,0xffd26c).strokeRoundedRect(-24,10,42,28,7).fillStyle(0xffdf78).fillCircle(-3,23,5);
-  v.add([wing,body]);v.setData('wing',wing);
+  const bird=scene.add.image(0,-12,'star_courier122',0).setDisplaySize(118,118);
+  v.add(bird);v.setData('bird',bird);
  }
- live.add(id);const wing=v.getData('wing'),flap=.82+Math.sin(e.age*15)*.22;wing.setScale(1,flap);v.setPosition(e.x,e.y).setRotation(Math.sin(e.age*3)*.045).setScale(e.flash>0?1.09:1);
- g.fillStyle(0x203b52,.82).fillRoundedRect(e.x-42,e.y-53,84,6,3);g.fillStyle(0xffdc7b).fillRoundedRect(e.x-42,e.y-53,84*Math.max(0,e.hp/e.maxHp),6,3);
+ live.add(id);const bird=v.getData('bird');const frame=Math.floor(e.age*8)%4;bird.setFrame(frame).setOrigin([.34,.30,.30,.32][frame],[.65,.65,.48,.52][frame]);bird.setTint(e.flash>0?0xffedbc:0xffffff);v.setPosition(e.x,e.y).setRotation(Math.sin(e.age*3)*.045);
+ g.fillStyle(0x203b52,.82).fillRoundedRect(e.x-42,e.y-76,84,6,3);g.fillStyle(0xffdc7b).fillRoundedRect(e.x-42,e.y-76,84*Math.max(0,e.hp/e.maxHp),6,3);
  return true;
 }
 

@@ -34,12 +34,12 @@ export function forestDefeat(s,e){
  if(e.kind<36||e.kind>39)return;
  if(e.kind===36)s.addPickup('gem',e.x,e.y);
  if(e.kind===38){s.stats.forestElites=(s.stats.forestElites||0)+1;s.addPickup('gem',e.x,e.y-16);s.addPickup('gem',e.x,e.y+16);}
- if(e.kind===39){s.score+=700;s.stats.forestElites=(s.stats.forestElites||0)+1;s.addPickup('heart',e.x,e.y);s.addPickup('weapon',e.x+52,e.y);s.message('落葉狐狸化為金色葉片！接住愛心與強化星星');s.emit('elite',e.x,e.y);}
+ if(e.kind===39){s.score+=4;s.stats.forestElites=(s.stats.forestElites||0)+1;s.addPickup('weapon',e.x+52,e.y);s.message('落葉狐狸化為金色葉片！接住變色星芽鈴');s.emit('elite',e.x,e.y);}
 }
 export function forestHazard(s,h,dt){
  if(!h.kind.startsWith('forest'))return;const p=s.player,active=h.age>=h.warn;
- if(h.kind==='forestBranch'){h.x-=125*dt;const outside=p.y<h.gapY-h.gap/2+s.hitRadius||p.y>h.gapY+h.gap/2-s.hitRadius;if(active&&!h.hit&&Math.abs(p.x-h.x)<h.r+s.hitRadius&&outside){h.hit=true;s.hit();s.emit('forestTwigHit',p.x,p.y);}}
- if(h.kind==='forestLeafWind'){h.x-=58*dt;if(active&&Math.abs(p.x-h.x)<h.r+s.hitRadius&&Math.abs(p.y-h.y)<170)s.forestDrift+=h.dir*62;}
+ if(h.kind==='forestBranch'){h.x-=125*dt;const outside=p.y<h.gapY-h.gap/2+s.hitRadius||p.y>h.gapY+h.gap/2-s.hitRadius;if(active&&!h.hit&&Math.abs(p.x-h.x)<h.r+s.hurtbox.rx&&outside){h.hit=true;s.hit();s.emit('forestTwigHit',p.x,p.y);}}
+ if(h.kind==='forestLeafWind'){h.x-=58*dt;if(active&&Math.abs(p.x-h.x)<h.r+s.hurtbox.rx&&Math.abs(p.y-h.y)<170)s.forestDrift+=h.dir*62;}
  if(h.kind==='forestEcho'){h.x-=50*dt;h.y+=Math.sin(h.age*3+(h.phase||0))*13*dt;if(active&&!h.fired){h.fired=true;const a=Math.atan2(p.y-h.y,p.x-h.x);for(const off of [-.36,0,.36])forestBullet(s,h.x,h.y,a+off,104,4);s.emit('forestLeafFan',h.x,h.y);}}
 }
 export function forestEnemy(s,e,dt){
@@ -48,5 +48,5 @@ export function forestEnemy(s,e,dt){
  else if(e.kind===37){e.x=Math.max(1005,e.x-e.speed*speed*dt);e.y=clamp(e.baseY+Math.sin(e.age*3.2)*128,55,425);if(e.x<1180&&e.fireCD<=0){e.telegraph=.42;e.fireCD=2.45;s.emit('forestStrings',e.x,e.y);}if(e.telegraph>0){e.telegraph-=dt;if(e.telegraph<=0){e.y=70+((e.id*97+Math.floor(e.age*10)*43)%340);const a=Math.atan2(p.y-e.y,p.x-e.x);for(const off of [-.17,0,.17])forestBullet(s,e.x-20,e.y,a+off,176,4);s.emit('forestWoodStrike',e.x,e.y);}}}
  else if(e.kind===38){e.x=Math.max(1035,e.x-e.speed*speed*dt);e.y=clamp(e.baseY+Math.sin(e.age*1.3)*42,80,395);if(e.x<1180&&e.fireCD<=0){const a=Math.atan2(p.y-e.y,p.x-e.x);for(const off of [-.2,.2])forestBullet(s,e.x-30,e.y,a+off,38,6,{forestDelay:1,boosted:false});e.fireCD=2.7;s.emit('forestTick',e.x,e.y);}}
  else{e.x=Math.max(1020,e.x-e.speed*speed*dt);e.y=clamp(e.baseY+Math.sin(e.age*1.15)*55,75,395);e.phaseShift=Math.max(0,(e.phaseShift||0)-dt);if(e.x<1180&&e.fireCD<=0){e.phaseShift=1.1;for(const side of [-1,1])addHazard(s,'forestEcho',e.x+20,e.y+side*92,{phase:side});const a=Math.atan2(p.y-e.y,p.x-e.x);for(const off of [-.46,-.23,0,.23,.46])forestBullet(s,e.x-32,e.y,a+off,112,5);e.fireCD=3.25;s.emit('forestLeaves',e.x,e.y);}}
- if(e.x<-120)e.exit=true;if(Math.hypot(e.x-p.x,e.y-p.y)<e.r+s.hitRadius)s.hit();return true;
+ if(e.x<-120)e.exit=true;if(s.bodyCircle(e.x,e.y,e.r))s.hit();return true;
 }

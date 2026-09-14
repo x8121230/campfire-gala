@@ -31,7 +31,7 @@ export const ITEM_CATALOG = Object.freeze({
 
 export const RARITY_ORDER = Object.freeze({ legendary: 6, epic: 5, rare: 4, uncommon: 3, quest: 2, common: 1 });
 export const TYPE_LABELS = Object.freeze({ all: '全部', equipment: '裝備／服飾', bead: '靈珠寶盒', consumable: '冒險消耗', material: '素材／任務' });
-export const STARSPROUT_QUICK_ITEMS = Object.freeze(['香脆橡果', '純淨星芽膠', '晨曦露水', '蓬鬆絨毛', '橡果迅捷珠', '蜜糖貪食珠']);
+export const STARSPROUT_QUICK_ITEMS = Object.freeze(['香脆橡果', '純淨星芽膠', '晨曦露水']);
 
 function cleanItems(items) {
   const result = {};

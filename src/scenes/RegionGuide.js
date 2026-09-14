@@ -18,7 +18,7 @@ export default class RegionGuide extends Phaser.Scene {
         SaveSystem.applyToRegistry(this.registry);
         this.progress = WorldProgressSystem.read(this.registry);
         this.region = getRegion(this.regionId);
-        AudioSystem.playBgm(this, this.regionId === 'forest' ? 'forest_music' : 'home_bgm', 0.38);
+        AudioSystem.playRegionBgm(this, this.regionId, 0.38);
 
         const guideBackground = this.region.guideBackground
             || (this.regionId === 'forest' ? 'forest_region_overview_v2' : null);
@@ -37,7 +37,7 @@ export default class RegionGuide extends Phaser.Scene {
         }).setOrigin(0.5);
 
         this.makeButton(92, 52, 145, 56, '← 世界地圖', () => this.scene.start('WorldAtlas'), 0x315e75);
-        this.makeButton(1180, 52, 150, 56, '📖 貼紙圖鑑', () => this.showStickerBook(), 0x735d8c);
+        this.makeButton(1170, 52, 190, 56, '📖 生態圖鑑', () => this.scene.start('EquipmentJournal', { returnScene: 'RegionGuide', returnData: { regionId: this.regionId }, tab: 'ecology' }), 0x735d8c);
         (REGION_SUBMAPS[this.regionId] || []).forEach((submap, index) => this.createSubmapNode(submap, index));
         this.add.text(1160, 670, '👗 本區獎勵', {
             fontFamily: 'Microsoft JhengHei, Arial', fontSize: '19px', color: '#fff4bf',

@@ -1,6 +1,6 @@
 import ForestChestRoom from './ForestChestRoom.js';
-import {CHEST_GAMES} from '../data/ChestConfig.js';
-import {chestService,syncChestWallet} from '../systems/ForestChestService.js';
+import {CHEST_TYPES} from '../data/ChestConfig.js';
+import {chestService} from '../systems/ForestChestService.js';
 import SaveSystem from '../systems/SaveSystem.js';
 export default class ChestTestTools extends ForestChestRoom {
  constructor(){super('ChestTestTools');}
@@ -9,14 +9,22 @@ export default class ChestTestTools extends ForestChestRoom {
   this.scene.bringToTop();this.modal=null;this.busy=false;this.audioNodes=new Set();
   this.events.once('shutdown',()=>{this.stopTones();if(!this.transferred&&this.hostKey&&this.scene.isPaused(this.hostKey))this.scene.resume(this.hostKey);});
   this.add.rectangle(640,360,1280,720,0xe8ddc3).setInteractive();
-  this.text(640,72,'寶箱測試工具',40);
-  this.text(640,137,'會加入目前存檔 · 不占用首勝，不改變掉落保底',27);
-  this.statusText=this.text(640,189,'點選一種寶箱，立即體驗獲箱與當場開啟',26);
-  const choices=[...CHEST_GAMES.map(g=>({name:g.chest,ids:()=>[g.id]})),{name:'隨機獲得 1 箱',ids:()=>[CHEST_GAMES[Math.floor(Math.random()*5)].id]}];
-  choices.forEach((g,i)=>this.button(225+i%3*415,284+Math.floor(i/3)*116,370,90,g.name,()=>this.grant(g.ids())));
-  this.button(398,521,440,90,'五種各獲得 1 箱',()=>this.grant(CHEST_GAMES.map(g=>g.id)),0xa47934);
-  this.button(884,521,440,90,'補滿愛心',()=>{try{chestService.load();SaveSystem.saveFromRegistry(this.registry);chestService.refillForTesting();const d=syncChestWallet(this.registry);this.statusText.setText(`愛心已補滿：${d.hearts} / ${d.max_hearts}`);}catch(e){this.statusText.setText(e.message);}});
-  this.button(640,642,440,88,'返回衣櫃',()=>this.scene.stop());
+  this.text(640,72,'BOX 測試工具',40);
+  this.text(640,124,'9 大區域＋全域木雕箱 · 不占用首勝，不改變掉落保底',24);
+  this.statusText=this.text(640,160,'30% 主題收藏／20% 共用收藏／50% 水晶 ×1',23);
+  const choices=[...CHEST_TYPES.map(type=>({name:type.chest,sub:type.regionName,run:()=>this.grant([type.id])})),
+   {name:'隨機獲得 1 箱',sub:'全部種類',run:()=>this.grant([CHEST_TYPES[Math.floor(Math.random()*CHEST_TYPES.length)].id])},
+   {name:'寶箱預覽／機率',sub:'查看內容',run:()=>this.showRates()}];
+  choices.forEach((choice,i)=>{
+   const x=178+(i%4)*308,y=220+Math.floor(i/4)*104;
+   this.button(x,y,282,76,choice.name,choice.run);this.text(x,y+27,choice.sub,16,'#dfe9df');
+  });
+  this.button(640,650,390,66,'返回衣櫃',()=>this.scene.stop());
+ }
+ showRates(){
+  const c=this.overlay('10 款寶箱預覽','每箱固定機率：30% 該箱主題收藏／20% 全域共用收藏／50% 星光水晶 ×1');
+  c.add(this.text(640,365,'苔蘚・花蜜・冰晶・熔光・珍珠\n月光・化石・王冠・雲晶・木雕',31,'#47664f').setLineSpacing(18));
+  this.modalButton(c,640,602,'看完了',()=>{c.destroy();this.modal=null;});
  }
  grant(ids){if(this.busy)return;this.busy=true;try{
   chestService.load();SaveSystem.saveFromRegistry(this.registry);const rewards=chestService.grantForTesting(ids);

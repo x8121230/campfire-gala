@@ -1,12 +1,14 @@
 import SaveSystem from '../systems/SaveSystem.js';
 import WorldProgressSystem from '../systems/WorldProgressSystem.js';
 import { getRegion, getSubmap } from '../data/WorldRegionData.js';
+import AudioSystem from '../systems/AudioSystem.js';
 
 export default class FreeExplore extends Phaser.Scene {
     constructor() { super('FreeExplore'); }
     init(data) { this.regionId=data?.regionId||'forest';this.submapId=data?.submapId||'morning_camp';this.taps=0; }
     create() {
         SaveSystem.applyToRegistry(this.registry); const region=getRegion(this.regionId); const submap=getSubmap(this.regionId,this.submapId);
+        AudioSystem.playRegionBgm(this, this.regionId, 0.38);
         const background=submap?.background&&this.textures.exists(submap.background)?submap.background:'world_map_overview';
         this.add.image(640,360,background).setDisplaySize(1280,720);
         this.add.rectangle(640,45,1280,90,0x173c43,.82);

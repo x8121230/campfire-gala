@@ -64,6 +64,10 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('cloud_sky_temple_storybook_v1', 'assets/cloud_sky_temple_storybook_v1.png');
 
         // ===== 音效 / 音樂 =====
+        this.load.audio('world_atlas_bgm', 'assets/music/world_atlas_bgm.mp3');
+        ['forest','fairy','ice','volcano','realm','water','starlight','dinosaur','chess','cloud'].forEach((regionId) => {
+            this.load.audio(`region_${regionId}_bgm`, `assets/music/region_${regionId}_bgm.mp3`);
+        });
         this.load.audio('home_bgm', 'assets/home_bgm.mp3');
         this.load.audio('forest_music', 'assets/forest_bgm.mp3');
         this.load.audio('collection_bgm', 'assets/collection_bgm.mp3');

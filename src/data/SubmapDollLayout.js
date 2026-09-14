@@ -29,15 +29,29 @@ export const SUBMAP_DOLL_PLACEMENTS = Object.freeze({
     windchime_isle: { footX: 620, footY: 700, height: 260 },
     sky_temple: { footX: 620, footY: 700, height: 260 }
 });
+
+// A single explicit multiplier prevents repeated scene entry from compounding
+// the requested 30% enlargement.
+export const SUBMAP_DOLL_SCALE = 1.3;
+
 export function getSubmapDollLayout(submapId, base) {
+    const safeBase = base || {
+        centerX: 640, centerY: 520, maxWidth: 168, maxHeight: 252,
+        hatAnchorX: 0.67, hatAnchorY: 0.205,
+        accessoryAnchorX: 0.77, accessoryAnchorY: 0.53
+    };
     const p = SUBMAP_DOLL_PLACEMENTS[submapId];
-    if (!p) return { ...base };
     const footRatio = 1266 / 1290;
+    const height = (p?.height || safeBase.maxHeight) * SUBMAP_DOLL_SCALE;
+    const footX = p?.footX ?? safeBase.centerX;
+    const footY = p?.footY ?? (safeBase.centerY + (footRatio - .5) * safeBase.maxHeight);
     return {
-        ...base,
-        centerX: p.footX,
-        centerY: p.footY - (footRatio - .5) * p.height,
-        maxWidth: p.height * 768 / 1290,
-        maxHeight: p.height
+        ...safeBase,
+        centerX: footX,
+        centerY: footY - (footRatio - .5) * height,
+        maxWidth: height * 768 / 1290,
+        maxHeight: height,
+        footX,
+        footY
     };
 }

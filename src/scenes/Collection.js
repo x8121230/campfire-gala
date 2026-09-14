@@ -32,6 +32,10 @@ export default class Collection extends Phaser.Scene {
     constructor() { super('Collection'); }
     init(data = {}) {
         this.mapID = data.mapID || '01';
+        this.returnScene = data.returnScene || 'WorldMap';
+        this.returnRegionId = data.regionId || 'forest';
+        this.returnSubmapId = data.submapId || this.registry.get('forest_submap_id') || 'morning_camp';
+        this.mapReturnScene = data.mapReturnScene || 'RegionGuide';
         this.selectedType = 'all';
         this.page = 0;
         this.selectedId = null;
@@ -147,7 +151,17 @@ export default class Collection extends Phaser.Scene {
     render() { this.clearWardrobeEffects(); this.renderHeader(); this.renderGrid(); this.renderDetails(); this.renderDoll(); }
     renderHeader() {
         this.header.removeAll(true);
-        this.button(this.header, 30, 29, 114, 48, '← 地圖', () => this.scene.start('WorldMap', { mapID: this.mapID }), 0xf9f2de, C.ink);
+        this.button(this.header, 30, 29, 114, 48, '← 地圖', () => {
+            if (this.returnScene === 'SubmapGames') {
+                this.scene.start('SubmapGames', { regionId: this.returnRegionId, submapId: this.returnSubmapId });
+                return;
+            }
+            this.scene.start('WorldMap', {
+                mapID: this.mapID,
+                submapId: this.returnSubmapId,
+                returnScene: this.mapReturnScene
+            });
+        }, 0xf9f2de, C.ink);
         this.txt(this.header, 170, 24, '森林小木屋', 32, C.ink, true);
         this.txt(this.header, 172, 64, '換一套心情，準備下一場冒險。', 16, '#6f735f');
         this.txt(this.header, 676, 42, `水晶  ${this.registry.get('user_crystals') || 0}`, 21, C.ink, true);

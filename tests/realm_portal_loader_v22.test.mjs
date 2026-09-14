@@ -8,7 +8,7 @@ test('星芽營地北門停留即自動前往丘陵並避免折返循環', async
   const source = await read('src/realm/RealmApp.js');
   assert.match(source, /requireGateExit/);
   assert.match(source, /gateDistance\s*<\s*SPOTS\.northGate\.radius/);
-  assert.match(source, /gateDwell\s*>=\s*\.12/);
+  assert.match(source, /gateDwell\s*>=\s*\.25/);
   assert.match(source, /travelToHills\(\)/);
 });
 

@@ -12,7 +12,7 @@ test('星芽營地限制懸崖、建築、噴水池並保留主路', () => {
   assert.equal(isWalkable(400 * WORLD_SCALE, 300 * WORLD_SCALE), false);
   assert.equal(isWalkable(835 * WORLD_SCALE, 820 * WORLD_SCALE), true);
   assert.equal(isWalkable(700 * WORLD_SCALE, 620 * WORLD_SCALE), true);
-  assert.equal(isWalkable(988 * WORLD_SCALE, 112 * WORLD_SCALE), true);
+  assert.equal(isWalkable(1017 * WORLD_SCALE, 100 * WORLD_SCALE), true);
 });
 
 test('MAIN_01 必須依照奧爾登、晨露池、布隆克順序完成', () => {
@@ -50,7 +50,7 @@ test('任務標記隨進度移動且北門只在完成後開放', () => {
   assert.equal(journey.questMarker('bronc'), '?');
   place(journey, 'bronc');
   journey.act('bronc');
-  assert.equal(journey.questMarker('northGate'), '!');
+  assert.equal(journey.questMarker('northGate'), '', '北門完成後改由傳送門呈現，不再顯示驚嘆號');
   place(journey, 'northGate');
   assert.equal(journey.act('northGate').travel, true);
 });

@@ -19,7 +19,7 @@ export default class WorldAtlas extends Phaser.Scene {
         SaveSystem.applyToRegistry(this.registry);
         StageManager.applyToRegistry(this.registry);
         this.progress = WorldProgressSystem.read(this.registry);
-        AudioSystem.playBgm(this, 'home_bgm', 0.34);
+        AudioSystem.playBgm(this, 'world_atlas_bgm', 0.34, 'home_bgm');
 
         this.map = this.add.image(640, 360, 'world_map_overview').setDisplaySize(1280, 720);
         this.add.rectangle(640, 35, 1280, 70, 0x123247, 0.78).setDepth(50);
@@ -43,22 +43,47 @@ export default class WorldAtlas extends Phaser.Scene {
         const group = this.add.container(region.x, region.y).setDepth(20);
         const width = region.haloWidth || 180;
         const height = region.haloHeight || 150;
-        const halo = this.add.ellipse(0, 0, width, height, open ? 0xffe785 : 0xb9d5dd, open ? 0.16 : 0.28)
-            .setStrokeStyle(open ? 4 : 3, open ? 0xffe69b : 0xd6ebef, 0.86);
-        const hit = this.add.ellipse(0, 0, width, height, 0xffffff, 0.001).setInteractive({ useHandCursor: true });
+        const hit = this.createRegionHitArea(region);
         const labelY = height / 2 - 3;
         const labelBg = this.add.rectangle(0, labelY, Math.max(132, region.name.length * 28 + 38), 43, open ? 0x245c49 : 0x334956, 0.92)
             .setStrokeStyle(2, open ? 0xffe59a : 0xb7cbd1);
         const label = this.add.text(0, labelY - 1, `${region.icon} ${region.name}${open ? '' : ' 🔒'}`, {
             fontFamily: 'Microsoft JhengHei, Arial', fontSize: '21px', color: '#ffffff', fontStyle: 'bold'
         }).setOrigin(0.5);
-        group.add([halo, hit, labelBg, label]);
+        group.add([labelBg, label]);
 
-        if (open) this.tweens.add({ targets: halo, alpha: 0.34, scale: 1.06, duration: 1250, yoyo: true, repeat: -1 });
         if (region.navigation === 'portal' && open) this.addRealmPortalAnimation(group, hit, labelBg, label);
-        hit.on('pointerover', () => this.tweens.add({ targets: group, scale: 1.06, duration: 120 }));
-        hit.on('pointerout', () => this.tweens.add({ targets: group, scale: 1, duration: 120 }));
+        hit.on('pointerover', () => {
+            this.tweens.add({ targets: group, scale: 1.035, duration: 120 });
+            labelBg.setStrokeStyle(3, open ? 0xffedb3 : 0xd6ebef, 1);
+        });
+        hit.on('pointerout', () => {
+            this.tweens.add({ targets: group, scale: 1, duration: 120 });
+            labelBg.setStrokeStyle(2, open ? 0xffe59a : 0xb7cbd1, 1);
+        });
         hit.on('pointerdown', () => this.onRegionPressed(region, group));
+    }
+
+    createRegionHitArea(region) {
+        const points = region.hitPolygon || [
+            [-region.haloWidth / 2, -region.haloHeight / 2],
+            [region.haloWidth / 2, -region.haloHeight / 2],
+            [region.haloWidth / 2, region.haloHeight / 2],
+            [-region.haloWidth / 2, region.haloHeight / 2]
+        ];
+        const xs = points.map(([x]) => x);
+        const ys = points.map(([, y]) => y);
+        const minX = Math.min(...xs);
+        const minY = Math.min(...ys);
+        const maxX = Math.max(...xs);
+        const maxY = Math.max(...ys);
+        const localPoints = points.map(([x, y]) => ({ x: x - minX, y: y - minY }));
+        const hit = this.add.zone(region.x + minX, region.y + minY, maxX - minX, maxY - minY)
+            .setOrigin(0, 0)
+            .setDepth(19);
+        hit.setInteractive(new Phaser.Geom.Polygon(localPoints), Phaser.Geom.Polygon.Contains);
+        if (hit.input) hit.input.cursor = 'pointer';
+        return hit;
     }
 
     onRegionPressed(region, marker) {
@@ -111,7 +136,6 @@ export default class WorldAtlas extends Phaser.Scene {
             this.tweens.add({ targets: spark, alpha: 0.25, scale: 1.7, duration: 520 + index * 55, delay: index * 70, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
         }
         group.addAt([core, outer, inner, ...sparks], 1);
-        group.bringToTop(hit);
         group.bringToTop(labelBg);
         group.bringToTop(label);
         this.tweens.add({ targets: outer, angle: 360, duration: 2300, repeat: -1, ease: 'Linear' });

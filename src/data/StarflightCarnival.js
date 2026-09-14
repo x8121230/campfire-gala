@@ -59,7 +59,7 @@ export function carnivalDefeat(s,e){
   if(e.kind===12)candyTrap(s,'candyFrost',e.x,e.y);
   if(e.kind===14&&!e.bubblePopped)candyTrap(s,'candySyrup',e.x,e.y);
  }
- if(e.kind===13){s.score+=400;s.stats.carnivalElites=(s.stats.carnivalElites||0)+1;s.addPickup('heart',e.x,e.y);s.addPickup('weapon',e.x+45,e.y);s.message('馬卡龍雀恢復平靜！接住愛心與強化星星');s.emit('elite',e.x,e.y);}
+ if(e.kind===13){s.score+=4;s.stats.carnivalElites=(s.stats.carnivalElites||0)+1;s.addPickup('weapon',e.x+45,e.y);s.message('馬卡龍雀恢復平靜！接住變色星芽鈴');s.emit('elite',e.x,e.y);}
 }
 export function carnivalHit(s,e){
  if(s.phase!=='combat')return;
@@ -84,7 +84,7 @@ export function carnivalHit(s,e){
 export function carnivalHazard(s,h,dt){
  if(h.kind==='candyWind'){
   h.x-=100*dt;
-  if(h.age>=h.warn&&Math.abs(s.player.x-h.x)<h.r+s.hitRadius)s.carnivalWind+=h.dir*65;
+  if(h.age>=h.warn&&Math.abs(s.player.x-h.x)<h.r+s.hurtbox.rx)s.carnivalWind+=h.dir*65;
  }
  if(['candySyrup','candyFrost','candyJam'].includes(h.kind)){
   h.x-=55*dt;
@@ -125,6 +125,6 @@ export function carnivalEnemy(s,e,dt){
   if(e.kind===14){e.bubbleCharge=Math.min(1,(e.bubbleCharge||0)+dt*.34);e.bubbleFlash=Math.max(0,(e.bubbleFlash||0)-dt);}
  }
  if(e.x<-120)e.exit=true;
- if(Math.hypot(e.x-p.x,e.y-p.y)<e.r+s.hitRadius)s.hit();
+ if(s.bodyCircle(e.x,e.y,e.r))s.hit();
  return true;
 }

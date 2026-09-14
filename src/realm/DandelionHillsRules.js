@@ -1,5 +1,8 @@
+import { NEW_HILLS_SIZE, NEW_HILLS_OBSTACLES, HILLS_OUTER, islandPoint, HILLS_BRIDGES } from './HillsMapV316.js';
+import { updatePumpkinBoss } from './PumpkinBoss.js';
+import { MANA_SLASH } from './ManaSlashTiming.js';
 export const HILLS_SCALE = 2;
-export const HILLS_MAP = Object.freeze({ width: 1672 * HILLS_SCALE, height: 941 * HILLS_SCALE });
+export const HILLS_MAP = Object.freeze(NEW_HILLS_SIZE);
 
 const at = (item) => Object.freeze({
   ...item,
@@ -7,16 +10,17 @@ const at = (item) => Object.freeze({
   y: item.y * HILLS_SCALE
 });
 
-export const HILLS_PORTALS = Object.freeze({
-  camp: at({ x: 1444, y: 858, name: '返回星芽營地', radius: 180 }),
-  forest: at({ x: 1515, y: 160, name: '螢火古橡樹林入口', radius: 100 })
+const location=(x,y)=>{const [wx,wy]=islandPoint([x,y]);return {x:wx,y:wy};};
+export const HILLS_PORTALS=Object.freeze({
+ camp:{...location(1317,791),name:'返回星芽營地',radius:120},
+ forest:{...location(1460,180),name:'螢火古橡樹林入口',radius:100}
 });
-
-export const GATHER_NODES = Object.freeze([
-  at({ id: 'dandelion-a', type: '晨曦蒲公英', x: 850, y: 455 }),
-  at({ id: 'dandelion-b', type: '晨曦蒲公英', x: 1085, y: 595 }),
-  at({ id: 'acorn-a', type: '香脆橡果', x: 1190, y: 705 }),
-  at({ id: 'acorn-b', type: '香脆橡果', x: 1320, y: 625 })
+export const HILLS_ENTRY=Object.freeze(location(1270,720));
+export const GATHER_NODES=Object.freeze([
+ {id:'dandelion-a',type:'晨曦蒲公英',...location(755,426)},
+ {id:'dandelion-b',type:'晨曦蒲公英',...location(1130,650)},
+ {id:'acorn-a',type:'香脆橡果',...location(1260,711)},
+ {id:'acorn-b',type:'香脆橡果',...location(1095,694)}
 ]);
 
 export const MOB_TYPES = Object.freeze({
@@ -30,8 +34,9 @@ export const MOB_TYPES = Object.freeze({
 export const HILLS_COMBAT = Object.freeze({
   slashRange: 205,
   slashConeDot: .42,
-  attackDuration: .72,
-  attackCooldown: 1.04,
+  attackDuration: MANA_SLASH.duration,
+  attackCooldown: MANA_SLASH.cooldown,
+  attackImpact: MANA_SLASH.impact,
   shieldMax: 100,
   shieldDamagePerHit: 25,
   guardConeDot: .34,
@@ -40,44 +45,28 @@ export const HILLS_COMBAT = Object.freeze({
   guardBreakGrace: .5
 });
 
-const SPAWNS = Object.freeze([
-  ['mouse', 1510, 700], ['mouse', 1385, 735], ['mouse', 1260, 765],
-  ['mouse', 1440, 615], ['mouse', 1190, 650], ['mouse', 1050, 750],
-  ['chick', 1150, 555], ['chick', 950, 610], ['chick', 780, 570], ['chick', 720, 650],
-  ['mole', 810, 495], ['mole', 520, 665], ['mole', 760, 735],
-  ['dew', 615, 350], ['dew', 750, 390], ['dew', 520, 400], ['dew', 650, 445],
-  ['rabbit', 230, 405]
-].map(([type, x, y]) => Object.freeze([type, x * HILLS_SCALE, y * HILLS_SCALE])));
+// Fixed ecological slots: the original 18 actors made the entrance look like a
+// monster pile. Keep exactly half the population and revive each defeated slot
+// in place instead of appending new actors. This guarantees the cap can never
+// grow during a long play session.
+const SPAWNS=Object.freeze([
+ ['mouse',1260,640],['mouse',1175,650],['mouse',1080,710],
+ ['chick',930,575],['chick',650,455],['mole',730,400],
+ ['dew',545,310],['dew',590,370],['rabbit',280,462]
+].map(([type,x,y])=>[type,...islandPoint([x,y])]));
 
-const OUTER = Object.freeze([
-  [26, 500], [22, 320], [55, 175], [110, 72], [300, 24], [475, 68],
-  [650, 43], [830, 34], [1030, 45], [1220, 20], [1560, 20], [1655, 82],
-  [1670, 420], [1625, 625], [1538, 782], [1538, 941], [1372, 941],
-  [1372, 835], [1135, 845], [920, 850], [750, 822], [610, 770],
-  [455, 705], [295, 655], [135, 585]
-].map(([x, y]) => Object.freeze([x * HILLS_SCALE, y * HILLS_SCALE])));
+export const HILLS_POPULATION = Object.freeze({
+  total: SPAWNS.length,
+  mouse: SPAWNS.filter(([type]) => type === 'mouse').length,
+  chick: SPAWNS.filter(([type]) => type === 'chick').length,
+  mole: SPAWNS.filter(([type]) => type === 'mole').length,
+  dew: SPAWNS.filter(([type]) => type === 'dew').length,
+  rabbit: SPAWNS.filter(([type]) => type === 'rabbit').length
+});
 
-const ellipse = (x, y, rx, ry) => Object.freeze({ type: 'ellipse', x: x * HILLS_SCALE, y: y * HILLS_SCALE, rx: rx * HILLS_SCALE, ry: ry * HILLS_SCALE });
-const polygon = (points) => Object.freeze({ type: 'polygon', points: Object.freeze(points.map(([x, y]) => Object.freeze([x * HILLS_SCALE, y * HILLS_SCALE]))) });
-const capsule = (x1, y1, x2, y2, r = 7) => Object.freeze({ type: 'capsule', x1: x1 * HILLS_SCALE, y1: y1 * HILLS_SCALE, x2: x2 * HILLS_SCALE, y2: y2 * HILLS_SCALE, r: r * HILLS_SCALE });
+const OUTER = Object.freeze(HILLS_OUTER);
 
-// Every entry follows a visible landmark in background.png.  Water and cliffs use
-// polygons, foliage uses projected ellipses, and fences use narrow capsules.
-export const HILLS_OBSTACLES = Object.freeze([
-  polygon([[0, 0], [610, 0], [620, 78], [585, 150], [630, 225], [610, 292], [510, 326], [390, 306], [280, 298], [170, 270], [0, 260]]),
-  polygon([[1390, 190], [1672, 175], [1672, 535], [1585, 535], [1515, 490], [1480, 430], [1510, 360], [1415, 320]]),
-  // Trees block at their visible trunk/root footprint only. Their painted crown
-  // no longer creates a large invisible wall across nearby grass and flowers.
-  ellipse(1275, 155, 56, 35), ellipse(1602, 122, 38, 28),
-  ellipse(1105, 153, 31, 23), ellipse(975, 225, 29, 21), ellipse(820, 220, 25, 19),
-  ellipse(712, 347, 32, 23), ellipse(525, 347, 33, 23), ellipse(985, 386, 36, 26),
-  ellipse(1225, 452, 39, 28), ellipse(1420, 380, 35, 25), ellipse(1075, 540, 32, 23),
-  ellipse(875, 712, 38, 26), ellipse(1260, 710, 36, 25), ellipse(520, 755, 42, 27),
-  ellipse(365, 615, 31, 23), ellipse(450, 555, 29, 21), ellipse(635, 785, 31, 22),
-  capsule(25, 292, 185, 252), capsule(185, 252, 390, 266), capsule(390, 266, 485, 340),
-  capsule(485, 340, 480, 500), capsule(480, 500, 305, 526), capsule(190, 526, 25, 485), capsule(25, 485, 25, 292),
-  capsule(675, 188, 960, 188, 8), capsule(1380, 505, 1590, 565, 8)
-]);
+export const HILLS_OBSTACLES = Object.freeze(NEW_HILLS_OBSTACLES);
 
 // Player-authored collision paint is deliberately kept separate from the map
 // landmarks above. Red circles add blockers; green circles repair an unwanted
@@ -159,7 +148,7 @@ const DROP_DATA = Object.freeze({
   rabbit: [['金彩紙糖果袋', 1], ['手繪布偶飾品', 1], ['蜜糖貪食珠', 1]]
 });
 
-const RESPAWN = Object.freeze({ mouse: 12, chick: 16, dew: 18, mole: 20, rabbit: 540 });
+export const HILLS_RESPAWN_SECONDS = Object.freeze({ mouse: 12, chick: 16, dew: 18, mole: 20, rabbit: 540 });
 
 function inPolygon(x, y, polygon) {
   let inside = false;
@@ -174,6 +163,7 @@ export function hillsWalkable(x, y, radius = 15) {
   if (!Number.isFinite(x) || !Number.isFinite(y) || !inPolygon(x, y, OUTER)) return false;
   if (collisionPaint.block.some((mark) => Math.hypot(x - mark.x, y - mark.y) < mark.r + radius)) return false;
   if (collisionPaint.pass.some((mark) => Math.hypot(x - mark.x, y - mark.y) < Math.max(4, mark.r - radius))) return true;
+  if (HILLS_BRIDGES.some(bridge=>obstacleContains(bridge,x,y,-radius))) return true;
   return !HILLS_OBSTACLES.some((obstacle, index) => !collisionPaint.disabled.includes(index) && obstacleContains(obstacle, x, y, radius));
 }
 
@@ -187,14 +177,21 @@ export class DandelionHillsJourney {
   constructor(saved) {
     const data = safeSaved(saved);
     this.time = 0;
-    this.player = { x: 1444 * HILLS_SCALE, y: 820 * HILLS_SCALE };
-    this.hp = 10;
-    this.maxHp = 10;
+    this.player = { x: HILLS_ENTRY.x, y: HILLS_ENTRY.y };
+    this.downed = false;
+    this.downTime = 0;
+    this.revivePrompted = false;
+    this.hp = 3;
+    this.maxHp = 3;
+    this.maxMana = 3;
+    this.mana = 3;
     this.invulnerable = 0;
     this.blind = 0;
     this.speedBuff = 0;
     this.attackCooldown = 0;
     this.attackWindow = 0;
+    this.activeSlash = null;
+    this.slashSerial = 0;
     this.dodgeCooldown = 0;
     this.shieldMax = HILLS_COMBAT.shieldMax;
     this.shieldDurability = Math.max(0, Math.min(this.shieldMax, Number(data.shieldDurability ?? this.shieldMax) || 0));
@@ -229,7 +226,7 @@ export class DandelionHillsJourney {
 
   makeMob(id, type, x, y) {
     const spec = MOB_TYPES[type];
-    return { id, type, x, y, homeX: x, homeY: y, hp: spec.hp, maxHp: spec.hp, alive: true, respawn: 0, aggro: false, hitFlash: 0, flee: 0, float: 0, dizzy: 0, attack: .8 + this.random() * 1.4, engaged: false };
+    return { id, type, x, y, homeX: x, homeY: y, hp: spec.hp, maxHp: spec.hp, alive: true, respawn: 0, aggro: false, hitFlash: 0, flee: 0, float: 0, dizzy: 0, attack: .8 + this.random() * 1.4, engaged: false, cast: null, recovery: 0, boss: null };
   }
 
   export() {
@@ -268,6 +265,7 @@ export class DandelionHillsJourney {
   }
 
   move(dt, axis, dodge = false) {
+    if (this.downed) return false;
     if (this.stunned > 0 || this.attackWindow > 0) { this.currentMoveSpeed = 0; return false; }
     const length = Math.hypot(axis.x, axis.y);
     if (length < .12) { this.currentMoveSpeed = 0; return false; }
@@ -296,20 +294,29 @@ export class DandelionHillsJourney {
   }
 
   attack() {
+    if (this.downed) return false;
     if (this.attackCooldown > 0 || this.blind > 0 || this.stunned > 0) return false;
-    const target = this.nearestMob(HILLS_COMBAT.slashRange + 28);
+    const target = this.nearestMob(HILLS_COMBAT.slashRange);
     if (target) {
       const d = distance(this.player, target) || 1;
       this.facing = { x: (target.x - this.player.x) / d, y: (target.y - this.player.y) / d };
     }
     this.attackCooldown = HILLS_COMBAT.attackCooldown;
     this.attackWindow = HILLS_COMBAT.attackDuration;
-    this.effect('slash', { x: this.player.x, y: this.player.y, dx: this.facing.x, dy: this.facing.y });
+    this.activeSlash = { id: ++this.slashSerial, start: this.time, x: this.player.x, y: this.player.y, dx: this.facing.x, dy: this.facing.y, resolved: false };
+    this.effect('slash', { ...this.activeSlash });
+    return true;
+  }
+
+  resolveSlash() {
+    const slash = this.activeSlash;
+    if (!slash || slash.resolved) return;
+    slash.resolved = true;
     for (const mob of this.mobs) {
       if (!mob.alive) continue;
-      const d = distance(this.player, mob);
+      const d = distance(slash, mob);
       if (d > HILLS_COMBAT.slashRange || d < 1) continue;
-      const dot = ((mob.x - this.player.x) * this.facing.x + (mob.y - this.player.y) * this.facing.y) / d;
+      const dot = ((mob.x - slash.x) * slash.dx + (mob.y - slash.y) * slash.dy) / d;
       if (dot >= HILLS_COMBAT.slashConeDot) this.hitMob(mob, 1);
     }
     return true;
@@ -326,7 +333,7 @@ export class DandelionHillsJourney {
     if (!mob?.alive) return;
     mob.hp = Math.max(0, mob.hp - power);
     mob.hitFlash = .18;
-    mob.aggro = MOB_TYPES[mob.type].temperament !== 'passive';
+    mob.aggro = mob.type === 'chick' || MOB_TYPES[mob.type].temperament !== 'passive';
     if (mob.type === 'mouse') {
       mob.flee = 2.3;
       mob.float = .38;
@@ -338,16 +345,16 @@ export class DandelionHillsJourney {
       }
     }
     if (mob.type === 'chick') mob.float = 1.15;
-    this.effect('hit', { x: mob.x, y: mob.y, target: mob.id });
+    this.effect('hit', { x: mob.x, y: mob.y, target: mob.id, type: mob.type });
     if (mob.hp <= 0) this.defeat(mob);
     this.checkQuest();
   }
 
   defeat(mob) {
     mob.alive = false;
-    mob.respawn = RESPAWN[mob.type];
+    mob.respawn = HILLS_RESPAWN_SECONDS[mob.type];
     mob.aggro = false;
-    this.effect('poof', { x: mob.x, y: mob.y, type: mob.type });
+    this.effect('poof', { x: mob.x, y: mob.y, type: mob.type, target: mob.id });
     const table = DROP_DATA[mob.type];
     for (const [name, chance] of table) {
       let drops = this.random() < chance;
@@ -398,6 +405,7 @@ export class DandelionHillsJourney {
   }
 
   interact() {
+    if (this.downed) return {};
     const nearby = this.nearby();
     if (!nearby) return { message: '靠近採集物或花環入口再互動。' };
     if (nearby.kind === 'portal') {
@@ -426,7 +434,7 @@ export class DandelionHillsJourney {
   }
 
   hurt(power, kind = '', source = null) {
-    if (this.invulnerable > 0) return false;
+    if (this.downed || this.invulnerable > 0) return false;
     if (this.canGuardFrom(source)) {
       this.shieldDurability = Math.max(0, this.shieldDurability - HILLS_COMBAT.shieldDamagePerHit * Math.max(1, power));
       this.dirty = true;
@@ -435,6 +443,7 @@ export class DandelionHillsJourney {
       if (this.shieldDurability <= 0) {
         this.stunned = HILLS_COMBAT.guardBreakStun;
         this.attackWindow = 0;
+        this.activeSlash = null;
         this.attackCooldown = 0;
         this.gather = null;
         this.invulnerable = Math.max(this.invulnerable, HILLS_COMBAT.guardBreakStun + HILLS_COMBAT.guardBreakGrace);
@@ -450,20 +459,34 @@ export class DandelionHillsJourney {
     if (this.gather) { this.gather = null; this.say('受擊使採集中斷！'); }
     this.effect('hurt', { x: this.player.x, y: this.player.y, kind });
     if (this.hp <= 0) {
-      this.hp = this.maxHp;
-      Object.assign(this.player, { x: 1444 * HILLS_SCALE, y: 820 * HILLS_SCALE });
-      this.invulnerable = 3;
-      this.projectiles = [];
-      this.traps = [];
-      for (const mob of this.mobs) mob.aggro = false;
-      this.say('星芽微光把你送回安全前哨，任務與素材都保留。');
+      this.downed = true; this.downTime = 0; this.revivePrompted = false;
+      this.activeSlash = null; this.attackWindow = 0; this.gather = null;
+      this.stunned = 0; this.blind = 0; this.invulnerable = 0;
+      this.projectiles = []; this.traps = [];
+      for (const mob of this.mobs) { mob.aggro = false; mob.cast = null; }
+      this.effect('sound', { name: 'playerDown' });
     }
+    return true;
+  }
+
+  revive() {
+    if (!this.downed || this.downTime < 1.2) return false;
+    this.downed = false; this.downTime = 0; this.revivePrompted = false;
+    this.hp = this.maxHp; this.mana = this.maxMana;
+    this.shieldDurability = this.shieldMax; this.attackCooldown = 0;
+    this.invulnerable = 3; Object.assign(this.player, HILLS_ENTRY);
+    this.projectiles = []; this.traps = [];
+    this.say('晨曦微光守護著你，準備好再出發吧！', 'correct');
     return true;
   }
 
   updateProjectiles(dt) {
     for (const shot of this.projectiles) {
       shot.life -= dt;
+      if (shot.life <= 0) {
+        this.effect('projectileEnd', { x: shot.x, y: shot.y, type: shot.kind });
+        continue;
+      }
       if (shot.friendly) {
         const target = this.mobs.find((mob) => mob.id === shot.target && mob.alive);
         if (!target) { shot.life = 0; continue; }
@@ -482,7 +505,8 @@ export class DandelionHillsJourney {
 
   enemyShot(mob, kind, speed, power) {
     const d = distance(mob, this.player) || 1;
-    this.projectiles.push({ kind, friendly: false, x: mob.x, y: mob.y, dx: (this.player.x - mob.x) / d, dy: (this.player.y - mob.y) / d, speed, power, life: 2.2 });
+    this.projectiles.push({ kind, friendly: false, x: mob.x, y: mob.y, dx: (this.player.x - mob.x) / d, dy: (this.player.y - mob.y) / d, speed, power, life: (kind === 'mud' ? 280 : 310) / speed, maxLife: (kind === 'mud' ? 280 : 310) / speed });
+    this.effect('sound', { name: kind === 'mud' ? 'mudThrow' : kind === 'seed' ? 'chickChirp' : 'bubbleCast' });
   }
 
   updateMobs(dt) {
@@ -496,6 +520,16 @@ export class DandelionHillsJourney {
         if (mob.respawn <= 0) Object.assign(mob, this.makeMob(mob.id, mob.type, mob.homeX, mob.homeY));
         continue;
       }
+      if (mob.type === 'rabbit') { updatePumpkinBoss(this, mob, dt); continue; }
+      mob.recovery = Math.max(0, (mob.recovery || 0) - dt);
+      if (mob.cast) {
+        mob.cast.elapsed += dt;
+        if (mob.cast.elapsed >= mob.cast.duration) {
+          this.enemyShot(mob, mob.type === 'mole' ? 'mud' : mob.type === 'chick' ? 'seed' : 'water', mob.type === 'mole' ? 175 : 155, 1);
+          mob.cast = null; mob.recovery = .36;
+        }
+        continue;
+      }
       const spec = MOB_TYPES[mob.type];
       const playerDistance = distance(mob, this.player);
       if (mob.dizzy > 0) continue;
@@ -507,15 +541,10 @@ export class DandelionHillsJourney {
         continue;
       }
       if (mob.aggro && playerDistance < (spec.elite ? 260 : 310)) {
-        if (mob.type === 'dew' && mob.attack <= 0 && playerDistance < 235) { mob.attack = 2.3; this.enemyShot(mob, 'water', 155, 1); }
-        if (mob.type === 'mole' && mob.attack <= 0 && playerDistance < 215) { mob.attack = 2.8; this.enemyShot(mob, 'mud', 175, 1); }
-        if (mob.type === 'rabbit' && mob.attack <= 0 && playerDistance < 250) {
-          mob.attack = 4;
-          for (let i = 0; i < 5; i += 1) {
-            const angle = i * Math.PI * 2 / 5;
-            this.traps.push({ x: mob.x + Math.cos(angle) * 72, y: mob.y + Math.sin(angle) * 48, life: 7, pulse: this.random() * 6 });
-          }
-        }
+        if (mob.type === 'chick' && mob.attack <= 0 && playerDistance < 240) { mob.attack = 2.6; mob.cast = { elapsed: 0, duration: .45 }; this.effect('sound', { name: 'chickChirp' }); }
+        if (mob.type === 'dew' && mob.attack <= 0 && playerDistance < 235) { mob.attack = 2.3; mob.cast = { elapsed: 0, duration: .55 }; this.effect('sound', { name: 'dewGather' }); }
+        if (mob.type === 'mole' && mob.attack <= 0 && playerDistance < 215) { mob.attack = 2.8; mob.cast = { elapsed: 0, duration: .7 }; this.effect('sound', { name: 'mudDig' }); }
+
       } else if (distance(mob, { x: mob.homeX, y: mob.homeY }) > 16) {
         const d = distance(mob, { x: mob.homeX, y: mob.homeY }) || 1;
         this.moveBody(mob, (mob.homeX - mob.x) / d * spec.speed * .55 * dt, (mob.homeY - mob.y) / d * spec.speed * .55 * dt);
@@ -564,6 +593,13 @@ export class DandelionHillsJourney {
   update(dt, axis = { x: 0, y: 0 }, attacking = false, dodge = false) {
     dt = Math.max(0, Math.min(.05, dt));
     this.time += dt;
+    if (this.downed) {
+      this.downTime += dt;
+      if (this.downTime >= 1.2 && !this.revivePrompted) {
+        this.revivePrompted = true; this.effect('playerDownReady', {});
+      }
+      return false;
+    }
     this.invulnerable = Math.max(0, this.invulnerable - dt);
     this.blind = Math.max(0, this.blind - dt);
     this.speedBuff = Math.max(0, this.speedBuff - dt);
@@ -581,13 +617,19 @@ export class DandelionHillsJourney {
     }
     this.bounceCooldown = Math.max(0, this.bounceCooldown - dt);
     for (const node of this.gathers) node.cooldown = Math.max(0, node.cooldown - dt);
+    if (this.activeSlash && !this.activeSlash.sounded && this.stunned <= 0 && this.time - this.activeSlash.start >= MANA_SLASH.windup) {
+      this.activeSlash.sounded = true;
+      this.effect('sound', { name: 'manaSwing' });
+    }
+    if (this.activeSlash && this.stunned <= 0 && this.time - this.activeSlash.start >= HILLS_COMBAT.attackImpact) this.resolveSlash();
+    if (this.activeSlash && this.attackWindow <= 0) this.activeSlash = null;
     if (attacking && this.stunned <= 0) this.attack();
     const moving = this.move(dt, axis, dodge);
     if (this.gather) {
       this.gather.elapsed += dt;
       if (this.gather.elapsed >= this.gather.duration) this.finishGather();
     }
-    if (this.bounceCooldown <= 0 && distance(this.player, { x: 840 * HILLS_SCALE, y: 585 * HILLS_SCALE }) < 72) {
+    if (this.bounceCooldown <= 0 && distance(this.player, { x: 2700, y: 1600 }) < 72) {
       this.bounceCooldown = 2;
       this.speedBuff = 3;
       this.effect('bounce', { x: this.player.x, y: this.player.y });

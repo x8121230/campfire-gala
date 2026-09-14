@@ -3,6 +3,7 @@ export const HERO_FRAME_SIZE = 512;
 
 const BASE_MOVE_SPEED = 260;
 const BASE_WALK_FPS = 10.5;
+const MAX_WALK_FPS = 13;
 const STOP_SETTLE_SECONDS = .08;
 const TURN_CONFIRM_SECONDS = .08;
 const TURN_HYSTERESIS = 13 * Math.PI / 180;
@@ -24,7 +25,11 @@ const FOOT_CONTACT_Y = Object.freeze({
   upRight: Object.freeze([508, 507, 506, 504, 509, 510, 509, 509])
 });
 const FOOT_BASELINE = Object.freeze(Object.fromEntries(Object.entries(FOOT_CONTACT_Y).map(([face, values]) => [face, Math.max(...values)])));
+// Preserve the complete generated gait. Camera pixel snapping and per-frame sole
+// calibration remove the jitter without sacrificing either passing pose.
+const WALK_SEQUENCE = Object.freeze([0, 1, 2, 3, 4, 5]);
 const WALK_BOB = Object.freeze([1.5, 0, -1.5, 1.5, 0, -1.5]);
+const WALK_TILT = Object.freeze([-1, -.35, .35, 1, .35, -.35].map((degrees) => degrees * Math.PI / 180));
 
 function wrapAngle(value) { return Math.atan2(Math.sin(value), Math.cos(value)); }
 function angleDistance(a, b) { return Math.abs(wrapAngle(a - b)); }
@@ -56,6 +61,7 @@ export class HeroMovementAnimator {
     this.wasMoving = false;
     this.stopSettle = 0;
     this.lastWalkBob = 0;
+    this.lastWalkTilt = 0;
     this.turnCandidate = '';
     this.turnCandidateTime = 0;
   }
@@ -79,8 +85,8 @@ export class HeroMovementAnimator {
     this.updateDirection(safeDt, axis, moving);
     if (moving) {
       if (!this.wasMoving) this.walkClock = 0;
-      const fps = Math.max(8.5, Math.min(13, BASE_WALK_FPS * Math.max(0, actualSpeed) / BASE_MOVE_SPEED));
-      this.walkClock += safeDt * fps / BASE_WALK_FPS;
+      const fps = Math.max(8.5, Math.min(MAX_WALK_FPS, BASE_WALK_FPS * Math.max(0, actualSpeed) / BASE_MOVE_SPEED));
+      this.walkClock += safeDt * fps;
       this.stopSettle = STOP_SETTLE_SECONDS;
     } else if (this.wasMoving) {
       this.stopSettle = STOP_SETTLE_SECONDS;
@@ -89,11 +95,21 @@ export class HeroMovementAnimator {
     }
 
     const settling = !moving && this.stopSettle > 0;
-    const column = moving ? Math.floor(this.walkClock * BASE_WALK_FPS) % 6 : settling ? 7 : 6;
-    const bodyBob = moving ? WALK_BOB[column] : settling ? this.lastWalkBob * this.stopSettle / STOP_SETTLE_SECONDS : 0;
-    if (moving) this.lastWalkBob = bodyBob;
+    const walkPhase = Math.floor(this.walkClock) % WALK_SEQUENCE.length;
+    const column = moving ? WALK_SEQUENCE[walkPhase] : settling ? 7 : 6;
+    const bodyBob = moving ? WALK_BOB[walkPhase] : settling ? this.lastWalkBob * this.stopSettle / STOP_SETTLE_SECONDS : 0;
+    const walkTilt = moving ? WALK_TILT[walkPhase] : settling ? this.lastWalkTilt * this.stopSettle / STOP_SETTLE_SECONDS : 0;
+    if (moving) { this.lastWalkBob = bodyBob; this.lastWalkTilt = walkTilt; }
     this.wasMoving = moving;
     const source = sourceFor(this.face);
-    return { ...source, column, face: this.face, moving, settling, renderOffsetYRatio: renderOffsetRatio(source.sourceFace, column, bodyBob) };
+    return {
+      ...source,
+      column,
+      face: this.face,
+      moving,
+      settling,
+      renderOffsetYRatio: renderOffsetRatio(source.sourceFace, column, bodyBob),
+      renderTiltRadians: source.flip ? -walkTilt : walkTilt
+    };
   }
 }

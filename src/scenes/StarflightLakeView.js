@@ -20,7 +20,7 @@ export function drawLakeEnemy(scene,g,e){
 export function drawLakeWorld(scene,g){
  const s=scene.session,alpha=Math.min(1,(scene.themeWeights?.crystal||0)*1.25);
  if(s.currentMap?.type==='lake'){
-  g.fillStyle(0x315b86,.24*alpha).fillRect(0,300,1280,180);g.lineStyle(3,0xbdefff,.4*alpha).lineBetween(0,398,1280,398);
+  g.lineStyle(3,0xbdefff,.4*alpha).lineBetween(0,398,1280,398);
   for(let i=0;i<18;i++){const x=((i*91-s.time*73)%1460+1460)%1460-90,y=407+(i%4)*17;g.lineStyle(2,0xcff7ff,.18*alpha).lineBetween(x,y,x+45,y+Math.sin(i)*4);}
   for(let i=0;i<8;i++){const x=((i*205-s.time*42)%1740+1740)%1740-170,y=425+(i%3)*16;g.fillStyle(i%2?0x7fa676:0x6f9776,.48*alpha).fillEllipse(x,y,76,20);g.fillStyle(0xf0adc8,.55*alpha).fillCircle(x+8,y-9,7);}
   for(let i=0;i<9;i++){const x=((i*173-s.time*31)%1600+1600)%1600-130;g.lineStyle(4,0x527b68,.45*alpha).lineBetween(x,480,x+5,405-(i%3)*12);g.fillStyle(0x789e76,.5*alpha).fillEllipse(x-3,420-(i%3)*12,19,7);}
@@ -36,5 +36,5 @@ export function drawLakeWorld(scene,g){
 export function lakeCaption(s){
  if(s.currentMap?.type!=='lake'||s.inTransit)return '';
  const t=s.phaseInfo.elapsed,phase=t<11?'水面巡航':t<26?'伏擊與折光':t<40?'菁英漩渦':'月露終航';
- return LAKE_PLANS[lakePlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(48,Math.floor(t))+' / 48 秒';
+ return LAKE_PLANS[lakePlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(s.phaseInfo.end-s.phaseInfo.start,Math.floor(t))+' / '+(s.phaseInfo.end-s.phaseInfo.start)+' 秒';
 }

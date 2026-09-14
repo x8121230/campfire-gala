@@ -87,7 +87,7 @@ export default class WorldMap extends Phaser.Scene {
 
         // 角色
         this.charManager = new CharacterManager(this);
-        const dollLayout = getSubmapDollLayout(this.submapId);
+        const dollLayout = getSubmapDollLayout(this.submapId, PAPER_DOLL_LAYOUT.worldMap);
         const footY = dollLayout.footY ?? dollLayout.centerY + dollLayout.maxHeight * .48;
         this.add.ellipse(dollLayout.centerX, footY+2, dollLayout.maxWidth*.46, 15, 0x394833, .16).setDepth(4);
         this.add.ellipse(dollLayout.centerX, footY+2, dollLayout.maxWidth*.30, 8, 0x394833, .12).setDepth(4);
@@ -109,7 +109,11 @@ export default class WorldMap extends Phaser.Scene {
             this.onEnterCollectionForMotherGuardSecret();
 
             this.scene.start('Collection', {
-                mapID: this.mapID
+                mapID: this.mapID,
+                returnScene: 'WorldMap',
+                regionId: 'forest',
+                submapId: this.submapId,
+                mapReturnScene: this.returnScene
             });
         });
 
@@ -145,17 +149,7 @@ export default class WorldMap extends Phaser.Scene {
     }
 
     playMapBgm() {
-        let bgmKey = 'forest_music';
-
-        if (this.mapID === '01') {
-            bgmKey = 'forest_music';
-        } else if (this.mapID === '02') {
-            bgmKey = 'lake_music';
-        } else if (this.mapID === '03') {
-            bgmKey = 'campfire_music';
-        }
-
-        AudioSystem.playBgm(this, bgmKey, 0.5);
+        AudioSystem.playRegionBgm(this, 'forest', 0.42);
     }
 
     createTopUI() {

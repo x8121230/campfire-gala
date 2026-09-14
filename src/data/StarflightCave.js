@@ -58,11 +58,11 @@ export function caveHazard(s,h,dt){
  if(!h.kind.startsWith('cave'))return;const p=s.player,active=h.age>=h.warn;
  if(h.kind==='caveDark'){h.x-=50*dt;if(active&&Math.abs(p.x-h.x)<h.r)s.caveDarkness=Math.max(s.caveDarkness,1-Math.abs(p.x-h.x)/h.r);}
  if(h.kind==='caveCrystal'){
-  if(active){h.vy=Math.min(430,(h.vy||0)+700*dt);h.y+=h.vy*dt;if(!h.hit&&Math.hypot(p.x-h.x,p.y-h.y)<h.r+s.hitRadius+5){h.hit=true;s.hit();}if(h.y>455&&!h.shattered){h.shattered=true;h.life=.16;s.emit('caveImpact',h.x,445);for(const off of [-.34,0,.34])caveBullet(s,h.x,440,Math.PI+off,95);}}
+  if(active){h.vy=Math.min(430,(h.vy||0)+700*dt);h.y+=h.vy*dt;if(!h.hit&&s.bodyCircle(h.x,h.y,h.r+5)){h.hit=true;s.hit();}if(h.y>455&&!h.shattered){h.shattered=true;h.life=.16;s.emit('caveImpact',h.x,445);for(const off of [-.34,0,.34])caveBullet(s,h.x,440,Math.PI+off,95);}}
  }
  if(h.kind==='caveEcho'){
   h.x-=34*dt;const radius=h.r+Math.max(0,h.age-h.warn)*92;h.currentRadius=radius;
-  if(active&&!h.hit&&Math.abs(Math.hypot(p.x-h.x,p.y-h.y)-radius)<12+s.hitRadius){h.hit=true;s.hit();}
+  if(active&&!h.hit&&s.bodyRing(h.x,h.y,radius)){h.hit=true;s.hit();}
  }
 }
 export function caveEnemy(s,e,dt){
@@ -82,5 +82,5 @@ export function caveEnemy(s,e,dt){
   if(target){e.supportTarget=target.id;e.x+=(target.x+62-e.x)*Math.min(1,dt*2.2);e.y+=(target.y-45-e.y)*Math.min(1,dt*2.2);target.supportUntil=s.time+.18;}
   else e.y=clamp(e.baseY+Math.sin(e.age*2.7)*38,55,420);
  }
- if(e.x<-110)e.exit=true;if(Math.hypot(e.x-p.x,e.y-p.y)<e.r+s.hitRadius)s.hit();return true;
+ if(e.x<-110)e.exit=true;if(s.bodyCircle(e.x,e.y,e.r))s.hit();return true;
 }

@@ -16,8 +16,7 @@ export default class AdventureSettings extends ForestChestRoom {
    }catch(e){this.notice.setText('設定未保存：請確認裝置儲存空間');}
   },preferences.value[key]?0x607f54:0x686b61));
   this.text(640,360,'語音控制既有朗讀；沒有旁白的內容不會新增語音。',25,'#dce8cc');
-  this.button(398,458,440,100,'森林冒險手冊',()=>this.navigate('EquipmentJournal'),0x98763b);
-  this.button(884,458,440,100,'我的寶箱',()=>this.navigate('ForestChestRoom'),0x98763b);
+  this.button(640,458,560,100,'森林冒險手冊',()=>this.navigate('EquipmentJournal'),0x98763b);
   if(this.hostKey==='WorldMap'){
    const host=this.scene.get(this.hostKey);
    this.button(225,619,360,96,host.isEditMode?'完成地圖佈置':'佈置地圖',()=>{host.toggleEditMode();this.scene.stop();},0x607f54);

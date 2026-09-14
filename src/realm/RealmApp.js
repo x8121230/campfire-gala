@@ -1,17 +1,22 @@
+import { FootstepClock, safeCue } from './RealmSoundEffects.js';
 import { RealmWorld } from './RealmWorld.js';
-import { RealmJourney, SPOTS, WORLD_SCALE, addCampCollisionMark, disableCampObstaclesAt, eraseCampCollisionMarks, getCampCollisionPaint, setCampCollisionPaint } from './RealmRules.js';
+import { RealmJourney, SPOTS, WORLD_SCALE, addCampCollisionMark, collisionStrokePoints, disableCampObstaclesAt, eraseCampCollisionMarks, getCampCollisionPaint, setCampCollisionPaint } from './RealmRules.js';
 import { ITEM_CATALOG, STARSPROUT_QUICK_ITEMS, loadStarsproutInventory, mergeStarsproutItems, saveStarsproutInventory } from './StarsproutInventory.js';
 import { StarsproutInventoryPanel } from './StarsproutInventoryPanel.js';
 
 const SAVE = 'forest_starsprout_camp_v2';
 const COLLISION_SAVE = 'forest_starsprout_camp_collision_v1';
+const COLLISION_LAYOUT_VERSION = 2;
 
 export class RealmApp {
-  constructor(root, { onExit = () => {}, onTravel = () => {}, onSound = () => {}, entry = '' } = {}) {
+  constructor(root, { onExit = () => {}, onTravel = () => {}, onSound = () => {}, entry = '', portalArrival = false } = {}) {
     this.root = root;
     this.onExit = onExit;
     this.onTravel = onTravel;
+    this.portalArrival = portalArrival;
+    this.entry = entry;
     this.onSound = onSound;
+    this.footsteps = new FootstepClock();
     this.abort = new AbortController();
     this.keys = new Set();
     this.axis = { x: 0, y: 0 };
@@ -26,7 +31,13 @@ export class RealmApp {
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(SAVE) || 'null'); } catch {}
     this.journey = new RealmJourney(saved);
-    try { setCampCollisionPaint(JSON.parse(localStorage.getItem(COLLISION_SAVE) || 'null') || {}); } catch { setCampCollisionPaint({}); }
+    try {
+      const collisionSaved = JSON.parse(localStorage.getItem(COLLISION_SAVE) || 'null') || {};
+      // v1 disabled indices refer to the old oversized workshop rectangle.
+      // Preserve user-painted red/green marks, but remap fixed obstacles from
+      // the corrected v2 geometry instead of disabling the wrong new shape.
+      setCampCollisionPaint(collisionSaved.v === COLLISION_LAYOUT_VERSION ? collisionSaved : { ...collisionSaved, disabled: [] });
+    } catch { setCampCollisionPaint({}); }
     this.inventoryState = mergeStarsproutItems(loadStarsproutInventory(), { '甜蘋果': this.journey.apples, ...(this.journey.robe ? { '星芽旅行者套裝': 1 } : {}) });
     this.inventoryState = saveStarsproutInventory(this.inventoryState);
     if (entry === 'northGate') this.journey.player = { x: SPOTS.northGate.x, y: SPOTS.northGate.y + 96 };
@@ -68,6 +79,7 @@ export class RealmApp {
       '@media(max-height:500px){.realm-app{font-size:14px}.realm-app .top{top:7px;left:max(9px,env(safe-area-inset-left));right:max(9px,env(safe-area-inset-right))}.realm-app .brand{padding:7px 11px}.realm-app h1{font-size:18px;margin:1px 0 2px}.realm-app .eyebrow{font-size:9px}.realm-app .objective{font-size:11px}.realm-app .topnav button{font-size:12px;min-height:40px;padding:6px 10px}.realm-app .joy{width:104px;height:104px;bottom:20px;left:max(19px,env(safe-area-inset-left))}.realm-app .knob{width:45px;height:45px;left:27px;top:27px}.realm-app .actions{bottom:15px;right:max(17px,env(safe-area-inset-right));gap:9px}.realm-app .actions button{width:64px;height:64px;font-size:13px}.realm-app .actions .interact{width:84px;height:84px;font-size:17px}.realm-app .bottom{font-size:10px;padding:6px 10px;bottom:8px;max-width:42%}.realm-app .card{padding:17px 23px}.realm-app h2{font-size:22px;margin-bottom:7px}.realm-app .body{font-size:16px;line-height:1.52}.realm-app .choices{margin-top:11px}.realm-app .choices button{min-height:44px}.realm-app .context{font-size:12px;bottom:24%}.realm-app .toast{font-size:13px}}'
     ].join('');
 
+    style.textContent += '\n.realm-app {font-family:"Arial Rounded MT Bold","Microsoft JhengHei",sans-serif}\n.realm-app .quickbar{left:auto;bottom:auto;right:max(16px,env(safe-area-inset-right));top:84px;transform:none;gap:8px;padding:9px;background:#fff3ddec;border:3px solid #cda46a;border-radius:23px}\n.realm-app .quickslot{width:68px;height:70px;min-height:70px!important;border:2px solid #c69c60!important;background:#fffaf0!important;color:#674b32!important;box-shadow:inset 0 -4px #eedbb8}\n.realm-app .quickslot .icon{font-size:32px;line-height:36px}.realm-app .quickslot .count{font-size:18px;color:#674b32;text-shadow:none}.realm-app .quickslot .key{font-size:14px;color:#796346}.realm-app .quickslot.empty{opacity:.75}\n.realm-app .nav button{font-size:16px;min-height:46px}.realm-app .objective{font-size:16px}.realm-app .eyebrow{font-size:14px;letter-spacing:1px}.realm-app .joylabel{font-size:15px}.realm-app .actions button{font-size:17px}.realm-app .toast{font-size:19px}.realm-app .context{font-size:17px;bottom:130px}.realm-app .bag{font-size:16px}\n.realm-app .vitals{min-width:0;width:340px;border:2px solid #d1b172;padding:10px 14px;border-radius:24px;background:#fff3e3f2;color:#674c38}.realm-app .vitals .bag{color:#674c38}.realm-app .vitals .bag:last-of-type{display:none}\n.realm-app .resource-row{display:flex;justify-content:space-between;gap:16px}.realm-app .resource-group{display:flex;gap:5px;align-items:center}.realm-app .resource-icon{width:38px;height:38px;filter:drop-shadow(0 2px 1px #88664444)}.realm-app .resource-icon.empty{opacity:.22;filter:grayscale(1)}\n@media(max-height:520px){.realm-app .quickbar{top:70px;padding:6px}.realm-app .quickslot{width:58px;height:62px;min-height:62px!important}.realm-app .nav button{padding:7px 9px;font-size:15px}.realm-app .brand{max-width:48%}.realm-app h1{font-size:20px}.realm-app .objective{font-size:14px}.realm-app .vitals{width:310px;padding:6px 10px}.realm-app .resource-icon{width:32px;height:32px}.realm-app .vitals .bag{font-size:14px}.realm-app .toast{font-size:17px}.realm-app .actions button{font-size:15px}.realm-app .attack{font-size:17px!important}}\n';
     this.canvas = this.el('canvas');
     this.canvas.setAttribute('aria-label', '幻界・微光星芽谷・星芽營地');
     const top = this.el('div', 'top');
@@ -147,7 +159,7 @@ export class RealmApp {
       }
       if (event.code === 'KeyB' && !event.repeat && !this.collisionEditing) { this.backpack(); return; }
       if (event.code === 'KeyM' && !event.repeat && this.world && !this.collisionEditing) { this.world.overview = !this.world.overview; this.mapButton.textContent = this.world.overview ? '跟隨' : '鳥瞰'; return; }
-      if (/^Digit[1-6]$/.test(event.code) && !this.collisionEditing) { this.itemDetails(STARSPROUT_QUICK_ITEMS[Number(event.code.slice(-1)) - 1]); return; }
+      if (/^Digit[1-3]$/.test(event.code) && !this.collisionEditing) { this.itemDetails(STARSPROUT_QUICK_ITEMS[Number(event.code.slice(-1)) - 1]); return; }
       if (this.paused) return;
       this.keys.add(event.code);
       if (event.code === 'KeyE' || event.code === 'Space') this.interact();
@@ -202,13 +214,19 @@ export class RealmApp {
       this.loading.remove();
       this.loading = null;
       this.resize();
-      this.dialog(
-        '歡迎來到微光星芽谷',
-        '你從幻界漩渦輕輕落在星芽營地。\n母樹的鐘聲響起，奧爾登長老正在廣場後方等你。\n\n先熟悉移動，再靠近發光驚嘆號按「互動」。',
-        [['開始探索', () => this.close()]]
-      );
+      this.world.camera = { x: this.journey.player.x, y: this.journey.player.y - 80 };
+      this.world.render(this.journey, 0, { x: 0, y: 0 }, false);
+      let welcomed = this.entry === 'northGate' || this.journey.stage > 0;
+      try { welcomed ||= localStorage.getItem('forest_camp_welcomed_v1') === '1'; } catch {}
+      if (!welcomed) {
+        this.dialog('歡迎來到微光星芽谷', '你從幻界漩渦輕輕落在星芽營地。\n母樹的鐘聲響起，奧爾登長老正在廣場後方等你。\n\n完成序章後，北門花環會化成通往蒲公英丘陵的傳送門。', [['開始探索', () => {
+          try { localStorage.setItem('forest_camp_welcomed_v1', '1'); } catch {}
+          this.close();
+        }]]);
+      } else if (!this.portalArrival) this.close();
       this.last = performance.now();
       this.frame = requestAnimationFrame((time) => this.tick(time));
+      return true;
     } catch (error) {
       if (this.dead) return;
       if (this.loading) this.loading.remove();
@@ -246,11 +264,12 @@ export class RealmApp {
       const gateReady = !this.requireGateExit && !this.traveling &&
         this.journey.stage >= 3 && gateDistance < SPOTS.northGate.radius;
       this.gateDwell = gateReady ? this.gateDwell + dt : 0;
-      if (this.gateDwell >= .12) {
+      if (this.gateDwell >= .25) {
         this.travelToHills();
         return;
       }
     }
+    if (this.footsteps.update(this.journey.player, !this.paused && moving)) safeCue(this.onSound, 'stepStone');
     this.world.render(this.journey, this.paused ? 0 : dt, axis, moving);
     if (this.toastUntil && time > this.toastUntil) this.toast.style.opacity = '0';
     this.frame = requestAnimationFrame((next) => this.tick(next));
@@ -304,9 +323,22 @@ export class RealmApp {
   closeCollisionEditor() { if (!this.collisionEditing) return; this.saveCollision(); this.collisionEditing = false; this.collisionPointer = null; this.lastCollisionPoint = null; this.root.classList.remove('collision-mode'); this.collisionTools.classList.remove('show'); this.world?.setCollisionEditor({ enabled: false, cursor: null }); this.paused = false; this.last = performance.now(); this.notify('營地碰撞已保存，可立即試走。'); }
   setCollisionMode(mode) { this.collisionMode = mode; for (const [key, button] of Object.entries(this.collisionButtons || {})) button.classList.toggle('active', key === mode); if (this.collisionSize) this.collisionSize.textContent = String(Math.round(this.collisionRadius / WORLD_SCALE)); this.world?.setCollisionEditor({ mode, radius: this.collisionRadius }); }
   changeCollisionRadius(delta) { this.collisionRadius = Math.max(24 * WORLD_SCALE, Math.min(112 * WORLD_SCALE, this.collisionRadius + delta * WORLD_SCALE)); this.setCollisionMode(this.collisionMode); }
-  paintCollision(event, force = false) { const point = this.world?.screenToWorld(event.clientX, event.clientY); if (!point) return; this.world.setCollisionEditor({ cursor: point }); if (!force && this.lastCollisionPoint && Math.hypot(point.x - this.lastCollisionPoint.x, point.y - this.lastCollisionPoint.y) < this.collisionRadius * .42) return; if (this.collisionMode === 'erase') { eraseCampCollisionMarks(point.x, point.y, this.collisionRadius); disableCampObstaclesAt(point.x, point.y, this.collisionRadius); } else addCampCollisionMark(this.collisionMode, { x: point.x, y: point.y, r: this.collisionRadius }); this.lastCollisionPoint = point; }
-  saveCollision() { try { localStorage.setItem(COLLISION_SAVE, JSON.stringify({ v: 1, ...getCampCollisionPaint() })); } catch { this.notify('瀏覽器無法保存碰撞標記，請先匯出 JSON。'); } }
-  exportCollision() { const data = JSON.stringify({ v: 1, map: '星芽營地', ...getCampCollisionPaint() }, null, 2), url = URL.createObjectURL(new Blob([data], { type: 'application/json' })), link = document.createElement('a'); link.href = url; link.download = '星芽營地_碰撞標記.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); this.notify('營地碰撞標記 JSON 已匯出。'); }
+  paintCollision(event, force = false) {
+    const point = this.world?.screenToWorld(event.clientX, event.clientY); if (!point) return;
+    this.world.setCollisionEditor({ cursor: point });
+    const distance = this.lastCollisionPoint ? Math.hypot(point.x - this.lastCollisionPoint.x, point.y - this.lastCollisionPoint.y) : Infinity;
+    if (!force && distance < this.collisionRadius * .2) return;
+    const stamps = collisionStrokePoints(this.lastCollisionPoint, point, this.collisionRadius * .32);
+    for (const stamp of stamps) {
+      if (this.collisionMode === 'erase') {
+        eraseCampCollisionMarks(stamp.x, stamp.y, this.collisionRadius);
+        disableCampObstaclesAt(stamp.x, stamp.y, this.collisionRadius);
+      } else addCampCollisionMark(this.collisionMode, { x: stamp.x, y: stamp.y, r: this.collisionRadius });
+    }
+    this.lastCollisionPoint = point;
+  }
+  saveCollision() { try { localStorage.setItem(COLLISION_SAVE, JSON.stringify({ v: COLLISION_LAYOUT_VERSION, ...getCampCollisionPaint() })); } catch { this.notify('瀏覽器無法保存碰撞標記，請先匯出 JSON。'); } }
+  exportCollision() { const data = JSON.stringify({ v: COLLISION_LAYOUT_VERSION, map: '星芽營地', ...getCampCollisionPaint() }, null, 2), url = URL.createObjectURL(new Blob([data], { type: 'application/json' })), link = document.createElement('a'); link.href = url; link.download = '星芽營地_碰撞標記.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); this.notify('營地碰撞標記 JSON 已匯出。'); }
   clearCollision() { if (!confirm('確定還原全部營地碰撞？')) return; setCampCollisionPaint({}); this.saveCollision(); this.notify('營地碰撞已還原。'); }
 
   result(result) {
@@ -346,6 +378,7 @@ export class RealmApp {
     this.traveling = true;
     this.paused = true;
     this.clearInput();
+    this.save();
     this.onTravel('hills');
   }
 

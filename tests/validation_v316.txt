@@ -1,0 +1,394 @@
+TAP version 13
+# Subtest: 待機不踩步、不改邏輯座標；移動後按路程推進步態並轉向
+ok 1 - 待機不踩步、不改邏輯座標；移動後按路程推進步態並轉向
+  ---
+  duration_ms: 2.143941
+  type: 'test'
+  ...
+# Subtest: 相同移動距離的步態不受更新幀率影響
+ok 2 - 相同移動距離的步態不受更新幀率影響
+  ---
+  duration_ms: 0.571734
+  type: 'test'
+  ...
+# Subtest: 浮空雀有持續拍翅、受擊平滑升空，暫停不推進动画
+ok 3 - 浮空雀有持續拍翅、受擊平滑升空，暫停不推進动画
+  ---
+  duration_ms: 0.399814
+  type: 'test'
+  ...
+# Subtest: 死亡清除動畫狀態，復活不沿用逃跑方向與相位
+ok 4 - 死亡清除動畫狀態，復活不沿用逃跑方向與相位
+  ---
+  duration_ms: 0.174964
+  type: 'test'
+  ...
+# Subtest: 呼吸、步態、拍翅循環首尾連續且所有頂點有限
+ok 5 - 呼吸、步態、拍翅循環首尾連續且所有頂點有限
+  ---
+  duration_ms: 8.926224
+  type: 'test'
+  ...
+# Subtest: 三張正式圖集皆為16格透明PNG，循環採樣不超出邊界
+ok 6 - 三張正式圖集皆為16格透明PNG，循環採樣不超出邊界
+  ---
+  duration_ms: 6.867042
+  type: 'test'
+  ...
+# Subtest: 玩家、怪物、採集點與傳送錨點都位於可行走區
+ok 7 - 玩家、怪物、採集點與傳送錨點都位於可行走區
+  ---
+  duration_ms: 4.060038
+  type: 'test'
+  ...
+# Subtest: 丘陵起始點與營地傳送門對準右下花拱且彼此可達
+ok 8 - 丘陵起始點與營地傳送門對準右下花拱且彼此可達
+  ---
+  duration_ms: 0.954283
+  type: 'test'
+  ...
+# Subtest: 新版碰撞層貼合深水、樹叢、圍欄與開闊草坡
+ok 9 - 新版碰撞層貼合深水、樹叢、圍欄與開闊草坡
+  ---
+  duration_ms: 0.213863
+  type: 'test'
+  ...
+# Subtest: 玩家可自行畫阻擋、通行修正與橡皮擦並安全清理標記
+ok 10 - 玩家可自行畫阻擋、通行修正與橡皮擦並安全清理標記
+  ---
+  duration_ms: 0.655581
+  type: 'test'
+  ...
+# Subtest: 橡皮擦可停用橙色既有碰撞並可完整還原
+ok 11 - 橡皮擦可停用橙色既有碰撞並可完整還原
+  ---
+  duration_ms: 0.356459
+  type: 'test'
+  ...
+# Subtest: 同類怪物出生點保有探索間距而非擠成一團
+ok 12 - 同類怪物出生點保有探索間距而非擠成一團
+  ---
+  duration_ms: 0.181785
+  type: 'test'
+  ...
+# Subtest: 丘陵怪物密度固定減半，波波鼠只有三隻且不會越生越多
+ok 13 - 丘陵怪物密度固定減半，波波鼠只有三隻且不會越生越多
+  ---
+  duration_ms: 0.631705
+  type: 'test'
+  ...
+# Subtest: 死亡怪物使用原出生格個別倒數復活，不新增怪物物件
+ok 14 - 死亡怪物使用原出生格個別倒數復活，不新增怪物物件
+  ---
+  duration_ms: 7.63995
+  type: 'test'
+  ...
+# Subtest: 出生點能經由可行走區抵達所有怪物、採集點與傳送錨點
+ok 15 - 出生點能經由可行走區抵達所有怪物、採集點與傳送錨點
+  ---
+  duration_ms: 57.171804
+  type: 'test'
+  ...
+# Subtest: 魔法斬自動轉向近身目標並在前方造成傷害
+ok 16 - 魔法斬自動轉向近身目標並在前方造成傷害
+  ---
+  duration_ms: 0.979832
+  type: 'test'
+  ...
+# Subtest: 魔法斬動畫結束前角色完全不能移動
+ok 17 - 魔法斬動畫結束前角色完全不能移動
+  ---
+  duration_ms: 0.705076
+  type: 'test'
+  ...
+# Subtest: 魔法斬只命中距離與扇形內的怪物
+ok 18 - 魔法斬只命中距離與扇形內的怪物
+  ---
+  duration_ms: 1.238863
+  type: 'test'
+  ...
+# Subtest: 正面攻擊可自動格擋並扣盾牌耐久，背面攻擊直接扣血
+ok 19 - 正面攻擊可自動格擋並扣盾牌耐久，背面攻擊直接扣血
+  ---
+  duration_ms: 0.348567
+  type: 'test'
+  ...
+# Subtest: 攻擊狀態無法防禦
+ok 20 - 攻擊狀態無法防禦
+  ---
+  duration_ms: 0.146171
+  type: 'test'
+  ...
+# Subtest: 盾牌歸零會原地破防暈眩2秒，結束後恢復25耐久與保護
+ok 21 - 盾牌歸零會原地破防暈眩2秒，結束後恢復25耐久與保護
+  ---
+  duration_ms: 1.726039
+  type: 'test'
+  ...
+# Subtest: 波波鼠受擊會彈起逃跑，撞到障礙後短暫暈眩
+ok 22 - 波波鼠受擊會彈起逃跑，撞到障礙後短暫暈眩
+  ---
+  duration_ms: 0.2119
+  type: 'test'
+  ...
+# Subtest: MAIN_02 需驅趕六隻波波鼠並拾取四顆香脆橡果
+ok 23 - MAIN_02 需驅趕六隻波波鼠並拾取四顆香脆橡果
+  ---
+  duration_ms: 6.73404
+  type: 'test'
+  ...
+# Subtest: 光團拋出後彈跳兩次、懸浮並進入磁吸拾取
+ok 24 - 光團拋出後彈跳兩次、懸浮並進入磁吸拾取
+  ---
+  duration_ms: 2.02077
+  type: 'test'
+  ...
+# Subtest: 橡果迅捷珠會擴大光團磁吸半徑
+ok 25 - 橡果迅捷珠會擴大光團磁吸半徑
+  ---
+  duration_ms: 0.52272
+  type: 'test'
+  ...
+# Subtest: 露珠精靈受擊後以慢速水泡反擊
+ok 26 - 露珠精靈受擊後以慢速水泡反擊
+  ---
+  duration_ms: 0.503702
+  type: 'test'
+  ...
+# Subtest: 採集草藥會驚動附近園藝鼴鼠，移動會中斷讀條
+ok 27 - 採集草藥會驚動附近園藝鼴鼠，移動會中斷讀條
+  ---
+  duration_ms: 0.414516
+  type: 'test'
+  ...
+# Subtest: MAIN_03 的星芽膠使用明黃任務光團並可完成
+ok 28 - MAIN_03 的星芽膠使用明黃任務光團並可完成
+  ---
+  duration_ms: 0.255727
+  type: 'test'
+  ...
+# Subtest: 南瓜兔擊敗時會爆出星藍靈珠與大量柔白光團
+ok 29 - 南瓜兔擊敗時會爆出星藍靈珠與大量柔白光團
+  ---
+  duration_ms: 0.136947
+  type: 'test'
+  ...
+# Subtest: 南側花環錨點可返回營地，北側出口維持鎖定
+ok 30 - 南側花環錨點可返回營地，北側出口維持鎖定
+  ---
+  duration_ms: 0.115665
+  type: 'test'
+  ...
+# Subtest: 存檔只接受 v1 並限制任務數值
+ok 31 - 存檔只接受 v1 並限制任務數值
+  ---
+  duration_ms: 0.248175
+  type: 'test'
+  ...
+# Subtest: 丘陵背景與五種透明怪物素材完整存在
+ok 32 - 丘陵背景與五種透明怪物素材完整存在
+  ---
+  duration_ms: 42.79176
+  type: 'test'
+  ...
+# Subtest: 星芽谷版波波鼠八格動作素材尺寸與透明通道一致
+ok 33 - 星芽谷版波波鼠八格動作素材尺寸與透明通道一致
+  ---
+  duration_ms: 2.370814
+  type: 'test'
+  ...
+# Subtest: 丘陵場景、營地北門與 Phaser 註冊互相連接
+ok 34 - 丘陵場景、營地北門與 Phaser 註冊互相連接
+  ---
+  duration_ms: 0.875733
+  type: 'test'
+  ...
+# Subtest: 營地與丘陵兩端都使用花環傳送門而非北門驚嘆號
+ok 35 - 營地與丘陵兩端都使用花環傳送門而非北門驚嘆號
+  ---
+  duration_ms: 1.292945
+  type: 'test'
+  ...
+# Subtest: 丘陵渲染器包含三色光團與戰鬥危險提示
+ok 36 - 丘陵渲染器包含三色光團與戰鬥危險提示
+  ---
+  duration_ms: 0.547307
+  type: 'test'
+  ...
+# Subtest: 丘陵加入可檢視所有素材與靈珠數量的冒險背包
+ok 37 - 丘陵加入可檢視所有素材與靈珠數量的冒險背包
+  ---
+  duration_ms: 0.529331
+  type: 'test'
+  ...
+# Subtest: 丘陵內建可視化碰撞筆刷並可保存與匯出JSON
+ok 38 - 丘陵內建可視化碰撞筆刷並可保存與匯出JSON
+  ---
+  duration_ms: 1.556372
+  type: 'test'
+  ...
+# Subtest: 魔法劍由法杖尖端形成且左向維持頭頂往前斬
+ok 39 - 魔法劍由法杖尖端形成且左向維持頭頂往前斬
+  ---
+  duration_ms: 0.431923
+  type: 'test'
+  ...
+# Subtest: 魔法斬動畫生命週期與規則共用同一速度設定
+ok 40 - 魔法斬動畫生命週期與規則共用同一速度設定
+  ---
+  duration_ms: 0.378833
+  type: 'test'
+  ...
+# Subtest: 丘陵主角縮小百分之二十且維持腳底錨點
+ok 41 - 丘陵主角縮小百分之二十且維持腳底錨點
+  ---
+  duration_ms: 0.352303
+  type: 'test'
+  ...
+# Subtest: 破防音效缺失或回呼錯誤都不會中斷動畫主循環
+ok 42 - 破防音效缺失或回呼錯誤都不會中斷動畫主循環
+  ---
+  duration_ms: 0.532324
+  type: 'test'
+  ...
+# Subtest: three hearts, three mana, three shared shortcuts
+ok 43 - three hearts, three mana, three shared shortcuts
+  ---
+  duration_ms: 1.01228
+  type: 'test'
+  ...
+# Subtest: mole telegraphs, shoots once, and cancels on death
+ok 44 - mole telegraphs, shoots once, and cancels on death
+  ---
+  duration_ms: 1.500899
+  type: 'test'
+  ...
+# Subtest: dew telegraphs, shoots once, and cancels on death
+ok 45 - dew telegraphs, shoots once, and cancels on death
+  ---
+  duration_ms: 0.221405
+  type: 'test'
+  ...
+# Subtest: mud has finite 280px range, expired shots cannot damage player
+ok 46 - mud has finite 280px range, expired shots cannot damage player
+  ---
+  duration_ms: 0.264159
+  type: 'test'
+  ...
+# Subtest: bird remains yellow until provoked, then retaliates with one seed shot
+ok 47 - bird remains yellow until provoked, then retaliates with one seed shot
+  ---
+  duration_ms: 0.333965
+  type: 'test'
+  ...
+# Subtest: player falls in place, shows one revive prompt, and waits for explicit revive
+ok 48 - player falls in place, shows one revive prompt, and waits for explicit revive
+  ---
+  duration_ms: 0.660698
+  type: 'test'
+  ...
+# Subtest: 傷害與劍刃接觸同時發生，後續收勢不重複傷害
+ok 49 - 傷害與劍刃接觸同時發生，後續收勢不重複傷害
+  ---
+  duration_ms: 44.012576
+  type: 'test'
+  ...
+# Subtest: 以命中當下的位置判斷範圍，離開斬擊範圍可避開
+ok 50 - 以命中當下的位置判斷範圍，離開斬擊範圍可避開
+  ---
+  duration_ms: 0.613708
+  type: 'test'
+  ...
+# Subtest: 倒地回出生點會取消尚未發生的斬擊
+ok 51 - 倒地回出生點會取消尚未發生的斬擊
+  ---
+  duration_ms: 0.531854
+  type: 'test'
+  ...
+# Subtest: 收勢完成才恢復格擋，純視覺接觸停留不延長邏輯硬直
+ok 52 - 收勢完成才恢復格擋，純視覺接觸停留不延長邏輯硬直
+  ---
+  duration_ms: 5.736748
+  type: 'test'
+  ...
+# Subtest: 範圍外的目標不強迫轉身，蓄力後面向快照保持固定
+ok 53 - 範圍外的目標不強迫轉身，蓄力後面向快照保持固定
+  ---
+  duration_ms: 0.89304
+  type: 'test'
+  ...
+# Subtest: boss chases, telegraphs before striking, and slams for damage
+ok 54 - boss chases, telegraphs before striking, and slams for damage
+  ---
+  duration_ms: 11.787169
+  type: 'test'
+  ...
+# Subtest: player can evade the locked slam location
+ok 55 - player can evade the locked slam location
+  ---
+  duration_ms: 3.374
+  type: 'test'
+  ...
+# Subtest: boss alternates slam with finite fan projectiles and returns home
+ok 56 - boss alternates slam with finite fan projectiles and returns home
+  ---
+  duration_ms: 6.968765
+  type: 'test'
+  ...
+# Subtest: boss death cancels skills; cooldown revives a clean state in the same slot
+ok 57 - boss death cancels skills; cooldown revives a clean state in the same slot
+  ---
+  duration_ms: 44.842751
+  type: 'test'
+  ...
+# Subtest: coherent island area doubles the original
+ok 58 - coherent island area doubles the original
+  ---
+  duration_ms: 0.256107
+  type: 'test'
+  ...
+# Subtest: mouse death expiry does not submit negative Canvas radius
+ok 59 - mouse death expiry does not submit negative Canvas radius
+  ---
+  duration_ms: 6.791778
+  type: 'test'
+  ...
+# Subtest: chick death expiry does not submit negative Canvas radius
+ok 60 - chick death expiry does not submit negative Canvas radius
+  ---
+  duration_ms: 4.667216
+  type: 'test'
+  ...
+# Subtest: rabbit death expiry does not submit negative Canvas radius
+ok 61 - rabbit death expiry does not submit negative Canvas radius
+  ---
+  duration_ms: 0.569581
+  type: 'test'
+  ...
+# Subtest: footsteps follow distance and ignore walls, pause and teleport
+ok 62 - footsteps follow distance and ignore walls, pause and teleport
+  ---
+  duration_ms: 0.260313
+  type: 'test'
+  ...
+# Subtest: one swing sound after windup
+ok 63 - one swing sound after windup
+  ---
+  duration_ms: 3.067327
+  type: 'test'
+  ...
+# Subtest: audio mute and source cleanup
+ok 64 - audio mute and source cleanup
+  ---
+  duration_ms: 1.520048
+  type: 'test'
+  ...
+1..64
+# tests 64
+# suites 0
+# pass 64
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 219.695381

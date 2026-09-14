@@ -11,7 +11,7 @@ export const MINI_GAME_CATALOG = Object.freeze([
         id: 'forest_starflight', scene: 'ForestStarflightGame', category: 'rhythm', icon: '🌟',
         title: '森林星航瘋狂隊', subtitle: '4＋1 機體・七區怪物・可玩式亂流航線',
         description: '每局隨機抽出三個不重複區域，以可玩的星風亂流無縫接續。亂流具有上下氣流、星砂安全航道與限時星願寶箱鳥；生命、武器、能量與冷卻全程延續，第三區後迎戰專屬首領。手機請橫放。',
-        status: 'v0.10.7・雨燕完整逐格／四鍵控制', accent: 0xc79b60, launchData: {}
+        status: 'v0.10.22・星芽鈴／子彈時間', accent: 0xc79b60, launchData: {}
     },
     {
         id: 'fruit_counting', scene: 'FruitCountingGame', category: 'observation', icon: '🍎',

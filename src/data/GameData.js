@@ -77,6 +77,7 @@ export const DEFAULT_SAVE_DATA = {
     },
 
     placed_decorations: [],
+    wardrobe_history_v1: [],
 
     equipped_hat: 'none',
     equipped_cloth: 'none',

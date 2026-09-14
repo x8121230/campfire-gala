@@ -1,19 +1,23 @@
+import { buildResourceIcons, updateResourceIcons } from './RealmResourceHUD.js';
+import { FootstepClock, safeCue } from './RealmSoundEffects.js';
 import { DandelionHillsJourney, HILLS_SCALE, MOB_TYPES, addHillsCollisionMark, disableHillsObstaclesAt, eraseHillsCollisionMarks, getHillsCollisionPaint, setHillsCollisionPaint } from './DandelionHillsRules.js';
 import { DandelionHillsWorld } from './DandelionHillsWorld.js';
 import { ITEM_CATALOG, STARSPROUT_QUICK_ITEMS, loadStarsproutInventory, mergeStarsproutItems, saveStarsproutInventory } from './StarsproutInventory.js';
 import { StarsproutInventoryPanel } from './StarsproutInventoryPanel.js';
 
 const SAVE = 'forest_dawn_dandelion_hills_v1';
-const COLLISION_SAVE = 'forest_dawn_dandelion_collision_v1';
+const COLLISION_SAVE = 'forest_dawn_dandelion_collision_v316'; // Old paint is preserved under its original key; coordinates belong to old terrain.
 const ITEM_META = Object.freeze(Object.fromEntries(Object.entries(ITEM_CATALOG).map(([name, item]) => [name, [item.icon, item.description]])));
 const QUICK_ITEMS = STARSPROUT_QUICK_ITEMS;
 
 export class DandelionHillsApp {
-  constructor(root, { onExit = () => {}, onTravel = () => {}, onSound = () => {} } = {}) {
+  constructor(root, { onExit = () => {}, onTravel = () => {}, portalArrival = false, onSound = () => {} } = {}) {
     this.root = root;
     this.onExit = onExit;
     this.onTravel = onTravel;
+    this.portalArrival = portalArrival;
     this.onSound = onSound;
+    this.footsteps = new FootstepClock();
     this.abort = new AbortController();
     this.keys = new Set();
     this.axis = { x: 0, y: 0 };
@@ -56,13 +60,15 @@ export class DandelionHillsApp {
       '.hills-app .modal{position:absolute;inset:0;background:#173c35a8;display:flex;justify-content:center;align-items:center;padding:18px;backdrop-filter:blur(4px);z-index:4}.hills-app .card{width:min(740px,94%);max-height:92%;overflow:auto;background:#fff7df;color:#315747;border:3px solid #caae6b;border-radius:28px;padding:25px 33px;box-shadow:0 20px 80px #17372f77}.hills-app h2{font-size:27px;margin:0 0 13px}.hills-app .body{font-size:18px;line-height:1.7;white-space:pre-line}.hills-app .choices{display:flex;flex-wrap:wrap;gap:11px;margin-top:18px}.hills-app .choices button{flex:1;color:#fff7d8;background:#3c6956;min-width:130px;min-height:52px}.hills-app .loading,.hills-app .rotate{position:absolute;inset:0;display:grid;place-items:center;background:#214d43;font-size:23px;padding:38px;text-align:center;z-index:7}.hills-app .rotate{display:none;white-space:pre-line}',
       '@media(max-height:520px){.hills-app .top{top:6px;left:9px;right:9px}.hills-app .brand{padding:7px 10px}.hills-app h1{font-size:18px;margin:1px 0}.hills-app .eyebrow{font-size:8px}.hills-app .objective{font-size:10px}.hills-app .nav button{font-size:11px;min-height:39px;padding:5px 9px}.hills-app .joy{width:100px;height:100px;bottom:18px;left:19px}.hills-app .knob{width:43px;height:43px;left:27px;top:27px}.hills-app .actions{width:170px;height:145px;right:15px;bottom:12px}.hills-app .actions button{width:60px;height:60px;font-size:11px}.hills-app .attack{width:82px!important;height:82px!important;font-size:14px!important}.hills-app .vitals{padding:5px 10px;bottom:11px;min-width:205px}.hills-app .hearts{font-size:16px}.hills-app .bag{font-size:10px}.hills-app .quickbar{bottom:78px;padding:4px;gap:3px}.hills-app .quickslot{width:44px;height:44px;min-height:44px!important}.hills-app .quickslot .icon{font-size:19px;line-height:22px}.hills-app .context{bottom:91px;font-size:12px}.hills-app .toast{font-size:13px;top:23%}.hills-app .card{padding:16px 22px}.hills-app h2{font-size:22px}.hills-app .body{font-size:15px;line-height:1.5}.hills-app .choices{margin-top:10px}.hills-app .choices button{min-height:42px;font-size:13px}.hills-app .collision-tools{left:8px;right:8px;bottom:7px;transform:none;justify-content:center;gap:4px;padding:5px}.hills-app .collision-tools button{font-size:10px;padding:5px 7px;min-height:36px}.hills-app .collision-note{display:none}}'
     ].join('');
+    style.textContent += '\n.hills-app {font-family:"Arial Rounded MT Bold","Microsoft JhengHei",sans-serif}\n.hills-app .quickbar{left:auto;bottom:auto;right:max(16px,env(safe-area-inset-right));top:84px;transform:none;gap:8px;padding:9px;background:#fff3ddec;border:3px solid #cda46a;border-radius:23px}\n.hills-app .quickslot{width:68px;height:70px;min-height:70px!important;border:2px solid #c69c60!important;background:#fffaf0!important;color:#674b32!important;box-shadow:inset 0 -4px #eedbb8}\n.hills-app .quickslot .icon{font-size:32px;line-height:36px}.hills-app .quickslot .count{font-size:18px;color:#674b32;text-shadow:none}.hills-app .quickslot .key{font-size:14px;color:#796346}.hills-app .quickslot.empty{opacity:.75}\n.hills-app .nav button{font-size:16px;min-height:46px}.hills-app .objective{font-size:16px}.hills-app .eyebrow{font-size:14px;letter-spacing:1px}.hills-app .joylabel{font-size:15px}.hills-app .actions button{font-size:17px}.hills-app .toast{font-size:19px}.hills-app .context{font-size:17px;bottom:130px}.hills-app .bag{font-size:16px}\n.hills-app .vitals{min-width:0;width:340px;border:2px solid #d1b172;padding:10px 14px;border-radius:24px;background:#fff3e3f2;color:#674c38}.hills-app .vitals .bag{color:#674c38}.hills-app .vitals .bag:last-of-type{display:none}\n.hills-app .resource-row{display:flex;justify-content:space-between;gap:16px}.hills-app .resource-group{display:flex;gap:5px;align-items:center}.hills-app .resource-icon{width:38px;height:38px;filter:drop-shadow(0 2px 1px #88664444)}.hills-app .resource-icon.empty{opacity:.22;filter:grayscale(1)}\n@media(max-height:520px){.hills-app .quickbar{top:70px;padding:6px}.hills-app .quickslot{width:58px;height:62px;min-height:62px!important}.hills-app .nav button{padding:7px 9px;font-size:15px}.hills-app .brand{max-width:48%}.hills-app h1{font-size:20px}.hills-app .objective{font-size:14px}.hills-app .vitals{width:310px;padding:6px 10px}.hills-app .resource-icon{width:32px;height:32px}.hills-app .vitals .bag{font-size:14px}.hills-app .toast{font-size:17px}.hills-app .actions button{font-size:15px}.hills-app .attack{font-size:17px!important}}\n';
+    style.textContent += '.hills-app.player-downed .top,.hills-app.player-downed .actions,.hills-app.player-downed .joy,.hills-app.player-downed .quickbar{pointer-events:none;opacity:.5}';
     this.canvas = this.el('canvas'); this.canvas.setAttribute('aria-label', '幻界・微光星芽谷・晨曦蒲公英丘陵');
     const top = this.el('div', 'top'), brand = this.el('div', 'brand', '', top);
     this.el('div', 'eyebrow', '幻界 · 微光星芽谷', brand); this.el('h1', '', '晨曦蒲公英丘陵', brand); this.objective = this.el('div', 'objective', '', brand);
     const nav = this.el('div', 'nav', '', top); this.button('手帳', () => this.journal(), nav); this.button('背包', () => this.backpack(), nav); this.button('碰撞', () => this.openCollisionEditor(), nav); this.mapButton = this.button('鳥瞰', () => { if (!this.world) return; this.world.overview = !this.world.overview; this.mapButton.textContent = this.world.overview ? '跟隨' : '鳥瞰'; }, nav); this.button('暫停', () => this.pause(), nav);
     this.joy = this.el('div', 'joy'); this.knob = this.el('div', 'knob', '', this.joy); this.el('div', 'joylabel', '拖曳移動', this.joy);
     const actions = this.el('div', 'actions'); this.dodgeButton = this.button('✧\n閃步', () => { this.dodgeRequested = true; }, actions, 'dodge'); this.interactButton = this.button('互動', () => this.interact(), actions, 'interact'); this.attackButton = this.button('✦\n魔法斬', () => {}, actions, 'attack');
-    const vitals = this.el('div', 'vitals'); this.hearts = this.el('div', 'hearts', '', vitals); this.shield = this.el('div', 'bag', '', vitals); this.bag = this.el('div', 'bag', '', vitals); this.gatherBar = this.el('div', 'gather', '', vitals); this.gatherFill = this.el('span', '', '', this.gatherBar);
+    const vitals = this.el('div', 'vitals'); this.hearts = this.el('div', 'resource-row', '', vitals); this.resourceIcons = buildResourceIcons(this.hearts); this.shield = this.el('div', 'bag', '', vitals); this.bag = this.el('div', 'bag', '', vitals); this.bag.style.display = 'none'; this.gatherBar = this.el('div', 'gather', '', vitals); this.gatherFill = this.el('span', '', '', this.gatherBar);
     this.quickbar = this.el('div', 'quickbar');
     this.quickSlots = QUICK_ITEMS.map((name, index) => {
       const slot = this.button('', () => this.itemDetails(name), this.quickbar, 'quickslot');
@@ -100,10 +106,11 @@ export class DandelionHillsApp {
     for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) this.on(this.attackButton, type, (event) => { if (event.pointerId === this.attackId) { this.attacking = false; this.attackId = null; } });
     this.on(window, 'keydown', (event) => {
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(event.code)) event.preventDefault();
+      if (this.journey.downed) return;
       if (event.code === 'Escape') { if (this.inventoryPanel) this.inventoryPanel.close(); else if (this.collisionEditing) this.closeCollisionEditor(); else if (this.modal) this.close(); else this.pause(); return; }
       if (event.code === 'KeyB' && !event.repeat && !this.collisionEditing) { this.backpack(); return; }
       if (event.code === 'KeyM' && !event.repeat && this.world && !this.collisionEditing) { this.world.overview = !this.world.overview; this.mapButton.textContent = this.world.overview ? '跟隨' : '鳥瞰'; return; }
-      if (/^Digit[1-6]$/.test(event.code) && !this.collisionEditing) { this.itemDetails(QUICK_ITEMS[Number(event.code.slice(-1)) - 1]); return; }
+      if (/^Digit[1-3]$/.test(event.code) && !this.collisionEditing) { this.itemDetails(QUICK_ITEMS[Number(event.code.slice(-1)) - 1]); return; }
       if (this.paused) return;
       this.keys.add(event.code);
       if (event.code === 'KeyE') this.interact();
@@ -122,8 +129,19 @@ export class DandelionHillsApp {
     try {
       this.world = new DandelionHillsWorld(this.canvas); await this.world.load(); if (this.dead) return;
       this.loading.remove(); this.loading = null; this.resize();
-      this.dialog('晨曦蒲公英丘陵', '北門外是一片會呼吸的花田。\n\n按「魔法斬」會讓星光棒朝前方劈出月牙斬擊；斬擊完整結束前無法移動。不攻擊時，面向來襲方向會自動以盾牌格擋。盾牌耐久歸零將破防並原地暈眩2秒。\n\n波波鼠不會還手，適合先熟悉攻擊。', [['開始試煉', () => this.close()]]);
+      this.world.camera = { x: this.journey.player.x, y: this.journey.player.y - 70 };
+      this.root.classList.toggle('player-downed', this.journey.downed);
+    if (this.journey.downed) this.clearInput();
+    this.world.render(this.journey, 0, { x: 0, y: 0 }, false);
+      let welcomed = this.journey.mouseProgress > 0 || this.journey.tutorialLoot;
+      try { welcomed ||= localStorage.getItem('forest_hills_welcomed_v1') === '1'; } catch {}
+      if (!welcomed) this.dialog('晨曦蒲公英丘陵', '星光棒凝聚魔法劍，向前劈下時才會命中。斬擊完整結束前無法移動或防禦。\n\n不攻擊時，面向來襲方向會自動格擋；盾牌耐久歸零將原地暈眩2秒。\n\n波波鼠不會還手，先試著靠近牠練習吧。', [['開始試煉', () => {
+        try { localStorage.setItem('forest_hills_welcomed_v1', '1'); } catch {}
+        this.close();
+      }]]);
+      else if (!this.portalArrival) this.close();
       this.last = performance.now(); this.frame = requestAnimationFrame((time) => this.tick(time));
+      return true;
     } catch (error) {
       console.error('Dandelion Hills load failed', error); this.loading?.remove(); this.loading = null;
       this.dialog('丘陵尚未成功載入', '請確認丘陵背景與五種怪物素材已完整安裝。', [['返回星芽營地', () => this.onTravel('camp')]]);
@@ -136,23 +154,41 @@ export class DandelionHillsApp {
     let axis = { x: 0, y: 0 }, moving = false;
     if (!this.paused) {
       axis = { x: this.axis.x + Number(this.keys.has('KeyD') || this.keys.has('ArrowRight')) - Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft')), y: this.axis.y + Number(this.keys.has('KeyS') || this.keys.has('ArrowDown')) - Number(this.keys.has('KeyW') || this.keys.has('ArrowUp')) };
+      if (this.world.overview && (Math.hypot(axis.x,axis.y)>.12 || this.attacking || this.keys.has('KeyJ') || this.keys.has('Space'))) {
+        this.world.overview=false;this.mapButton.textContent='鳥瞰';
+        this.world.camera={x:this.journey.player.x,y:this.journey.player.y-70};
+      }
       moving = this.journey.update(dt, axis, this.attacking || this.keys.has('KeyJ') || this.keys.has('Space'), this.dodgeRequested); this.dodgeRequested = false;
       this.flush(); if (this.journey.dirty || time - (this.lastSave || 0) > 5000) { this.save(); this.journey.dirty = false; this.lastSave = time; } this.hud();
       const camp = this.journey.nearby();
       const campPortal = camp?.kind === 'portal' && camp.id === 'camp';
       if (this.requireCampExit && !campPortal) this.requireCampExit = false;
-      if (!this.requireCampExit && !this.traveling && campPortal && axis.y > .12) {
+      if (!this.requireCampExit && !this.traveling && this.journey.attackWindow <= 0 && this.journey.stunned <= 0 && campPortal && axis.y > .12) {
         this.travelTo('camp');
         return;
       }
     }
+    if (this.footsteps.update(this.journey.player, !this.paused && moving)) safeCue(this.onSound, 'stepGrass');
+    this.root.classList.toggle('player-downed', this.journey.downed);
+    if (this.journey.downed) this.clearInput();
     this.world.render(this.journey, this.paused ? 0 : dt, axis, moving);
     if (this.toastUntil && time > this.toastUntil) this.toast.style.opacity = '0';
     this.frame = requestAnimationFrame((next) => this.tick(next));
   }
 
   flush() {
-    for (const effect of this.journey.effects.splice(0)) this.world.consumeEffect(effect);
+    for (const effect of this.journey.effects.splice(0)) {
+      if (effect.kind === 'playerDownReady') {
+        this.dialog('先趴一下，休息一下…', '阿晨晨累倒了，星芽微光會帶你回到門口。\n任務進度與背包物品都會保留。', [['✦ 回到門口', () => { if (this.journey.revive()) { this.requireCampExit = true; this.save(); this.close(); } }]]);
+        continue;
+      }
+      if (effect.kind === 'sound') { safeCue(this.onSound, effect.name); continue; }
+      if (effect.kind === 'hit') {
+        const type = effect.type || this.journey.mobs.find(m => m.id === effect.target)?.type;
+        safeCue(this.onSound, type === 'mouse' ? 'mouseHit' : type === 'mole' ? 'moleHit' : type === 'dew' ? 'dewHit' : 'creatureHit');
+      }
+      this.world.consumeEffect(effect);
+    }
     for (const message of this.journey.messages.splice(0)) {
       if (message.sound) {
         try { this.onSound(message.sound); }
@@ -164,7 +200,7 @@ export class DandelionHillsApp {
   }
 
   hud() {
-    const j = this.journey; this.objective.textContent = j.objective(); this.hearts.textContent = '♥'.repeat(j.hp) + '♡'.repeat(j.maxHp - j.hp);
+    const j = this.journey; this.objective.textContent = j.objective(); updateResourceIcons(this.resourceIcons, j.hp, j.mana);
     this.shield.textContent = j.stunned > 0 ? `💥 破防暈眩 ${j.stunned.toFixed(1)}秒` : `🛡 盾牌耐久 ${Math.ceil(j.shieldDurability)}/${j.shieldMax}${j.attackWindow > 0 ? ' · 攻擊中無法防禦' : ''}`;
     this.bag.textContent = `橡果 ${j.itemCount('香脆橡果')} · 星芽膠 ${j.itemCount('純淨星芽膠')} · 靈珠 ${Object.keys(j.inventory).filter((key) => key.includes('珠')).reduce((sum, key) => sum + j.itemCount(key), 0)}`;
     this.dodgeButton.textContent = `✧\n閃步${j.dodgeCooldown > 0 ? ' ' + Math.ceil(j.dodgeCooldown) : ''}`;
@@ -180,6 +216,7 @@ export class DandelionHillsApp {
 
   interact() {
     if (this.paused) return;
+    if (this.journey.attackWindow > 0) { this.notify('斬擊結束後就能互動。'); return; }
     if (this.journey.stunned > 0) { this.notify('破防暈眩中，暫時無法互動。'); return; }
     const result = this.journey.interact();
     if (result.travel) this.dialog(result.title, result.message, [['確認返回', () => this.travelTo(result.travel)], ['留下探索', () => this.close()]]);
@@ -254,10 +291,10 @@ export class DandelionHillsApp {
   }
 
   save() { try { localStorage.setItem(SAVE, JSON.stringify(this.journey.export())); this.inventoryState = mergeStarsproutItems(this.inventoryState, this.journey.inventory); this.inventoryState.unlockedBeadSlots = Math.max(this.inventoryState.unlockedBeadSlots, this.journey.questStage >= 2 ? 2 : 1); this.inventoryState = saveStarsproutInventory(this.inventoryState); } catch { this.notify('目前無法保存進度，請先不要關閉頁面。'); } }
-  travelTo(target) { if (this.traveling) return; this.traveling = true; this.paused = true; this.clearInput(); this.onTravel(target); }
+  travelTo(target) { if (this.journey.downed || this.traveling || this.journey.attackWindow > 0 || this.journey.stunned > 0) return; this.traveling = true; this.paused = true; this.clearInput(); this.save(); this.onTravel(target); }
   notify(text) { this.toast.textContent = text; this.toast.style.opacity = '1'; this.toastUntil = performance.now() + 3800; }
   dialog(title, text, choices) { this.paused = true; this.clearInput(); this.modal?.remove(); this.modal = this.el('div', 'modal'); const card = this.el('div', 'card', '', this.modal); this.el('h2', '', title, card); this.el('div', 'body', text, card); const buttons = this.el('div', 'choices', '', card); for (const choice of choices) this.button(choice[0], choice[1], buttons); return card; }
-  close() { if (this.root.clientHeight > this.root.clientWidth) return; this.modal?.remove(); this.modal = null; this.clearInput(); this.paused = false; this.last = performance.now(); }
+  close() { if (this.journey.downed) return; if (this.root.clientHeight > this.root.clientWidth) return; this.modal?.remove(); this.modal = null; this.clearInput(); this.paused = false; this.last = performance.now(); }
   pause() { if (this.dead || this.loading) return; if (this.modal) return; this.dialog('在蒲公英花田休息', this.journey.objective() + '\n目前進度已自動保存。', [['繼續', () => this.close()], ['返回星芽營地', () => this.travelTo('camp')], ['返回遊戲列表', () => this.onExit()]]); }
   backpack() {
     if (this.loading || this.collisionEditing || this.inventoryPanel) return;

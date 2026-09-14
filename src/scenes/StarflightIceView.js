@@ -34,4 +34,4 @@ export function drawIceWorld(scene,g){
  }
 }
 
-export function iceCaption(s){if(s.currentMap?.type!=='ice'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'霜糖滑行':t<26?'雪球與八音盒':t<40?'毛線束縛':'極光終航';return ICE_PLANS[icePlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(48,Math.floor(t))+' / 48 秒';}
+export function iceCaption(s){if(s.currentMap?.type!=='ice'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'霜糖滑行':t<26?'雪球與八音盒':t<40?'毛線束縛':'極光終航';return ICE_PLANS[icePlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(s.phaseInfo.end-s.phaseInfo.start,Math.floor(t))+' / '+(s.phaseInfo.end-s.phaseInfo.start)+' 秒';}

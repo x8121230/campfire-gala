@@ -28,4 +28,4 @@ export function drawWetlandWorld(scene,g){
  }
 }
 
-export function wetlandCaption(s){if(s.currentMap?.type!=='wetland'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'風鈴孢子':t<26?'露珠與琴音':t<40?'花粉茶會':'螢火出口';return WETLAND_PLANS[wetlandPlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(48,Math.floor(t))+' / 48 秒';}
+export function wetlandCaption(s){if(s.currentMap?.type!=='wetland'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'風鈴孢子':t<26?'露珠與琴音':t<40?'花粉茶會':'螢火出口';return WETLAND_PLANS[wetlandPlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(s.phaseInfo.end-s.phaseInfo.start,Math.floor(t))+' / '+(s.phaseInfo.end-s.phaseInfo.start)+' 秒';}

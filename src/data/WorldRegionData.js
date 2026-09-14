@@ -1,16 +1,27 @@
 export const DEVELOPMENT_UNLOCK_ALL = true;
 
 export const WORLD_REGIONS = [
-    { id: 'forest', name: '森林', icon: '🌲', mechanic: '教學・探索・收集', x: 620, y: 325, haloWidth: 270, haloHeight: 190, unlockStars: 0 },
-    { id: 'fairy', name: '妖精村落', icon: '🧚', mechanic: '委託・商店・培育', x: 875, y: 270, haloWidth: 205, haloHeight: 145, unlockStars: 12 },
-    { id: 'ice', name: '冰原', icon: '❄️', mechanic: '滑行・風向・落冰', x: 520, y: 135, haloWidth: 285, haloHeight: 150, unlockStars: 24 },
-    { id: 'volcano', name: '暖焰火山谷', icon: '🌋', mechanic: '溫度・節奏・鍛造', x: 1070, y: 365, haloWidth: 255, haloHeight: 195, unlockStars: 30 },
-    { id: 'realm', name: '幻界・星芽谷', icon: '🌀', mechanic: '點擊星核漩渦・進入微光星芽谷', x: 1160, y: 145, haloWidth: 190, haloHeight: 178, unlockStars: 0, alwaysUnlocked: true, navigation: 'portal', targetScene: 'RealmWorldGame' },
-    { id: 'water', name: '水世界', icon: '🌊', mechanic: '水流・泡泡・通道', x: 690, y: 480, haloWidth: 300, haloHeight: 155, unlockStars: 3, guideBackground: 'water_region_overview_v1' },
-    { id: 'starlight', name: '星光湖畔', icon: '✨', mechanic: '霧氣・聲音・隱路', x: 675, y: 590, haloWidth: 225, haloHeight: 145, unlockStars: 18 },
-    { id: 'dinosaur', name: '恐龍山谷', icon: '🦕', mechanic: '化石・追蹤・巨獸', x: 260, y: 315, haloWidth: 270, haloHeight: 185, unlockStars: 21 },
-    { id: 'chess', name: '棋藝王國', icon: '♟️', mechanic: '格子・順序・策略', x: 170, y: 555, haloWidth: 190, haloHeight: 140, unlockStars: 42 },
-    { id: 'cloud', name: '雲端島嶼', icon: '☁️', mechanic: '飛行・氣流・平台', x: 870, y: 105, haloWidth: 180, haloHeight: 125, unlockStars: 48 }
+    { id: 'forest', name: '森林', icon: '🌲', mechanic: '教學・探索・收集', x: 620, y: 325, haloWidth: 270, haloHeight: 190, unlockStars: 0,
+        hitPolygon: [[-230,-95],[-70,-120],[125,-105],[220,-40],[180,95],[-10,125],[-180,75],[-245,-15]] },
+    { id: 'fairy', name: '妖精村落', icon: '🧚', mechanic: '委託・商店・培育', x: 875, y: 270, haloWidth: 205, haloHeight: 145, unlockStars: 12,
+        hitPolygon: [[-135,-85],[30,-100],[145,-45],[95,70],[-55,90],[-140,15]] },
+    { id: 'ice', name: '冰原', icon: '❄️', mechanic: '滑行・風向・落冰', x: 520, y: 135, haloWidth: 285, haloHeight: 150, unlockStars: 24,
+        hitPolygon: [[-205,-65],[160,-65],[260,10],[195,90],[40,105],[-115,75],[-205,15]] },
+    { id: 'volcano', name: '暖焰火山谷', icon: '🌋', mechanic: '溫度・節奏・鍛造', x: 1070, y: 365, haloWidth: 255, haloHeight: 195, unlockStars: 30,
+        hitPolygon: [[-140,-130],[80,-135],[175,-35],[140,135],[-20,150],[-150,55]] },
+    { id: 'realm', name: '幻界・星芽谷', icon: '🌀', mechanic: '點擊星核漩渦・進入微光星芽谷', x: 1160, y: 145, haloWidth: 190, haloHeight: 178, unlockStars: 0,
+        alwaysUnlocked: true, navigation: 'portal', targetScene: 'RealmWorldGame',
+        hitPolygon: [[-110,-90],[85,-100],[115,25],[55,90],[-100,70],[-145,-15]] },
+    { id: 'water', name: '水世界', icon: '🌊', mechanic: '水流・泡泡・通道', x: 690, y: 480, haloWidth: 300, haloHeight: 155, unlockStars: 3,
+        guideBackground: 'water_region_overview_v1', hitPolygon: [[-270,-100],[-130,-130],[70,-115],[240,-60],[205,45],[0,75],[-190,40]] },
+    { id: 'starlight', name: '星光湖畔', icon: '✨', mechanic: '霧氣・聲音・隱路', x: 675, y: 590, haloWidth: 225, haloHeight: 145, unlockStars: 18,
+        hitPolygon: [[-195,-90],[-55,-135],[140,-105],[190,40],[70,100],[-135,75],[-225,0]] },
+    { id: 'dinosaur', name: '恐龍山谷', icon: '🦕', mechanic: '化石・追蹤・巨獸', x: 260, y: 315, haloWidth: 270, haloHeight: 185, unlockStars: 21,
+        hitPolygon: [[-190,-160],[60,-180],[215,-85],[160,105],[5,165],[-180,80]] },
+    { id: 'chess', name: '棋藝王國', icon: '♟️', mechanic: '格子・順序・策略', x: 170, y: 555, haloWidth: 190, haloHeight: 140, unlockStars: 42,
+        hitPolygon: [[-130,-145],[100,-155],[185,0],[120,135],[-105,130]] },
+    { id: 'cloud', name: '雲端島嶼', icon: '☁️', mechanic: '飛行・氣流・平台', x: 870, y: 105, haloWidth: 180, haloHeight: 125, unlockStars: 48,
+        hitPolygon: [[-150,-55],[130,-60],[170,40],[80,100],[-85,85],[-170,15]] }
 ];
 
 export const REGION_SUBMAPS = {

@@ -10,10 +10,12 @@ export default class ForestChestRoom extends AnimalSnackGame {
  constructor(key='ForestChestRoom'){super(key);}
  init(data={}){this.roomReturn=data.returnScene||'MiniGameHub';this.roomReturnData=data.returnData||{};}
  preload(){if(!this.textures.exists('forest_chests'))this.load.spritesheet('forest_chests','assets/forest-chests/chests.png',{frameWidth:512,frameHeight:512});for(const [key,file]of Object.entries(PAPER_DOLL_FILES))if(!this.textures.exists(key))this.load.image(key,file);}
- create(){this.sound.stopAll();this.soundOn=true;this.audioNodes=new Set();this.page=0;this.tab='boxes';this.busy=false;this.modal=null;this.events.once('shutdown',()=>this.stopTones());
-  try{syncChestInventory(this.registry);SaveSystem.saveFromRegistry(this.registry);this.draw();}catch(e){this.error(e.message);}
+ create(){
+  // 寶箱架已取消；保留舊 Scene key 只為相容舊按鈕與瀏覽器快取。
+  // 任何舊入口都安全轉回冒險手冊，不會刪除既有 BOX 紀錄。
+  this.scene.start('EquipmentJournal',{returnScene:this.roomReturn,returnData:this.roomReturnData});
  }
- button(x,y,w,h,label,fn,fill=0x537b5b){const b=super.button(x,y,w,h,label,()=>{if(!this.modal&&!this.busy)fn();},fill);b.label.setFontSize(28);return b;}
+ button(x,y,w,h,label,fn,fill=0x537b5b,color='#fffbed'){const b=super.button(x,y,w,h,label,()=>{if(!this.modal&&!this.busy)fn();},fill,color);b.label.setFontSize(28);return b;}
  chest(x,y,frame,size){if(this.textures.exists('forest_chests'))return this.add.image(x,y,'forest_chests',frame).setDisplaySize(size,size);return this.text(x,y,'寶箱',38);}
  item(x,y,id,size){const i=ITEM_DB[id],key=i?.icon||i?.texture;if(key&&this.textures.exists(key)){const a=this.add.image(x,y,key);a.setScale(size/Math.max(a.width,a.height));return a;}return this.text(x,y,i?.name||'裝備',30).setWordWrapWidth(size,true);}
  draw(){

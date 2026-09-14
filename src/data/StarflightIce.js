@@ -55,16 +55,16 @@ export function iceDefeat(s,e){
  if(e.kind<24||e.kind>27)return;
  if(e.kind===24)for(let i=0;i<3;i++)s.addPickup('gem',e.x+i*13,e.y+(i-1)*12);
  if(e.kind===25){s.stats.iceElites=(s.stats.iceElites||0)+1;s.addPickup('gem',e.x,e.y-18);s.addPickup('gem',e.x,e.y+18);}
- if(e.kind===26){s.score+=550;s.stats.iceElites=(s.stats.iceElites||0)+1;s.addPickup('heart',e.x,e.y);s.addPickup('weapon',e.x+46,e.y);s.message('雪豹收起毛線玩具！接住愛心與強化星星');s.emit('elite',e.x,e.y);}
+ if(e.kind===26){s.score+=4;s.stats.iceElites=(s.stats.iceElites||0)+1;s.addPickup('weapon',e.x+46,e.y);s.message('雪豹收起毛線玩具！接住變色星芽鈴');s.emit('elite',e.x,e.y);}
 }
 export function iceHazard(s,h,dt){
  if(!h.kind.startsWith('ice'))return;const p=s.player,active=h.age>=h.warn;
- if(h.kind==='iceGust'){h.x-=64*dt;if(active&&Math.abs(p.x-h.x)<h.r+s.hitRadius&&Math.abs(p.y-h.y)<155)s.iceDrift+=h.dir*65;}
+ if(h.kind==='iceGust'){h.x-=64*dt;if(active&&Math.abs(p.x-h.x)<h.r+s.hurtbox.rx&&Math.abs(p.y-h.y)<155)s.iceDrift+=h.dir*65;}
  if(h.kind==='iceYarn'){
-  h.x+=(h.vx||-105)*dt;const ropeEnd=h.x+(h.ropeLength||245),cross=p.x>=h.x-20&&p.x<=ropeEnd+20&&Math.abs(p.y-h.y)<11+s.hitRadius;
+  h.x+=(h.vx||-105)*dt;const ropeEnd=h.x+(h.ropeLength||245),cross=p.x>=h.x-s.hurtbox.rx&&p.x<=ropeEnd+s.hurtbox.rx&&Math.abs(p.y-h.y)<11+s.hitRadius;
   if(active&&cross&&!h.hit){h.hit=true;s.hit();s.environmentSlow=Math.min(s.environmentSlow,.55);s.emit('iceTangle',p.x,p.y);}
  }
- if(h.kind==='iceShard'&&active){h.vy=Math.min(390,(h.vy||0)+610*dt);h.x+=(h.drift||0)*dt;h.y+=h.vy*dt;if(!h.hit&&Math.hypot(p.x-h.x,p.y-h.y)<h.r+s.hitRadius+5){h.hit=true;s.hit();}if(h.y>455&&!h.shattered){h.shattered=true;h.life=.14;s.emit('iceBreak',h.x,445);for(const off of [-.3,.3])iceBullet(s,h.x,440,Math.PI+off,88);}}
+ if(h.kind==='iceShard'&&active){h.vy=Math.min(390,(h.vy||0)+610*dt);h.x+=(h.drift||0)*dt;h.y+=h.vy*dt;if(!h.hit&&s.bodyCircle(h.x,h.y,h.r+5)){h.hit=true;s.hit();}if(h.y>455&&!h.shattered){h.shattered=true;h.life=.14;s.emit('iceBreak',h.x,445);for(const off of [-.3,.3])iceBullet(s,h.x,440,Math.PI+off,88);}}
 }
 export function iceEnemy(s,e,dt){
  if(e.kind<24||e.kind>27)return false;const speed=s.tuning.enemySpeedScale,p=s.player;e.fireCD-=dt;e.shieldFlash=Math.max(0,(e.shieldFlash||0)-dt);
@@ -78,5 +78,5 @@ export function iceEnemy(s,e,dt){
  }else{
   e.x-=e.speed*speed*dt;e.y=clamp(e.baseY+Math.sin(e.age*3.1+e.id)*(e.curve||45),38,442);e.rotation=(e.rotation||0)+dt*8;
  }
- if(e.x<-110)e.exit=true;if(Math.hypot(e.x-p.x,e.y-p.y)<e.r+s.hitRadius)s.hit();return true;
+ if(e.x<-110)e.exit=true;if(s.bodyCircle(e.x,e.y,e.r))s.hit();return true;
 }

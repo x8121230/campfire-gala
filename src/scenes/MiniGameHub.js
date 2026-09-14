@@ -42,7 +42,7 @@ export default class MiniGameHub extends Phaser.Scene {
 
         if (this.returnedTestSession) {
             const game = MINI_GAME_CATALOG.find((item) => item.id === this.returnedTestSession.gameId);
-            this.showToast(`已從「${game?.title || '小遊戲'}」返回；獲得的寶箱可到右上寶箱架查看。`, 0x3d7958);
+            this.showToast(`已從「${game?.title || '小遊戲'}」安全返回。`, 0x3d7958);
         }
     }
 
@@ -111,15 +111,6 @@ export default class MiniGameHub extends Phaser.Scene {
             color: '#dff5df'
         }).setOrigin(0.5);
 
-        const safeBadge = this.add.rectangle(1115, 49, 250, 88, 0x315d4b, 0.98)
-            .setStrokeStyle(3, 0xa9d7ad, 0.9);
-        safeBadge.setInteractive({useHandCursor:true}).on('pointerdown',()=>this.scene.start('ForestChestRoom'));
-        this.add.text(safeBadge.x, safeBadge.y, '寶箱架・裝備收藏', {
-            fontFamily: FONT,
-            fontSize: '24px',
-            fontStyle: 'bold',
-            color: '#e9ffe8'
-        }).setOrigin(0.5);
     }
 
     createTabs() {

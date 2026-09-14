@@ -73,5 +73,5 @@ export function drawCandyWorld(scene,g){
 export function carnivalCaption(s){
  if(s.currentMap?.type!=='sky'||s.inTransit)return '';
  const t=s.phaseInfo.elapsed,phase=t<9?'暖身巡遊':t<27?'機關挑戰':t<40?'菁英與獎勵':'終點加速';
- return CARNIVAL_PLANS[carnivalPlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(48,Math.floor(t))+' / 48 秒';
+ return CARNIVAL_PLANS[carnivalPlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(s.phaseInfo.end-s.phaseInfo.start,Math.floor(t))+' / '+(s.phaseInfo.end-s.phaseInfo.start)+' 秒';
 }

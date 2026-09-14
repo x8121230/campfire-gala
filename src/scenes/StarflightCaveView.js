@@ -34,4 +34,4 @@ export function drawCaveWorld(scene,g){
  }
 }
 
-export function caveCaption(s){if(s.currentMap?.type!=='cave'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'提燈偵察':t<26?'書頁與石筍':t<40?'護盾共鳴':'星晶窄道';return CAVE_PLANS[cavePlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(48,Math.floor(t))+' / 48 秒';}
+export function caveCaption(s){if(s.currentMap?.type!=='cave'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'提燈偵察':t<26?'書頁與石筍':t<40?'護盾共鳴':'星晶窄道';return CAVE_PLANS[cavePlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(s.phaseInfo.end-s.phaseInfo.start,Math.floor(t))+' / '+(s.phaseInfo.end-s.phaseInfo.start)+' 秒';}

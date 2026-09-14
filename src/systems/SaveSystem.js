@@ -26,6 +26,7 @@ export default class SaveSystem {
                 tutorial_flags: this.safeObjectValue(parsed?.tutorial_flags, {}),
                 world_progress: this.safeObjectValue(parsed?.world_progress, DEFAULT_SAVE_DATA.world_progress || {}),
                 placed_decorations: Array.isArray(parsed?.placed_decorations) ? parsed.placed_decorations : [...DEFAULT_SAVE_DATA.placed_decorations],
+                wardrobe_history_v1: Array.isArray(parsed?.wardrobe_history_v1) ? parsed.wardrobe_history_v1 : [],
 
                 minigame_stats: this.mergeMiniGameStats(parsed?.minigame_stats),
                 bonus_play_counts: parsed?.bonus_play_counts ?? { ...DEFAULT_SAVE_DATA.bonus_play_counts },
@@ -57,6 +58,7 @@ export default class SaveSystem {
             tutorial_flags: { ...(DEFAULT_SAVE_DATA.tutorial_flags || {}) },
             world_progress: JSON.parse(JSON.stringify(DEFAULT_SAVE_DATA.world_progress || {})),
             placed_decorations: Array.isArray(DEFAULT_SAVE_DATA.placed_decorations) ? [...DEFAULT_SAVE_DATA.placed_decorations] : [],
+            wardrobe_history_v1: Array.isArray(DEFAULT_SAVE_DATA.wardrobe_history_v1) ? [...DEFAULT_SAVE_DATA.wardrobe_history_v1] : [],
             minigame_stats: this.mergeMiniGameStats(DEFAULT_SAVE_DATA.minigame_stats),
             bonus_play_counts: { ...(DEFAULT_SAVE_DATA.bonus_play_counts || {}) },
             bonus_reward_rates: { ...(DEFAULT_SAVE_DATA.bonus_reward_rates || {}) },
@@ -131,6 +133,7 @@ export default class SaveSystem {
             tutorial_flags: this.safeObjectValue(registry.get('tutorial_flags'), oldData.tutorial_flags || {}),
             world_progress: this.safeObjectValue(registry.get('world_progress'), oldData.world_progress || {}),
             placed_decorations: this.safeArrayValue(registry.get('placed_decorations'), oldData.placed_decorations),
+            wardrobe_history_v1: this.safeArrayValue(registry.get('wardrobe_history_v1'), oldData.wardrobe_history_v1 || []),
 
             equipped_hat: this.safeValue(registry.get('equipped_hat'), oldData.equipped_hat ?? 'none'),
             equipped_cloth: this.safeValue(registry.get('equipped_cloth'), oldData.equipped_cloth ?? 'none'),
@@ -174,6 +177,7 @@ export default class SaveSystem {
         registry.set('tutorial_flags', data.tutorial_flags ?? {});
         registry.set('world_progress', this.safeObjectValue(data.world_progress, DEFAULT_SAVE_DATA.world_progress || {}));
         registry.set('placed_decorations', Array.isArray(data.placed_decorations) ? data.placed_decorations : []);
+        registry.set('wardrobe_history_v1', Array.isArray(data.wardrobe_history_v1) ? data.wardrobe_history_v1 : []);
 
         registry.set('equipped_hat', data.equipped_hat ?? 'none');
         registry.set('equipped_cloth', data.equipped_cloth ?? 'none');

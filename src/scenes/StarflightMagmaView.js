@@ -28,4 +28,4 @@ export function drawMagmaWorld(scene,g){
  }
 }
 
-export function magmaCaption(s){if(s.currentMap?.type!=='magma'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'爆米花航隊':t<26?'焦糖噴泉':t<40?'風箱火舌':'夕陽出口';return MAGMA_PLANS[magmaPlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(48,Math.floor(t))+' / 48 秒';}
+export function magmaCaption(s){if(s.currentMap?.type!=='magma'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'爆米花航隊':t<26?'焦糖噴泉':t<40?'風箱火舌':'夕陽出口';return MAGMA_PLANS[magmaPlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(s.phaseInfo.end-s.phaseInfo.start,Math.floor(t))+' / '+(s.phaseInfo.end-s.phaseInfo.start)+' 秒';}

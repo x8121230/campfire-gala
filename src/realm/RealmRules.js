@@ -14,7 +14,9 @@ export const SPOTS = Object.freeze({
   phoebe: at({ x: 1275, y: 445, name: '奇物少女・菲比', kind: 'npc' }),
   noticeboard: at({ x: 1080, y: 355, name: '營地小布告欄', kind: 'object' }),
   fountain: at({ x: 835, y: 520, name: '晨露噴水池', kind: 'object', radius: 215 }),
-  northGate: at({ x: 988, y: 112, name: '晨曦蒲公英丘陵入口', kind: 'exit', radius: 260 })
+  // Calibrated to the painted flower arch rather than the old oversized
+  // trigger that floated left/below it. Source image point: (1017, 100).
+  northGate: at({ x: 1017, y: 100, name: '晨曦蒲公英丘陵傳送門', kind: 'exit', radius: 125 })
 });
 
 const OUTER = [
@@ -24,12 +26,21 @@ const OUTER = [
   [470, 748], [650, 775]
 ].map(([x, y]) => [x * WORLD_SCALE, y * WORLD_SCALE]);
 
+// The hand-painted eastern flagstone branch rises above OUTER's old straight
+// edge. Keep it as a dedicated walkable lobe so nearby trees/cliffs stay out.
+const EAST_ROAD = [
+  [1060, 420], [1060, 325], [1140, 265], [1260, 245], [1390, 285],
+  [1470, 370], [1430, 455], [1310, 475], [1180, 450]
+].map(([x, y]) => [x * WORLD_SCALE, y * WORLD_SCALE]);
+
 export const CAMP_BLOCKS = Object.freeze([
   { type: 'ellipse', x: 835, y: 520, rx: 92, ry: 58 },
   { type: 'ellipse', x: 375, y: 625, rx: 72, ry: 46 },
   { type: 'ellipse', x: 812, y: 286, rx: 142, ry: 92 },
   { type: 'rect', x1: 274, y1: 232, x2: 548, y2: 397 },
-  { type: 'rect', x1: 1180, y1: 245, x2: 1452, y2: 414 },
+  // Right workshop footprint. The old box started at x=1180/y=245 and
+  // incorrectly covered the visible flagstone road at world (2442, 641).
+  { type: 'rect', x1: 1260, y1: 300, x2: 1515, y2: 560 },
   { type: 'rect', x1: 1040, y1: 292, x2: 1116, y2: 355 }
 ].map((block) => Object.freeze(Object.fromEntries(
   Object.entries(block).map(([key, value]) => [key, key === 'type' ? value : value * WORLD_SCALE])
@@ -87,24 +98,40 @@ export function disableCampObstaclesAt(x, y, radius) {
   collisionPaint.disabled.sort((a, b) => a - b); return getCampCollisionPaint();
 }
 
-function blocked(x, y, radius) {
-  if (collisionPaint.pass.some((mark) => Math.hypot(mark.x - x, mark.y - y) < mark.r + radius)) return false;
-  if (collisionPaint.block.some((mark) => Math.hypot(mark.x - x, mark.y - y) < mark.r + radius)) return true;
-  return CAMP_BLOCKS.some((b, index) => {
-    if (collisionPaint.disabled.includes(index)) return false;
-    return obstacleContains(b, x, y, radius);
+export function collisionStrokePoints(from, to, maxSpacing) {
+  if (!to || !Number.isFinite(to.x) || !Number.isFinite(to.y)) return [];
+  if (!from || !Number.isFinite(from.x) || !Number.isFinite(from.y)) return [{ x: to.x, y: to.y }];
+  const distance = Math.hypot(to.x - from.x, to.y - from.y);
+  const spacing = Math.max(1, Number(maxSpacing) || 1);
+  const steps = Math.max(1, Math.ceil(distance / spacing));
+  return Array.from({ length: steps }, (_unused, index) => {
+    const t = (index + 1) / steps;
+    return { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t };
   });
 }
 
-export function isWalkable(x, y, radius = 16) {
+export function explainCampWalkability(x, y, radius = 16) {
   const main = inPolygon(x, y, OUTER);
-  // 北門的石板路刻意保留較寬的可行走廊道，避免布告欄與花台的
-  // 碰撞盒在視覺上仍有空隙時把玩家卡住。
+  const eastRoad = inPolygon(x, y, EAST_ROAD);
   const northPath = x > 850 * WORLD_SCALE - radius && x < 1160 * WORLD_SCALE + radius && y > 38 * WORLD_SCALE && y < 445 * WORLD_SCALE;
-  const northPassage = x > 865 * WORLD_SCALE - radius && x < 1145 * WORLD_SCALE + radius && y > 38 * WORLD_SCALE && y < 445 * WORLD_SCALE;
+  const northPassage = x > 880 * WORLD_SCALE && x < 1024 * WORLD_SCALE && y > 38 * WORLD_SCALE && y < 445 * WORLD_SCALE;
   const paintedPass = collisionPaint.pass.some((mark) => Math.hypot(mark.x - x, mark.y - y) < mark.r + radius);
-  const paintedBlock = !paintedPass && collisionPaint.block.some((mark) => Math.hypot(mark.x - x, mark.y - y) < mark.r + radius);
-  return (main || northPath) && (!blocked(x, y, radius) || northPassage) && !paintedBlock;
+  const paintedBlock = collisionPaint.block.some((mark) => Math.hypot(mark.x - x, mark.y - y) < mark.r + radius);
+  const obstacleIndex = CAMP_BLOCKS.findIndex((block, index) => !collisionPaint.disabled.includes(index) && obstacleContains(block, x, y, radius));
+
+  // The editor overrides are intentionally resolved once, in strict order.
+  // Red is the user's explicit wall; green is the user's explicit opening.
+  if (paintedBlock) return { walkable: false, reason: '紅色手動阻擋', layer: 'paint-block' };
+  if (paintedPass) return { walkable: true, reason: '綠色手動通行', layer: 'paint-pass' };
+  if (northPassage) return { walkable: true, reason: '北門中央通道', layer: 'north-passage' };
+  if (!main && !northPath && !eastRoad) return { walkable: false, reason: 'OUTER 地圖邊界', layer: 'outer' };
+  if (obstacleIndex >= 0) return { walkable: false, reason: `橙色固定障礙 #${obstacleIndex}`, layer: 'obstacle', obstacleIndex };
+  if (eastRoad && !main) return { walkable: true, reason: '東側石板道路補區', layer: 'east-road' };
+  return { walkable: true, reason: northPath ? '北門道路補區' : '一般可行走區', layer: northPath ? 'north-path' : 'main' };
+}
+
+export function isWalkable(x, y, radius = 16) {
+  return explainCampWalkability(x, y, radius).walkable;
 }
 
 export class RealmJourney {
@@ -170,7 +197,6 @@ export class RealmJourney {
     if (id === 'alden' && this.stage === 0) return '!';
     if (id === 'washPool' && this.stage === 1) return '!';
     if (id === 'bronc' && this.stage === 2) return '?';
-    if (id === 'northGate' && this.stage === 3) return '!';
     return '';
   }
 

@@ -1,5 +1,6 @@
 import AnimalSnackGame from './AnimalSnackGame.js';
 import { preferences } from '../systems/AdventurePreferences.js';
+import AudioSystem from '../systems/AudioSystem.js';
 
 export default class RealmWorldGame extends AnimalSnackGame {
     constructor() { super('RealmWorldGame'); }
@@ -11,6 +12,7 @@ export default class RealmWorldGame extends AnimalSnackGame {
     }
 
     create() {
+        AudioSystem.playRegionBgm(this, 'realm', 0.32);
         this.audioNodes = new Set();
         this.soundOn = true;
         this.realmDead = false;

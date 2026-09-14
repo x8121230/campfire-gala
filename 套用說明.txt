@@ -1,0 +1,33 @@
+冒險手冊 v1.5｜精緻寶箱美術修正（最小更新包）
+
+適用版本：已套用 v1.4「正式 10 款寶箱重製」的專案。
+
+套用方式：
+1. 先備份目前專案。
+2. 將本包內的 assets 與 src 資料夾貼到專案根目錄。
+3. 選擇合併資料夾並覆蓋同名檔案。
+
+本包只處理寶箱美術與顯示，不修改掉落池、裝備、玩家存檔、愛心、水晶或地圖進度。
+
+必要程式檔：
+- src/scenes/ChestArt.js
+- src/scenes/ChestRewardCelebration.js
+- src/scenes/InstantChestOpen.js
+
+新增精緻透明 PNG：
+- assets/chests_v15/chest_flower_nectar.png
+- assets/chests_v15/chest_ice_crystal.png
+- assets/chests_v15/chest_emberglow.png
+- assets/chests_v15/chest_pearl.png
+- assets/chests_v15/chest_moonlight.png
+- assets/chests_v15/chest_fossil.png
+- assets/chests_v15/chest_crown.png
+- assets/chests_v15/chest_cloud_crystal.png
+- assets/chests_v15/chest_global_wood.png
+
+說明：
+- 苔蘚寶箱恢復使用專案原本 assets/forest-chests/chests.png 的精緻第 1 格素材。
+- 其餘 9 款改用與原苔蘚寶箱一致的細緻童話繪本風格 PNG。
+- 完全撤除 v1.4 的扁平幾何寶箱。
+- 所有新圖片均為 1254×1254、真正透明背景。
+- 開箱到場動畫與開啟前搖晃畫面會顯示同一款正確寶箱。

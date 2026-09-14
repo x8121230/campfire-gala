@@ -22,4 +22,4 @@ export function drawForestWorld(scene,g){
   if(h.kind==='forestEcho'){const pulse=1+Math.sin(s.time*5+(h.phase||0))*.05;g.fillStyle(0xc55242,active?.16:.07).fillEllipse(h.x,h.y,145*pulse,68*pulse);g.lineStyle(3,0xffbd73,active?.45:.22).strokeEllipse(h.x,h.y,145*pulse,68*pulse);for(let i=0;i<3;i++){const a=i*Math.PI*2/3+s.time;g.fillStyle(0xe27e4f,.5).fillEllipse(h.x+Math.cos(a)*48,h.y+Math.sin(a)*22,13,7);}}
  }
 }
-export function forestCaption(s){if(s.currentMap?.type!=='forest'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'落葉傘兵':t<26?'木偶與滴答':t<40?'三尾幻葉':'晨光出口';return FOREST_PLANS[forestPlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(48,Math.floor(t))+' / 48 秒';}
+export function forestCaption(s){if(s.currentMap?.type!=='forest'||s.inTransit)return '';const t=s.phaseInfo.elapsed,phase=t<11?'落葉傘兵':t<26?'木偶與滴答':t<40?'三尾幻葉':'晨光出口';return FOREST_PLANS[forestPlan(s.currentMap,s.seed)]+'　·　'+phase+'　'+Math.min(s.phaseInfo.end-s.phaseInfo.start,Math.floor(t))+' / '+(s.phaseInfo.end-s.phaseInfo.start)+' 秒';}

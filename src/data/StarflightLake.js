@@ -63,7 +63,7 @@ export function lakeDefeat(s,e){
  if(e.kind<16||e.kind>19)return;
  if(e.kind===16)addHazard(s,'lakeSplash',e.x,e.y,{r:30});
  if(e.kind===18){s.addPickup('gem',e.x,e.y-18);s.addPickup('gem',e.x,e.y+18);}
- if(e.kind===19){s.score+=500;s.stats.lakeElites=(s.stats.lakeElites||0)+1;s.addPickup('heart',e.x,e.y);s.addPickup('weapon',e.x+46,e.y);s.message('瓷壺水精靈恢復清澈！接住愛心與強化星星');s.emit('elite',e.x,e.y);}
+ if(e.kind===19){s.score+=4;s.stats.lakeElites=(s.stats.lakeElites||0)+1;s.addPickup('weapon',e.x+46,e.y);s.message('瓷壺水精靈恢復清澈！接住變色星芽鈴');s.emit('elite',e.x,e.y);}
 }
 export function lakeHit(s,e){
  if(e.kind!==18||e.prismBroken||e.hp<=0)return;
@@ -74,7 +74,7 @@ export function lakeHazard(s,h,dt){
  const p=s.player,active=h.age>=h.warn;
  if(h.kind==='lakeCurrent'){
   h.x-=70*dt;
-  if(active&&Math.abs(p.x-h.x)<h.r+s.hitRadius&&Math.abs(p.y-h.y)<150)s.lakePull+=h.dir*58;
+  if(active&&Math.abs(p.x-h.x)<h.r+s.hurtbox.rx&&Math.abs(p.y-h.y)<150)s.lakePull+=h.dir*58;
  }
  if(h.kind==='lakeWhirlpool'){
   h.x-=42*dt;
@@ -83,7 +83,7 @@ export function lakeHazard(s,h,dt){
  if(h.kind==='lakeOrb'){
   h.x+=(h.vx||-68)*dt;h.y+=Math.sin(h.age*2.2+(h.phase||0))*15*dt;
   if(active&&h.life<.24&&!h.fired){h.fired=true;for(let i=0;i<8;i++)lakeBullet(s,h.x,h.y,i*Math.PI/4,88);s.emit('lakePrism',h.x,h.y);}
-  if(active&&Math.hypot(p.x-h.x,p.y-h.y)<h.r+s.hitRadius){h.life=0;s.hit();}
+  if(active&&s.bodyCircle(h.x,h.y,h.r)){h.life=0;s.hit();}
  }
  if(h.kind==='lakeSplash'&&active&&!h.fired){h.fired=true;for(const off of [-.48,-.24,0,.24,.48])lakeBullet(s,h.x,h.y,-Math.PI/2+off,105);s.emit('lakeSplash',h.x,h.y);h.life=.12;}
 }
@@ -104,6 +104,6 @@ export function lakeEnemy(s,e,dt){
   if(e.x<1180&&e.fireCD<=0){addHazard(s,'lakeWhirlpool',e.x-170,420,{r:112});for(const off of [-.22,.22])lakeBullet(s,e.x-28,e.y,Math.atan2(p.y-e.y,p.x-e.x)+off,125,5);e.fireCD=3.8;}
  }
  if(e.x<-110)e.exit=true;
- if(!(e.kind===17&&e.state==='hidden')&&Math.hypot(e.x-p.x,e.y-p.y)<e.r+s.hitRadius)s.hit();
+ if(!(e.kind===17&&e.state==='hidden')&&s.bodyCircle(e.x,e.y,e.r))s.hit();
  return true;
 }

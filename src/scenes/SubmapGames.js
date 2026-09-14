@@ -1,3 +1,4 @@
+import { createFernRunnerNode } from './FernRunnerMapLink.js';
 import SaveSystem from '../systems/SaveSystem.js';
 import StageManager from '../systems/StageManager.js';
 import CharacterManager from '../managers/CharacterManager.js';
@@ -5,6 +6,7 @@ import { getRegion, getSubmap } from '../data/WorldRegionData.js';
 import { getStageData } from '../data/StageData.js';
 import { PAPER_DOLL_LAYOUT } from '../data/PaperDollConfig.js';
 import { getSubmapDollLayout } from '../data/SubmapDollLayout.js';
+import AudioSystem from '../systems/AudioSystem.js';
 
 export default class SubmapGames extends Phaser.Scene {
     constructor() { super('SubmapGames'); }
@@ -20,6 +22,7 @@ export default class SubmapGames extends Phaser.Scene {
         StageManager.applyToRegistry(this.registry);
         const region = getRegion(this.regionId);
         const submap = getSubmap(this.regionId, this.submapId);
+        AudioSystem.playRegionBgm(this, this.regionId, 0.38);
         this.registry.set('submap_return_context', { regionId: this.regionId, submapId: this.submapId });
         const background = submap?.background && this.textures.exists(submap.background)
             ? submap.background : 'world_map_overview';
@@ -58,9 +61,25 @@ export default class SubmapGames extends Phaser.Scene {
         this.makeButton(95, 50, 150, 54, `← ${region.name}`, () => this.scene.start('RegionGuide', { regionId: this.regionId }), 0x286f88).setDepth(72);
 
         const layout = getSubmapDollLayout(this.submapId, PAPER_DOLL_LAYOUT.worldMap);
+        const footY = layout.footY ?? layout.centerY + layout.maxHeight * (1266 / 1290 - .5);
+        this.add.ellipse(layout.centerX, footY + 3, layout.maxWidth * .52, 18, 0x243b38, .18).setDepth(10);
+        this.add.ellipse(layout.centerX, footY + 2, layout.maxWidth * .34, 9, 0x243b38, .12).setDepth(11);
         this.character = new CharacterManager(this);
         this.character.createCharacter(layout.centerX, layout.centerY, layout);
         this.character.container.setDepth(12);
+
+        const dollHitArea = new Phaser.Geom.Rectangle(
+            -layout.maxWidth / 2, -layout.maxHeight / 2,
+            layout.maxWidth, layout.maxHeight
+        );
+        this.character.container
+            .setInteractive(dollHitArea, Phaser.Geom.Rectangle.Contains)
+            .on('pointerdown', () => this.scene.start('Collection', {
+                mapID: '01',
+                returnScene: 'SubmapGames',
+                regionId: this.regionId,
+                submapId: this.submapId
+            }));
 
         (submap.stageIds || []).forEach((stageId, index) => {
             const p = submap.stagePlacements?.[stageId] || { x: 260 + index * 380, y: 320 };
@@ -750,6 +769,7 @@ export default class SubmapGames extends Phaser.Scene {
     }
 
     createComingSoonBubble(x, y, index = 0) {
+        if (createFernRunnerNode(this, x, y, index)) return;
         const c = this.add.container(x, y).setDepth(18);
         const bubble = this.add.circle(0, 0, 43, 0xbbefff, 0.28).setStrokeStyle(3, 0xe7fbff, 0.75);
         const text = this.add.text(0, 0, '🌱\n待開放', {

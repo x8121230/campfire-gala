@@ -1,5 +1,6 @@
 // src/main.js
 import './patches/GrassTransitionPatch.js';
+import './patches/ChestIntegration.js';
 import BootScene from './scenes/BootScene.js';
 import PreloadScene from './scenes/PreloadScene.js';
 import Start from './scenes/Start.js';
@@ -18,7 +19,7 @@ import ForestGame from './scenes/ForestGame.js';
 import BushExplore from './scenes/BushMinesweeper.js';
 import ShapeColorGame from './scenes/ShapeColorGame.js';
 import BushBanqiMiniGame from './scenes/BushBanqiMiniGame.js';
-import MiniGameHub from './scenes/MiniGameHub.js?v=continuous093';
+import MiniGameHub from './scenes/MiniGameHub.js?v=handbook-box-direct101';
 import MemoryMatchGame from './scenes/MemoryMatchGame.js';
 import AnimalFoodMatch from './scenes/AnimalFoodMatch.js';
 import AnimalSnackGame from './scenes/AnimalSnackGame.js';
@@ -47,12 +48,17 @@ import WaterFlowMazeGame from './scenes/WaterFlowMazeGame.js';
 import JumpClimbGame from './scenes/JumpClimbGame.js';
 import StarlightFireflyGame from './scenes/StarlightFireflyGame.js';
 import FruitCountingGame from './scenes/FruitCountingGame.js';
-import ForestStarflightGame from './scenes/ForestStarflightGame.js?v=continuous093';
+import ForestStarflightGame from './scenes/ForestStarflightGame.js?v=star0122';
 import { LavaStepGame, CoolingWorkshopGame, LavaPipeGame, VolcanoEchoGame, LavaBridgeGame } from './scenes/VolcanoSeriesGames.js';
 import FireflyExplore from './scenes/FireflyExplore.js';
 import FireflyCatchGame from './scenes/FireflyCatchGame.js';
 import ConstellationGame from './scenes/ConstellationGame.js';
 import CampfireGame from './scenes/CampfireGame.js';
+import ForestChestRoom from './scenes/ForestChestRoom.js';
+import EquipmentJournal from './scenes/EquipmentJournal.js';
+import ChestRewardCelebration from './scenes/ChestRewardCelebration.js';
+import InstantChestOpen from './scenes/InstantChestOpen.js';
+import ChestTestTools from './scenes/ChestTestTools.js';
 import GMPanel from './scenes/GMPanel.js';
 
 const config = {
@@ -128,6 +134,11 @@ const config = {
         FireflyCatchGame,
         ConstellationGame,
         CampfireGame,
+        ForestChestRoom,
+        EquipmentJournal,
+        ChestRewardCelebration,
+        InstantChestOpen,
+        ChestTestTools,
         GMPanel
     ]
 };

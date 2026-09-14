@@ -71,9 +71,8 @@ export default class StarlightLake extends AnimalSnackGame {
   }
   this.add.rectangle(W/2,H-45,W,90,0x10283d,.98);
   const bw=this.portrait?212:270;
-  this.baseButton(W*.19,H-45,bw,this.portrait?82:72,'探索手帳',()=>this.journal());
-  this.baseButton(W*.5,H-45,bw,this.portrait?82:72,'我的寶箱',()=>this.travel('ForestChestRoom',{returnScene:'StarlightLake'}));
-  this.baseButton(W*.81,H-45,bw,this.portrait?82:72,'裝備與成就',()=>this.travel('EquipmentJournal',{returnScene:'StarlightLake'}));
+  this.baseButton(W*.3,H-45,bw,this.portrait?82:72,'探索手帳',()=>this.journal());
+  this.baseButton(W*.7,H-45,bw,this.portrait?82:72,'裝備與成就',()=>this.travel('EquipmentJournal',{returnScene:'StarlightLake'}));
   if(this.errorMessage)this.showError(this.errorMessage);
  }
  owl(x,y,size){if(!this.textures.exists('lake_owl'))return this.text(x,y,'星燈',32);const a=this.add.image(x,y,'lake_owl');return a.setScale(size/Math.max(a.width,a.height));}

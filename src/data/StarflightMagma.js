@@ -41,14 +41,14 @@ export function magmaDefeat(s,e){
  if(e.kind<32||e.kind>35)return;
  if(e.kind===32){addHazard(s,'magmaCaramel',e.x,e.y,{r:38});s.emit('magmaSplash',e.x,e.y);}
  if(e.kind===34){s.stats.magmaElites=(s.stats.magmaElites||0)+1;s.addPickup('gem',e.x,e.y-15);s.addPickup('gem',e.x,e.y+15);}
- if(e.kind===33){s.score+=650;s.stats.magmaElites=(s.stats.magmaElites||0)+1;s.addPickup('heart',e.x,e.y);s.addPickup('weapon',e.x+50,e.y);s.message('風箱火蜥蜴熄火休息！接住愛心與強化星星');s.emit('elite',e.x,e.y);}
+ if(e.kind===33){s.score+=4;s.stats.magmaElites=(s.stats.magmaElites||0)+1;s.addPickup('weapon',e.x+50,e.y);s.message('風箱火蜥蜴熄火休息！接住變色星芽鈴');s.emit('elite',e.x,e.y);}
 }
 export function magmaHazard(s,h,dt){
  if(!h.kind.startsWith('magma'))return;const p=s.player,active=h.age>=h.warn;
  if(h.kind==='magmaCaramel'){h.x-=38*dt;h.r=Math.min(64,h.r+dt*9);if(active&&Math.hypot((p.x-h.x)*.82,p.y-h.y)<h.r+s.hitRadius)s.environmentSlow=Math.min(s.environmentSlow,.62);}
- if(h.kind==='magmaGeyser'&&active){h.height=Math.min(390,(h.height||0)+dt*640);if(!h.hit&&Math.abs(p.x-h.x)<h.r+s.hitRadius&&p.y>445-h.height){h.hit=true;s.hit();s.emit('magmaScorch',p.x,p.y);}}
- if(h.kind==='magmaCoal'&&active){h.vy=Math.min(430,(h.vy||0)+670*dt);h.x+=(h.vx||-45)*dt;h.y+=h.vy*dt;if(!h.hit&&Math.hypot(p.x-h.x,p.y-h.y)<h.r+s.hitRadius+5){h.hit=true;s.hit();}if(h.y>438&&!h.burst){h.burst=true;h.life=.18;s.emit('magmaCoalBurst',h.x,438);for(let i=-1;i<=1;i++)magmaBullet(s,h.x,435,Math.PI+i*.42,88,4);}}
- if(h.kind==='magmaFlame'&&active&&!h.hit&&p.x<h.x&&Math.abs(p.y-h.y)<h.r+s.hitRadius){h.hit=true;s.hit();s.emit('magmaScorch',p.x,p.y);}
+ if(h.kind==='magmaGeyser'&&active){h.height=Math.min(390,(h.height||0)+dt*640);if(!h.hit&&Math.abs(p.x-h.x)<h.r+s.hurtbox.rx&&p.y+s.hurtbox.ry>445-h.height){h.hit=true;s.hit();s.emit('magmaScorch',p.x,p.y);}}
+ if(h.kind==='magmaCoal'&&active){h.vy=Math.min(430,(h.vy||0)+670*dt);h.x+=(h.vx||-45)*dt;h.y+=h.vy*dt;if(!h.hit&&s.bodyCircle(h.x,h.y,h.r+5)){h.hit=true;s.hit();}if(h.y>438&&!h.burst){h.burst=true;h.life=.18;s.emit('magmaCoalBurst',h.x,438);for(let i=-1;i<=1;i++)magmaBullet(s,h.x,435,Math.PI+i*.42,88,4);}}
+ if(h.kind==='magmaFlame'&&active&&!h.hit&&p.x-s.hurtbox.rx<h.x&&Math.abs(p.y-h.y)<h.r+s.hitRadius){h.hit=true;s.hit();s.emit('magmaScorch',p.x,p.y);}
 }
 export function magmaEnemy(s,e,dt){
  if(e.kind<32||e.kind>35)return false;const speed=s.tuning.enemySpeedScale,p=s.player;e.fireCD-=dt;e.armorFlash=Math.max(0,(e.armorFlash||0)-dt);
@@ -56,5 +56,5 @@ export function magmaEnemy(s,e,dt){
  else if(e.kind===33){e.armor??=42;e.x=Math.max(1030,e.x-e.speed*speed*dt);e.y=clamp(e.baseY+Math.sin(e.age*1.1)*35,90,385);if(e.x<1185&&e.fireCD<=0){e.inhale=.8;e.fireCD=3.8;s.emit('magmaInhale',e.x,e.y);}if(e.inhale>0){e.inhale-=dt;p.x=clamp(p.x+42*dt,30,1225);if(e.inhale<=0)addHazard(s,'magmaFlame',e.x-45,e.y,{r:28});}}
  else if(e.kind===34){e.x=Math.max(1015,e.x-e.speed*speed*dt);e.y=clamp(e.baseY+Math.sin(e.age*1.35)*40,55,215);if(e.x<1190&&e.fireCD<=0){addHazard(s,'magmaCoal',clamp(p.x+180,520,980),-20,{r:21,warn:.9,vx:-25,vy:0});e.fireCD=2.25;s.emit('magmaDrop',e.x,e.y);}}
  else{e.x-=e.speed*speed*dt;e.y=clamp(e.baseY+Math.sin(e.age*3.4+e.id)*45,45,435);e.heat=(e.heat||0)-dt;if(e.heat<=0&&!e.popped){e.popped=true;e.exit=true;for(const off of [-.48,0,.48])magmaBullet(s,e.x,e.y,Math.PI+off,96,4);s.emit('magmaPopcorn',e.x,e.y);}}
- if(e.x<-120)e.exit=true;if(Math.hypot(e.x-p.x,e.y-p.y)<e.r+s.hitRadius)s.hit();return true;
+ if(e.x<-120)e.exit=true;if(s.bodyCircle(e.x,e.y,e.r))s.hit();return true;
 }

@@ -53,7 +53,7 @@ export function transitHazard(s,h,dt){
  h.x-=210*dt;
  const active=h.age>=h.warn,nearX=Math.abs(s.player.x-h.x)<h.r+165,nearY=Math.abs(s.player.y-h.y)<108;
  if(active&&nearX&&nearY){s.transitDrift+=h.dir*105;s.environmentSlow=Math.min(s.environmentSlow,.88);}
- if(active&&!h.hit&&nearX&&nearY&&Math.abs(s.player.y-h.y)<28){h.hit=true;s.stats.transitRides=(s.stats.transitRides||0)+1;s.score+=180;s.gainEnergy(5);s.emit('transitRide',s.player.x,s.player.y,{dir:h.dir});s.message('乘上星風中心！獲得 180 分與大招能量');}
+ if(active&&!h.hit&&nearX&&nearY&&Math.abs(s.player.y-h.y)<28){h.hit=true;s.stats.transitRides=(s.stats.transitRides||0)+1;s.score+=3;s.gainEnergy(5);s.emit('transitRide',s.player.x,s.player.y,{dir:h.dir});s.message('乘上星風中心！獲得 3 分與大招能量');}
  return true;
 }
 
@@ -61,16 +61,17 @@ export function transitEnemy(s,e,dt){
  if(e.kind!==TRANSIT_ENEMY_KIND)return false;
  const speed=s.tuning.enemySpeedScale;e.escape+=dt;e.x-=e.speed*speed*dt;e.y=clamp(e.baseY+Math.sin(e.age*4.2)*72,55,425);
  if(e.escape>5.4)e.exit=true;
- if(Math.hypot(e.x-s.player.x,e.y-s.player.y)<e.r+s.hitRadius)s.hit();
+ if(s.bodyCircle(e.x,e.y,e.r))s.hit();
  return true;
 }
 
 export function transitDefeat(s,e){
  if(e.kind!==TRANSIT_ENEMY_KIND||e.transitRewarded)return false;e.transitRewarded=true;
- s.score+=800;s.stats.transitCouriers=(s.stats.transitCouriers||0)+1;
- s.addPickup('heart',e.x,e.y);s.addPickup('weapon',e.x+48,e.y);
+ s.score+=4;s.stats.transitCouriers=(s.stats.transitCouriers||0)+1;
+ const bellCount=2+Math.floor(s.random()*2);
+ for(let i=0;i<bellCount;i++)s.addPickup('weapon',clamp(e.x+28+i*34,40,1170),clamp(e.y+(i-(bellCount-1)/2)*58,35,445));
  for(let i=0;i<5;i++)s.addPickup('gem',e.x-28+i*14,e.y-26+Math.abs(i-2)*10);
- s.message('星願寶箱打開！掉出回復愛心、強化星星與星砂');s.emit('transitPrize',e.x,e.y);
+ s.message('星願寶箱打開！掉出星芽鈴與星砂');s.emit('transitPrize',e.x,e.y);
  return true;
 }
 
