@@ -1,13 +1,13 @@
-import {stepIceYarn} from './StarflightIce.js?v=star0126';
-import {getStarCraft} from './StarflightCrafts.js?v=star0126';
-import {CARNIVAL_ENEMIES,carnivalTimeline,carnivalEvent,carnivalEnemy,carnivalHazard,carnivalDefeat,carnivalHit} from './StarflightCarnival.js?v=star0126';
-import {LAKE_ENEMIES,lakeTimeline,lakeEvent,lakeEnemy,lakeHazard,lakeDefeat,lakeHit} from './StarflightLake.js?v=star0126';
-import {CAVE_ENEMIES,caveTimeline,caveEvent,caveEnemy,caveHazard,caveDefeat,caveHit,stepCaveWorld} from './StarflightCave.js?v=star0126';
-import {ICE_ENEMIES,iceTimeline,iceEvent,iceEnemy,iceHazard,iceDefeat,iceHit} from './StarflightIce.js?v=star0126';
-import {WETLAND_ENEMIES,wetlandTimeline,wetlandEvent,wetlandEnemy,wetlandHazard,wetlandDefeat,wetlandHit} from './StarflightWetland.js?v=star0126';
-import {MAGMA_ENEMIES,magmaTimeline,magmaEvent,magmaEnemy,magmaHazard,magmaDefeat,magmaHit,spawnMagmaMeteor,stepMagmaBomb} from './StarflightMagma.js?v=star0126';
-import {FOREST_ENEMIES,forestTimeline,forestEvent,forestEnemy,forestHazard,forestDefeat,forestHit} from './StarflightForest.js?v=star0126';
-import {TRANSIT_ENEMIES,transitTimeline,transitEvent,transitEnemy,transitHazard,transitDefeat} from './StarflightTransit.js?v=star0126';
+import {stepIceYarn} from './StarflightIce.js?v=star0130';
+import {getStarCraft} from './StarflightCrafts.js?v=star0201';
+import {CARNIVAL_ENEMIES,carnivalTimeline,carnivalEvent,carnivalEnemy,carnivalHazard,carnivalDefeat,carnivalHit} from './StarflightCarnival.js?v=star0130';
+import {LAKE_ENEMIES,lakeTimeline,lakeEvent,lakeEnemy,lakeHazard,lakeDefeat,lakeHit} from './StarflightLake.js?v=star0130';
+import {CAVE_ENEMIES,caveTimeline,caveEvent,caveEnemy,caveHazard,caveDefeat,caveHit,stepCaveWorld} from './StarflightCave.js?v=star0130';
+import {ICE_ENEMIES,iceTimeline,iceEvent,iceEnemy,iceHazard,iceDefeat,iceHit} from './StarflightIce.js?v=star0130';
+import {WETLAND_ENEMIES,wetlandTimeline,wetlandEvent,wetlandEnemy,wetlandHazard,wetlandDefeat,wetlandHit} from './StarflightWetland.js?v=star0130';
+import {MAGMA_ENEMIES,magmaTimeline,magmaEvent,magmaEnemy,magmaHazard,magmaDefeat,magmaHit,spawnMagmaMeteor,stepMagmaBomb} from './StarflightMagma.js?v=star0130';
+import {FOREST_ENEMIES,forestTimeline,forestEvent,forestEnemy,forestHazard,forestDefeat,forestHit} from './StarflightForest.js?v=star0130';
+import {TRANSIT_ENEMIES,transitTimeline,transitEvent,transitEnemy,transitHazard,transitDefeat} from './StarflightTransit.js?v=star0130';
 // Horizontal flight simulation. World units match the 1280 × 480 playfield.
 export const STAR_REGION_SECONDS=48;
 export const starRegionDuration=index=>index===0?60:48;
@@ -27,7 +27,7 @@ export const STAR_SPECIALS=[
  {id:'explosive',name:'炸裂彈',short:'炸裂',cd:4,charge:0,color:0xffc87b,tip:'直射種子彈，命中後爆開、安撫附近敵人'},
  {id:'shotgun',name:'幸運草散彈',short:'散彈',cd:3,charge:0,color:0x83ed99,tip:'七向扇形散射，適合靠近大型敵人使用'}
 ];
-export const STAR_PHASE1={version:'0.10.26',craftId:'swift-vanguard',craftName:'巡天雨燕',normalShotCooldown:.5,chargeSeconds:2,playerSpeed:245,visualScale:1.05,launchSeconds:3,guardianSeconds:3};
+export const STAR_PHASE1={version:'0.11.0',craftId:'swift-vanguard',craftName:'巡天雨燕',normalShotCooldown:.5,chargeSeconds:2,playerSpeed:245,visualScale:1.05,launchSeconds:3,guardianSeconds:3};
 export const STAR_TUNING=[
  {id:'playerSpeed',name:'玩家移動速度',default:245,min:120,max:450,step:12.5,digits:1,unit:''},
  {id:'shotCooldown',name:'普攻發射間隔',default:.5,min:.2,max:1.2,step:.1,digits:1,unit:'秒'},
@@ -94,8 +94,15 @@ export const STAR_ENEMIES=[
  {name:'冰羽小貓頭鷹',hp:6,r:21,speed:175},{name:'泥泡跳跳蛙',hp:5,r:19,speed:165},
  {name:'火種小蜥蜴',hp:9,r:22,speed:150},{name:'松果滑翔鳥',hp:6,r:20,speed:180},...CARNIVAL_ENEMIES,...LAKE_ENEMIES,...CAVE_ENEMIES,...ICE_ENEMIES,...WETLAND_ENEMIES,...MAGMA_ENEMIES,...FOREST_ENEMIES,...TRANSIT_ENEMIES
 ];
-export const STAR_BELL_COLORS=[{id:'upgrade',color:0x73cfff},{id:'shield',color:0x82e6a4},{id:'special',color:0xc49cff},{id:'power',color:0xff8c7d}];
-export function starColor(item){const index=(item.colorIndex||0)%4;return {...STAR_BELL_COLORS[index],index};}
+export const STAR_BELL_COLORS=[
+ {id:'yellow',name:'黃鈴',color:0xffd45e,weight:50},
+ {id:'red',name:'紅鈴',color:0xf36b66,weight:20},
+ {id:'green',name:'綠鈴',color:0x74d88f,weight:15},
+ {id:'white',name:'白鈴',color:0xf8f2dc,weight:7},
+ {id:'purple',name:'紫鈴',color:0xb98cff,weight:7},
+ {id:'rainbow',name:'虹鈴',color:0xff8fd8,weight:1}
+];
+export function starColor(item){const index=clamp(item.colorIndex||0,0,STAR_BELL_COLORS.length-1);return {...STAR_BELL_COLORS[index],index};}
 export function buildStarTimeline(route,seed){
  const rng=seeded(seed^0x51fa),events=[];
  route.forEach((m,index)=>{const start=starRegionStart(index),slots=[4,12,20,28,35];events.push({at:start+.05,type:'region',index});
@@ -152,11 +159,11 @@ export function buildStarTimeline(route,seed){
 }
 export class StarflightTouch{
  constructor(){this.reset();}
- reset(){this.ultimateReady=false;this.owner=null;this.origin={...STAR_CONTROLS.joystick};this.axis={x:0,y:0};this.firing=new Set();this.requests={};this.presses=new Map();this.lastTap=-Infinity;this.traitHold=null;this.bayPointerId=null;}
- down(p){const {x,y,id}=p;for(const key of ['trait','dash','special','bomb']){const c=STAR_CONTROLS[key];if(Math.hypot(x-c.x,y-c.y)<=c.r){if(key==='trait'){this.firing.add(id);this.presses.set(id,performance.now());}else if(key==='dash')this.requests.dash=true;else if(key==='bomb'&&this.ultimateReady)this.requests.bomb=true;return;}}
+ reset(){this.ultimateReady=false;this.owner=null;this.origin={...STAR_CONTROLS.joystick};this.axis={x:0,y:0};this.firing=new Set();this.requests={};this.presses=new Map();this.fireOrigins=new Map();this.lastTap=-Infinity;this.traitHold=null;this.bayPointerId=null;}
+ down(p){const {x,y,id}=p;for(const key of ['trait','dash','special','bomb']){const c=STAR_CONTROLS[key];if(Math.hypot(x-c.x,y-c.y)<=c.r){if(key==='trait'){this.firing.add(id);this.presses.set(id,performance.now());this.fireOrigins.set(id,{x,y});}else if(key==='dash')this.requests.dash=true;return;}}
   if(this.owner===null&&x<450&&y>110){this.owner=id;this.origin={x:clamp(x,62,390),y:clamp(y,140,645)};this.move(p);}}
- move(p){if(this.firing.has(p.id)){const c=STAR_CONTROLS.trait;if(Math.hypot(p.x-c.x,p.y-c.y)>c.r+20){this.firing.delete(p.id);this.presses.delete(p.id);this.lastTap=-Infinity;}}if(p.id!==this.owner)return;const x=p.x-this.origin.x,y=p.y-this.origin.y,n=Math.max(57,Math.hypot(x,y));this.axis=Math.hypot(x,y)<7?{x:0,y:0}:{x:x/n,y:y/n};}
- up(p){this.firing.delete(p.id);this.presses.delete(p.id);if(p.id===this.owner){this.owner=null;this.axis={x:0,y:0};}}
+ move(p){if(this.firing.has(p.id)){const origin=this.fireOrigins.get(p.id)||STAR_CONTROLS.trait;if(this.ultimateReady&&origin.y-p.y>=55&&Math.abs(origin.x-p.x)<=95){this.requests.bomb=true;this.firing.delete(p.id);this.presses.delete(p.id);this.fireOrigins.delete(p.id);}else{const c=STAR_CONTROLS.trait;if(Math.hypot(p.x-c.x,p.y-c.y)>c.r+95){this.firing.delete(p.id);this.presses.delete(p.id);this.fireOrigins.delete(p.id);this.lastTap=-Infinity;}}}if(p.id!==this.owner)return;const x=p.x-this.origin.x,y=p.y-this.origin.y,n=Math.max(57,Math.hypot(x,y));this.axis=Math.hypot(x,y)<7?{x:0,y:0}:{x:x/n,y:y/n};}
+ up(p){this.firing.delete(p.id);this.presses.delete(p.id);this.fireOrigins.delete(p.id);if(p.id===this.owner){this.owner=null;this.axis={x:0,y:0};}}
 
  read(){return {...this.axis,fire:this.firing.size>0,...this.requests};}
  consume(){this.requests={};}
@@ -169,12 +176,12 @@ export class StarflightSession{
   this.timeline=buildStarTimeline(this.route,this.seed);this.eventIndex=this.timeline.findIndex(e=>e.at>=this.time);if(this.eventIndex<0)this.eventIndex=this.timeline.length;
   this.status='playing';this.paused=false;this.accumulator=0;this.id=0;this.craft=getStarCraft(checkpoint?.craftId||craftId);this.hurtbox=this.craft.hurtbox;this.hitRadius=this.hurtbox.ry;const hp=this.craft.hp;this.velocity={x:0,y:0};this.guardFeathers=0;this.owlOrbitCD=0;this.guardTime=0;this.cruise=0;this.breezeCD=0;
   this.tuning=Object.fromEntries(STAR_TUNING.map(item=>[item.id,checkpoint?.tuning?.[item.id]??item.default]));this.gmUsed=checkpoint?.gmUsed??false;if(!checkpoint?.tuning){this.tuning.playerSpeed=this.craft.speed;this.tuning.shotCooldown=this.craft.cd;}
-  this.player={x:210,y:240,hp,maxHp:hp,invuln:2,dashCD:0,dashing:0,shotCD:0,traitCD:0,shield:0,powerBoost:0};
+  this.player={x:210,y:240,hp,maxHp:hp,invuln:2,dashCD:0,dashing:0,shotCD:0,traitCD:0,shield:0,powerBoost:0,tacticalTime:0};
   this.weapon='clover';
   this.specialWeapon=checkpoint?.specialWeapon||'chargeLaser';this.specialCooldowns={chargeLaser:0,explosive:0,shotgun:0,...checkpoint?.specialCooldowns};
   this.charging=null;this.ultimateEnergy=checkpoint?.ultimateEnergy||0;this.energyBudget=0;this.phase='combat';this.phaseTime=0;this.laserVisual=null;this.bayOpen=false;this.suitActive=null;
   this.guardianEnabled=false;this.guardianUsed=false;
-  this.bellLevels={upgrade:0,shield:0,special:0,power:0,...checkpoint?.bellLevels};this.gravityFields=[];this.ancientWaves=[];this.siegeTime=0;this.bellVolley=0;this.starLocks=[];this.starSalvoCD=0;this.starStacks=0;this.starOverclock=0;this.weaponRanks={clover:1,laser:1,homing:1,...checkpoint?.weaponRanks};this.options=checkpoint?.options||0;this.optionTrail=[];this.optionPositions=[];
+  this.bellLevels={upgrade:0,shield:0,special:0,power:0,...checkpoint?.bellLevels};this.skillLevels=Array.from({length:4},(_,i)=>checkpoint?.skillLevels?.[i]||0);this.whiteStacks=checkpoint?.whiteStacks||0;this.purpleStacks=checkpoint?.purpleStacks||0;this.yellowChain=checkpoint?.yellowChain||0;this.tacticalStock=checkpoint?.tacticalStock??1;this.tacticalRecharge=checkpoint?.tacticalRecharge||0;this.gravityFields=[];this.ancientWaves=[];this.siegeTime=0;this.bellVolley=0;this.starLocks=[];this.starWingOpen=0;this.starWingAudioOpen=false;this.starLastShot=-100;this.starLastSalvo=-100;this.starSalvoCD=0;this.starStacks=0;this.starOverclock=0;this.weaponRanks={clover:Math.max(1,Math.min(5,checkpoint?.weaponRanks?.clover||1)),laser:1,homing:1,...checkpoint?.weaponRanks};this.options=checkpoint?.options||0;this.optionTrail=[];this.optionPositions=[];
   this.bombs=0;this.score=checkpoint?.score||0;this.chain=0;this.chainLife=0;
   this.stats={cleared:0,rescued:0,hits:0,bombs:0,weaponChoices:0,upgrades:0,graze:0,branches:0,gmChanges:0,...checkpoint?.stats};
   this.events=[];this.enemies=[];this.shots=[];this.bullets=[];this.pickups=[];this.gates=[];this.hazards=[];this.warnings=[];this.branchOffer=null;this.environmentSlow=1;this.boss=null;this.last={};this.pending={};
@@ -184,7 +191,7 @@ export class StarflightSession{
  get inTransit(){return this.travelPhase==='transit';}
  get phaseInfo(){return resolveStarPhase(this.time);}
  get dangerTier(){return Math.min(3,this.segment);}
- snapshot(){const time=this.boss?STAR_FIELD.bossAt:starRegionStart(Math.min(this.segment,STAR_ROUTE_LENGTH-1));return {bellLevels:{...this.bellLevels},craftId:this.craft.id,specialWeapon:this.specialWeapon,specialCooldowns:{...this.specialCooldowns},ultimateEnergy:this.ultimateEnergy,guardianEnabled:this.guardianEnabled,guardianUsed:this.guardianUsed,seed:this.seed,rng:this.rng,time,route:this.route.map(m=>({...m})),weapon:this.weapon,weaponRanks:{...this.weaponRanks},options:this.options,score:this.score,stats:{...this.stats},bombs:this.bombs,tuning:{...this.tuning},gmUsed:this.gmUsed};}
+ snapshot(){const time=this.boss?STAR_FIELD.bossAt:starRegionStart(Math.min(this.segment,STAR_ROUTE_LENGTH-1));return {bellLevels:{...this.bellLevels},skillLevels:[...this.skillLevels],whiteStacks:this.whiteStacks,purpleStacks:this.purpleStacks,yellowChain:this.yellowChain,tacticalStock:this.tacticalStock,tacticalRecharge:this.tacticalRecharge,craftId:this.craft.id,specialWeapon:this.specialWeapon,specialCooldowns:{...this.specialCooldowns},ultimateEnergy:this.ultimateEnergy,guardianEnabled:this.guardianEnabled,guardianUsed:this.guardianUsed,seed:this.seed,rng:this.rng,time,route:this.route.map(m=>({...m})),weapon:this.weapon,weaponRanks:{...this.weaponRanks},options:this.options,score:this.score,stats:{...this.stats},bombs:this.bombs,tuning:{...this.tuning},gmUsed:this.gmUsed};}
  random(){this.rng=(Math.imul(this.rng,1664525)+1013904223)>>>0;return this.rng/4294967296;}
  emit(type,x=this.player.x,y=this.player.y,extra={}){this.events.push({type,x,y,...extra});if(this.events.length>150)this.events.shift();}
  message(t){this.notice=t;this.noticeLife=3;}
@@ -205,20 +212,27 @@ export class StarflightSession{
  bodyCircle(x,y,r=0){return this.bodySweep(x,y,x,y,r);}
  bodyRing(x,y,r,w=12){const h=this.hurtbox,p=this.player,d=Math.hypot(p.x-x,p.y-y),a=Math.atan2(p.y-y,p.x-x),support=Math.hypot(h.rx*Math.cos(a),h.ry*Math.sin(a));return Math.abs(d-r)<=w+support;}
  hit(){const p=this.player;if(p.invuln>0||this.phase!=='combat'||this.status!=='playing')return false;p.invuln=1.7;this.chain=0;this.stats.hits++;this.cruise=0;if(this.craft.id==='swift'&&p.shield>0){const radius=90+this.bellLevels.shield*30;this.bullets=this.bullets.filter(b=>distance(b,p)>radius);this.emit('shieldBreak',p.x,p.y,{radius});}if(p.shield>0){p.shield--;if(this.craft.id==='ancient')this.emit('ancientArmor',p.x,p.y,{layers:p.shield});}else p.hp--;this.emit('hurt');if(p.hp<=0){this.phase='falling';this.phaseTime=0;this.charging=null;this.emit('fall');}return true;}
- addPickup(kind,x,y){if(kind==='heart')kind='gem';const item={id:++this.id,kind,x,y,age:0,r:kind==='weapon'?23:kind==='option'?20:12,life:18,locked:null,colorIndex:0,flash:0,hits:0,kick:0,baseY:y,colorLock:0};this.pickups.push(item);return item;}
- cycleStarbud(item){if(item.life<=0)return false;item.kick=430;item.flash=.16;if(item.colorLock>0){this.emit('bellHit',item.x,item.y,{color:starColor(item).color});return false;}item.hits=(item.hits||0)+1;
+ randomBellIndex(){let roll=this.random()*100;for(let i=0;i<STAR_BELL_COLORS.length;i++){roll-=STAR_BELL_COLORS[i].weight;if(roll<0)return i;}return 0;}
+ addPickup(kind,x,y){if(kind==='heart')kind='gem';const item={id:++this.id,kind,x,y,age:0,r:kind==='weapon'?23:kind==='option'?20:12,life:18,locked:null,colorIndex:kind==='weapon'?this.randomBellIndex():0,flash:0,hits:0,kick:0,baseY:y,colorLock:0};this.pickups.push(item);return item;}
+ cycleStarbud(item){if(item.life<=0)return false;item.kick=430;item.flash=.16;if(starColor(item).id==='rainbow'||item.colorLock>0){this.emit('bellHit',item.x,item.y,{color:starColor(item).color});return false;}item.hits=(item.hits||0)+1;
   if(item.hits<3){this.emit('bellHit',item.x,item.y,{hits:item.hits,color:starColor(item).color});return false;}
-  item.hits=0;item.colorLock=.5;item.colorIndex=((item.colorIndex||0)+1)%4;item.kick=430;item.flash=.38;this.emit('bellChange',item.x,item.y,{color:starColor(item).color});return true;
+  item.hits=0;item.colorLock=.5;item.colorIndex=((item.colorIndex||0)+1)%(STAR_BELL_COLORS.length-1);item.kick=430;item.flash=.38;this.emit('bellChange',item.x,item.y,{color:starColor(item).color});return true;
  }
- attackMultiplier(){return 1+.25*(Math.max(1,Math.min(3,this.weaponRanks.clover))-1);}
- collectCrystal(){const upgraded=this.weaponRanks.clover<3;if(upgraded){this.weaponRanks.clover++;this.stats.upgrades++;}this.score+=1;this.emit('crystalCollect',this.player.x,this.player.y);this.message(upgraded?'全攻擊提升！ Lv.'+this.weaponRanks.clover+' · +'+Math.round((this.attackMultiplier()-1)*100)+'%':'全攻擊已滿級 +50% · 分數 +1');}
+ attackMultiplier(){return [1,1.12,1.27,1.44,1.65][Math.max(1,Math.min(5,this.weaponRanks.clover))-1]*(1+(this.skillOverflow||0)*.02);}
+ attackSpeedMultiplier(){const gains=[.06,.05,.04,.03,.02];return 1+gains.slice(0,this.purpleStacks).reduce((a,b)=>a+b,0);}
+ moveSpeedMultiplier(){const gains=[.06,.05,.04,.03,.02];return 1+gains.slice(0,this.whiteStacks).reduce((a,b)=>a+b,0);}
+ collectCrystal(){const upgraded=this.weaponRanks.clover<5;if(upgraded){this.weaponRanks.clover++;this.stats.upgrades++;}this.score+=upgraded?1:50;this.emit('crystalCollect',this.player.x,this.player.y);this.message(upgraded?'主武器提升！ Lv.'+this.weaponRanks.clover:'主武器已滿級 · 分數 +50');}
 
- collectWeapon(reward='upgrade'){
-  const c=this.craft,p=this.player;if(!Object.hasOwn(this.bellLevels,reward))return false;
-  const cap=c.id==='swift'&&reward==='upgrade'?4:3;if(this.bellLevels[reward]>=cap&&['upgrade','special'].includes(reward))this.gainEnergy(3);this.bellLevels[reward]=reward==='power'?1:Math.min(cap,this.bellLevels[reward]+1);const lv=this.bellLevels[reward];
-  if(reward==='shield'){if(c.id==='owl'){this.guardFeathers=2+lv;this.guardTime=0;}else if(c.id==='starwing')this.options=Math.min(2,lv);else if(c.id==='falcon')p.dashCD=Math.max(0,p.dashCD-10);else p.shield=Math.min(c.id==='ancient'?2:1,lv);}
-  if(reward==='power')p.powerBoost=10;
-  this.score+=2;this.stats.weaponChoices++;this.message(c.bells[['upgrade','shield','special','power'].indexOf(reward)]+(reward==='power'?' · 10 秒':' Lv.'+lv));this.emit('weaponChosen',p.x,p.y,{reward});return true;
+ collectWeapon(reward='yellow',item=null){
+  const c=this.craft,p=this.player;this.stats.weaponChoices++;let text='';
+  if(reward==='yellow'){const values=[1,2,4,8,16,32];this.yellowChain=Math.min(6,this.yellowChain+1);const gain=values[this.yellowChain-1];this.score+=gain;text='黃鈴連鎖 · 分數 +'+gain;}
+  else if(reward==='red'){const available=[0,1,2,3].filter(i=>this.skillLevels[i]<3);if(!available.length){this.skillOverflow=(this.skillOverflow||0)+1;text='技能全滿 · 全傷害 +2%';}else{const requested=item?.rouletteSlot??Math.floor((item?.age||0)/.45)%available.length,slot=available.includes(requested)?requested:available[Math.floor((item?.age||0)/.45)%available.length];this.skillLevels[slot]++;if(c.id==='starwing'&&slot===2)this.options=this.skillLevels[slot]>=3?2:1;text=c.bells[slot]+' Lv.'+this.skillLevels[slot];item.rouletteSlot=slot;}}
+  else if(reward==='green'){if(this.tacticalStock<3){this.tacticalStock++;text='戰術特攻補充 · '+this.tacticalStock+'/3';}else{this.ultimateEnergy=Math.min(100,this.ultimateEnergy+10);text='特攻已滿 · 大招能量 +10%';}}
+  else if(reward==='white'){if(this.whiteStacks<5){this.whiteStacks++;text='巡航速度強化 · '+this.whiteStacks+'/5';}else{this.score+=50;text='速度已滿 · 分數 +50';}}
+  else if(reward==='purple'){if(this.purpleStacks<5){this.purpleStacks++;text='射擊節奏強化 · '+this.purpleStacks+'/5';}else{this.score+=50;text='攻速已滿 · 分數 +50';}}
+  else if(reward==='rainbow'){this.bullets=[];const converts=this.enemies.filter(e=>!e.dead&&!e.exit&&e.maxHp<=120);for(const e of converts){e.dead=true;this.emit('rainbowPop',e.x,e.y);this.addPickup(this.random()<.7?'crystal':'weapon',e.x,e.y);}this.score+=converts.length;text='虹鈴奇蹟 · 彈幕與雜魚化為星光';}
+  else return false;
+  this.message(text);this.emit('weaponChosen',p.x,p.y,{reward,slot:item?.rouletteSlot});return true;
  }
  openBay(){return false;}
  equipSpecial(id){if(!this.bayOpen||!STAR_SPECIALS.some(w=>w.id===id))return false;
@@ -257,6 +271,15 @@ export class StarflightSession{
   if(this.craft.id==='ancient'){p.shield=1;this.guardTime=2;this.craftShot(0,'explosive',55,3,620);p.traitCD=6;}
   if(this.craft.id==='starwing'){const targets=this.enemies.filter(e=>!e.dead&&e.x>p.x).sort((a,b)=>distance(a,p)-distance(b,p)).slice(0,4);if(!targets.length)this.craftShot(0,'laser',35,4);else targets.forEach((e,i)=>this.craftShot((i-1.5)*.25,'homing',26,1,740,e));p.traitCD=5;this.emit('lock',p.x,p.y,{targets:targets.map(e=>({x:e.x,y:e.y}))});}
   this.emit('traitFire');return true;
+ }
+ triggerTactical(){const p=this.player;if(this.phase!=='combat'||this.paused||this.tacticalStock<=0)return false;
+  this.tacticalStock--;this.stats.tacticals=(this.stats.tacticals||0)+1;
+  if(this.craft.id==='swift'){p.tacticalTime=this.skillLevels[3]>=3?15:10;this.bullets=this.bullets.filter(b=>distance(b,p)>175);this.emit('breeze',p.x,p.y,{radius:175});}
+  else if(this.craft.id==='falcon'){p.dashing=5;p.invuln=Math.max(p.invuln,.5);}
+  else if(this.craft.id==='owl'){this.guardFeathers=4;this.guardTime=20;p.invuln=Math.max(p.invuln,1);}
+  else if(this.craft.id==='ancient'){p.shield=Math.max(p.shield,1);this.guardTime=10;}
+  else if(this.craft.id==='starwing'){this.starOverclock=Math.max(this.starOverclock,5);p.invuln=Math.max(p.invuln,1);}
+  this.emit('dash',p.x,p.y,{tactical:true,craft:this.craft.id});return true;
  }
 
  explode(shot,target){if(shot.ancientShell){const radius=shot.blastRadius;this.ancientArea(target.x,target.y,radius,shot.damage*.45,target);this.ancientWaves.push({x:target.x,y:target.y,radius:radius+25,damage:shot.damage*.30,delay:.25});this.ancientRicochet(shot,target);this.emit('ancientBlast',target.x,target.y,{radius});return;}this.emit('burst',target.x,target.y);for(const e of this.enemies)if(e!==target&&!e.dead&&!e.exit&&distance(e,target)<105){e.hp-=16*this.attackMultiplier();carnivalHit(this,e);lakeHit(this,e);caveHit(this,e,16*this.attackMultiplier());iceHit(this,e,16*this.attackMultiplier());wetlandHit(this,e,16*this.attackMultiplier());magmaHit(this,e,16*this.attackMultiplier());forestHit(this,e,16*this.attackMultiplier());e.flash=.06;this.gainEnergy(1);if(e.hp<=0)this.defeat(e);}}
@@ -299,50 +322,52 @@ export class StarflightSession{
  }
  updateStarLocks(dt){if(this.craft.id!=='starwing')return;this.starSalvoCD=Math.max(0,this.starSalvoCD-dt);this.starOverclock=Math.max(0,this.starOverclock-dt);
   const targets=this.starTargets().slice(0,4);if(targets.length===1&&targets[0]===this.boss)while(targets.length<4)targets.push(this.boss);
-  const old=this.starLocks;this.starLocks=targets.map((target,i)=>{const previous=old.find(l=>l.target===target&&l.slot===i);return {target,slot:i,charge:Math.min(.6,(previous?.charge||0)+dt)};});
+  const old=this.starLocks;this.starLocks=targets.map((target,i)=>{const previous=old.find(l=>l.target===target&&(target!==this.boss||l.slot===i));return {target,slot:i,charge:Math.min(.6,(previous?.charge||0)+dt)};});
+  const open=this.starLocks.length>0||this.starOverclock>0||this.time-this.starLastSalvo<.5;this.starWingOpen=Math.max(0,Math.min(1,this.starWingOpen+(open?1:-1)*dt/.6));
+  if(open&&!this.starWingAudioOpen&&this.starWingOpen>=.12){this.starWingAudioOpen=true;this.emit('starWingOpen',this.player.x,this.player.y);}else if(!open&&this.starWingAudioOpen&&this.starWingOpen<=.18){this.starWingAudioOpen=false;this.emit('starWingClose',this.player.x,this.player.y);}
  }
- shootStarwing(){const p=this.player,rank=this.weaponRanks.clover,blue=this.bellLevels.upgrade,purple=this.bellLevels.special,boost=this.starOverclock>0;
-  const count=blue>=2?4:2;for(let i=0;i<count;i++){this.craftShot((i-(count-1)/2)*.027,'laser',3+(rank-1)*.5,1+Math.floor(blue/2),1150);const beam=this.shots.at(-1);beam.starBeam=true;beam.y+=(i-(count-1)/2)*7;}
-  for(const o of this.optionPositions){const n=this.bellLevels.shield>=3?2:1;for(let i=0;i<n;i++){this.craftShot((i-(n-1)/2)*.10,'laser',2.4,1,1050);const beam=this.shots.at(-1);beam.x=o.x+14;beam.y=o.y;beam.starBeam=true;beam.option=true;}}
+ shootStarwing(){this.starLastShot=this.time;const p=this.player,rank=this.weaponRanks.clover,blue=this.skillLevels[0],purple=this.skillLevels[1],boost=this.starOverclock>0;
+  const count=blue>=2?4:2;for(let i=0;i<count;i++){this.craftShot((i-(count-1)/2)*.027,'laser',3+(rank-1)*.5,1+Math.floor(blue/2),1150);const beam=this.shots.at(-1);beam.starBeam=true;beam.bornAt=this.time;beam.y+=(i-(count-1)/2)*7;}
+  for(const o of this.optionPositions){const n=this.bellLevels.shield>=3?2:1;for(let i=0;i<n;i++){this.craftShot((i-(n-1)/2)*.10,'laser',2.4,1,1050);const beam=this.shots.at(-1);beam.x=o.x+14;beam.y=o.y;beam.starBeam=true;beam.bornAt=this.time;beam.option=true;}}
   const valid=this.starTargets(),ready=this.starLocks.filter(l=>l.charge>=.6&&valid.includes(l.target));
-  if(ready.length&&this.starSalvoCD<=0){const perTarget=1+(purple>=1?1:0)+(purple>=3?1:0);for(const lock of ready)for(let i=0;i<perTarget;i++){const side=(lock.slot+i)%2?1:-1;this.craftShot(side*(.25+i*.16),'homing',5+purple*1.5,1,680,lock.target);const missile=this.shots.at(-1);missile.starMissile=true;missile.targetId=null;}
-   this.starSalvoCD=purple>=2?1.3:1.6;for(const l of this.starLocks)l.charge=0;
+  if(ready.length&&this.starSalvoCD<=0){const perTarget=1+(purple>=1?1:0)+(purple>=3?1:0);for(const lock of ready)for(let i=0;i<perTarget;i++){const side=(lock.slot+i)%2?1:-1;this.craftShot(side*(.25+i*.16),'homing',5+purple*1.5,1,680,lock.target);const missile=this.shots.at(-1);missile.starMissile=true;missile.bornAt=this.time;missile.targetId=null;}
+   this.starLastSalvo=this.time;this.starSalvoCD=purple>=2?1.3:1.6;for(const l of this.starLocks)l.charge=0;
    this.emit('starSalvo',p.x,p.y,{count:ready.length*perTarget});if(!boost){this.starStacks++;if(this.starStacks>=3){this.starStacks=0;this.starOverclock=6;this.emit('starOverclock',p.x,p.y);}}
   }
-  p.shotCD=this.tuning.shotCooldown/(1+(rank-1)*.2)/(this.starOverclock>0?1.6:1)/(p.powerBoost>0?1.5:1);this.emit('shot');
+  p.shotCD=this.tuning.shotCooldown/(1+(rank-1)*.2)/(this.starOverclock>0?1.6:1)/(p.powerBoost>0?1.5:1)/this.attackSpeedMultiplier();this.emit('shot');
  }
- shootAncient(){const p=this.player,rank=this.weaponRanks.clover,blue=this.bellLevels.upgrade,purple=this.bellLevels.special;
-  this.bellVolley++;this.craftShot(0,'explosive',22+(rank-1)*4,1,620);const shot=this.shots.at(-1);shot.ancientShell=true;shot.blastRadius=85+blue*15+(rank-1)*5;
+ shootAncient(){const p=this.player,rank=this.weaponRanks.clover,blue=this.skillLevels[0],purple=0;
+  this.bellVolley++;this.craftShot(0,'explosive',22+(rank-1)*4,1,620);const shot=this.shots.at(-1);shot.ancientShell=true;shot.bornAt=this.time;this.ancientLastShot=this.time;shot.blastRadius=85+blue*15+(rank-1)*5;
   if(purple&&this.bellVolley%Math.max(2,5-purple)===0){this.craftShot(0,'gravity',12+purple*5,1,480);const core=this.shots.at(-1);core.gravityLevel=purple;core.deployX=Math.min(1180,p.x+360);}
-  p.shotCD=this.tuning.shotCooldown/(1+(rank-1)*.15)/(this.siegeTime>=.7?1.25:1)/(p.powerBoost>0?1.3:1);this.emit('ancientFire',p.x,p.y);this.emit('shot');
+  p.shotCD=this.tuning.shotCooldown/(1+(rank-1)*.15)/(this.siegeTime>=.7?1.25:1)/(p.powerBoost>0?1.3:1)/this.attackSpeedMultiplier();this.emit('ancientFire',p.x,p.y);this.emit('shot');
  }
- ancientRicochet(shot,target){const candidates=this.enemies.filter(e=>e!==target&&!e.dead&&!e.exit&&e.hp>0&&e.x>0&&e.x<1280);if(this.boss&&this.boss!==target&&this.boss.hp>0&&this.boss.age>2)candidates.push(this.boss);const next=candidates.sort((a,b)=>distance(a,target)-distance(b,target))[0];if(!next)return;const angle=Math.atan2(next.y-target.y,next.x-target.x);this.shots.push({id:++this.id,x:target.x,y:target.y,vx:Math.cos(angle)*780,vy:Math.sin(angle)*780,r:6,damage:shot.damage*.4,life:1.5,pierce:1,hit:new Set([target.id]),kind:'leaf',rank:1,ancientRicochet:true});}
+ ancientRicochet(shot,target){const candidates=this.enemies.filter(e=>e!==target&&!e.dead&&!e.exit&&e.hp>0&&e.x>0&&e.x<1280);if(this.boss&&this.boss!==target&&this.boss.hp>0&&this.boss.age>2)candidates.push(this.boss);const next=candidates.sort((a,b)=>distance(a,target)-distance(b,target))[0];if(!next)return;const angle=Math.atan2(next.y-target.y,next.x-target.x);this.shots.push({id:++this.id,x:target.x,y:target.y,vx:Math.cos(angle)*780,vy:Math.sin(angle)*780,r:6,damage:shot.damage*.4,life:1.5,pierce:1,hit:new Set([target.id]),kind:'leaf',rank:1,ancientRicochet:true,bornAt:this.time});}
  separateBells(dt){const bells=this.pickups.filter(b=>b.kind==='weapon'&&b.life>0);for(let i=0;i<bells.length;i++)for(let j=i+1;j<bells.length;j++){const a=bells[i],b=bells[j],dx=b.x-a.x,dy=b.baseY-a.baseY,d=Math.hypot(dx,dy);if(d>=64)continue;const ux=d>.01?dx/d:0,uy=d>.01?dy/d:1,shift=Math.min((64-d)/2,90*dt);a.x=clamp(a.x-ux*shift,-40,1200);b.x=clamp(b.x+ux*shift,-40,1200);a.baseY=clamp(a.baseY-uy*shift,28,452);b.baseY=clamp(b.baseY+uy*shift,28,452);}}
  ancientArea(x,y,radius,damage,exclude=null){for(const e of this.enemies){if(e===exclude||e.dead||e.exit||distance(e,{x,y})>radius)continue;e.hp-=damage;carnivalHit(this,e);lakeHit(this,e);caveHit(this,e,damage);iceHit(this,e,damage);wetlandHit(this,e,damage);magmaHit(this,e,damage);forestHit(this,e,damage);e.flash=.08;if(e.hp<=0)this.defeat(e);}
   const b=this.boss;if(b&&b!==exclude&&b.age>2&&distance(b,{x,y})<=radius+b.r){b.hp-=damage;b.flash=.08;}
  }
  updateAncientWaves(dt){for(const w of this.ancientWaves){w.delay-=dt;if(w.delay<=0){this.ancientArea(w.x,w.y,w.radius,w.damage);this.emit('ancientWave',w.x,w.y,{radius:w.radius});}}this.ancientWaves=this.ancientWaves.filter(w=>w.delay>0);}
- shootFalcon(){const p=this.player,rank=Math.max(1,Math.min(3,this.weaponRanks.clover)),blue=this.bellLevels.upgrade,purple=this.bellLevels.special;
+ shootFalcon(){const p=this.player,rank=Math.max(1,Math.min(3,this.weaponRanks.clover)),blue=this.skillLevels[0],purple=this.skillLevels[2];
   this.bellVolley++;const empowered=purple>0&&this.bellVolley%Math.max(2,6-purple)===0;
   // One narrow lane: crystal increases cadence; bells extend penetration and precision.
   this.craftShot(0,'laser',10+(rank-1)*2,4+blue*2,2100);
-  const shot=this.shots.at(-1);shot.falconBeam=true;shot.originX=shot.x;shot.falconBlue=blue;shot.falconEmpowered=empowered;
+  const shot=this.shots.at(-1);shot.falconBeam=true;shot.bornAt=this.time;this.falconLastShot=this.time;shot.originX=shot.x;shot.falconBlue=blue;shot.falconEmpowered=empowered;
   if(empowered){shot.damage*=1.5+purple*.15;shot.pierce+=3;shot.r=8;this.emit('falconFocus',p.x,p.y);}
-  p.shotCD=this.tuning.shotCooldown/[1,1.3,1.65][rank-1]/(p.powerBoost>0?1.2:1);this.emit('shot');
+  this.emit('falconShot',p.x+23,p.y,{empowered});p.shotCD=this.tuning.shotCooldown/[1,1.3,1.65][rank-1]/(p.powerBoost>0?1.2:1)/this.attackSpeedMultiplier();this.emit('shot');
  }
  falconDamage(shot,target){if(!shot.falconBeam)return shot.damage;
   const range=Math.max(0,target.x-shot.originX),bonus=Math.min(1,range/600)*(.15+.10*shot.falconBlue);
-  if(range>=450)this.emit('falconPierce',target.x,target.y);
+  this.emit('falconPierce',target.x,target.y,{empowered:shot.falconEmpowered,far:range>=450});
   return shot.damage*(1+bonus);
  }
  owlShotRange(speed){const body=this.hurtbox.rx*2;return clamp(body*5*440/Math.max(1,speed),body*2,body*5);}
- shootOwl(){const p=this.player,rank=this.weaponRanks.clover,lv=this.bellLevels.upgrade,count=3+lv*2+(rank-1)*2;
+ shootOwl(){const p=this.player,rank=this.weaponRanks.clover,lv=this.skillLevels[0],count=3+lv*2+(rank-1)*2;
   for(let i=0;i<count;i++){const speed=440*this.tuning.playerBulletSpeed/880;this.craftShot((i-(count-1)/2)*.105,'leaf',2.5,1,speed);Object.assign(this.shots.at(-1),{owlFeather:true,maxTravel:this.owlShotRange(speed),travelled:0});}
 
-  p.shotCD=this.tuning.shotCooldown/(1+(rank-1)*.25)/(p.powerBoost>0?1.6:1);this.emit('shot');
+  p.shotCD=this.tuning.shotCooldown/(1+(rank-1)*.25)/(p.powerBoost>0?1.6:1)/this.attackSpeedMultiplier();this.emit('shot');
  }
  launchOwlOrbit(){
-  const p=this.player,lv=this.bellLevels.special;if(this.craft.id!=='owl'||lv<=0||this.owlOrbitCD>0)return false;
+  const p=this.player,lv=this.skillLevels[1];if(this.craft.id!=='owl'||lv<=0||this.owlOrbitCD>0)return false;
   this.owlOrbitCD=3;
   // A new volley starts in the four feather quadrants; each has its own life/hit set.
   for(let i=0;i<4;i++){const angle=-Math.PI/4+i*Math.PI/2;
@@ -365,18 +390,16 @@ export class StarflightSession{
   const p=this.player,dx=b.x-ox,dy=b.y-oy,t=clamp(((p.x-ox)*dx+(p.y-oy)*dy)/(dx*dx+dy*dy||1),0,1),x=ox+dx*t,y=oy+dy*t;if(Math.hypot(x-p.x,y-p.y)>58)return false;
   b.life=0;this.guardFeathers--;this.emit('owlBlock',x,y);return true;
  }
- shootSwift(){const p=this.player,rank=Math.max(1,Math.min(3,this.weaponRanks.clover)),lv=this.bellLevels.upgrade;
-  // Crystal: denser central stream. Blue bells: wider independent wing fans.
-  const count=rank*2;
-  for(let i=0;i<count;i++){const angle=(i-(count-1)/2)*.038;this.craftShot(angle,'leaf',rank===1?3:rank===2?2.35:2,1,920);const shot=this.shots.at(-1);shot.swiftMain=true;shot.y+=(i-(count-1)/2)*4;}
-  const sideCount=lv>0?Math.min(4,lv+1):0;for(let i=0;i<sideCount;i++){const angle=(i-(sideCount-1)/2)*.24+Math.sin(this.time*5)*.025;this.craftShot(angle,'leaf',1.35,1,840);const shot=this.shots.at(-1);shot.swiftSide=true;shot.guided=p.powerBoost>0;}
+ shootSwift(){const p=this.player,rank=Math.max(1,Math.min(5,this.weaponRanks.clover)),cut=this.skillLevels[0],side=this.skillLevels[1];
+  const count=rank===1?1:rank<5?1:2,baseDamage=[3,3.35,3.85,4.8,5.3][rank-1],lingerIndex=rank===5?Math.floor(this.random()*count):-1;
+  for(let i=0;i<count;i++){const angle=(i-(count-1)/2)*.055;this.craftShot(angle,'leaf',baseDamage,rank>=4?2:1,rank===1?980:920);const shot=this.shots.at(-1);shot.swiftMain=true;shot.swiftRank=rank;shot.r=(rank>=4?8:5)*(1+cut*.1);shot.y+=(i-(count-1)/2)*9;if(i===lingerIndex)shot.swiftLingering=true;}
+  const sideCount=side;for(let i=0;i<sideCount;i++){const angle=(i-(sideCount-1)/2)*.24+Math.sin(this.time*5)*.025;this.craftShot(angle,'leaf',1.35,1,840);const shot=this.shots.at(-1);shot.swiftSide=true;shot.guided=p.tacticalTime>0;}
   for(const o of this.optionPositions){this.craftShot(0,'leaf',2,1,840);const shot=this.shots.at(-1);shot.x=o.x;shot.y=o.y;shot.option=true;}
-  p.shotCD=Math.max(.075,this.tuning.shotCooldown/[1,1.35,1.8][rank-1]/(p.powerBoost>0?1.5:1));this.emit('shot');
+  p.shotCD=Math.max(.075,this.tuning.shotCooldown/([1,1.08,1.16,1.24,1.32][rank-1]*this.attackSpeedMultiplier()*(p.tacticalTime>0?(this.skillLevels[3]>=1?1.3:1.15):1)));this.emit('shot');
  }
- swiftResonate(target,shot){const level=this.bellLevels.special;if(this.craft.id!=='swift'||!level||!shot.swiftMain)return;
-  const previous=target.swiftEcho;if(!previous||this.time-previous.at>1)target.swiftEcho={count:0,at:this.time};const echo=target.swiftEcho;echo.count++;echo.at=this.time;
-  if(echo.count<7-level||this.time<(target.swiftEchoReady||0))return;echo.count=0;target.swiftEchoReady=this.time+.16;const damage=7*this.attackMultiplier(),radius=48+level*10;
-  target.hp-=damage;target.flash=.10;this.emit('swiftEcho',target.x,target.y,{radius});for(const e of this.enemies)if(e!==target&&!e.dead&&distance(e,target)<radius){e.hp-=damage*.6;if(e.hp<=0)this.defeat(e);}if(target!==this.boss&&target.hp<=0)this.defeat(target);
+ swiftResonate(target,shot){this.emit('enemyHit',target.x,target.y,{boss:target===this.boss});const level=this.skillLevels[2];if(this.craft.id!=='swift'||!level||!shot.swiftMain||shot.swiftShard)return;
+  const count=level>=3?2:1,damage=.9*(level>=2?1.15:1);for(let i=0;i<count;i++){this.craftShot((i-(count-1)/2)*.7+(i?.35:-.35),'leaf',damage,1,520);const shard=this.shots.at(-1);shard.x=target.x;shard.y=target.y;shard.swiftShard=true;shard.life=.75;shard.r=3;}
+  this.emit('swiftEcho',target.x,target.y,{radius:28});
  }
  updateGravity(dt){
   for(const field of this.gravityFields){field.age+=dt;const radius=85+field.level*20;
@@ -384,7 +407,7 @@ export class StarflightSession{
    if(field.age>=1.2){this.ancientArea(field.x,field.y,radius,field.damage);this.emit('gravityBurst',field.x,field.y,{radius});}
   }this.gravityFields=this.gravityFields.filter(f=>f.age<1.2);
  }
- craftShot(angle,kind,damage,pierce=1,speed=880,target=null){const p=this.player;this.shots.push({id:++this.id,x:p.x+23,y:p.y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,r:kind==='explosive'?11:5,damage:damage*(this.craft.id==='swift'&&this.bellLevels.upgrade>=4?1.02:1)*this.attackMultiplier()*(1+(this.bellLevels.upgrade||0)*(this.craft.id==='ancient'?.22:this.craft.id==='starwing'?.14:this.craft.id==='falcon'?.10:0))*(p.powerBoost>0?(['ancient','falcon'].includes(this.craft.id)?1.65:1.2):1),life:2.4,pierce,hit:new Set(),kind,rank:this.weaponRanks.clover,homingSpeed:speed,targetId:target?.id,target});}
+ craftShot(angle,kind,damage,pierce=1,speed=880,target=null){const p=this.player;this.shots.push({id:++this.id,x:p.x+23,y:p.y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,r:kind==='explosive'?11:5,damage:damage*this.attackMultiplier()*(p.powerBoost>0?(['ancient','falcon'].includes(this.craft.id)?1.65:1.2):1),life:2.4,pierce,hit:new Set(),kind,rank:this.weaponRanks.clover,homingSpeed:speed,targetId:target?.id,target});}
 
  defeat(e){if(e.dead)return;e.dead=true;this.gainEnergy(e.kind===1?4:1.5);this.stats.cleared++;this.chain++;this.chainLife=3;this.score+=(e.kind===1?3:1)+Math.min(2,Math.floor(this.chain/12));this.emit(e.kind===1?'elite':'pop',e.x,e.y,{kind:e.kind});
   if(!e.warmup){carnivalDefeat(this,e);
@@ -448,9 +471,10 @@ export class StarflightSession{
  tick(dt,input){
   const playerDt=dt;if(this.bayOpen){this.bayAge+=dt;if(this.bayAge>=3)this.closeBay();else dt*=.2;}
   if(this.craft.id==='ancient'){this.siegeTime=input.fire&&Math.hypot(input.x||0,input.y||0)<.12&&Math.hypot(this.velocity.x,this.velocity.y)<.12?Math.min(1,this.siegeTime+playerDt):0;}this.guardTime=Math.max(0,this.guardTime-dt);if(!this.guardTime&&this.craft.id!=='owl')this.guardFeathers=0;this.breezeCD=Math.max(0,this.breezeCD-dt);const motion=Math.hypot(input.x||0,input.y||0);this.cruise=motion>.25?this.cruise+dt:0;
-  if(input.dash&&this.player.dashCD<=0){this.player.dashCD=30;this.player.dashing=5;if(this.craft.id==='falcon')this.player.invuln=Math.max(this.player.invuln,1);this.emit('dash');}
+  if(input.dash)this.triggerTactical();
   this.time+=dt;const p=this.player;this.noticeLife=Math.max(0,this.noticeLife-dt);this.chainLife-=dt;if(this.chainLife<=0)this.chain=0;
-  for(const k of ['invuln','dashCD','dashing','shotCD','traitCD','powerBoost'])p[k]=Math.max(0,p[k]-playerDt);
+  for(const k of ['invuln','dashCD','dashing','shotCD','traitCD','powerBoost','tacticalTime'])p[k]=Math.max(0,p[k]-playerDt);
+  if(this.tacticalStock<=0){this.tacticalRecharge+=playerDt;const recharge=this.craft.id==='falcon'?40:60;if(this.tacticalRecharge>=recharge){this.tacticalStock=1;this.tacticalRecharge=0;this.emit('tacticalReady',p.x,p.y);}}else this.tacticalRecharge=0;
   const travel=resolveStarPhase(this.time);if(travel.kind==='region'&&(travel.index!==this.segment||this.travelPhase!=='region'))this.enterSegment(travel.index);else if(travel.kind==='transit'&&this.travelPhase!=='transit')this.enterTransit(travel.index);
   this.energyBudget=Math.max(0,this.energyBudget-1.5*dt);
   for(const k of Object.keys(this.specialCooldowns))this.specialCooldowns[k]=Math.max(0,this.specialCooldowns[k]-dt);
@@ -462,7 +486,7 @@ export class StarflightSession{
    if((h.kind==='rock'||h.kind==='icicle')&&h.age>=h.warn){h.vy=Math.min(h.kind==='icicle'?430:360,h.vy+(h.kind==='icicle'?680:540)*dt);h.y+=h.vy*dt;if(!h.hit&&this.bodyCircle(h.x,h.y,h.r+5)){h.hit=true;this.hit();}}
    if(h.kind==='ember'&&h.age>=h.warn){h.vy=Math.min(390,h.vy+620*dt);h.x+=h.vx*dt;h.y+=h.vy*dt;if(!h.hit&&this.bodyCircle(h.x,h.y,h.r+6)){h.hit=true;this.hit();}}}
   this.hazards=this.hazards.filter(h=>h.life>0&&h.x>-160&&h.y<530);
-  let ix=input.x||0,iy=input.y||0;if(this.craft.id==='ancient'){const q=1-Math.exp(-playerDt*5);this.velocity.x+=(ix-this.velocity.x)*q;this.velocity.y+=(iy-this.velocity.y)*q;ix=this.velocity.x;iy=this.velocity.y;}const x=ix,y=iy,n=Math.max(1,Math.hypot(x,y)),speed=this.tuning.playerSpeed*this.environmentSlow*(input.slow?.55:1)*(p.dashing>0?1+this.craft.boost:1);
+  let ix=input.x||0,iy=input.y||0;if(this.craft.id==='ancient'){const q=1-Math.exp(-playerDt*5);this.velocity.x+=(ix-this.velocity.x)*q;this.velocity.y+=(iy-this.velocity.y)*q;ix=this.velocity.x;iy=this.velocity.y;}const x=ix,y=iy,n=Math.max(1,Math.hypot(x,y)),swiftRush=this.craft.id==='swift'&&p.tacticalTime>0?(this.skillLevels[3]>=2?1.3:1.15):1,speed=this.tuning.playerSpeed*this.moveSpeedMultiplier()*this.environmentSlow*(input.slow?.55:1)*(p.dashing>0?1+this.craft.boost:1)*swiftRush;
   const drift=(this.currentMap?.hazard==='gust'&&!this.gates.length?Math.sin(this.time*1.4)*18:0)+(this.carnivalWind||0)+(this.lakePull||0)+(this.iceDrift||0)+(this.wetlandDrift||0)+(this.forestDrift||0)+(this.transitDrift||0);
   p.x=clamp(p.x+x/n*speed*playerDt,30,1225);p.y=clamp(p.y+(y/n*speed+drift)*playerDt,22,458);
   this.optionTrail.push({x:p.x,y:p.y});if(this.optionTrail.length>85)this.optionTrail.shift();
@@ -498,11 +522,11 @@ export class StarflightSession{
    for(const gate of this.gates)if(shot.x>gate.x-gate.w/2&&ox<gate.x+gate.w/2&&(shot.y<gate.gapY-gate.gap/2||shot.y>gate.gapY+gate.gap/2))shot.life=0;
    if(shot.life<=0)continue;
    for(const e of (shot.falconBeam?[...this.enemies].sort((a,b)=>a.x-b.x):this.enemies))if(!e.dead&&!e.exit&&!shot.hit.has(e.id)&&starSweep(ox,oy,shot.x,shot.y,e.x,e.y,e.r+shot.r)){
-    const impactDamage=this.falconDamage(shot,e),impact=shot.falconBeam?{...shot,damage:impactDamage}:shot;e.hp-=impactDamage;this.swiftResonate(e,shot);carnivalHit(this,e,impact);lakeHit(this,e,impact);caveHit(this,e,impactDamage);iceHit(this,e,impactDamage);wetlandHit(this,e,impactDamage);magmaHit(this,e,impactDamage);forestHit(this,e,impactDamage);this.gainEnergy(shot.option?.15:.6);e.flash=.035;shot.hit.add(e.id);shot.pierce--;if(e.hp<=0)this.defeat(e);
+    const impactDamage=this.falconDamage(shot,e),impact=shot.falconBeam?{...shot,damage:impactDamage}:shot;e.hp-=impactDamage;if(shot.starBeam||shot.starMissile)this.emit('starImpact',e.x,e.y,{missile:!!shot.starMissile});this.swiftResonate(e,shot);carnivalHit(this,e,impact);lakeHit(this,e,impact);caveHit(this,e,impactDamage);iceHit(this,e,impactDamage);wetlandHit(this,e,impactDamage);magmaHit(this,e,impactDamage);forestHit(this,e,impactDamage);this.gainEnergy(shot.option?.15:.6);e.flash=.035;shot.hit.add(e.id);if(shot.swiftLingering&&!shot.lingered){shot.lingered=true;shot.x=e.x;shot.y=e.y;shot.vx=0;shot.vy=0;shot.life=1;shot.pierce=Math.max(2,shot.pierce);}shot.pierce--;if(e.hp<=0)this.defeat(e);
     if(shot.kind==='explosive')this.explode(shot,e);
     if(shot.kind==='homing'&&shot.rank===3){this.emit('burst',e.x,e.y);for(const other of this.enemies)if(other!==e&&!other.dead&&distance(e,other)<65){other.hp-=shot.damage*.45;if(other.hp<=0)this.defeat(other);}}
     if(shot.pierce<=0){shot.life=0;break;}}
-   const b=this.boss;if(shot.life>0&&b&&b.age>2&&!shot.hit.has('boss')&&starSweep(ox,oy,shot.x,shot.y,b.x,b.y,b.r+shot.r)){b.hp-=this.falconDamage(shot,b);this.swiftResonate(b,shot);this.gainEnergy(shot.option?.15:.6);if(shot.kind==='explosive')this.explode(shot,b);b.flash=.035;shot.hit.add('boss');shot.life=0;this.emit('spark',shot.x,shot.y);}
+   const b=this.boss;if(shot.life>0&&b&&b.age>2&&!shot.hit.has('boss')&&starSweep(ox,oy,shot.x,shot.y,b.x,b.y,b.r+shot.r)){b.hp-=this.falconDamage(shot,b);if(shot.starBeam||shot.starMissile)this.emit('starImpact',shot.x,shot.y,{missile:!!shot.starMissile});this.swiftResonate(b,shot);this.gainEnergy(shot.option?.15:.6);if(shot.kind==='explosive')this.explode(shot,b);b.flash=.035;shot.hit.add('boss');shot.life=0;this.emit('spark',shot.x,shot.y);}
    if(shot.rangeExpired)shot.life=0;
   }
   for(const b of this.bullets){if(b.magmaBomb){stepMagmaBomb(this,b,dt);continue;}const ox=b.x,oy=b.y;if(b.gravity)b.vy+=b.gravity*dt;if(b.forestDelay>0){b.forestDelay-=dt;if(b.forestDelay<=0&&!b.boosted){b.vx*=4.5;b.vy*=4.5;b.boosted=true;this.emit('forestTick',b.x,b.y);}}if(b.yarnBall)stepIceYarn(b,dt);else{b.x+=b.vx*dt;b.y+=b.vy*dt;}if(b.bounceY&&(b.y<18||b.y>462)){b.y=clamp(b.y,18,462);b.vy*=-1;}b.life-=dt;
@@ -516,13 +540,15 @@ export class StarflightSession{
    item.age+=dt;item.life-=dt;item.colorLock=Math.max(0,(item.colorLock||0)-dt);item.flash=Math.max(0,(item.flash||0)-dt);item.x+=((item.kick||0)-(item.kind==='weapon'?141.96:105))*dt;item.kick=Math.max(0,(item.kick||0)*Math.exp(-5*dt));if(item.kind==='weapon'){if(item.x>1200){item.x=1200;item.kick=Math.min(141.96,item.kick);}item.y=item.baseY+Math.sin(item.age*2.8)*7;}
    if(item.kind==='gem'&&distance(item,p)<150)item.magnetized=true;
    if(item.kind==='gem'&&item.magnetized){const d=distance(item,p),step=Math.min(d,Math.max(420,this.tuning.playerSpeed*2.1)*dt);if(d>0){item.x+=(p.x-item.x)/d*step;item.y+=(p.y-item.y)/d*step;}}else if(item.kind!=='weapon'&&distance(item,p)<65){item.x+=(p.x-item.x)*dt*6;item.y+=(p.y-item.y)*dt*6;}
-   if(item.life>0&&this.status==='playing'&&this.phase==='combat'&&distance(item,p)<item.r+12){item.life=0;
-    if(item.kind==='weapon')this.collectWeapon(captured);
+   if(item.kind==='weapon'&&captured==='red'){const available=[0,1,2,3].filter(i=>this.skillLevels[i]<3);item.rouletteSlot=available.length?available[Math.floor(item.age/.45)%available.length]:Math.floor(item.age/.45)%4;}
+   if(item.life>0&&this.status==='playing'&&this.phase==='combat'&&distance(item,p)<item.r+12){item.life=0;item.collected=true;
+    if(item.kind==='weapon')this.collectWeapon(captured,item);
     else if(item.kind==='crystal')this.collectCrystal();
     else if(item.kind==='option'){this.options=Math.min(2,this.options+1);this.stats.rescued++;this.score+=3;this.emit('rescue');this.message('妹妹精靈加入！同步輔助射擊');}
     else if(item.kind==='heart'){this.score+=1;this.emit('energy',item.x,item.y);}
     else{this.score+=1;this.emit('energy',item.x,item.y);}}
   }
+  if(this.pickups.some(i=>i.kind==='weapon'&&!i.collected&&starColor(i).id==='yellow'&&(i.life<=0||i.x<=-70)))this.yellowChain=0;
   this.enemies=this.enemies.filter(e=>!e.dead&&!e.exit);this.shots=this.shots.filter(s=>s.life>0&&(s.owlOrbit||(s.x<1450&&s.x>-80&&s.y>-70&&s.y<550)));
   this.bullets=this.bullets.filter(b=>b.life>0&&b.x>-70&&b.x<1350&&b.y>-70&&b.y<550);this.pickups=this.pickups.filter(i=>i.life>0&&i.x>-70);
   if(this.boss?.hp<=0&&this.status==='playing'&&this.phase==='combat'){this.status='won';this.score+=9;this.emit('end');}

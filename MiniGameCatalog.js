@@ -46,8 +46,8 @@ export const MINI_GAME_CATALOG = Object.freeze([
     {
         id: 'cloud_glide_kids', scene: 'CloudGlideGame', category: 'rhythm', icon: '☁️',
         title: '阿晨晨・雲端滑翔', subtitle: '水彩雲圈・稀有金圈・彩虹爆發',
-        description: '陪阿晨晨飛進童話水彩雲海，穿越五段航線；管理耐力、俯衝蓄能，捕捉偶爾出現的金圈與彩虹圈。',
-        status: '空中屬性 v1.2・水彩動態完成品化', accent: 0x58a7c7, launchData: { mode: 'challenge' }
+        description: '陪阿晨晨飛進童話水彩雲海，選擇分岔航線、結交天空朋友，穿越金圈與彩虹圈，最後迎戰暴風雲鯨。',
+        status: '空中屬性 v1.4・水彩生物完成版', accent: 0x58a7c7, launchData: { mode: 'challenge' }
     },
     {
         id: 'lava_step', scene: 'LavaStepGame', category: 'rhythm', icon: '🪨',

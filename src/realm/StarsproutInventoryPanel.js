@@ -1,3 +1,4 @@
+import {SouvenirBookV322} from './SouvenirBookV322.js';
 import {assignQuickItem} from './RealmQuickItemsV319.js';
 import {souvenirProgress} from './SouvenirProgression.js';
 import { ITEM_CATALOG, TYPE_LABELS, normalizeStarsproutInventory, occupiedSlots, sortedStarsproutItems, appendItemArt } from './StarsproutInventory.js';
@@ -66,6 +67,7 @@ export class StarsproutInventoryPanel {
     if(!this.state.learnedSkills.includes('slash'))this.el('p','sprout-caption','到冒險工房找布隆克，學會第一個技能「斬擊」。',left);
     this.el('p','sprout-caption','SP 每 5 秒回復 1 點。營地為安全區，技能於野外使用。',left);
     this.progress=this.el('div','sprout-progress','',left);
+    this.button('紀念品圖鑑',()=>{if(!this.souvenirBook)this.souvenirBook=new SouvenirBookV322(this.host,this.state,()=>{this.souvenirBook=null;});},left,'sprout-skill');
     this.el('h3','sprout-bead-title','靈珠插槽',left);this.beads=this.el('div','sprout-beads','',left);
     const right=this.el('section','sprout-right','',this.book);this.el('h2','sprout-title','冒險行囊',right);const tabs=this.el('div','sprout-tabs','',right);this.tabButtons={};
     for(const [type,label] of Object.entries(TYPE_LABELS))this.tabButtons[type]=this.button(label,()=>{this.filter=type;this.render();},tabs);
@@ -114,5 +116,5 @@ export class StarsproutInventoryPanel {
   equip(name,requestedIndex=-1){const item=ITEM_CATALOG[name];if(item?.type!=='bead'||!this.state.items[name])return;let index=requestedIndex;if(index<0)index=this.state.beads.findIndex((v,i)=>i<this.state.unlockedBeadSlots&&!v);if(index<0)index=0;if(index>=this.state.unlockedBeadSlots)return;this.state.beads[index]=name;this.changed();}
   unequipBead(index){if(index<this.state.unlockedBeadSlots&&this.state.beads[index]){this.state.beads[index]='';this.changed();}}
   changed(){this.state=normalizeStarsproutInventory(this.state);this.onChange(this.state);this.render();}
-  close(){this.onClose(this.state);this.style.remove();this.overlay.remove();}
+  close(){this.souvenirBook?.close();this.onClose(this.state);this.style.remove();this.overlay.remove();}
 }

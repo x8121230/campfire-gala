@@ -1,9 +1,9 @@
 export const HERO_MOVEMENT_ATLAS = '../../assets/phantom-realm/hero-achenchen/animation-v2/hero-movement-atlas-v2.png';
 export const HERO_FRAME_SIZE = 512;
 
-const BASE_MOVE_SPEED = 260;
-const BASE_WALK_FPS = 10.5;
-const MAX_WALK_FPS = 13;
+const BASE_MOVE_SPEED = 225;
+const BASE_WALK_FPS = 10.0;
+const MAX_WALK_FPS = 12.4;
 const STOP_SETTLE_SECONDS = .08;
 const TURN_CONFIRM_SECONDS = .08;
 const TURN_HYSTERESIS = 13 * Math.PI / 180;
@@ -28,8 +28,8 @@ const FOOT_BASELINE = Object.freeze(Object.fromEntries(Object.entries(FOOT_CONTA
 // Preserve the complete generated gait. Camera pixel snapping and per-frame sole
 // calibration remove the jitter without sacrificing either passing pose.
 const WALK_SEQUENCE = Object.freeze([0, 1, 2, 3, 4, 5]);
-const WALK_BOB = Object.freeze([1.5, 0, -1.5, 1.5, 0, -1.5]);
-const WALK_TILT = Object.freeze([-1, -.35, .35, 1, .35, -.35].map((degrees) => degrees * Math.PI / 180));
+const WALK_BOB = Object.freeze([1.25, 0, -1.25, 1.25, 0, -1.25]);
+const WALK_TILT = Object.freeze([-.6, -.2, .2, .6, .2, -.2].map((degrees) => degrees * Math.PI / 180));
 
 function wrapAngle(value) { return Math.atan2(Math.sin(value), Math.cos(value)); }
 function angleDistance(a, b) { return Math.abs(wrapAngle(a - b)); }
@@ -80,12 +80,16 @@ export class HeroMovementAnimator {
     if (this.turnCandidateTime >= TURN_CONFIRM_SECONDS) { this.face = candidate; this.turnCandidate = ''; this.turnCandidateTime = 0; }
   }
 
-  update(dt, axis, moving, actualSpeed = BASE_MOVE_SPEED) {
+  update(dt, axis, moving, actualSpeed = BASE_MOVE_SPEED, pacing = {}) {
     const safeDt = Math.max(0, Math.min(.05, dt || 0));
     this.updateDirection(safeDt, axis, moving);
     if (moving) {
       if (!this.wasMoving) this.walkClock = 0;
-      const fps = Math.max(8.5, Math.min(MAX_WALK_FPS, BASE_WALK_FPS * Math.max(0, actualSpeed) / BASE_MOVE_SPEED));
+      const baseSpeed = Number(pacing.walkSpeed) || BASE_MOVE_SPEED;
+      const baseFps = Number(pacing.walkFps) || BASE_WALK_FPS;
+      const minFps = Number(pacing.minFps) || 8.8;
+      const maxFps = Number(pacing.maxFps) || MAX_WALK_FPS;
+      const fps = Math.max(minFps, Math.min(maxFps, baseFps * Math.max(0, actualSpeed) / baseSpeed));
       this.walkClock += safeDt * fps;
       this.stopSettle = STOP_SETTLE_SECONDS;
     } else if (this.wasMoving) {

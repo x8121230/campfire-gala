@@ -1,3 +1,4 @@
+import {souvenirForEvent,claimSouvenir,SouvenirRewardToast} from './SouvenirRewardsV323.js';
 import {souvenirProgress} from './SouvenirProgression.js';
 import {mentorReward,consumeItem,autoConsume,buildQuickSlots,renderQuickSlots} from './RealmQuickItemsV319.js';
 import { loadSkillResource, saveSkillResource } from './RealmSkillResource.js';
@@ -7,6 +8,7 @@ import { DandelionHillsJourney, HILLS_SCALE, MOB_TYPES, addHillsCollisionMark, d
 import { DandelionHillsWorld } from './DandelionHillsWorld.js';
 import { appendItemArt, ITEM_CATALOG, STARSPROUT_QUICK_ITEMS, loadStarsproutInventory, mergeStarsproutItems, saveStarsproutInventory } from './StarsproutInventory.js';
 import { StarsproutInventoryPanel } from './StarsproutInventoryPanel.js';
+import { loadMovementProfile, movementProfile, MOVEMENT_PROFILES, saveMovementProfile } from './RealmMovementProfilesV325.js';
 
 const SAVE = 'forest_dawn_dandelion_hills_v1';
 const COLLISION_SAVE = 'forest_dawn_dandelion_collision_v316'; // Old paint is preserved under its original key; coordinates belong to old terrain.
@@ -40,6 +42,8 @@ export class DandelionHillsApp {
     try { saved = JSON.parse(localStorage.getItem(SAVE) || 'null'); } catch {}
     try { setHillsCollisionPaint(JSON.parse(localStorage.getItem(COLLISION_SAVE) || 'null') || {}); } catch { setHillsCollisionPaint({}); }
     this.journey = new DandelionHillsJourney(saved);
+    this.movementProfile = loadMovementProfile();
+    this.journey.movementProfile = this.movementProfile;
     this.inventoryState=loadStarsproutInventory();
     if(!this.inventoryState.hillsInventoryMerged){this.inventoryState=mergeStarsproutItems(this.inventoryState,this.journey.inventory);this.inventoryState.hillsInventoryMerged=true;}
     let campStage=0;try{campStage=JSON.parse(localStorage.getItem('forest_starsprout_camp_v2')||'null')?.stage||0;}catch{}
@@ -74,7 +78,7 @@ export class DandelionHillsApp {
     style.textContent += '.hills-app .vitals{width:max-content;max-width:calc(100% - 24px)}.hills-app .resource-group{flex-wrap:wrap;max-width:195px}.hills-app .resource-icon{flex-shrink:0}';
     const top = this.el('div', 'top'), brand = this.el('div', 'brand', '', top);
     this.el('div', 'eyebrow', '幻界 · 微光星芽谷', brand); this.el('h1', '', '晨曦蒲公英丘陵', brand); this.objective = this.el('div', 'objective', '', brand);
-    const nav = this.el('div', 'nav', '', top); this.button('手帳', () => this.journal(), nav); this.button('背包', () => this.backpack(), nav); this.button('碰撞', () => this.openCollisionEditor(), nav); this.mapButton = this.button('鳥瞰', () => { if (!this.world) return; this.world.overview = !this.world.overview; this.mapButton.textContent = this.world.overview ? '跟隨' : '鳥瞰'; }, nav); this.button('暫停', () => this.pause(), nav);
+    const nav = this.el('div', 'nav', '', top); this.button('手帳', () => this.journal(), nav); this.button('背包', () => this.backpack(), nav); this.button('QM', () => this.openMovementQM(), nav).title = 'QM・移動手感'; this.button('碰撞', () => this.openCollisionEditor(), nav); this.mapButton = this.button('鳥瞰', () => { if (!this.world) return; this.world.overview = !this.world.overview; this.mapButton.textContent = this.world.overview ? '跟隨' : '鳥瞰'; }, nav); this.button('暫停', () => this.pause(), nav);
     this.joy = this.el('div', 'joy'); this.knob = this.el('div', 'knob', '', this.joy); this.el('div', 'joylabel', '拖曳移動', this.joy);
     const actions = this.el('div', 'actions'); this.dodgeButton = this.button('✧\n閃步', () => { this.dodgeRequested = true; }, actions, 'dodge'); this.interactButton = this.button('互動', () => this.interact(), actions, 'interact'); this.attackButton = this.button('', () => {}, actions, 'attack');
     appendItemArt(this.attackButton, '斬擊', 'skill-icon'); this.swordLabel = this.el('span', 'skill-label', '斬擊 SP 0', this.attackButton);
@@ -189,6 +193,9 @@ export class DandelionHillsApp {
 
   flush() {
     for (const effect of this.journey.effects.splice(0)) {
+      const souvenirId=souvenirForEvent(effect);
+      if(souvenirId){const reward=claimSouvenir(this.inventoryState,this.journey,souvenirId);if(reward){this.save();this.hud();(this.souvenirToast ||= new SouvenirRewardToast(this.root)).show(reward);safeCue(this.onSound,'finish');}}
+      if(effect.kind==='souvenirDefeat')continue;
       if (effect.kind === 'playerDownReady') {
         this.dialog('先趴一下，休息一下…', '阿晨晨累倒了，星芽微光會帶你回到門口。\n任務進度與背包物品都會保留。', [['✦ 回到門口', () => { if (this.journey.revive()) { this.requireCampExit = true; this.save(); this.close(); } }]]);
         continue;
@@ -316,6 +323,20 @@ export class DandelionHillsApp {
   travelTo(target) { if (this.journey.downed || this.traveling || this.journey.attackWindow > 0 || this.journey.stunned > 0) return; this.traveling = true; this.paused = true; this.clearInput(); this.save(); this.onTravel(target); }
   notify(text) { this.toast.textContent = text; this.toast.style.opacity = '1'; this.toastUntil = performance.now() + 3800; }
   dialog(title, text, choices) { this.paused = true; this.clearInput(); this.modal?.remove(); this.modal = this.el('div', 'modal'); const card = this.el('div', 'card', '', this.modal); this.el('h2', '', title, card); this.el('div', 'body', text, card); const buttons = this.el('div', 'choices', '', card); for (const choice of choices) this.button(choice[0], choice[1], buttons); return card; }
+  openMovementQM() {
+    const current = movementProfile(this.movementProfile);
+    this.dialog('QM・移動手感', `目前使用：${current.name}\n${current.description}\n\n選擇後會立刻套用，並同步保存到星芽營地與所有後續地圖。`, [
+      ['小碎步｜225', () => this.setMovementProfile('sprout')],
+      ['悠閒漫步｜210', () => this.setMovementProfile('stroll')],
+      ['取消', () => this.close()]
+    ]);
+  }
+  setMovementProfile(id) {
+    this.movementProfile = saveMovementProfile(id);
+    this.journey.movementProfile = this.movementProfile;
+    this.save(); this.hud(); this.close();
+    this.notify(`QM 已切換為「${MOVEMENT_PROFILES[this.movementProfile].name}」`);
+  }
   close() { if (this.journey.downed) return; if (this.root.clientHeight > this.root.clientWidth) return; this.modal?.remove(); this.modal = null; this.clearInput(); this.paused = false; this.last = performance.now(); }
   pause() { if (this.dead || this.loading) return; if (this.modal) return; this.dialog('在蒲公英花田休息', this.journey.objective() + '\n目前進度已自動保存。', [['繼續', () => this.close()], ['返回星芽營地', () => this.travelTo('camp')], ['返回遊戲列表', () => this.onExit()]]); }
   backpack() {
@@ -332,8 +353,8 @@ export class DandelionHillsApp {
   journal() {
     if (this.loading) return;
     const j = this.journey, species = Object.entries(MOB_TYPES).map(([id, mob]) => `${mob.elite ? '★' : '•'} ${mob.name}｜${mob.level}`).join('\n');
-    this.dialog('晨曦丘陵探險手帳', `${j.objective()}\n\n戰鬥\n斬擊（J／空白鍵）不耗 SP。其他技能日後向導師學習。SP 每 5 秒回復 1 點，上限隨紀念品等級提升。斬擊會朝面前劈下；斬擊完整結束前不能移動或防禦。不攻擊時面向敵方攻擊即可自動格擋，盾牌耐久歸零會破防並原地暈眩2秒。Shift／閃步可短暫避開攻擊。\n\n警戒圈\n黃色＝被動或尚未敵對；紅色＝正在攻擊你。\n\n掉落\n光團彈跳兩次後懸浮；靠近1.5格會自動磁吸。柔白＝普通、明黃＝任務、星藍＝稀有靈珠。\n\n生物\n${species}\n\n蒲公英大遷徙期間，晨曦蒲公英採集量加倍。`, [['回到探索', () => this.close()], ['重玩丘陵任務', () => this.dialog('重新開始丘陵進度？', '只重設丘陵任務與素材，不影響星芽營地。', [['取消', () => this.journal()], ['確認重玩', () => { this.journey = new DandelionHillsJourney(); this.journey.learnedSkills=this.inventoryState.learnedSkills;this.journey.inventory=this.inventoryState.items;Object.assign(this.journey,souvenirProgress(this.inventoryState.souvenirs)); this.save(); this.hud(); this.close(); }]])]]);
+    this.dialog('晨曦丘陵探險手帳', `${j.objective()}\n\n戰鬥\n斬擊（J／空白鍵）不耗 SP。其他技能日後向導師學習。SP 每 5 秒回復 1 點，上限隨紀念品等級提升。斬擊會朝面前劈下；斬擊在0.20秒命中，0.32秒後可用移動取消收招；0.45秒後才可再次攻擊或防禦。不攻擊時面向敵方攻擊即可自動格擋，盾牌耐久歸零會破防並原地暈眩2秒。Shift／閃步可短暫避開攻擊。\n\n警戒圈\n黃色＝被動或尚未敵對；紅色＝正在攻擊你。\n\n掉落\n光團彈跳兩次後懸浮；靠近1.5格會自動磁吸。柔白＝普通、明黃＝任務、星藍＝稀有靈珠。\n\n生物\n${species}\n\n蒲公英大遷徙期間，晨曦蒲公英採集量加倍。`, [['回到探索', () => this.close()], ['重玩丘陵任務', () => this.dialog('重新開始丘陵進度？', '只重設丘陵任務與素材，不影響星芽營地。', [['取消', () => this.journal()], ['確認重玩', () => { this.journey = new DandelionHillsJourney(); this.journey.movementProfile=this.movementProfile; this.journey.learnedSkills=this.inventoryState.learnedSkills;this.journey.inventory=this.inventoryState.items;Object.assign(this.journey,souvenirProgress(this.inventoryState.souvenirs)); this.save(); this.hud(); this.close(); }]])]]);
   }
 
-  dispose() { this.dead = true; cancelAnimationFrame(this.frame); this.abort.abort(); this.clearInput(); if (this.inventoryPanel) { this.inventoryPanel.style.remove(); this.inventoryPanel.overlay.remove(); this.inventoryPanel = null; } this.world?.dispose(); this.root.remove(); }
+  dispose() { this.souvenirToast?.dispose(); this.dead = true; cancelAnimationFrame(this.frame); this.abort.abort(); this.clearInput(); if (this.inventoryPanel) { this.inventoryPanel.style.remove(); this.inventoryPanel.overlay.remove(); this.inventoryPanel = null; } this.world?.dispose(); this.root.remove(); }
 }

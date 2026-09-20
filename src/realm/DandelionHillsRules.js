@@ -1,8 +1,9 @@
 import { SMALL_CREATURE_TYPES, updateSmallCreature } from './CreatureLifeV318.js';
 import { regenerateSkillResource } from './RealmSkillResource.js';
 import { NEW_HILLS_SIZE, NEW_HILLS_OBSTACLES, HILLS_OUTER, islandPoint, HILLS_BRIDGES } from './HillsMapV316.js';
-import { updatePumpkinBoss } from './PumpkinBoss.js';
+import { updatePumpkinBossV321, advancePumpkinProjectile, clearPumpkinAttacks } from './PumpkinCombatV321.js';
 import { MANA_SLASH } from './ManaSlashTiming.js';
+import { movementProfile } from './RealmMovementProfilesV325.js';
 export const HILLS_SCALE = 2;
 export const HILLS_MAP = Object.freeze(NEW_HILLS_SIZE);
 
@@ -39,6 +40,7 @@ export const HILLS_COMBAT = Object.freeze({
   attackDuration: MANA_SLASH.duration,
   attackCooldown: MANA_SLASH.cooldown,
   attackImpact: MANA_SLASH.impact,
+  attackMoveUnlock: MANA_SLASH.moveUnlock,
   shieldMax: 100,
   shieldDamagePerHit: 25,
   guardConeDot: .34,
@@ -178,7 +180,7 @@ function safeSaved(saved) {
 export class DandelionHillsJourney {
   constructor(saved) {
     const data = safeSaved(saved);
-    this.learnedSkills=[];this.damage=1;this.moveMultiplier=1;
+    this.learnedSkills=[];this.damage=1;this.moveMultiplier=1;this.movementProfile='sprout';
     this.time = 0;
     this.player = { x: HILLS_ENTRY.x, y: HILLS_ENTRY.y };
     this.downed = false;
@@ -194,6 +196,7 @@ export class DandelionHillsJourney {
     this.speedBuff = 0;
     this.attackCooldown = 0;
     this.attackWindow = 0;
+    this.attackMoveLock = 0;
     this.activeSlash = null;
     this.slashSerial = 0;
     this.dodgeCooldown = 0;
@@ -277,11 +280,14 @@ export class DandelionHillsJourney {
 
   move(dt, axis, dodge = false) {
     if (this.downed) return false;
-    if (this.stunned > 0 || this.attackWindow > 0) { this.currentMoveSpeed = 0; return false; }
+    if (this.stunned > 0 || this.attackMoveLock > 0) { this.currentMoveSpeed = 0; return false; }
     const length = Math.hypot(axis.x, axis.y);
     if (length < .12) { this.currentMoveSpeed = 0; return false; }
+    // Input after 0.32s cancels only the remaining pose and blade; damage already resolved.
+    if (this.activeSlash) this.activeSlash = null;
     this.facing = { x: axis.x / length, y: axis.y / length };
-    let speed = 260 * (this.moveMultiplier||1) * (this.speedBuff > 0 ? 1.12 : 1);
+    const pacing = movementProfile(this.movementProfile);
+    let speed = pacing.walkSpeed * (this.moveMultiplier||1) * (this.speedBuff > 0 ? 1.12 : 1);
     if (dodge && this.dodgeCooldown <= 0) {
       speed *= 2.45;
       this.dodgeCooldown = 2.2;
@@ -315,6 +321,7 @@ export class DandelionHillsJourney {
     }
     this.attackCooldown = HILLS_COMBAT.attackCooldown;
     this.attackWindow = HILLS_COMBAT.attackDuration;
+    this.attackMoveLock = HILLS_COMBAT.attackMoveUnlock;
     this.activeSlash = { id: ++this.slashSerial, start: this.time, x: this.player.x, y: this.player.y, dx: this.facing.x, dy: this.facing.y, resolved: false };
     this.effect('slash', { ...this.activeSlash });
     return true;
@@ -369,9 +376,11 @@ export class DandelionHillsJourney {
 
   defeat(mob) {
     if (!mob.alive) return;
+    if(mob.type==='rabbit')clearPumpkinAttacks(this,mob);
     mob.alive = false; mob.deathTime = 0; mob.cast = null; mob.moveSpeed = 0;
     mob.respawn = HILLS_RESPAWN_SECONDS[mob.type];
     mob.aggro = false;
+    this.effect('souvenirDefeat', {type:mob.type});
     this.effect('poof', { x: mob.x, y: mob.y, type: mob.type, target: mob.id, faceLeft: mob.faceLeft });
     const table = DROP_DATA[mob.type];
     for (const [name, chance] of table) {
@@ -412,7 +421,7 @@ export class DandelionHillsJourney {
     if (this.questStage === 0 && this.mouseProgress >= 6 && this.itemCount('香脆橡果') >= 4) {
       this.questStage = 1;
       this.dirty = true;
-      this.say('MAIN_02 完成！取得手工木製冒險法杖。菲比正在等待5份純淨星芽膠。', 'finish');
+      this.say('MAIN_02 完成！軟綿綿的試煉通過了。菲比正在等待5份純淨星芽膠。', 'finish');
     }
     if (this.questStage === 1 && this.itemCount('純淨星芽膠') >= 5) {
       this.questStage = 2;
@@ -461,6 +470,7 @@ export class DandelionHillsJourney {
       if (this.shieldDurability <= 0) {
         this.stunned = HILLS_COMBAT.guardBreakStun;
         this.attackWindow = 0;
+        this.attackMoveLock = 0;
         this.activeSlash = null;
         this.attackCooldown = 0;
         this.gather = null;
@@ -478,7 +488,7 @@ export class DandelionHillsJourney {
     this.effect('hurt', { x: this.player.x, y: this.player.y, kind });
     if (this.hp <= 0) {
       this.downed = true; this.downTime = 0; this.revivePrompted = false;
-      this.activeSlash = null; this.attackWindow = 0; this.gather = null;
+      this.activeSlash = null; this.attackWindow = 0; this.attackMoveLock = 0; this.gather = null;
       this.stunned = 0; this.blind = 0; this.invulnerable = 0;
       this.projectiles = []; this.traps = [];
       for (const mob of this.mobs) { mob.aggro = false; mob.cast = null; }
@@ -500,6 +510,7 @@ export class DandelionHillsJourney {
 
   updateProjectiles(dt) {
     for (const shot of this.projectiles) {
+      if(shot.kind==='pumpkin'){advancePumpkinProjectile(this,shot,dt,hillsWalkable);continue;}
       shot.life -= dt;
       if (shot.life <= 0) {
         this.effect('projectileEnd', { x: shot.x, y: shot.y, type: shot.kind });
@@ -550,7 +561,7 @@ export class DandelionHillsJourney {
         continue;
       }
       mob.animTime = (mob.animTime || 0) + dt; mob.moveSpeed = 0;
-      if (mob.type === 'rabbit') { updatePumpkinBoss(this, mob, dt); continue; }
+      if (mob.type === 'rabbit') { updatePumpkinBossV321(this, mob, dt, hillsWalkable); continue; }
       mob.recovery = Math.max(0, (mob.recovery || 0) - dt);
       if (mob.cast) {
         mob.cast.elapsed += dt;
@@ -638,8 +649,9 @@ export class DandelionHillsJourney {
     this.invulnerable = Math.max(0, this.invulnerable - dt);
     this.blind = Math.max(0, this.blind - dt);
     this.speedBuff = Math.max(0, this.speedBuff - dt);
-    this.attackCooldown = Math.max(0, this.attackCooldown - dt);
-    this.attackWindow = Math.max(0, this.attackWindow - dt);
+    this.attackCooldown = this.attackCooldown <= dt + 1e-9 ? 0 : this.attackCooldown - dt;
+    this.attackWindow = this.attackWindow <= dt + 1e-9 ? 0 : this.attackWindow - dt;
+    this.attackMoveLock = this.attackMoveLock <= dt + 1e-9 ? 0 : this.attackMoveLock - dt;
     this.dodgeCooldown = Math.max(0, this.dodgeCooldown - dt);
     const wasStunned = this.stunned > 0;
     this.stunned = Math.max(0, this.stunned - dt);

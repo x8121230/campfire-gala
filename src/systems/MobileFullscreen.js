@@ -1,5 +1,6 @@
 const FULLSCREEN_CLASS = 'mobile-web-fullscreen';
 const FULLSCREEN_EVENT = 'forest-fullscreen-change';
+let lastViewportSize = '';
 
 function fullscreenElement() {
     return document.fullscreenElement || document.webkitFullscreenElement || null;
@@ -48,8 +49,16 @@ export function syncMobileViewport() {
     const viewport = window.visualViewport;
     const height = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight);
     const width = Math.round(viewport?.width || window.innerWidth || document.documentElement.clientWidth);
+    const size = `${width}x${height}`;
+    // syncMobileViewport is itself registered as a resize listener.  The old
+    // unconditional synthetic resize event therefore called this function
+    // again immediately until the browser stack overflowed.
+    if (size === lastViewportSize) return;
+    lastViewportSize = size;
     document.documentElement.style.setProperty('--app-height', `${height}px`);
     document.documentElement.style.setProperty('--app-width', `${width}px`);
+    // Keep Phaser and existing layout listeners informed once, while the
+    // size guard makes the re-entrant listener call a safe no-op.
     window.dispatchEvent(new Event('resize'));
 }
 

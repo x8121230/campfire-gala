@@ -1,0 +1,16 @@
+森林星航 v0.10.38｜全螢幕遞迴與 BGM 啟動修正
+
+【修正】
+1. 修復 MobileFullscreen.js 的 syncMobileViewport 無限 resize 遞迴。
+   原問題會造成 Maximum call stack size exceeded，並干擾遊戲音訊與畫面事件。
+2. 九區 BGM 改在正式 preload 階段載入。
+3. BGM 改為第一次點擊、切換機體、按準備出發或鍵盤操作後解鎖播放。
+4. 區域／星風亂流／Boss 的自動換曲與交叉淡化維持不變。
+5. main.js 加入新的快取版本，確保不會繼續讀取舊的星航程式。
+
+【安裝】
+本包只含必要檔案。解壓後將 src 資料夾覆蓋到遊戲根目錄。
+請保留已安裝的 v0.10.36 BGM 音檔資料夾：
+assets/forest-starflight/bgm-v0136/
+
+安裝後完全關閉遊戲並重新開啟，再點任一機體或「準備出發」即可開始 BGM。

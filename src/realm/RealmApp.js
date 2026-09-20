@@ -6,6 +6,7 @@ import { RealmWorld } from './MentorCampWorldV319.js';
 import { RealmJourney, SPOTS, WORLD_SCALE, addCampCollisionMark, collisionStrokePoints, disableCampObstaclesAt, eraseCampCollisionMarks, getCampCollisionPaint, setCampCollisionPaint } from './MentorCampRulesV319.js';
 import { appendItemArt, ITEM_CATALOG, STARSPROUT_QUICK_ITEMS, loadStarsproutInventory, mergeStarsproutItems, saveStarsproutInventory } from './StarsproutInventory.js';
 import { StarsproutInventoryPanel } from './StarsproutInventoryPanel.js';
+import { loadMovementProfile, movementProfile, MOVEMENT_PROFILES, saveMovementProfile } from './RealmMovementProfilesV325.js';
 
 const SAVE = 'forest_starsprout_camp_v2';
 const COLLISION_SAVE = 'forest_starsprout_camp_collision_v1';
@@ -34,6 +35,8 @@ export class RealmApp {
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(SAVE) || 'null'); } catch {}
     this.journey = new RealmJourney(saved);
+    this.movementProfile = loadMovementProfile();
+    this.journey.movementProfile = this.movementProfile;
     try {
       const collisionSaved = JSON.parse(localStorage.getItem(COLLISION_SAVE) || 'null') || {};
       // v1 disabled indices refer to the old oversized workshop rectangle.
@@ -96,6 +99,7 @@ export class RealmApp {
     const nav = this.el('div', 'topnav', '', top);
     this.button('手帳', () => this.journal(), nav);
     this.button('背包', () => this.backpack(), nav);
+    this.button('QM', () => this.openMovementQM(), nav).title = 'QM・移動手感';
     this.button('碰撞', () => this.openCollisionEditor(), nav);
     this.mapButton = this.button('鳥瞰', () => {
       if (!this.world) return;
@@ -419,6 +423,22 @@ export class RealmApp {
     return card;
   }
 
+  openMovementQM() {
+    const current = movementProfile(this.movementProfile);
+    this.dialog('QM・移動手感', `目前使用：${current.name}\n${current.description}\n\n選擇後會立刻套用，並同步保存到晨曦蒲公英丘陵與所有後續地圖。`, [
+      ['小碎步｜225', () => this.setMovementProfile('sprout')],
+      ['悠閒漫步｜210', () => this.setMovementProfile('stroll')],
+      ['取消', () => this.close()]
+    ]);
+  }
+
+  setMovementProfile(id) {
+    this.movementProfile = saveMovementProfile(id);
+    this.journey.movementProfile = this.movementProfile;
+    this.save(); this.hud(); this.close();
+    this.notify(`QM 已切換為「${MOVEMENT_PROFILES[this.movementProfile].name}」`);
+  }
+
   close() {
     if (this.root.clientHeight > this.root.clientWidth) return;
     if (this.modal) this.modal.remove();
@@ -452,6 +472,7 @@ export class RealmApp {
           ['取消', () => this.journal()],
           ['確認重玩', () => {
             this.journey = new RealmJourney();
+            this.journey.movementProfile = this.movementProfile;
             this.save();
             this.hud();
             this.close();

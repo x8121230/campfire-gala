@@ -1,0 +1,12 @@
+✔ eight actual frames and stable looping, including invalid clock (0.997991ms)
+✔ only new hostile shots of this boss are tagged; original AI called once (0.272921ms)
+✔ idle renders genuine atlas frames; attack, death and hurt delegate to existing art (0.521154ms)
+✔ rendering all frames, directions and expired effects is finite, balanced and read-only (25.023209ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 405.01024

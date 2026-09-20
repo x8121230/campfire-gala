@@ -1,3 +1,6 @@
+import { STORYBOOK_ASSETS, mouseIdlePhase, drawPaintedImpact, drawThrownPumpkin, drawStorybookSlash } from './StorybookEffectsV321.js';
+import { PUMPKIN_COMBAT } from './PumpkinCombatV321.js';
+import { PUMPKIN_ATLAS_V320, SLAM_VISUAL_SECONDS, drawPumpkinIdle } from './PumpkinPresentationV320.js';
 import { HillsDetailTiles } from './HillsDetailTilesV318.js';
 import { drawLifeFrame, MOUSE_VISUAL_SCALE, CREATURE_DEATH_SECONDS } from './CreatureLifeV318.js';
 import { HILLS_TILES } from './HillsMapV316.js';
@@ -7,8 +10,11 @@ import { CreatureAnimator, creatureAtlasRigs, drawCreatureFrame } from './Creatu
 import { manaSlashPose, MANA_SLASH } from './ManaSlashTiming.js';
 import { GATHER_NODES, HILLS_COMBAT, HILLS_ENTRY, HILLS_MAP, HILLS_OBSTACLES, HILLS_PORTALS, HILLS_SCALE, MOB_TYPES, distance, getHillsCollisionPaint } from './DandelionHillsRules.js';
 import { HERO_FRAME_SIZE, HERO_MOVEMENT_ATLAS, HeroMovementAnimator } from './HeroMovementAnimator.js';
+import { movementProfile } from './RealmMovementProfilesV325.js';
 
 const ASSETS = Object.freeze({
+  ...STORYBOOK_ASSETS,
+  pumpkinLife: PUMPKIN_ATLAS_V320,
   moleLife: '../../assets/phantom-realm/dawn-dandelion-hills/life-v318/mole-atlas.png',
   dewLife: '../../assets/phantom-realm/dawn-dandelion-hills/life-v318/dew-atlas.png',
   bossFrames: '../../assets/phantom-realm/dawn-dandelion-hills/pumpkin-boss-v315.png',
@@ -107,7 +113,7 @@ export class DandelionHillsWorld {
   consumeEffect(effect) {
     if (effect.kind === 'hurt') this.shake = .28;
     if (effect.kind === 'guardBreak') this.shake = .42;
-    const life = effect.kind === 'poof' && ['mole','dew'].includes(effect.type) ? CREATURE_DEATH_SECONDS : { hit: .35, poof: .8, pickup: .8, cast: .3, slash: HILLS_COMBAT.attackDuration, guard: .38, guardBreak: .85, guardRecover: .7, dodge: .45, bounce: .7, gather: .75, hurt: .45, grassStep: .45, splash: .55 }[effect.kind] || .5;
+    const life = ['bossSlam','pumpkinBurst'].includes(effect.kind) ? SLAM_VISUAL_SECONDS : effect.kind === 'poof' && ['mole','dew'].includes(effect.type) ? CREATURE_DEATH_SECONDS : { hit: .35, poof: .8, pickup: .8, cast: .3, slash: HILLS_COMBAT.attackDuration, guard: .38, guardBreak: .85, guardRecover: .7, dodge: .45, bounce: .7, gather: .75, hurt: .45, grassStep: .45, splash: .55 }[effect.kind] || .5;
     const creaturePose = effect.kind === 'poof' ? { ...this.creatureAnimator.states.get(effect.target) } : null;
     this.effects.push({ ...effect, creaturePose, life, maxLife: life });
   }
@@ -202,8 +208,9 @@ export class DandelionHillsWorld {
     const slash = journey.activeSlash;
     const pose = slash ? manaSlashPose(journey.time - slash.start) : null;
     if (pose) {
-      ctx.translate(slash.dx * pose.forward, slash.dy * pose.forward * .5);
+      ctx.translate(slash.dx * pose.forward, slash.dy * pose.forward * .5 + pose.bodyY);
       ctx.rotate(pose.tilt * slash.dx);
+      ctx.scale(pose.scaleX,pose.scaleY);
     }
     ctx.rotate(frame.renderTiltRadians);
     ctx.translate(0, frame.renderOffsetYRatio * height);
@@ -244,7 +251,7 @@ export class DandelionHillsWorld {
   drawMob(ctx, mob, journey) {
     if (!mob.alive) return;
     const image = this.images[mob.type];
-    const state = this.creatureAnimator.states.get(mob.id);
+    const state = this.creatureAnimator.states.get(mob.id) || {lift:0,flip:mob.faceLeft,mix:0,mode:'idle',clock:this.time,phase:0};
     const animated = this.creatureFrames && state && ['mouse', 'chick'].includes(mob.type);
     const height = MOB_HEIGHT[mob.type];
     const width = image.width / image.height * height;
@@ -275,7 +282,7 @@ export class DandelionHillsWorld {
         const hit = Math.min(1, mob.hitFlash / .18);
         if (state.mode === 'dizzy') ctx.rotate(Math.sin(state.clock * 9) * .035);
         ctx.scale(1 + hit * .045, 1 - hit * .035);
-        drawCreatureFrame(ctx, this.creatureFrames[running ? 'mouseRun' : 'mouseIdle'], running ? state.phase : state.clock / 2.8, width, height);
+        drawCreatureFrame(ctx, this.creatureFrames[running ? 'mouseRun' : 'mouseIdle'], running ? state.phase : mouseIdlePhase(this.time,mob.id), width, height);
       } else {
         ctx.rotate(Math.sin(state.clock * 2.4) * .022);
         drawCreatureFrame(ctx, this.creatureFrames.chickFlight, state.phase, width, height);
@@ -288,7 +295,15 @@ export class DandelionHillsWorld {
           ctx.fillText('✦', mob.x + Math.cos(a) * 19, mob.y - 108 + Math.sin(a) * 5);
         }
       }
-    } else if(mob.type === 'rabbit') drawPumpkinBoss(ctx,this.images.bossFrames,mob);
+    } else if(mob.type === 'rabbit') {
+      const b=mob.boss;
+      if(b && ['slamWindup','leap'].includes(b.phase)) {
+        // Visual altitude is separate from ground movement and the landing target.
+        const lift=b.phase==='leap'?Math.sin(Math.min(1,b.elapsed/PUMPKIN_COMBAT.leap)*Math.PI)*115:0;
+        const pose={...mob,y:mob.y-lift,boss:{...b,phase:'idle'}};
+        if(!drawPumpkinIdle(ctx,this.images.pumpkinLife,pose))drawPumpkinBoss(ctx,this.images.bossFrames,pose);
+      } else if(!drawPumpkinIdle(ctx,this.images.pumpkinLife,mob))drawPumpkinBoss(ctx,this.images.bossFrames,mob);
+    }
     else if (['mole', 'dew'].includes(mob.type)) {
       ctx.save();ctx.translate(mob.x, mob.y);if (mob.faceLeft) ctx.scale(-1, 1);
       const size = mob.type === 'mole' ? 132 : 122;
@@ -376,6 +391,7 @@ export class DandelionHillsWorld {
 
   drawProjectiles(ctx, journey) {
     for (const shot of journey.projectiles) {
+      if(shot.kind==='pumpkin' && drawThrownPumpkin(ctx,this.images.pumpkinImpact,shot,this.time))continue;
       if (shot.kind === 'magicArrow') {
         ctx.save(); ctx.translate(shot.x, shot.y - 42); ctx.rotate(Math.atan2(shot.dy, shot.dx));
         ctx.globalAlpha = Math.min(1, Math.max(0, shot.life / .16));
@@ -416,78 +432,11 @@ export class DandelionHillsWorld {
       // Expired effects must never reach Canvas (arc rejects negative radii).
       if (!(fx.life > 0) || !(fx.maxLife > 0)) continue;
       const p = Math.max(0, Math.min(1, 1 - fx.life / fx.maxLife));
-      ctx.save(); ctx.globalAlpha = Math.max(0, 1 - p);
+      ctx.save(); ctx.globalAlpha = fx.kind === 'slash' ? 1 : Math.max(0, 1 - p);
       const color = fx.kind === 'hurt' ? '#ff8f82' : fx.kind === 'pickup' ? (fx.rarity === 'rare' ? '#79bfff' : '#fff1a2') : '#fff4bd';
       ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4;
       if (fx.kind === 'slash') {
-        const dx = Number.isFinite(fx.dx) ? fx.dx : 1;
-        const dy = Number.isFinite(fx.dy) ? fx.dy : 0;
-        let targetAngle = Math.atan2(dy, dx);
-        // Keep left-facing attacks on the upper half-plane: overhead -> left,
-        // never the accidental lower-left -> upward reverse cut.
-        if (dx < 0 && targetAngle > 0) targetAngle -= Math.PI * 2;
-        let startAngle = -Math.PI / 2;
-        if (dy < -.66) startAngle = dx < 0 ? -Math.PI : 0;
-        const elapsed = journey.time - fx.start;
-        const pose = manaSlashPose(elapsed);
-        const formation = pose.formation;
-        const swingTime = pose.swing;
-        const eased = pose.swing;
-        const swordAngle = startAngle + (targetAngle - startAngle) * eased;
-        // The spell forms at the star-wand tip, not at the character's body.
-        const pivotX = fx.x + dx * 38 - dy * 12;
-        const pivotY = fx.y - 67 + dy * 22;
-        ctx.globalCompositeOperation = 'screen';
-
-        // Blue mana gathers above the hero before the kendo-style cut.
-        for (let i = 0; i < 12; i += 1) {
-          const a = i * Math.PI * 2 / 12 + this.time * (i % 2 ? 2.4 : -1.8);
-          const gather = (1 - formation) * (54 + i % 3 * 8);
-          const px = pivotX + Math.cos(a) * gather;
-          const py = pivotY - 58 + Math.sin(a) * gather * .58;
-          ctx.globalAlpha = pose.bladeAlpha * (.35 + formation * .55);
-          ctx.fillStyle = i % 3 ? '#63cfff' : '#d8f8ff';
-          ctx.beginPath(); ctx.arc(px, py, 2 + (i % 3), 0, Math.PI * 2); ctx.fill();
-        }
-
-        // Three translucent blade afterimages make the swing direction legible.
-        if (swingTime > 0) {
-          for (let trail = 3; trail >= 1; trail -= 1) {
-            const oldEase = Math.max(0, eased - trail * .1);
-            const oldAngle = startAngle + (targetAngle - startAngle) * oldEase;
-            ctx.save(); ctx.translate(pivotX, pivotY); ctx.rotate(oldAngle);
-            ctx.globalAlpha = pose.bladeAlpha * (.04 + (4 - trail) * .035);
-            ctx.strokeStyle = trail === 1 ? '#7fe4ff' : '#3d7dff';
-            ctx.lineWidth = 13 - trail * 2; ctx.lineCap = 'round';
-            ctx.beginPath(); ctx.moveTo(12, 0); ctx.lineTo(116, 0); ctx.stroke(); ctx.restore();
-          }
-        }
-
-        // The actual mana sword keeps its blue pigment against the bright meadow.
-        ctx.save(); ctx.globalCompositeOperation = 'source-over'; ctx.translate(pivotX, pivotY); ctx.rotate(swordAngle);
-        ctx.globalAlpha = pose.bladeAlpha;
-        ctx.shadowColor = '#36a9ff'; ctx.shadowBlur = 16;
-        const blade = ctx.createLinearGradient(13, 0, 125, 0);
-        blade.addColorStop(0, '#225cce'); blade.addColorStop(.45, '#288fdc'); blade.addColorStop(.78, '#67dcff'); blade.addColorStop(1, 'rgba(126,225,255,0)');
-        ctx.fillStyle = blade; ctx.beginPath(); ctx.moveTo(14, -6); ctx.lineTo(104, -9.75); ctx.lineTo(132, 0); ctx.lineTo(104, 9.75); ctx.lineTo(14, 6); ctx.closePath(); ctx.fill();
-        ctx.strokeStyle = elapsed >= MANA_SLASH.windup && elapsed <= MANA_SLASH.impact + MANA_SLASH.contactHold ? '#e9fdff' : '#63cfff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(18, 0); ctx.lineTo(119, 0); ctx.stroke();
-        ctx.shadowBlur = 16; ctx.strokeStyle = '#8be8ff'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(2, -18); ctx.lineTo(2, 18); ctx.stroke();
-        ctx.fillStyle = '#fff4a8'; ctx.beginPath();
-        for (let n = 0; n < 10; n += 1) { const a = -Math.PI / 2 + n * Math.PI / 5, r = n % 2 ? 5 : 11; const x = Math.cos(a) * r, y = Math.sin(a) * r; if (!n) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
-        ctx.closePath(); ctx.fill(); ctx.restore();
-
-        // A forward blue pressure wave finishes the strike instead of a plain arc.
-        if (elapsed >= MANA_SLASH.impact && pose.wave < 1) {
-          const wave = pose.wave;
-          ctx.save(); ctx.translate(pivotX + dx * (68 + wave * 54), pivotY + 30 + dy * (35 + wave * 35)); ctx.rotate(targetAngle);
-          ctx.globalAlpha = (1 - wave) * .5;
-          ctx.shadowColor = '#56cfff'; ctx.shadowBlur = 24;
-          ctx.strokeStyle = '#bff7ff'; ctx.lineWidth = 6 * (1 - wave * .55); ctx.lineCap = 'round';
-          ctx.beginPath(); ctx.arc(0, 0, 42 + wave * 52, -1.05, 1.05); ctx.stroke();
-          ctx.strokeStyle = '#438dff'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(0, 0, 51 + wave * 57, -.92, .92); ctx.stroke();
-          for (let i = 0; i < 7; i += 1) { const a = -.9 + i * .3; ctx.fillStyle = i % 2 ? '#78dcff' : '#e3fbff'; ctx.beginPath(); ctx.arc(Math.cos(a) * (58 + wave * 70), Math.sin(a) * (58 + wave * 70), 2.5 + (1 - wave) * 2, 0, Math.PI * 2); ctx.fill(); }
-          ctx.restore();
-        }
+        drawStorybookSlash(ctx,this.images.storybookSlash,fx,manaSlashPose(journey.time-fx.start));
       } else if (fx.kind === 'guard') {
         const dx = fx.dx || 1, dy = fx.dy || 0;
         ctx.translate(fx.x + dx * 45, fx.y - 56 + dy * 25);
@@ -532,8 +481,8 @@ export class DandelionHillsWorld {
           const a = i * Math.PI / 4;
           ctx.beginPath(); ctx.arc(fx.x + Math.cos(a) * p * 38, fx.y - h * .35 + Math.sin(a) * p * 27, 2.5 * (1 - p), 0, Math.PI * 2); ctx.fill();
         }
-      } else if (fx.kind === 'bossSlam') {
-        ctx.strokeStyle='#ffc56a';ctx.lineWidth=6*(1-p)+1;ctx.beginPath();ctx.ellipse(fx.x,fx.y,20+p*100,12+p*60,0,0,Math.PI*2);ctx.stroke();
+      } else if (fx.kind === 'bossSlam' || fx.kind === 'pumpkinBurst') {
+        // Ground impact is drawn below actors in render(), never over their faces.
       } else if(fx.kind==='poof'&&fx.type==='rabbit') {
         drawPumpkinBoss(ctx,this.images.bossFrames,{x:fx.x,y:fx.y,alive:false});
       } else if (fx.kind === 'projectileEnd') {
@@ -564,7 +513,7 @@ export class DandelionHillsWorld {
       this.heroAnimator.stopSettle = 0;
       this.renderSlashId = slash.id;
     }
-    this.heroFrame = this.heroAnimator.update(dt, slash ? { x: slash.dx, y: slash.dy } : axis, moving, journey.currentMoveSpeed || 260);
+    this.heroFrame = this.heroAnimator.update(dt, slash ? { x: slash.dx, y: slash.dy } : axis, moving, journey.currentMoveSpeed || 225, movementProfile(journey.movementProfile));
     this.shake = Math.max(0, this.shake - dt);
     this.stepCooldown = Math.max(0, this.stepCooldown - dt);
     if (moving && this.stepCooldown <= 0) {
@@ -599,9 +548,10 @@ export class DandelionHillsWorld {
       const b=mob.boss;
       if(!mob.alive||!b||!['slamWindup','leap'].includes(b.phase))continue;
       ctx.save();ctx.fillStyle='#ff984a44';ctx.strokeStyle='#ffdf8b';ctx.lineWidth=5;
-      ctx.beginPath();ctx.ellipse(b.target.x,b.target.y,105,65,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.ellipse(b.target.x,b.target.y,PUMPKIN_COMBAT.rx,PUMPKIN_COMBAT.ry,0,0,Math.PI*2);ctx.fill();ctx.stroke();
       ctx.fillStyle='#6b3223';ctx.font='bold 25px sans-serif';ctx.textAlign='center';ctx.fillText('!',b.target.x,b.target.y+8);ctx.restore();
     }
+    for(const fx of this.effects)if(['bossSlam','pumpkinBurst'].includes(fx.kind))drawPaintedImpact(ctx,this.images.pumpkinImpact,fx);
     const actors = journey.mobs.filter((mob) => mob.alive).map((mob) => ({ y: mob.y, draw: () => this.drawMob(ctx, mob, journey) }));
     actors.push({ y: journey.player.y, draw: () => this.drawPlayer(ctx, journey, moving) });
     actors.sort((a, b) => a.y - b.y).forEach((actor) => actor.draw());

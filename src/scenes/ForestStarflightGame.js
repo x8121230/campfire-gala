@@ -1,23 +1,33 @@
-import {registerIceArt26,drawBubbleBreak26} from './StarflightIceArt26.js?v=star0126';
-import {registerStar125Frames} from './StarflightSpriteFrames25.js?v=star0126';
-import {STAR_CRAFTS,getStarCraft} from '../data/StarflightCrafts.js?v=star0126';
+import {STARWING30_SHEETS,registerStarwing30,starwingPose30,setStarwingPose30,drawStarwingShot30,drawStarwingLocks30,drawStarwingDrone30,drawStarwingFx30,drawStarwingUltimate30} from './StarflightStarwingFrames30.js?v=star0130';
+import {ANCIENT29_SHEETS,registerAncient29,ancientPose29,setAncientPose29,drawAncientShot29,drawAncientFx29,drawAncientUltimate29} from './StarflightAncientFrames29.js?v=star0130';
+import {FALCON28_SHEETS,registerFalcon28,falconPose28,setFalconPose28,drawFalconBeam28,drawFalconFx28,drawFalconUltimate28} from './StarflightFalconFrames28.js?v=star0130';
+import {OWL27_SHEETS,registerOwl27,owlPose27,setOwlPose27} from './StarflightOwlFrames27.js?v=star0130';
+import {registerIceArt26,drawBubbleBreak26} from './StarflightIceArt26.js?v=star0130';
+import {registerStar125Frames} from './StarflightSpriteFrames25.js?v=star0130';
+import {STAR_CRAFTS,getStarCraft} from '../data/StarflightCrafts.js?v=star0201';
 import AnimalSnackGame from './AnimalSnackGame.js';
-import {StarflightSession,StarflightTouch,STAR_CONTROLS,STAR_FIELD,STAR_WEAPONS,STAR_SPECIALS,STAR_PHASE1,STAR_TUNING,STAR_TRANSIT_SECONDS,resolveStarPhase,starColor} from '../data/StarflightRules.js?v=star0126';
-import {CARNIVAL_PLANS} from '../data/StarflightCarnival.js?v=star0126';
+import {StarflightSession,StarflightTouch,STAR_CONTROLS,STAR_FIELD,STAR_WEAPONS,STAR_SPECIALS,STAR_PHASE1,STAR_TUNING,STAR_TRANSIT_SECONDS,resolveStarPhase,starColor} from '../data/StarflightRules.js?v=star0201';
+import {CARNIVAL_PLANS} from '../data/StarflightCarnival.js?v=star0130';
 import {registerCarnivalFrames,createCandyScenery,drawCandyEnemy,drawCandyWorld,carnivalCaption} from './StarflightCarnivalView.js';
-import {drawLakeEnemy,drawLakeWorld,lakeCaption} from './StarflightLakeView.js?v=star0126';
-import {registerCaveFrames,drawCaveEnemy,drawCaveWorld,caveCaption} from './StarflightCaveView.js?v=star0126';
-import {registerIceFrames,drawIceEnemy,drawIceWorld,iceCaption} from './StarflightIceView.js?v=star0126';
-import {registerWetlandFrames,drawWetlandEnemy,drawWetlandWorld,wetlandCaption} from './StarflightWetlandView.js';
-import {registerMagmaFrames,drawMagmaEnemy,drawMagmaWorld,magmaCaption} from './StarflightMagmaView.js?v=star0126';
+import {drawLakeEnemy,drawLakeWorld,lakeCaption} from './StarflightLakeView.js?v=star0130';
+import {registerCaveFrames,drawCaveEnemy,drawCaveWorld,caveCaption} from './StarflightCaveView.js?v=star0130';
+import {registerIceFrames,drawIceEnemy,drawIceWorld,iceCaption} from './StarflightIceView.js?v=star0130';
+import {registerWetlandFrames,drawWetlandEnemy,drawWetlandWorld,wetlandCaption} from './StarflightWetlandView.js?v=star0130';
+import {registerMagmaFrames,drawMagmaEnemy,drawMagmaWorld,magmaCaption} from './StarflightMagmaView.js?v=star0130';
 import {registerForestFrames,drawForestEnemy,drawForestWorld,forestCaption} from './StarflightForestView.js';
-import {drawTransitEnemy,drawTransitWorld,transitCaption} from './StarflightTransitView.js?v=star0126';
+import {drawTransitEnemy,drawTransitWorld,transitCaption} from './StarflightTransitView.js?v=star0130';
 import {preferences} from '../systems/AdventurePreferences.js';
 const TOP=64,H=480,SCALE=1.27;
 const FRAMES={hero:[0,174,348,456],fairy:[632,794,224,334],boss:[842,645,412,514]};
 const SKY={cloud:'star_sky',market:'star_sky_market',honey:'star_sky_honey',crystal:'star_sky_crystal',harbor:'star_sky_harbor',carnival:'star_carnival_bg',cave:'star_cave_bg',ice:'star_ice_bg',wetland:'star_wetland_bg',magma:'star_magma_bg',forest:'star_forest_bg',transit:'star_transit_bg'};
 const MAGIC=['clover','beam','dandelion','option','bubble'];
 const MOTHER_GUARD='item_fullset_secret_guard';
+const STAR_SFX31={sortie:'swift-sortie',shot:'swift-shot',echo:'swift-echo',hurt:'swift-hurt',dash:'swift-dash',shield:'swift-shield-break',ultimate:'swift-ultimate',fall:'swift-fall',bellHit:'bell-hit',bellChange:'bell-change',crystal:'crystal',upgrade:'upgrade',enemyHit:'enemy-hit',enemyPop:'enemy-pop',elite:'elite-break',warning:'boss-warning',boss:'boss-enter',clear:'ultimate-clear',weaponCharge:'weapon-charge',weaponLaser:'weapon-laser',weaponExplosive:'weapon-explosive',weaponShotgun:'weapon-shotgun',graze:'graze'};
+const STAR_SFX32={falconSortie:'falcon-sortie',falconShot:'falcon-shot',falconFocus:'falcon-focus',falconPierce:'falcon-pierce',falconHurt:'falcon-hurt',falconDash:'falcon-dash',falconUltimate:'falcon-ultimate',falconFall:'falcon-fall'};
+const STAR_SFX33={owlSortie:'owl-sortie',owlShot:'owl-shot',owlOrbit:'owl-orbit',owlBlock:'owl-block',owlNova:'owl-nova',owlHurt:'owl-hurt',owlDash:'owl-dash',owlUltimate:'owl-ultimate',owlFall:'owl-fall'};
+const STAR_SFX34={ancientSortie:'ancient-sortie',ancientCannon:'ancient-cannon',ancientBlast:'ancient-blast',ancientWave:'ancient-wave',ancientArmor:'ancient-armor',ancientGravity:'ancient-gravity',ancientHurt:'ancient-hurt',ancientDash:'ancient-dash',ancientUltimate:'ancient-ultimate',ancientFall:'ancient-fall'};
+const STAR_SFX35={starwingSortie:'starwing-sortie',starwingLaser:'starwing-laser',starwingLock:'starwing-lock',starwingSalvo:'starwing-salvo',starwingMissileHit:'starwing-missile-hit',starwingBeamHit:'starwing-beam-hit',starwingOverclock:'starwing-overclock',starwingHurt:'starwing-hurt',starwingDash:'starwing-dash',starwingUltimate:'starwing-ultimate',starwingFall:'starwing-fall',starwingWingOpen:'starwing-wing-open',starwingWingClose:'starwing-wing-close'};
+const STAR_BGM36={sky:'candy-carnival',lake:'moonlit-lake',cave:'crystal-cave',ice:'winter-sky',wetland:'misty-wetland',magma:'magma-gallop',forest:'ancient-canopy',transit:'starwind-transit',boss:'storybook-boss'};
 const DOLL_BODIES={
  item_cloth_daily_01:['star_doll_daily','assets/wardrobe_v50/doll_daily_v50.png','日常休閒裝'],
  item_fullset_pink_home_01:['star_doll_pink','assets/wardrobe_v50/doll_pink_home_v50_alpha.png','粉色居家服'],
@@ -46,7 +56,14 @@ const DOLL_HATS={
 };
 export default class ForestStarflightGame extends AnimalSnackGame{
  constructor(){super('ForestStarflightGame');}
- preload(){for(const key of ['rabbit','swan','pinecone','bubble','updraft','starwind'])this.load.image('star126_'+key,'assets/forest-starflight/ice-v0126/'+key+'.png');for(const key of ['boat','frog','seahorse','teapot','leopard','yarn'])this.load.image('star125_'+key,'assets/forest-starflight/lake-ice-v0125/'+key+'.png');for(const key of ['icicle','shard','pillar','feather','bomb','fireball'])this.load.image('star124_'+key,'assets/forest-starflight/world-v0124/'+key+'.png');for(const key of ['salamander','flame'])this.load.spritesheet('star124_'+key,'assets/forest-starflight/world-v0124/'+key+'.png',{frameWidth:627,frameHeight:627,endFrame:3});for(const [key,file,w,h] of [['popbird','popbird-flap',627,627],['cloud','cloud-puff',887,443],['tanuki','tanuki-attack',627,627]])this.load.spritesheet('star123_'+key,'assets/forest-starflight/owl-magma-v0123/'+file+'.png',{frameWidth:w,frameHeight:h,endFrame:3});for(const key of ['meteor','warning'])this.load.image('star123_'+key,'assets/forest-starflight/owl-magma-v0123/'+key+'.png');this.load.spritesheet('star_courier122','assets/forest-starflight/transit-v0122/treasure-bird-flap.png',{frameWidth:627,frameHeight:627});for(const key of ['blue','green','purple','coral','drone'])this.load.image('starwing120_'+key,'assets/forest-starflight/starwing-v0120/'+key+'.png');for(const key of ['blue','green','purple','coral'])this.load.image('ancient119_'+key,'assets/forest-starflight/ancient-v0119/'+key+'.png');for(const key of ['blue','green','purple','coral'])this.load.image('falcon118_'+key,'assets/forest-starflight/falcon-v0118/'+key+'.png');for(const key of ['blue','green','purple','coral','feather'])this.load.image('owl117_'+key,'assets/forest-starflight/owl-v0117/'+key+'.png');this.load.audio('starflight_bgm116','assets/forest-starflight/audio-v0116/storybook-flight.mp3');for(const key of ['blue','green','purple','coral','wind-feather'])this.load.image('star115_'+key,'assets/forest-starflight/ui-v0115/'+key+'.png');this.load.image('star_hangar112','assets/forest-starflight/hangar-v0112/storybook-stage.png');this.load.image('star_bell109','assets/forest-starflight/pickups-v0109/starbud-bell.png');this.load.image('star_crystal109','assets/forest-starflight/pickups-v0109/energy-crystal.png');for(const c of STAR_CRAFTS)if(!this.textures.exists('craft_'+c.id))this.load.image('craft_'+c.id,'assets/forest-starflight/player/'+c.file);if(!this.textures.exists('craft_swift_cruise'))this.load.spritesheet('craft_swift_cruise','assets/forest-starflight/animation-v0107/swift-cruise-8.png',{frameWidth:444,frameHeight:444});if(!this.textures.exists('craft_swift_maneuver'))this.load.spritesheet('craft_swift_maneuver','assets/forest-starflight/animation-v0107/swift-maneuver-8.png',{frameWidth:444,frameHeight:444});if(!this.textures.exists('craft_swift_combat'))this.load.spritesheet('craft_swift_combat','assets/forest-starflight/animation-v0107/swift-combat-8.png',{frameWidth:444,frameHeight:444});this.flightLook=this.readFlightLook();const files={crew:'crew.png',sky:'sky.png',sky_market:'sky-market-v02.png',sky_honey:'sky-honey-v02.png',sky_crystal:'sky-crystal-v02.png',sky_harbor:'sky-harbor-v02.png'};
+ loadStarflightSfx31(){for(const [key,file]of Object.entries(STAR_SFX31))this.load.audio('star131_'+key,'assets/forest-starflight/audio-v0131/'+file+'.mp3');}
+ loadStarflightSfx32(){for(const [key,file]of Object.entries(STAR_SFX32))this.load.audio('star132_'+key,'assets/forest-starflight/audio-v0132/'+file+'.mp3');}
+ loadStarflightSfx33(){for(const [key,file]of Object.entries(STAR_SFX33))this.load.audio('star133_'+key,'assets/forest-starflight/audio-v0133/'+file+'.mp3');}
+ loadStarflightSfx34(){for(const [key,file]of Object.entries(STAR_SFX34))this.load.audio('star134_'+key,'assets/forest-starflight/audio-v0134/'+file+'.mp3');}
+ loadStarflightSfx35(){for(const [key,file]of Object.entries(STAR_SFX35))this.load.audio('star135_'+key,'assets/forest-starflight/audio-v0135/'+file+'.mp3');}
+ loadStarflightBgm36(){for(const [key,file]of Object.entries(STAR_BGM36))this.load.audio('star136_bgm_'+key,'assets/forest-starflight/bgm-v0136/'+file+'.mp3');}
+ init(data){super.init?.(data);this.loadStarflightSfx31();this.loadStarflightSfx32();this.loadStarflightSfx33();this.loadStarflightSfx34();this.loadStarflightSfx35();}
+ preload(){this.loadStarflightBgm36();for(const key of STARWING30_SHEETS)this.load.image('star130_'+key,'assets/forest-starflight/animation-v0130/'+key+'.png');for(const key of ANCIENT29_SHEETS)this.load.image('star129_'+key,'assets/forest-starflight/animation-v0129/'+key+'.png');for(const key of FALCON28_SHEETS)this.load.image('star128_'+key,'assets/forest-starflight/animation-v0128/'+key+'.png');for(const key of OWL27_SHEETS)this.load.image('star127_'+key,'assets/forest-starflight/animation-v0127/'+key+'.png');for(const key of ['rabbit','swan','pinecone','bubble','updraft','starwind'])this.load.image('star126_'+key,'assets/forest-starflight/ice-v0126/'+key+'.png');for(const key of ['boat','frog','seahorse','teapot','leopard','yarn'])this.load.image('star125_'+key,'assets/forest-starflight/lake-ice-v0125/'+key+'.png');for(const key of ['icicle','shard','pillar','feather','bomb','fireball'])this.load.image('star124_'+key,'assets/forest-starflight/world-v0124/'+key+'.png');for(const key of ['salamander','flame'])this.load.spritesheet('star124_'+key,'assets/forest-starflight/world-v0124/'+key+'.png',{frameWidth:627,frameHeight:627,endFrame:3});for(const [key,file,w,h] of [['popbird','popbird-flap',627,627],['cloud','cloud-puff',887,443],['tanuki','tanuki-attack',627,627]])this.load.spritesheet('star123_'+key,'assets/forest-starflight/owl-magma-v0123/'+file+'.png',{frameWidth:w,frameHeight:h,endFrame:3});for(const key of ['meteor','warning'])this.load.image('star123_'+key,'assets/forest-starflight/owl-magma-v0123/'+key+'.png');this.load.spritesheet('star_courier122','assets/forest-starflight/transit-v0122/treasure-bird-flap.png',{frameWidth:627,frameHeight:627});for(const key of ['blue','green','purple','coral','drone'])this.load.image('starwing120_'+key,'assets/forest-starflight/starwing-v0120/'+key+'.png');for(const key of ['blue','green','purple','coral'])this.load.image('ancient119_'+key,'assets/forest-starflight/ancient-v0119/'+key+'.png');for(const key of ['blue','green','purple','coral'])this.load.image('falcon118_'+key,'assets/forest-starflight/falcon-v0118/'+key+'.png');for(const key of ['blue','green','purple','coral','feather'])this.load.image('owl117_'+key,'assets/forest-starflight/owl-v0117/'+key+'.png');for(const key of ['blue','green','purple','coral','wind-feather'])this.load.image('star115_'+key,'assets/forest-starflight/ui-v0115/'+key+'.png');this.load.image('star_hangar112','assets/forest-starflight/hangar-v0112/storybook-stage.png');this.load.image('star_bell109','assets/forest-starflight/pickups-v0109/starbud-bell.png');this.load.image('star_crystal109','assets/forest-starflight/pickups-v0109/energy-crystal.png');for(const c of STAR_CRAFTS)if(!this.textures.exists('craft_'+c.id))this.load.image('craft_'+c.id,'assets/forest-starflight/player/'+c.file);if(!this.textures.exists('craft_swift_cruise'))this.load.spritesheet('craft_swift_cruise','assets/forest-starflight/animation-v0107/swift-cruise-8.png',{frameWidth:444,frameHeight:444});if(!this.textures.exists('craft_swift_maneuver'))this.load.spritesheet('craft_swift_maneuver','assets/forest-starflight/animation-v0107/swift-maneuver-8.png',{frameWidth:444,frameHeight:444});if(!this.textures.exists('craft_swift_combat'))this.load.spritesheet('craft_swift_combat','assets/forest-starflight/animation-v0107/swift-combat-8.png',{frameWidth:444,frameHeight:444});this.flightLook=this.readFlightLook();const files={crew:'crew.png',sky:'sky.png',sky_market:'sky-market-v02.png',sky_honey:'sky-honey-v02.png',sky_crystal:'sky-crystal-v02.png',sky_harbor:'sky-harbor-v02.png'};
   for(const [key,file]of Object.entries(files))if(!this.textures.exists('star_'+key))this.load.image('star_'+key,'assets/forest-starflight/'+file);
   for(const [key,file]of [['star_carnival_bg','background.png'],['star_candy_enemies','enemies.png'],['star_candy_scenery','scenery.png']])if(!this.textures.exists(key))this.load.image(key,'assets/forest-starflight/carnival-v092/'+file);
   for(const [key,file]of [['star_cave_bg','background.png'],['star_cave_enemies','enemies.png']])if(!this.textures.exists(key))this.load.image(key,'assets/forest-starflight/cave-v096/'+file);
@@ -59,17 +76,17 @@ export default class ForestStarflightGame extends AnimalSnackGame{
   const assets=[DOLL_BODIES.item_cloth_daily_01,DOLL_BODIES[MOTHER_GUARD],this.flightLook.body,this.flightLook.hat].filter(Boolean);
   for(const [key,file]of assets)if(!this.textures.exists(key))this.load.image(key,file);}
  create(){
-  this.stopStarflightMusic();for(const music of [...(this.sound.sounds||[])])if(music.loop||/bgm|music/i.test(music.key||''))music.stop();this.flightMusic=this.sound.add('starflight_bgm116',{loop:true,volume:.32});this.flightMusic.play();
-  this.skyScenario=-1;
+  this.stopStarflightMusic();for(const music of [...(this.sound.sounds||[])])if(music.loop||/bgm|music/i.test(music.key||''))music.stop();this.flightMusicBank={};this.flightMusic=null;this.flightMusicKey='';this.flightMusicStarted=false;
+  this.skyScenario=-1;this.sfxLast={};
   this.selectedCraft='swift';this.mode='title';this.session=null;this.touch=new StarflightTouch();this.held=new Set();this.requests={};this.views=new Map();this.effects=[];this.heroAction=null;this.audioNodes=new Set();this.flightLook=this.readFlightLook();
   this.soundOn=preferences.value.sfx;this.autoFire=true;this.selectedSpecial='chargeLaser';this.difficulty='normal';this.overlay=null;this.carnivalIntro=0;
   this.reducedFX=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||false;
   if(this.textures.exists('star_crew')){const t=this.textures.get('star_crew'),im=t.getSourceImage();for(const [k,[x,y,w,h]]of Object.entries(FRAMES))if(!t.has(k))t.add(k,0,Math.round(x*im.width/1254),Math.round(y*im.height/1254),Math.round(w*im.width/1254),Math.round(h*im.height/1254));}
   this.input.addPointer(Math.max(0,4-(this.input.manager.pointersTotal||1)));const canvas=this.game.canvas,old=canvas.style.touchAction;canvas.style.touchAction='none';
-  this.down=p=>{this.sound.context?.resume?.()?.catch?.(()=>{});if(this.mode!=='playing')return;if(this.session?.bayOpen&&p.x>760){this.weaponPointerId=p.id;this.selectWeaponAt(p.x,p.y);return;}this.touch.ultimateReady=this.session.ultimateEnergy>=100&&this.session.phase==='combat';if(!this.chooseBranchAt(p.x,p.y))this.touch.down(p);};
+  this.down=p=>{this.unlockStarflightMusic();if(this.mode!=='playing')return;if(this.session?.bayOpen&&p.x>760){this.weaponPointerId=p.id;this.selectWeaponAt(p.x,p.y);return;}this.touch.ultimateReady=this.session.ultimateEnergy>=100&&this.session.phase==='combat';if(!this.chooseBranchAt(p.x,p.y))this.touch.down(p);};
   this.move=p=>{if(this.mode!=='playing')return;if(this.session?.bayOpen&&p.id===this.weaponPointerId)this.selectWeaponAt(p.x,p.y);else this.touch.move(p);};
   this.up=p=>{if(this.session?.bayOpen&&p.id===this.weaponPointerId){this.selectWeaponAt(p.x,p.y);this.closeWeaponBay(true);}this.touch.up(p);};this.cancel=()=>{this.closeWeaponBay();this.clearInput();};
-  this.keydown=e=>{if(e.repeat)return;if(this.mode==='title'&&['ArrowLeft','ArrowRight'].includes(e.code)){this.switchCraft(e.code==='ArrowLeft'?-1:1);return;}if(['Escape','KeyP'].includes(e.code)){if(this.session?.bayOpen){this.closeWeaponBay();return;}this.mode==='gm'?this.closeGMPanel():this.mode==='bay'?this.closeWeaponBay():this.mode==='paused'?this.resumeGame():this.pauseGame();return;}if(e.code==='KeyG'&&this.mode==='playing'){this.openGMPanel();return;}if(this.mode!=='playing')return;
+  this.keydown=e=>{if(e.repeat)return;this.unlockStarflightMusic();if(this.mode==='title'&&['ArrowLeft','ArrowRight'].includes(e.code)){this.switchCraft(e.code==='ArrowLeft'?-1:1);return;}if(['Escape','KeyP'].includes(e.code)){if(this.session?.bayOpen){this.closeWeaponBay();return;}this.mode==='gm'?this.closeGMPanel():this.mode==='bay'?this.closeWeaponBay():this.mode==='paused'?this.resumeGame():this.pauseGame();return;}if(e.code==='KeyG'&&this.mode==='playing'){this.openGMPanel();return;}if(this.mode!=='playing')return;
    this.held.add(e.code);if(e.code==='Space'||e.code==='KeyI')this.touch.down({id:'keyboardFire',...STAR_CONTROLS.trait});if(e.code==='KeyU')this.requests.dash=true;if(e.code==='KeyK'&&this.session.ultimateEnergy>=100)this.requests.bomb=true;};
   this.keyup=e=>{this.held.delete(e.code);if(e.code==='Space'||e.code==='KeyI')this.touch.up({id:'keyboardFire',...STAR_CONTROLS.trait});};
   this.input.on('pointerdown',this.down);this.input.on('pointermove',this.move);this.input.on('pointerup',this.up);this.input.on('pointerupoutside',this.up);this.input.on('gameout',this.cancel);
@@ -80,9 +97,9 @@ export default class ForestStarflightGame extends AnimalSnackGame{
    this.input.keyboard?.off('keydown',this.keydown);this.input.keyboard?.off('keyup',this.keyup);this.input.keyboard?.removeCapture(['SPACE','UP','DOWN','LEFT','RIGHT']);
    this.game.events.off('blur',this.blur);document.removeEventListener('visibilitychange',this.hidden);window.removeEventListener('resize',this.resize);window.removeEventListener('pointercancel',this.cancel);
    this.stopStarflightMusic();this.clearInput();this.stopTones();this.maskShape?.destroy();this.fieldMask?.destroy();});
-  if(!this.textures.exists('star_courier122')||['blue','green','purple','coral','drone'].some(k=>!this.textures.exists('starwing120_'+k))||['blue','green','purple','coral'].some(k=>!this.textures.exists('ancient119_'+k))||['blue','green','purple','coral'].some(k=>!this.textures.exists('falcon118_'+k))||['blue','green','purple','coral','feather'].some(k=>!this.textures.exists('owl117_'+k))||['blue','green','purple','coral','wind-feather'].some(k=>!this.textures.exists('star115_'+k))||!this.textures.exists('star_hangar112')||!this.textures.exists('star_bell109')||!this.textures.exists('star_crystal109')||Object.values(SKY).some(k=>!this.textures.exists(k))||!this.textures.exists('star_candy_enemies')||!this.textures.exists('star_candy_scenery')||!this.textures.exists('star_cave_enemies')||!this.textures.exists('star_ice_enemies')||!this.textures.exists('star_wetland_enemies')||!this.textures.exists('star_magma_enemies')||!this.textures.exists('star_forest_enemies')||!this.textures.exists('star_crew')||!this.textures.exists('craft_swift_cruise')||!this.textures.exists('craft_swift_maneuver')||!this.textures.exists('craft_swift_combat')||STAR_CRAFTS.some(c=>!this.textures.exists('craft_'+c.id))||MAGIC.some(k=>!this.textures.exists('stg04_'+k))){
+  if(STARWING30_SHEETS.some(k=>!this.textures.exists('star130_'+k))||!this.textures.exists('star_courier122')||['blue','green','purple','coral','drone'].some(k=>!this.textures.exists('starwing120_'+k))||['blue','green','purple','coral'].some(k=>!this.textures.exists('ancient119_'+k))||['blue','green','purple','coral'].some(k=>!this.textures.exists('falcon118_'+k))||['blue','green','purple','coral','feather'].some(k=>!this.textures.exists('owl117_'+k))||['blue','green','purple','coral','wind-feather'].some(k=>!this.textures.exists('star115_'+k))||!this.textures.exists('star_hangar112')||!this.textures.exists('star_bell109')||!this.textures.exists('star_crystal109')||Object.values(SKY).some(k=>!this.textures.exists(k))||!this.textures.exists('star_candy_enemies')||!this.textures.exists('star_candy_scenery')||!this.textures.exists('star_cave_enemies')||!this.textures.exists('star_ice_enemies')||!this.textures.exists('star_wetland_enemies')||!this.textures.exists('star_magma_enemies')||!this.textures.exists('star_forest_enemies')||!this.textures.exists('star_crew')||!this.textures.exists('craft_swift_cruise')||!this.textures.exists('craft_swift_maneuver')||!this.textures.exists('craft_swift_combat')||STAR_CRAFTS.some(c=>!this.textures.exists('craft_'+c.id))||MAGIC.some(k=>!this.textures.exists('stg04_'+k))){
    this.add.rectangle(640,360,1280,720,0x173f43);this.text(640,260,'星航素材尚未齊全\n請將更新內容合併至保留原 assets 的遊戲資料夾',30);this.b(640,450,340,80,'返回遊戲列表',()=>this.leave());return;}
-  this.registerMagicFrames();this.registerCraftAnimations();
+  registerStarwing30(this);registerAncient29(this);registerFalcon28(this);registerOwl27(this);this.registerMagicFrames();this.registerCraftAnimations();
   registerCarnivalFrames(this);
   registerCaveFrames(this);
   registerIceFrames(this);registerStar125Frames(this);registerIceArt26(this);
@@ -97,7 +114,7 @@ export default class ForestStarflightGame extends AnimalSnackGame{
  clearInput(){this.touch?.reset();this.held?.clear();this.requests={};if(this.session){this.session.last={};this.session.pending={};}}
  clear(){this.clearInput();this.tweens.killAll();this.fieldMask?.destroy();this.maskShape?.destroy();this.fieldMask=null;this.maskShape=null;for(const child of this.children.getChildren().slice())child.destroy();this.views.clear();this.effects=[];this.heroAction=null;this.overlay=null;this.ultimateOverlay=null;this.guardianOverlay=null;this.launchOverlay=null;this.skillCards=null;this.skillMeters=null;}
  art(x,y,frame,size,parent=null){const im=this.add.image(x,y,'star_crew',frame);im.setScale(size/Math.max(im.width,im.height));parent?.add(im);return im;}
- craft(x,y,width,parent=null,bodyAnchor=false){const c=getStarCraft(this.mode==='title'?this.selectedCraft:this.session?.craft?.id||this.selectedCraft),animated=bodyAnchor&&c.id==='swift'&&this.textures.exists('craft_swift_cruise'),im=animated?this.add.sprite(x,y,'craft_swift_cruise',0):this.add.image(x,y,'craft_'+c.id);im.setScale(width/im.width).setData('baseScale',width/im.width);if(animated)im.play('swift_cruise');if(bodyAnchor)im.setOrigin(...c.anchor);parent?.add(im);return im;}
+ craft(x,y,width,parent=null,bodyAnchor=false){const c=getStarCraft(this.mode==='title'?this.selectedCraft:this.session?.craft?.id||this.selectedCraft),animated=bodyAnchor&&c.id==='swift'&&this.textures.exists('craft_swift_cruise'),im=animated?this.add.sprite(x,y,'craft_swift_cruise',0):this.add.image(x,y,'craft_'+c.id);im.setScale(width/im.width).setData('baseScale',width/im.width);if(animated)im.play('swift_cruise');if(c.id==='starwing'){im.setData('starwingWidth',width);setStarwingPose30(im,['cruise',0,'cruise']);im.setScale(width/im.width).setData('baseScale',width/im.width);}if(c.id==='owl'){im.setData('owlWidth',width);setOwlPose27(im,['owl-cruise',0,'cruise']);im.setScale(width/im.width).setData('baseScale',width/im.width);}if(c.id==='ancient'){im.setData('ancientWidth',width);setAncientPose29(im,['cruise',0,'cruise']);im.setScale(width/im.width).setData('baseScale',width/im.width);}if(c.id==='falcon'){im.setData('falconWidth',width);setFalconPose28(im,['falcon-cruise',0,'cruise']);im.setScale(width/im.width).setData('baseScale',width/im.width);}if(bodyAnchor&&!['owl','falcon','ancient','starwing'].includes(c.id))im.setOrigin(...c.anchor);parent?.add(im);return im;}
  readFlightLook(){let saved={};try{saved=JSON.parse(globalThis.localStorage?.getItem('forest_save_data')||'{}');}catch{}const get=k=>{try{const value=this.registry?.get(k);if(value!==undefined&&value!==null&&value!=='')return value;}catch{}return saved[k]||'none';},fullsetId=get('equipped_fullset'),clothId=get('equipped_cloth'),hatId=get('equipped_hat');
   const bodyId=fullsetId!=='none'?fullsetId:clothId!=='none'?clothId:'item_cloth_daily_01',body=DOLL_BODIES[bodyId]||DOLL_BODIES.item_cloth_daily_01;
   return {bodyId,hatId,body,hat:bodyId==='item_fullset_fairytale_raincoat'?null:DOLL_HATS[hatId]||null,guardian:bodyId===MOTHER_GUARD};}
@@ -137,26 +154,27 @@ export default class ForestStarflightGame extends AnimalSnackGame{
   this.text(300,511,'♥ '.repeat(c.hp).trim(),26,'#ba6670').setStroke('#fff8e5',3);
   this.text(189,549,'速度',18,ink);const g=this.add.graphics(),rating={swift:3,falcon:5,owl:2,ancient:1,starwing:4}[c.id];
   for(let i=0;i<5;i++){const x=242+i*29;g.fillStyle(i<rating?0x558c97:0xc0c5b7,1);g.fillTriangle(x-9,550,x+10,537,x+3,555);g.lineStyle(2,0xfff4d6,1).lineBetween(x-5,550,x+7,541);}
-  this.text(300,580,'衝刺 +'+Math.round(c.boost*100)+'% · 5秒 · 冷卻30秒',16,ink);
+  this.text(300,580,'4 號戰術特攻：'+c.trait,16,ink);
   STAR_CRAFTS.forEach((item,i)=>{this.add.circle(244+i*28,610,i===index?6:4,i===index?0x547f5b:0xb9baa4);this.add.zone(244+i*28,610,26,28).setInteractive({useHandCursor:true}).on('pointerdown',()=>{this.selectedCraft=item.id;this.showTitle(i>index?1:-1);this.hangarSound(item.id);});});
   this.text(910,145,'飛行夥伴手冊',28,'#795b32');
   this.text(679,201,'①',25,'#ba6353');this.text(727,185,'按住攻擊',21,ink,0);this.text(727,217,c.tip,17,'#796b52',0);
-  this.text(910,261,'星芽鈴 · 四色能力可並存',20,'#795b32');
-  const descriptions={swift:['追加2／3／4枚風羽；Lv.4射擊傷害+2%','獲得一層護罩；破裂時清除近身彈','連續命中同一目標，觸發共振爆破','10秒強化連射，側翼風羽追蹤目標'],falcon:['增加穿透數，距離越遠傷害越高','拾取時減少目前衝刺冷卻10秒','每5／4／3次射擊，發出強化穿透光束','10秒提升光束傷害與射速'],owl:['展開更寬的羽刃扇面','環繞護羽抵擋小型敵彈','每3秒4根旋羽；命中或擋彈各消耗1根','10秒加快羽扇連射；旋羽仍每3秒一組'],ancient:['擴大重砲爆破及延遲震盪波','拾取補充翼甲，最多兩層、不回血','前方砲核聚攏小怪，1.2秒後爆破','10秒強化重砲威力與裝填速度'],starwing:['提升光束；Lv.2展開四道穿透光束','Lv.1／2召出1／2子機，Lv.3雙射','提高鎖定齊射彈數，Lv.2縮短間隔','10秒強化火力與連射，可搭配超頻']}[c.id];
-  const colors=[0x56aacc,0x72a464,0xa67bb5,0xd8866f];
+  this.text(910,261,'紅鈴輪盤 · 四項技能可並存',20,'#795b32');
+  const descriptions={swift:['風羽寬度 +10／20／30%','追加 1／2／3 枚側翼風羽','命中分裂風屑，最高分裂 2 枚','強化狂風過載，最高延長至 15 秒'],falcon:['翼下微型貫穿彈逐步成雙','擴大擦彈圈與最遠端傷害','累積擦彈後召喚幻隼反擊','增加超頻獵殺時間與分身上限'],owl:['月羽音波與旋羽距離 +10／20／30%','未攻擊後生成 2／3／4 片旋羽','縮短常駐護羽重新生成時間','同步增加羽傷與爆破範圍'],ancient:['定時凝聚可吸收攻擊的岩盾','每 10／8／6 秒拋出史前落石','提高古生岩嶂的吸收上限','手動引爆散射更多碎岩'],starwing:['光束逐步升級為四聯裝矩陣','追加並強化追蹤導彈','浮游子機數量與射速成長','雷達鎖定上限提升至 8／10／12']}[c.id];
+  const colors=[0xd56b62,0xc96358,0xb95750,0xa94b48];
   c.bells.forEach((name,i)=>{const y=310+i*66;g.fillStyle(colors[i],.10).fillRoundedRect(650,y-24,515,59,12);this.add.image(679,y,'star_bell109').setDisplaySize(45,45).setTint(colors[i]);
    const x=734;g.lineStyle(3,colors[i],1);if(i===0){g.lineBetween(x-10,y+8,x+9,y-9).lineBetween(x-7,y,x+2,y+5);}if(i===1){g.beginPath().moveTo(x,y-12).lineTo(x+11,y-7).lineTo(x+8,y+7).lineTo(x,y+14).lineTo(x-8,y+7).lineTo(x-11,y-7).closePath().strokePath();}if(i===2){g.strokeCircle(x,y,10).lineBetween(x-15,y,x+15,y);}if(i===3)this.star(g,x,y,13,colors[i],1);
    this.text(770,y-18,name,20,ink,0);this.text(770,y+9,descriptions[i],15,'#796b52',0);
   });
-  this.hangarButton(773,564,235,38,'難度：'+(this.difficulty==='normal'?'標準':'挑戰'),()=>{this.difficulty=this.difficulty==='normal'?'challenge':'normal';this.showTitle();},0x819578).label.setFontSize(17);
-  this.hangarButton(1032,564,235,38,this.reducedFX?'動態：柔和':'動態：標準',()=>{this.reducedFX=!this.reducedFX;this.showTitle();},0x819578).label.setFontSize(17);
+  this.text(910,566,'黃分數・綠特攻・白移速・紫攻速・虹奇蹟',14,'#796b52');
+  this.hangarButton(773,604,235,38,'難度：'+(this.difficulty==='normal'?'標準':'挑戰'),()=>{this.difficulty=this.difficulty==='normal'?'challenge':'normal';this.showTitle();},0x819578).label.setFontSize(17);
+  this.hangarButton(1032,604,235,38,this.reducedFX?'動態：柔和':'動態：標準',()=>{this.reducedFX=!this.reducedFX;this.showTitle();},0x819578).label.setFontSize(17);
   this.hangarButton(160,666,240,56,'← 遊戲列表',()=>this.leave());
   this.hangarButton(463,666,330,56,'糖果雲端：'+(CARNIVAL_PLANS[this.skyScenario]||'隨機劇本'),()=>{this.skyScenario=((this.skyScenario??-1)+2)%4-1;this.showTitle();},0x938263).label.setFontSize(18);
   this.hangarButton(943,660,510,70,'準備出發！',()=>this.start(),0xb58242).label.setFontSize(29);
  }
 
 
- start(checkpoint=null){if(this.portrait()){this.showMessage('請把手機橫放','左手移動；右手按住紅鍵連射、2號大招，4號加速。',()=>{this.overlay?.destroy();this.overlay=null;},'知道了');return;}
+ start(checkpoint=null){if(this.portrait()){this.showMessage('請把手機橫放','左手移動；右手按住紅鍵連射，能量滿時向上滑放大招，4號使用戰術特攻。',()=>{this.overlay?.destroy();this.overlay=null;},'知道了');return;}
   this.flightLook=this.readFlightLook();this.session=new StarflightSession({skyScenario:this.skyScenario,craftId:this.selectedCraft,difficulty:this.difficulty,seed:checkpoint?.seed??((Date.now()^Math.floor(Math.random()*0xffffffff))>>>0),checkpoint,guardianEnabled:this.flightLook.guardian});
   if(!checkpoint)this.session.specialWeapon=this.selectedSpecial;this.session.checkpoint=this.session.snapshot();
   this.renderGame();this.sound.context?.resume?.()?.catch?.(()=>{});this.showLaunchSequence(!!checkpoint);
@@ -182,6 +200,7 @@ export default class ForestStarflightGame extends AnimalSnackGame{
  }
  showLaunchSequence(fromCheckpoint=false){
   this.clearInput();this.mode='launching';this.session.setPaused(true);this.launchTime=0;this.launchDuration=fromCheckpoint?1:2;this.launchCue=-1;
+  if(this.session.craft.id==='swift')this.playSfx31('sortie',.36,.5);else if(this.session.craft.id==='falcon')this.playSfx32('falconSortie',.38,.5);else if(this.session.craft.id==='owl')this.playSfx33('owlSortie',.36,.5);else if(this.session.craft.id==='ancient')this.playSfx34('ancientSortie',.42,.5);else if(this.session.craft.id==='starwing')this.playSfx35('starwingSortie',.43,.5);
   this.entities.setVisible(false);this.fx.setVisible(false);this.noticeText.setVisible(false);
   const o=this.add.container(0,0).setDepth(120);this.launchOverlay=o;
   this.launchMist=this.add.rectangle(640,368,1280,610,0xd5e9e5,.3).setInteractive();o.add(this.launchMist);
@@ -195,7 +214,8 @@ export default class ForestStarflightGame extends AnimalSnackGame{
    y:u*u*u*760+3*u*u*q*850+3*u*q*q*(TOP+end.y*SCALE)+q*q*q*(TOP+end.y*SCALE)};
  }
  stepLaunch(dt){this.launchTime=Math.min(this.launchDuration,this.launchTime+dt);const p=this.launchTime/this.launchDuration,q=1-Math.pow(1-p,3),pt=this.launchPoint(q),prev=this.launchPoint(Math.max(0,q-.008));
-  this.launchCraft.setPosition(pt.x,pt.y).setRotation(Math.atan2(pt.y-prev.y,pt.x-prev.x)*Math.min(1,(1-p)*4));
+  if(this.session.craft.id==='starwing')setStarwingPose30(this.launchCraft,['arrival',Math.min(3,Math.floor(p*4)),'sortie']);if(this.session.craft.id==='owl')setOwlPose27(this.launchCraft,['owl-arrival',Math.min(3,Math.floor(p*4)),'sortie']);
+  if(this.session.craft.id==='ancient')setAncientPose29(this.launchCraft,['arrival',Math.min(3,Math.floor(p*4)),'sortie']);if(this.session.craft.id==='falcon')setFalconPose28(this.launchCraft,['falcon-arrival',Math.min(3,Math.floor(p*4)),'sortie']);this.launchCraft.setPosition(pt.x,pt.y).setRotation(Math.atan2(pt.y-prev.y,pt.x-prev.x)*Math.min(1,(1-p)*4));
   this.launchMist.setAlpha(.3*(1-p));const g=this.launchLines.clear();
   if(!this.reducedFX){for(let i=1;i<13;i++){const a=this.launchPoint(Math.max(0,q-i*.018)),b=this.launchPoint(Math.max(0,q-(i-1)*.018));g.lineStyle(12-i*.7,0xc2efff,(1-i/13)*.35*(1-p)).lineBetween(a.x,a.y,b.x,b.y);}}
   const leaves=this.launchLeaves.clear();for(let i=0;i<3;i++){const phase=i*.23,lit=p>=phase,scatter=Math.max(0,(p-.72)/.28),x=565+i*75+scatter*(i-1)*115,y=215-scatter*85;
@@ -209,20 +229,101 @@ export default class ForestStarflightGame extends AnimalSnackGame{
  finishLaunch(){this.launchOverlay?.destroy();this.launchOverlay=null;this.entities.setVisible(true);this.fx.setVisible(true);this.noticeText.setVisible(true);this.clearInput();this.session.setPaused(false);this.mode='playing';this.drawState(0);}
  controlState(){const t=this.touch.read(),k=this.held;return {...t,x:t.x+Number(k.has('KeyD')||k.has('ArrowRight'))-Number(k.has('KeyA')||k.has('ArrowLeft')),y:t.y+Number(k.has('KeyS')||k.has('ArrowDown'))-Number(k.has('KeyW')||k.has('ArrowUp')),dash:t.dash||this.requests.dash,special:t.special||this.requests.special,trait:t.trait||this.requests.trait,fire:t.fire,bomb:t.bomb||this.requests.bomb,slow:k.has('ShiftLeft')||k.has('ShiftRight')};}
  chooseBranchAt(x,y){if(!this.session?.branchOffer||this.session.branchOffer.selected||x<720||x>990||y<105||y>615)return false;const worldY=(y-TOP)/SCALE;return this.session.chooseBranch(worldY<240?'top':'bottom','tap');}
- stopStarflightMusic(){if(this.flightMusic){this.flightMusic.stop();this.flightMusic.destroy();this.flightMusic=null;}}
- update(t,delta){this.flightMusic?.setMute(!preferences.value.music||document.hidden);if(this.mode==='launching'){if(!this.portrait()&&!document.hidden)this.stepLaunch(Math.min(.1,delta/1000));return;}if(this.mode==='returning'){if(this.portrait()||document.hidden)return;this.resumeTime-=Math.min(.1,delta/1000);this.resumeLabel?.setText(this.resumeTime>.35?'準備好了嗎？':'出發！');if(this.resumeTime<=0){this.overlay?.destroy();this.overlay=null;this.clearInput();this.session.closeBay();this.session.setPaused(false);this.mode='playing';}return;}
+ musicTheme(){if(this.session?.travelPhase==='boss'||this.session?.boss)return 'boss';if(this.session?.travelPhase==='transit')return 'transit';return this.session?.currentMap?.type||'sky';}
+ unlockStarflightMusic(){const resume=this.sound.context?.resume?.();this.startStarflightMusic();resume?.then?.(()=>this.startStarflightMusic()).catch?.(()=>{});}
+ startStarflightMusic(){this.flightMusicStarted=true;this.switchStarflightMusic(this.musicTheme(),true);}
+ switchStarflightMusic(theme,immediate=false){if(!this.flightMusicStarted)return;const key=STAR_BGM36[theme]?theme:'sky';if(this.flightMusicKey===key&&this.flightMusic?.isPlaying)return;const old=this.flightMusic;let next=this.flightMusicBank?.[key];if(!next){if(!this.cache.audio.exists('star136_bgm_'+key))return;this.flightMusicBank??={};next=this.flightMusicBank[key]=this.sound.add('star136_bgm_'+key,{loop:true,volume:0});}
+  if(!next.isPlaying)next.play();next.setMute(!preferences.value.music||document.hidden);this.flightMusic=next;this.flightMusicKey=key;const target=key==='boss'?.29:.25;
+  this.tweens.killTweensOf(next);if(immediate)next.setVolume(target);else{next.setVolume(0);this.tweens.add({targets:next,volume:target,duration:850,ease:'Sine.easeInOut'});}if(old&&old!==next){this.tweens.killTweensOf(old);if(immediate)old.stop();else this.tweens.add({targets:old,volume:0,duration:850,ease:'Sine.easeInOut',onComplete:()=>old.stop()});}}
+ updateStarflightMusic(){this.switchStarflightMusic(this.musicTheme());const muted=!preferences.value.music||document.hidden;for(const music of Object.values(this.flightMusicBank||{}))music.setMute(muted);}
+ stopStarflightMusic(){this.tweens?.killTweensOf?.(Object.values(this.flightMusicBank||{}));for(const music of Object.values(this.flightMusicBank||{})){music.stop();music.destroy();}if(this.flightMusic&&!Object.values(this.flightMusicBank||{}).includes(this.flightMusic)){this.flightMusic.stop();this.flightMusic.destroy();}this.flightMusicBank={};this.flightMusic=null;this.flightMusicKey='';this.flightMusicStarted=false;}
+ playSfx31(name,volume=.3,minGap=0,detune=0){if(!this.soundOn||!this.cache.audio.exists('star131_'+name))return false;const now=this.time.now,last=this.sfxLast?.[name]??-Infinity;if(now-last<minGap*1000)return true;this.sfxLast??={};this.sfxLast[name]=now;this.sound.play('star131_'+name,{volume,detune});return true;}
+ playSfx32(name,volume=.3,minGap=0,detune=0){if(!this.soundOn||!this.cache.audio.exists('star132_'+name))return false;const now=this.time.now,last=this.sfxLast?.[name]??-Infinity;if(now-last<minGap*1000)return true;this.sfxLast??={};this.sfxLast[name]=now;this.sound.play('star132_'+name,{volume,detune});return true;}
+ playSfx33(name,volume=.3,minGap=0,detune=0){if(!this.soundOn||!this.cache.audio.exists('star133_'+name))return false;const now=this.time.now,last=this.sfxLast?.[name]??-Infinity;if(now-last<minGap*1000)return true;this.sfxLast??={};this.sfxLast[name]=now;this.sound.play('star133_'+name,{volume,detune});return true;}
+ playSfx34(name,volume=.3,minGap=0,detune=0){if(!this.soundOn||!this.cache.audio.exists('star134_'+name))return false;const now=this.time.now,last=this.sfxLast?.[name]??-Infinity;if(now-last<minGap*1000)return true;this.sfxLast??={};this.sfxLast[name]=now;this.sound.play('star134_'+name,{volume,detune});return true;}
+ playSfx35(name,volume=.3,minGap=0,detune=0){if(!this.soundOn||!this.cache.audio.exists('star135_'+name))return false;const now=this.time.now,last=this.sfxLast?.[name]??-Infinity;if(now-last<minGap*1000)return true;this.sfxLast??={};this.sfxLast[name]=now;this.sound.play('star135_'+name,{volume,detune});return true;}
+ playEventSfx31(e){if(!this.soundOn)return false;const swift=this.session?.craft?.id==='swift';
+  if(e.type==='bellHit')return this.playSfx31('bellHit',.23,.045,Math.min(180,(e.hits||0)*70));
+  if(e.type==='bellChange')return this.playSfx31('bellChange',.32,.18);
+  if(e.type==='crystalCollect')return this.playSfx31('crystal',.30,.12);
+  if(e.type==='weaponChosen')return this.playSfx31('upgrade',.34,.18);
+  if(e.type==='enemyHit')return this.playSfx31('enemyHit',e.boss?.20:.10,.045,e.boss?-120:Phaser.Math.Between(-80,70));
+  if(e.type==='pop')return this.playSfx31('enemyPop',.16,.055,Phaser.Math.Between(-90,90));
+  if(e.type==='elite')return this.playSfx31('elite',.34,.12);
+  if(e.type==='warning')return this.playSfx31('warning',.38,.5);
+  if(e.type==='boss')return this.playSfx31('boss',.42,.8);
+  if(e.type==='bomb')return this.playSfx31('clear',.34,.2);
+  if(e.type==='charge')return this.playSfx31('weaponCharge',.28,.18);
+  if(e.type==='laserFire')return this.playSfx31('weaponLaser',.32,.12);
+  if(e.type==='explosiveFire')return this.playSfx31('weaponExplosive',.38,.12);
+  if(e.type==='shotgunFire')return this.playSfx31('weaponShotgun',.34,.12);
+  if(e.type==='graze')return this.playSfx31('graze',.14,.07,Phaser.Math.Between(-60,60));
+  const falcon=this.session?.craft?.id==='falcon';
+  if(falcon&&e.type==='falconShot')return this.playSfx32('falconShot',.22,.075,Phaser.Math.Between(-35,35));
+  if(falcon&&e.type==='falconFocus')return this.playSfx32('falconFocus',.31,.10);
+  if(falcon&&e.type==='falconPierce')return this.playSfx32('falconPierce',e.far?.27:.18,.045,e.empowered?90:0);
+  if(falcon&&e.type==='hurt')return this.playSfx32('falconHurt',.35,.25);
+  if(falcon&&e.type==='dash')return this.playSfx32('falconDash',.38,.5);
+  if(falcon&&e.type==='fall')return this.playSfx32('falconFall',.38,.6);
+  if(falcon&&e.type==='ultimateStart')return this.playSfx32('falconUltimate',.43,.7);
+  if(falcon&&e.type==='shot')return true;
+  const owl=this.session?.craft?.id==='owl';
+  if(owl&&e.type==='shot')return this.playSfx33('owlShot',.19,.09,Phaser.Math.Between(-45,45));
+  if(owl&&e.type==='owlOrbit')return this.playSfx33('owlOrbit',.32,.25);
+  if(owl&&e.type==='owlBlock')return this.playSfx33('owlBlock',.27,.055,Phaser.Math.Between(-70,70));
+  if(owl&&e.type==='owlNova')return this.playSfx33('owlNova',.40,.5);
+  if(owl&&e.type==='hurt')return this.playSfx33('owlHurt',.34,.25);
+  if(owl&&e.type==='dash')return this.playSfx33('owlDash',.33,.5);
+  if(owl&&e.type==='fall')return this.playSfx33('owlFall',.37,.6);
+  if(owl&&e.type==='ultimateStart')return this.playSfx33('owlUltimate',.43,.7);
+  const ancient=this.session?.craft?.id==='ancient';
+  if(ancient&&e.type==='ancientFire')return this.playSfx34('ancientCannon',.39,.12,Phaser.Math.Between(-35,25));
+  if(ancient&&e.type==='ancientBlast')return this.playSfx34('ancientBlast',.39,.09);
+  if(ancient&&e.type==='ancientWave')return this.playSfx34('ancientWave',.34,.12);
+  if(ancient&&e.type==='ancientArmor')return this.playSfx34('ancientArmor',.32,.16);
+  if(ancient&&e.type==='gravityBurst')return this.playSfx34('ancientGravity',.40,.35);
+  if(ancient&&e.type==='hurt')return this.playSfx34('ancientHurt',.38,.25);
+  if(ancient&&e.type==='dash')return this.playSfx34('ancientDash',.37,.5);
+  if(ancient&&e.type==='fall')return this.playSfx34('ancientFall',.42,.6);
+  if(ancient&&e.type==='ultimateStart')return this.playSfx34('ancientUltimate',.46,.7);
+  if(ancient&&e.type==='shot')return true;
+  const starwing=this.session?.craft?.id==='starwing';
+  if(starwing&&e.type==='shot')return this.playSfx35('starwingLaser',.20,.065,Phaser.Math.Between(-30,30));
+  if(starwing&&e.type==='lock')return this.playSfx35('starwingLock',.30,.18);
+  if(starwing&&e.type==='starSalvo')return this.playSfx35('starwingSalvo',.36,.18);
+  if(starwing&&e.type==='starImpact')return this.playSfx35(e.missile?'starwingMissileHit':'starwingBeamHit',e.missile?.31:.18,.045);
+  if(starwing&&e.type==='starOverclock')return this.playSfx35('starwingOverclock',.40,.5);
+  if(starwing&&e.type==='starWingOpen')return this.playSfx35('starwingWingOpen',.31,.35);
+  if(starwing&&e.type==='starWingClose')return this.playSfx35('starwingWingClose',.25,.35);
+  if(starwing&&e.type==='traitFire')return true;
+  if(starwing&&e.type==='hurt')return this.playSfx35('starwingHurt',.37,.25);
+  if(starwing&&e.type==='dash')return this.playSfx35('starwingDash',.40,.5);
+  if(starwing&&e.type==='fall')return this.playSfx35('starwingFall',.43,.6);
+  if(starwing&&e.type==='ultimateStart')return this.playSfx35('starwingUltimate',.48,.7);
+  if(!swift)return false;
+  if(e.type==='shot')return this.playSfx31('shot',.17,.075,Phaser.Math.Between(-45,45));
+  if(e.type==='swiftEcho')return this.playSfx31('echo',.28,.10);
+  if(e.type==='hurt')return this.playSfx31('hurt',.34,.25);
+  if(e.type==='shieldBreak')return this.playSfx31('shield',.34,.2);
+  if(e.type==='dash')return this.playSfx31('dash',.34,.5);
+  if(e.type==='fall')return this.playSfx31('fall',.38,.6);
+  if(e.type==='ultimateStart')return this.playSfx31('ultimate',.42,.7);
+  return false;
+ }
+ update(t,delta){this.updateStarflightMusic();if(this.mode==='launching'){if(!this.portrait()&&!document.hidden)this.stepLaunch(Math.min(.1,delta/1000));return;}if(this.mode==='returning'){if(this.portrait()||document.hidden)return;this.resumeTime-=Math.min(.1,delta/1000);this.resumeLabel?.setText(this.resumeTime>.35?'準備好了嗎？':'出發！');if(this.resumeTime<=0){this.overlay?.destroy();this.overlay=null;this.clearInput();this.session.closeBay();this.session.setPaused(false);this.mode='playing';}return;}
   if(this.mode!=='playing'||!this.session)return;const dt=Math.min(.1,delta/1000),input=this.controlState();
   
   if(this.session.advance(dt,input)){this.requests={};this.touch.consume();}
   this.soundOn=preferences.value.sfx;this.soundCD-=dt;
   for(const e of this.session.events.splice(0)){if(!['shot','stage','ultimateStart','charge'].includes(e.type))this.effects.push({...e,age:0});
-   if(['dash','hurt','charge','laserFire','explosiveFire','shotgunFire','traitFire'].includes(e.type))this.heroAction={type:e.type,until:this.session.time+(e.type==='charge'?.45:e.type==='traitFire'?.62:e.type==='hurt'?.28:.34)};
-   if(e.type==='weaponChosen'&&e.reward)this.bellFeedback={index:['upgrade','shield','special','power'].indexOf(e.reward),until:this.session.time+.65};
+   if(['dash','hurt','charge','laserFire','explosiveFire','shotgunFire','traitFire','owlOrbit'].includes(e.type))this.heroAction={type:e.type,started:this.session.time,until:this.session.time+(e.type==='charge'?.45:['traitFire','owlOrbit'].includes(e.type)?.5:e.type==='hurt'?.28:.34)};
+   if(e.type==='weaponChosen'&&e.reward)this.bellFeedback={index:e.reward==='red'?(e.slot??-1):-1,until:this.session.time+.65};
    if(e.type==='regionIntro')this.carnivalIntro=2.8;
-   if(['bellHit','bellChange','crystalCollect','weaponChosen','swiftEcho','shieldBreak','owlBlock','owlOrbit','falconFocus','ancientFire','ancientBlast','ancientArmor','starSalvo','starOverclock'].includes(e.type))this.bellTone(e.type,e.hits||0);
+   if(this.playEventSfx31(e)){}
+   else if(['bellHit','bellChange','crystalCollect','weaponChosen','swiftEcho','shieldBreak','owlBlock','owlOrbit','falconFocus','ancientFire','ancientBlast','ancientArmor','starSalvo','starOverclock'].includes(e.type))this.bellTone(e.type,e.hits||0);
    else if(['charge','laserFire','explosiveFire','shotgunFire','traitFire'].includes(e.type))this.weaponTone(e.type);
    else if(e.type==='guardianStart'||e.type==='guardianRevive'){this.tone(e.type==='guardianStart'?'finish':'correct');this.soundCD=.3;}
-   else if(this.soundCD<=0&&e.type!=='stage'){this.tone(e.type==='shot'?'send':e.type==='hurt'?'hint':['end','boss','warning','ultimateStart'].includes(e.type)?'finish':'correct');this.soundCD=e.type==='shot'?.25:.13;}
+   else if(this.soundCD<=0&&!['stage','starImpact'].includes(e.type)){this.tone(e.type==='shot'?'send':e.type==='hurt'?'hint':['end','boss','warning','ultimateStart'].includes(e.type)?'finish':'correct');this.soundCD=e.type==='shot'?.25:.13;}
    if(!this.reducedFX&&['bomb','hurt','elite','laserFire','guardianRevive','caveImpact','iceBreak'].includes(e.type))this.cameras.main.shake(e.type==='bomb'?180:['caveImpact','iceBreak'].includes(e.type)?130:90,e.type==='bomb'?.003:['caveImpact','iceBreak'].includes(e.type)?.0022:.0014);
   }
   if(this.session.phase==='combat'){this.effects=this.effects.map(e=>({...e,age:e.age+dt})).filter(e=>e.age<.7).slice(-65);this.carnivalIntro=Math.max(0,this.carnivalIntro-dt);}
@@ -235,16 +336,9 @@ export default class ForestStarflightGame extends AnimalSnackGame{
    o.type=type==='explosiveFire'?'triangle':'sine';o.frequency.setValueAtTime(type==='charge'?260:type==='laserFire'?1000:480,now);o.frequency.exponentialRampToValueAtTime(type==='charge'?1050:150,now+d);
    g.gain.setValueAtTime(.035,now);g.gain.exponentialRampToValueAtTime(.001,now+d);o.connect(g);g.connect(ctx.destination);this.audioNodes.add(o);o.onended=()=>{this.audioNodes.delete(o);o.disconnect();g.disconnect();};o.start(now);o.stop(now+d);
   }catch{}}
- drawStarwingUltimate(){const s=this.session,p=s.player;if(!this.ultimateOverlay){this.ultimateOverlay=this.add.container(0,0).setDepth(80);this.starwingBurst=this.add.graphics();this.ultimateOverlay.add(this.starwingBurst);}
-  const g=this.starwingBurst,t=s.phaseTime,y=TOP+p.y*SCALE,a=Math.min(1,t*4)*Math.max(0,1-t/3);g.clear();for(let i=0;i<8;i++){const originY=y+(i-3.5)*16,endY=95+i*70;g.lineStyle(12,0x8dcfff,a*.25).lineBetween(p.x-20,originY,1280,endY);g.lineStyle(3,i%2?0xffe4a2:0xebffff,a).lineBetween(p.x-20,originY,1280,endY);}
- }
- drawAncientUltimate(){const s=this.session,p=s.player;if(!this.ultimateOverlay){this.ultimateOverlay=this.add.container(0,0).setDepth(80);this.ancientBurst=this.add.graphics();this.ultimateOverlay.add(this.ancientBurst);}
-  const g=this.ancientBurst,t=s.phaseTime,y=TOP+p.y*SCALE;g.clear();for(let i=0;i<3;i++){const q=Math.max(0,t-i*.3),r=q*420,a=Math.max(0,1-q/2);if(q>0)g.lineStyle(9-i*2,0xffd790,a*.65).strokeEllipse(p.x,y,r*2,r*1.2);}
- }
- drawFalconUltimate(){const s=this.session,p=s.player;if(!this.ultimateOverlay){this.ultimateOverlay=this.add.container(0,0).setDepth(80);this.falconBurst=this.add.graphics();this.ultimateOverlay.add(this.falconBurst);}
-  const g=this.falconBurst,t=s.phaseTime,y=TOP+p.y*SCALE;g.clear();const a=Math.min(1,t*4)*Math.max(0,1-t/3);
-  for(let i=-2;i<=2;i++){const offset=i*(22+t*20);g.lineStyle(16,0x80d8ff,a*.25).lineBetween(p.x,y,1280,y+offset);g.lineStyle(3,0xfff6d5,a).lineBetween(p.x,y,1280,y+offset);}
- }
+ drawStarwingUltimate(){drawStarwingUltimate30(this,TOP,SCALE);}
+ drawAncientUltimate(){drawAncientUltimate29(this,TOP,SCALE);}
+ drawFalconUltimate(){drawFalconUltimate28(this,TOP,SCALE);}
  drawOwlUltimate(){const s=this.session,p=s.owlUltimateCenter||s.player;
   if(!this.ultimateOverlay){this.ultimateOverlay=this.add.container(0,0).setDepth(80);this.owlBurst=Array.from({length:32},()=>{const im=this.add.image(0,0,'star124_feather').setDisplaySize(70,56);this.ultimateOverlay.add(im);return im;});}
   const t=s.phaseTime,r=(p.radius||s.owlUltimateRadius())*Math.min(1,t/.55),alpha=Math.min(1,t*15)*Math.max(0,1-Math.max(0,t-.55)/.35);
@@ -305,7 +399,7 @@ export default class ForestStarflightGame extends AnimalSnackGame{
  }
  registerCraftAnimations(){if(this.anims.exists('swift_cruise'))return;const make=(key,texture,frames,frameRate,repeat=-1)=>this.anims.create({key,frames:frames.map(frame=>({key:texture,frame})),frameRate,repeat});
   make('swift_cruise','craft_swift_cruise',[0,1,2,3,4,5,6,7],12);make('swift_reverse','craft_swift_maneuver',[0,1,2,3],10);make('swift_up','craft_swift_maneuver',[4,5],8);make('swift_down','craft_swift_maneuver',[6,7],8);make('swift_hurt','craft_swift_combat',[0,1],12,0);make('swift_boost','craft_swift_combat',[2,3],12);make('swift_trait','craft_swift_combat',[4,5],10);make('swift_fall','craft_swift_combat',[6,7],7,0);}
- animateHero(hero,s,moving,action){if(s.craft.id!=='swift'||!hero.anims)return;let state='cruise';if(s.phase==='falling')state='fall';else if(action?.type==='hurt')state='hurt';else if(action?.type==='traitFire'||s.charging||['laserFire','charge','explosiveFire','shotgunFire'].includes(action?.type))state='trait';else if(s.player.dashing>0||action?.type==='dash')state='boost';else if(moving.x<-.22)state='reverse';else if(moving.y<-.22)state='up';else if(moving.y>.22)state='down';if(hero.getData('swiftState')===state)return;hero.setData('swiftState',state);hero.play('swift_'+state,true);}
+ animateHero(hero,s,moving,action){if(s.craft.id==='starwing'){setStarwingPose30(hero,starwingPose30(s,moving,action?{...action,elapsed:s.time-(action.started??s.time)}:null));return;}if(s.craft.id==='ancient'){setAncientPose29(hero,ancientPose29(s,moving,action?{...action,elapsed:s.time-(action.started??s.time)}:null));return;}if(s.craft.id==='falcon'){setFalconPose28(hero,falconPose28(s,moving,action?{...action,elapsed:s.time-(action.started??s.time)}:null));return;}if(s.craft.id==='owl'){setOwlPose27(hero,owlPose27(s,moving,action?{...action,elapsed:s.time-(action.started??s.time)}:null));return;}if(s.craft.id!=='swift'||!hero.anims)return;let state='cruise';if(s.phase==='falling')state='fall';else if(action?.type==='hurt')state='hurt';else if(action?.type==='traitFire'||s.charging||['laserFire','charge','explosiveFire','shotgunFire'].includes(action?.type))state='trait';else if(s.player.dashing>0||action?.type==='dash')state='boost';else if(moving.x<-.22)state='reverse';else if(moving.y<-.22)state='up';else if(moving.y>.22)state='down';if(hero.getData('swiftState')===state)return;hero.setData('swiftState',state);hero.play('swift_'+state,true);}
  magic(name,x,y,width,height=null,rotation=0,alpha=1,tint=0xffffff,anchor=.5){
   let v=this.magicPool[this.magicIndex];if(!v){v=this.add.image(0,0,'stg04_'+name,'trim');this.magicLayer.add(v);this.magicPool.push(v);}this.magicIndex++;
   v.setBlendMode(0).setTexture('stg04_'+name,'trim').setOrigin(anchor,.5).setPosition(x,y).setRotation(rotation).setAlpha(alpha).setTint(tint).setVisible(true);
@@ -398,22 +492,22 @@ export default class ForestStarflightGame extends AnimalSnackGame{
    g.fillStyle(0x8dc5a0).fillRoundedRect(x-4,top-15,gate.w+8,16,7).fillRoundedRect(x-4,bottom,gate.w+8,16,7);
    for(let j=0;j<4;j++){this.star(g,x+12+j*24,top-9,4,0xffe6ad);this.star(g,x+12+j*24,bottom+8,4,0xffe6ad);}
   }
-  if(s.craft.id==='starwing'){for(const lock of s.starLocks){const e=lock.target,ready=lock.charge>=.6,offset=e===s.boss?(lock.slot-1.5)*24:0,r=12+lock.charge*12;f.lineStyle(2,ready?0xffdba1:0x83d9e8,ready?.85:.45).beginPath().arc(e.x+offset,e.y,r,-Math.PI/2,-Math.PI/2+Math.PI*2*lock.charge/.6).strokePath();}if(s.starOverclock>0)f.lineStyle(3,0x8fe9ff,.6).lineBetween(p.x-70,p.y-45,p.x-15,p.y-15).lineBetween(p.x-70,p.y+45,p.x-15,p.y+15);}
+  if(s.craft.id==='starwing')drawStarwingLocks30(this);
   const live=new Set();for(const e of s.enemies)if(!e.dead&&!e.exit){if(e.kind>=40)drawTransitEnemy(this,g,e,live);else if(e.kind>=36)drawForestEnemy(this,g,e,live);else if(e.kind>=32)drawMagmaEnemy(this,g,e,live);else if(e.kind>=28)drawWetlandEnemy(this,g,e,live);else if(e.kind>=24)drawIceEnemy(this,g,e,live);else if(e.kind>=20)drawCaveEnemy(this,g,e,live);else if(e.kind>=16)drawLakeEnemy(this,g,e,live);else if(e.kind>=12)drawCandyEnemy(this,g,e,live);else this.enemy(g,e);}
   let hero=this.views.get('hero');if(!hero){hero=this.craft(p.x,p.y,s.craft.width,this.entities,true);hero.scaleY/=SCALE;this.views.set('hero',hero);}live.add('hero');
   const moving=this.controlState(),action=this.heroAction?.until>s.time?this.heroAction:null,base=hero.getData('baseScale'),move=Math.min(1,Math.hypot(moving.x,moving.y)),idle=Math.sin(s.time*(s.craft.id==='owl'?3.2:4.6))*.018,actionScale=action?.type==='traitFire'?1.09:action?.type==='charge'?1.045:action?.type==='hurt'?.93:1,tilt=moving.y*(s.craft.id==='ancient'?.035:.095)-moving.x*(s.craft.id==='falcon'?.10:.045)+(s.craft.id==='falcon'&&action?.type==='traitFire'?-0.19:0)+(s.craft.id==='starwing'&&action?.type==='traitFire'?.08:0);this.animateHero(hero,s,moving,action);
-  this.drawHeroMotion(f,p,s,moving,action);hero.setRotation(s.phase==='falling'?s.phaseTime*2.4:tilt).setScale(base*(1+idle)*actionScale,base/SCALE*(1-idle*.55)*actionScale).setPosition(p.x,p.y+(s.phase==='falling'?s.phaseTime*130:Math.sin(s.time*(s.craft.id==='owl'?3.2:4.6))*(s.craft.id==='ancient'?1.2:2.5)-move*1.5)).setAlpha(s.phase==='falling'?1-s.phaseTime*.6:p.invuln>0?.58+Math.sin(s.time*24)*.2:1);
+  this.drawHeroMotion(f,p,s,moving,action);hero.setRotation(s.phase==='falling'?(['owl','falcon','ancient','starwing'].includes(s.craft.id)?.15:s.phaseTime*2.4):tilt).setScale(hero.getData('baseScale')*(1+idle)*actionScale,hero.getData('baseScale')/SCALE*(1-idle*.55)*actionScale).setPosition(p.x,p.y+(s.phase==='falling'?s.phaseTime*130:Math.sin(s.time*(s.craft.id==='owl'?3.2:4.6))*(s.craft.id==='ancient'?1.2:2.5)-move*1.5)).setAlpha(s.phase==='falling'?1-s.phaseTime*.6:p.invuln>0?.58+Math.sin(s.time*24)*.2:1);
   if(this.held.has('KeyH'))f.lineStyle(2,0xff756f,.95).strokeEllipse(p.x,p.y,s.hurtbox.rx*2,s.hurtbox.ry*2);
   if(this.effects.some(e=>e.type==='hurt'&&e.age<.13))hero.setTintFill(0xffffff);else hero.clearTint();
   this.drawHeroRim(hero,live);
   if(p.dashing>0){f.lineStyle(12,0x8eeeff,.22).lineBetween(p.x-135,p.y,p.x-15,p.y);f.lineStyle(4,0xffffff,.6).lineBetween(p.x-110,p.y,p.x-20,p.y);}
   if(s.guardFeathers>0&&s.craft.id!=='owl'){for(let i=0;i<s.guardFeathers;i++){const a=s.time*3+i*Math.PI/2;this.star(f,p.x+Math.cos(a)*58,p.y+Math.sin(a)*44,9,0xd7c7ff,.9);}}
   
-  s.optionPositions.forEach((o,i)=>{if(s.craft.id==='starwing'){this.pickupArt('starwing120_drone',o.x,o.y,54,0).setDisplaySize(54,27).setBlendMode(1);}else this.magic('option',o.x,o.y+Math.sin(s.time*5+i)*2,36,null,Math.sin(s.time*3+i)*.07,.88);});
+  s.optionPositions.forEach((o,i)=>{if(s.craft.id==='starwing'){drawStarwingDrone30(this,o,i);}else this.magic('option',o.x,o.y+Math.sin(s.time*5+i)*2,36,null,Math.sin(s.time*3+i)*.07,.88);});
   for(const item of s.pickups){
    if(item.kind==='weapon'){const color=starColor(item).color,k=item.flash>0?1+item.flash*.45:1;
-    this.pickupArt('star_bell109',item.x,item.y,64*k,Math.sin(item.age*4)*.16+Math.sin(item.age*30)*item.flash*.5,color);
-    f.lineStyle(item.colorLock>0?3:2,item.colorLock>0?0xffffff:color,item.colorLock>0?.65+.25*Math.sin(item.age*40):.55).strokeCircle(item.x,item.y,35*k);for(let j=0;j<3;j++)f.fillStyle(j<item.hits?0xffffff:color,j<item.hits?1:.45).fillCircle(item.x+(j-1)*10,item.y+40,3);
+   this.pickupArt('star_bell109',item.x,item.y,64*k,Math.sin(item.age*4)*.16+Math.sin(item.age*30)*item.flash*.5,color);
+    f.lineStyle(item.colorLock>0?3:2,item.colorLock>0?0xffffff:color,item.colorLock>0?.65+.25*Math.sin(item.age*40):.55).strokeCircle(item.x,item.y,35*k);for(let j=0;j<3;j++)f.fillStyle(j<item.hits?0xffffff:color,j<item.hits?1:.45).fillCircle(item.x+(j-1)*10,item.y+40,3);if(starColor(item).id==='red')for(let j=0;j<4;j++)f.fillStyle(j===item.rouletteSlot?0xfff2ae:0x733f3b,j===item.rouletteSlot?1:.7).fillCircle(item.x-15+j*10,item.y-42,j===item.rouletteSlot?4:3);if(starColor(item).id==='rainbow'){for(let j=0;j<6;j++)f.lineStyle(3,[0xff6b6b,0xffcc5c,0x77dd88,0x69b7ff,0xa98bff,0xff8fd8][j],.9).beginPath().arc(item.x,item.y,39,j*Math.PI/3,(j+1)*Math.PI/3).strokePath();}
    }else if(item.kind==='crystal'){this.pickupArt('star_crystal109',item.x,item.y,43,Math.sin(item.age*3)*.10);f.lineStyle(2,0x92eaff,.45).strokeCircle(item.x,item.y,25+Math.sin(item.age*5)*2);
    }else if(item.kind==='option'){this.magic('option',item.x,item.y,49);f.lineStyle(2,0xffe9a4,.65).strokeCircle(item.x,item.y,30);}
    else if(item.kind==='heart'){f.fillStyle(0xffb7c5).fillCircle(item.x-5,item.y-3,7).fillCircle(item.x+5,item.y-3,7).fillTriangle(item.x-11,item.y,item.x+11,item.y,item.x,item.y+13);}
@@ -426,16 +520,14 @@ export default class ForestStarflightGame extends AnimalSnackGame{
   }else this.bossText.setText('');
   for(const [id,v]of this.views)if(!live.has(id)){v.destroy();this.views.delete(id);}
   for(const a of s.shots){const alpha=a.option?.38:.87;
-   if(a.kind==='gravity'){f.fillStyle(0xb997da,.25).fillCircle(a.x,a.y,17);f.fillStyle(0xffedd2,1).fillCircle(a.x,a.y,6);f.lineStyle(2,0xd8c5ef,.8).strokeEllipse(a.x,a.y,28,15);}
-   else if(a.ancientRicochet){this.pickupArt('star_crystal109',a.x,a.y,20,Math.atan2(a.vy,a.vx)).setTint(0xffdc95);f.lineStyle(3,0xffe1a3,.7).lineBetween(a.x-a.vx*.025,a.y-a.vy*.025,a.x,a.y);}
-   else if(a.ancientShell){const q=1+Math.sin(s.time*15)*.1;this.pickupArt('star_crystal109',a.x,a.y,44*q,a.x*.016).setDisplaySize(40*q,44*q).setTint(0xffd195);f.lineStyle(5,0xffd393,.35*alpha).lineBetween(a.x-36,a.y,a.x-12,a.y);}
+   if(a.ancientShell||a.ancientRicochet||(a.kind==='gravity'&&s.craft.id==='ancient')){drawAncientShot29(this,a);}
+   else if(a.kind==='gravity'){this.magic('clover',a.x,a.y,38);}
    else if(a.kind==='explosive'){this.magic('clover',a.x,a.y,38,null,a.x*.03,alpha);f.lineStyle(2,0xffd78a,.9).strokeCircle(a.x,a.y,17);}
    else if(a.kind==='traitLeaf'){this.magic('clover',a.x,a.y,58,null,a.x*.045,alpha);f.lineStyle(3,0xc9ffd5,.7).strokeCircle(a.x,a.y,24);}
-   else if(a.starBeam){f.lineStyle(a.option?4:7,0x88d8ff,alpha*.35).lineBetween(a.x-65,a.y,a.x,a.y);f.lineStyle(2,0xf4ffff,alpha).lineBetween(a.x-54,a.y,a.x,a.y);}
-   else if(a.starMissile){this.pickupArt('starwing120_drone',a.x,a.y,31,Math.atan2(a.vy,a.vx)).setDisplaySize(31,16).setBlendMode(1).setTint(0xd6bbff);if(!this.reducedFX)f.lineStyle(3,0xcba5ff,.5).lineBetween(a.x-a.vx*.035,a.y-a.vy*.035,a.x,a.y);}
+   else if(a.starBeam||a.starMissile){drawStarwingShot30(this,a);}
    else if(a.kind==='laser'&&!a.falconBeam)this.magic('beam',a.x,a.y,85+a.rank*12,a.r*2-2,0,alpha,0xffffff,1);
    else if(a.kind==='homing'){const angle=Math.atan2(a.vy,a.vx);if(!this.reducedFX)f.lineStyle(2,0xffedb0,alpha*.38).lineBetween(a.x-a.vx*.05,a.y-a.vy*.05,a.x,a.y);this.magic('dandelion',a.x,a.y,29,null,angle,alpha,0xffffff,.78);}
-   else if(a.falconBeam){const length=a.falconEmpowered?148:90,color=a.falconEmpowered?0xdab6ff:0x9deaff;f.lineStyle(a.falconEmpowered?13:7,color,.23*alpha).lineBetween(a.x-length,a.y,a.x,a.y);f.lineStyle(a.falconEmpowered?5:3,0xf5ffff,alpha).lineBetween(a.x-length*.8,a.y,a.x,a.y);this.pickupArt('star115_wind-feather',a.x-24,a.y,a.falconEmpowered?98:64,0).setDisplaySize(a.falconEmpowered?98:64,a.falconEmpowered?24:15).setBlendMode(1).setTint(color).setAlpha(alpha);}
+   else if(a.falconBeam){drawFalconBeam28(this,a);}
    else if(a.owlOrbit){this.pickupArt('star124_feather',a.x,a.y,62,a.angle+Math.PI/2).setDisplaySize(93,74.5).setTint(0xe5c9ff).setAlpha(alpha);if(!this.reducedFX)f.lineStyle(3,0xd8b5ff,.4).beginPath().arc(p.x,p.y,66+Math.min(1,a.age)*96,a.angle-.28,a.angle,false).strokePath();}
    else if(s.craft.id==='owl'){this.pickupArt('star124_feather',a.x,a.y,46,Math.atan2(a.vy,a.vx)).setDisplaySize(46,37).setBlendMode(1).setAlpha(alpha);}
    else if(s.craft.id==='swift'){this.pickupArt('star115_wind-feather',a.x,a.y,52+a.rank*3,Math.atan2(a.vy,a.vx)).setDisplaySize(52+a.rank*3,20).setBlendMode(1).setAlpha(alpha);}
@@ -446,7 +538,8 @@ export default class ForestStarflightGame extends AnimalSnackGame{
   if(s.laserVisual){const l=s.laserVisual;this.magic('beam',l.x,l.y,Math.max(1,l.end-l.x),31,0,Math.min(1,l.life*7),0xffffff,0);}
   for(const a of s.bullets){if(a.swanShot){this.pickupArt('star124_shard',a.x,a.y,30,Math.atan2(a.vy,a.vx)+Math.PI/4).setDisplaySize(30,24);continue;}if(a.yarnBall){this.pickupArt('star125_yarn',a.x,a.y,86,a.age*3).setDisplaySize(86,57.3).setOrigin(.42,.52);continue;}if(a.iceShard){this.pickupArt('star124_shard',a.x,a.y,30,Math.atan2(a.vy,a.vx)+Math.PI/4);continue;}if(a.magmaBomb){this.pickupArt('star124_bomb',a.x,a.y,48,a.age*2);continue;}if(a.magmaFireball){this.pickupArt('star124_fireball',a.x,a.y,68,Math.atan2(a.vy,a.vx)-Math.PI).setDisplaySize(68,45);continue;}const radius=a.visualRadius||8,edge=a.forest?0x39513a:a.magma?0x69333a:a.wetland?0x315f55:a.ice?0x3e647b:a.cave?0x3e355c:a.lake?0x315b79:a.candy?0x6f405d:0x48364e,fill=a.forest?0xb98a4e:a.magma?0xffa647:a.wetland?0xc9ef9b:a.ice?0xc9f7ff:a.cave?0xc8adff:a.lake?0x8fe8ff:a.candy?0xffbe6b:0xff86b0;f.fillStyle(edge).fillCircle(a.x,a.y,radius+2);f.fillStyle(fill).fillCircle(a.x,a.y,radius);f.fillStyle(0xfffbec).fillCircle(a.x-2,a.y-2,2);if(a.candy||a.wetland||a.magma||a.forest)this.star(f,a.x,a.y,Math.max(3,radius-2),a.forest?0xffd984:a.magma?0xfff0a8:a.wetland?0xe7d0ff:0xffef9c,.8);if(a.lake||a.cave||a.ice||a.wetland||a.magma||a.forest)f.lineStyle(2,a.cave?0xe6d9ff:a.wetland?0xffe6a3:a.magma?0xffd184:a.forest?0xc7e89a:0xe6fbff,.65).strokeCircle(a.x,a.y,radius+1);}
   for(const e of this.effects){const alpha=1-e.age/.7;
-   if(e.type==='iceBubbleBreak'){drawBubbleBreak26(this,e);}
+   if(['starImpact','starSalvo','starOverclock'].includes(e.type)){drawStarwingFx30(this,e);}
+   else if(e.type==='iceBubbleBreak'){drawBubbleBreak26(this,e);}
    else if(e.type==='lock'){for(const t of e.targets||[])f.lineStyle(2,0x93eeff,alpha).strokeCircle(t.x,t.y,24);}
    else if(e.type==='candyBounce')f.lineStyle(7,0xf0b9e5,alpha).strokeCircle(e.x,e.y,35+e.age*90);
    else if(e.type==='bubblePop'){for(let i=0;i<6;i++){const a=i*Math.PI/3;f.fillStyle(i%2?0xff9fcf:0xffd5e8,alpha).fillCircle(e.x+Math.cos(a)*e.age*85,e.y+Math.sin(a)*e.age*70,7-e.age*5);}}
@@ -472,8 +565,10 @@ export default class ForestStarflightGame extends AnimalSnackGame{
    else if(e.type==='transitPrize'||e.type==='transitRide'){for(let i=0;i<12;i++){const a=i*Math.PI/6,r=20+e.age*(e.type==='transitPrize'?260:170);this.star(f,e.x+Math.cos(a)*r,e.y+Math.sin(a)*r,Math.max(2,10-e.age*8),i%2?0xffdc78:0xaeeeff,alpha);}f.lineStyle(7,0xffffff,alpha).strokeCircle(e.x,e.y,24+e.age*180);}
    else if(e.type==='regionClear'){f.lineStyle(10,e.flawless?0xffe189:0xbcefcf,alpha).strokeCircle(e.x,e.y,45+e.age*700);for(let i=0;i<9;i++){const a=i*Math.PI*2/9;this.star(f,e.x+Math.cos(a)*(35+e.age*290),e.y+Math.sin(a)*(30+e.age*170),9-e.age*7,0xffe6a1,alpha);}}
    else if(e.type==='bellHit'||e.type==='bellChange'||e.type==='crystalCollect'){const c=e.color||0x9aeaff;f.lineStyle(e.type==='bellChange'?5:2,c,alpha).strokeCircle(e.x,e.y,12+e.age*100);for(let i=0;i<6;i++){const a=i*Math.PI/3;this.star(f,e.x+Math.cos(a)*e.age*110,e.y+Math.sin(a)*e.age*90,Math.max(1,7-e.age*8),c,alpha);}}
-   else if(['ancientBlast','ancientWave','ancientArmor'].includes(e.type)){const radius=e.radius||55,rr=radius*Math.min(1,e.age/.45);f.lineStyle(e.type==='ancientWave'?5:8,e.type==='ancientArmor'?0xbde8ad:0xffd798,alpha*.75).strokeEllipse(e.x,e.y,rr*2,rr*1.4);for(let n=0;n<8;n++){const a=n*Math.PI/4;f.lineStyle(3,0xffefc8,alpha).lineBetween(e.x+Math.cos(a)*rr*.7,e.y+Math.sin(a)*rr*.5,e.x+Math.cos(a)*rr,e.y+Math.sin(a)*rr*.7);}}
-   else if(e.type==='falconPierce'||e.type==='falconFocus'){for(let i=-1;i<=1;i++){f.lineStyle(3,e.type==='falconPierce'?0xffedb8:0xdac7ff,alpha).lineBetween(e.x-26-e.age*100,e.y+i*7,e.x+30+e.age*100,e.y+i*7);}}
+   else if(['ancientFire','ancientBlast','ancientWave','gravityBurst'].includes(e.type)){drawAncientFx29(this,e);}
+   else if(e.type==='ancientArmor'){const radius=e.radius||55,rr=radius*Math.min(1,e.age/.45);f.lineStyle(e.type==='ancientWave'?5:8,e.type==='ancientArmor'?0xbde8ad:0xffd798,alpha*.75).strokeEllipse(e.x,e.y,rr*2,rr*1.4);for(let n=0;n<8;n++){const a=n*Math.PI/4;f.lineStyle(3,0xffefc8,alpha).lineBetween(e.x+Math.cos(a)*rr*.7,e.y+Math.sin(a)*rr*.5,e.x+Math.cos(a)*rr,e.y+Math.sin(a)*rr*.7);}}
+   else if(['falconPierce','falconShot','falconFocus'].includes(e.type)){drawFalconFx28(this,e);}
+   else if(e.type==='wetlandSpore'){this.pickupArt('star127_mushroom',e.x,e.y,118).setFrame(e.age<.32?6:7).setDisplaySize(118,118/1.27).setAlpha(alpha);}
    else if(e.type==='owlBlock'||e.type==='owlOrbit'){for(let i=0;i<6;i++){const a=i*Math.PI/3;f.lineStyle(3,e.type==='owlBlock'?0xc7ffe0:0xe8caff,alpha).lineBetween(e.x+Math.cos(a)*e.age*80,e.y+Math.sin(a)*e.age*80,e.x+Math.cos(a)*(e.age*80+10),e.y+Math.sin(a)*(e.age*80+10));}}
    else if(e.type==='swiftEcho'||e.type==='shieldBreak'){const radius=(e.radius||80)*Math.min(1,e.age*4);f.lineStyle(e.type==='shieldBreak'?5:3,e.type==='shieldBreak'?0xb9ffdc:0xa9dcff,alpha).strokeCircle(e.x,e.y,radius);f.lineStyle(2,0xffffff,alpha*.65).strokeCircle(e.x,e.y,radius*.7);}
    else if(e.type==='gravityBurst'){f.lineStyle(4,0xdcc5f1,alpha).strokeCircle(e.x,e.y,e.radius*Math.min(1,e.age*4));f.lineStyle(2,0xffeed1,alpha*.7).strokeCircle(e.x,e.y,e.radius*Math.min(1,e.age*3));}
@@ -484,7 +579,7 @@ export default class ForestStarflightGame extends AnimalSnackGame{
    else if(e.type!=='warning'&&e.type!=='boss'){for(let i=0;i<5;i++){const a=i*Math.PI*2/5;this.star(f,e.x+Math.cos(a)*e.age*100,e.y+Math.sin(a)*e.age*80,Math.max(1,7-e.age*8),e.type==='hurt'?0xff9fb7:0xffebaf,alpha);}}
   }
   const weapon=STAR_WEAPONS.find(w=>w.id===s.weapon);this.hp.setText('生命 '+p.hp+'/'+p.maxHp);this.meta.setText(s.craft.name+' 全攻擊 +'+Math.round((s.attackMultiplier()-1)*100)+'%');
-  const stageName=s.boss?s.boss.name:s.inTransit?'星風亂流 → '+s.route[Math.min(s.segment+1,s.route.length-1)].name:s.currentMap?.name||'';this.scoreLabel.setText('分數 '+s.score.toLocaleString()+'  擦彈 '+s.stats.graze);this.stageLabel.setText(stageName+'　｜　按住 I／空白鍵射擊 · K 大招 · U 加速 · G 調校');this.gmButton?.label?.setText(s.gmUsed?'GM＊':'GM 調校');
+  const stageName=s.boss?s.boss.name:s.inTransit?'星風亂流 → '+s.route[Math.min(s.segment+1,s.route.length-1)].name:s.currentMap?.name||'';this.scoreLabel.setText('分數 '+s.score.toLocaleString()+'  擦彈 '+s.stats.graze);this.stageLabel.setText(stageName+'　｜　按住射擊・滿能量向上滑放大招・U 戰術特攻・G 調校');this.gmButton?.label?.setText(s.gmUsed?'GM＊':'GM 調校');
   for(let i=this.magicIndex;i<this.magicPool.length;i++)this.magicPool[i].setVisible(false);
   this.noticeText.setOrigin(0).setPosition(24,90).setFontSize(17).setWordWrapWidth(365).setText(s.noticeLife>0?s.notice:'');this.branchHint.setVisible(!!offer).setText(offer?(offer.selected?'已選擇 · 區域交接中':'飛入通道或直接點路牌'):'');this.branchTop.setVisible(!!offer).setText(offer?'上　'+offer.top.name:'');this.branchBottom.setVisible(!!offer).setText(offer?'下　'+offer.bottom.name:'');this.drawControls();
  }
@@ -499,21 +594,14 @@ export default class ForestStarflightGame extends AnimalSnackGame{
   if(index===2){if(id==='swift'){for(const rad of [8,15,23])g.lineStyle(2,color,alpha).beginPath().arc(x,y,rad,-.9,.9).strokePath();g.fillStyle(ink,alpha).fillCircle(x-6,y,5);}else if(id==='ancient'){g.lineStyle(3,color,alpha).strokeEllipse(x,y,45,20).strokeEllipse(x,y,20,39);g.fillStyle(ink,alpha).fillCircle(x,y,7);}else if(id==='owl'){feather(0,0);g.lineStyle(2,ink,alpha).strokeCircle(x,y,20);}else{missile(-10);missile(10);}}
   if(index===3){if(id==='swift'){feather(-8,0);g.lineStyle(3,color,alpha).lineBetween(x+3,y-10,x+24,y-10).lineBetween(x+3,y,x+20,y).lineBetween(x+3,y+10,x+25,y+10);}else if(id==='ancient'){g.fillStyle(color,alpha).fillTriangle(x,y-22,x-18,y+13,x+17,y+13);g.fillStyle(ink,alpha).fillTriangle(x,y-7,x-7,y+13,x+7,y+13);}else{beam(-8);beam(8);g.fillStyle(ink,alpha).fillTriangle(x+2,y-22,x-6,y+1,x+6,y-2);}}
  }
- drawSwiftCards(){const s=this.session,keys=['upgrade','shield','special','power'],colors=[0x73cfff,0x82e6a4,0xc49cff,0xff8c7d];
+ drawSwiftCards(){const s=this.session,colors=[0xd56b62,0xc96358,0xb95750,0xa94b48];
   if(!this.skillCards){this.skillCards=['blue','green','purple','coral'].map((key,i)=>this.add.image(416+i*104,613,(s.craft.id==='starwing'?'starwing120_':s.craft.id==='ancient'?'ancient119_':s.craft.id==='falcon'?'falcon118_':s.craft.id==='owl'?'owl117_':'star115_')+key).setDisplaySize(92,92).setDepth(10));this.skillMeters=this.add.graphics().setDepth(11);}
-  const g=this.skillMeters.clear();this.skillCards.forEach((card,i)=>{const x=416+i*104,y=613,level=s.bellLevels[keys[i]],remaining=this.bellFeedback?.index===i?Math.max(0,this.bellFeedback.until-s.time):0,pulse=remaining>0?Math.sin(Math.PI*(1-remaining/.65)):0;
+  const g=this.skillMeters.clear();this.skillCards.forEach((card,i)=>{const x=416+i*104,y=613,level=s.skillLevels[i],remaining=this.bellFeedback?.index===i?Math.max(0,this.bellFeedback.until-s.time):0,pulse=remaining>0?Math.sin(Math.PI*(1-remaining/.65)):0;
    card.setVisible(true).setDisplaySize(92*(1+.12*pulse),92*(1+.12*pulse));if(level)card.clearTint();else card.setTint(0x777777);
    if(pulse>0)g.lineStyle(3,colors[i],pulse).strokeRoundedRect(x-48-pulse*4,y-48-pulse*4,96+pulse*8,96+pulse*8,8);
-   if(i<3){const cap=s.craft.id==='swift'&&i===0?4:3;for(let n=0;n<cap;n++)g.fillStyle(n<level?colors[i]:0x6f6250).fillCircle(x-(cap-1)*6+n*12,y+32,3.5);}
-   if(i===1)g.fillStyle((s.craft.id==='starwing'?s.options:s.craft.id==='falcon'?(s.player.dashCD<=0?1:0):s.craft.id==='owl'?s.guardFeathers:s.player.shield)>0?0xbaffc1:0x494132).fillCircle(x+31,y-31,6).lineStyle(1,0xd4efbb).strokeCircle(x+31,y-31,6);
-   if(s.craft.id==='falcon'&&i===2&&level){const cycle=Math.max(2,6-level),progress=s.bellVolley%cycle;for(let n=0;n<cycle;n++)g.fillStyle(n<progress?colors[i]:0x453827).fillCircle(x-(cycle-1)*5+n*10,y+21,2.8);}
-   if(s.craft.id==='starwing'&&i===1){for(let n=0;n<2;n++)g.fillStyle(n<s.options?colors[i]:0x453827).fillCircle(x-7+n*14,y+21,4);}
-   if(s.craft.id==='starwing'&&i===2){for(let n=0;n<3;n++)g.fillStyle(n<s.starStacks?0xffe1a0:0x453827).fillCircle(x-12+n*12,y+21,3);if(s.starOverclock>0){g.lineStyle(3,0xffd99a,.9).strokeRoundedRect(x-44,y-44,88,88,8);g.fillStyle(0xffd99a,.9).fillRoundedRect(x-28,y+40,56*s.starOverclock/6,3,1);}}
-   if(s.craft.id==='ancient'&&i===1){for(let n=0;n<2;n++)g.fillStyle(n<s.player.shield?colors[i]:0x453827).fillCircle(x-7+n*14,y+21,4);}
-   if(s.craft.id==='ancient'&&i===0&&s.siegeTime>=.7)g.lineStyle(2,0xffd89a,.8).strokeRoundedRect(x-44,y-44,88,88,8);
-   if(s.craft.id==='owl'&&(i===1||i===2)){const stock=i===1?s.guardFeathers:s.shots.filter(a=>a.owlOrbit&&a.life>0).length;for(let n=0;n<(i===1?5:4);n++)g.fillStyle(n<stock?colors[i]:0x453827).fillCircle(x-24+n*12,y+21,2.8);}
-   if(i===3){g.fillStyle(0x534032).fillRoundedRect(x-28,y+30,56,5,2);g.fillStyle(colors[i]).fillRoundedRect(x-28,y+30,56*Math.max(0,Math.min(1,(s.player.powerBoost||0)/10)),5,2);}
+   for(let n=0;n<3;n++)g.fillStyle(n<level?0xffefbd:0x6f6250).fillCircle(x-12+n*12,y+32,3.5);
   });
+  const status=[{x:842,color:0xf8f2dc,value:s.whiteStacks},{x:884,color:0xb98cff,value:s.purpleStacks}];for(const item of status){g.fillStyle(0x193e4e,.84).fillRoundedRect(item.x-19,588,38,48,8).lineStyle(2,item.color,.9).strokeRoundedRect(item.x-19,588,38,48,8);for(let n=0;n<5;n++)g.fillStyle(n<item.value?item.color:0x5d584d,n<item.value?1:.7).fillCircle(item.x-12+n*6,626,2.4);g.fillStyle(item.color,.9).fillCircle(item.x,606,8);}
  }
  drawBellBar(g){if(['swift','owl','falcon','ancient','starwing'].includes(this.session.craft.id)){this.drawSwiftCards();return;}if(this.skillCards)this.skillCards.forEach(c=>c.setVisible(false));this.skillMeters?.clear();const s=this.session,colors=[0x73cfff,0x82e6a4,0xc49cff,0xff8c7d],levels=[s.bellLevels.upgrade/3,s.craft.id==='owl'?s.guardFeathers/5:s.craft.id==='starwing'?s.options/2:s.craft.id==='falcon'?s.bellLevels.shield/3:s.player.shield/(s.craft.id==='ancient'?2:1),s.bellLevels.special/3,(s.player.powerBoost||0)/10];
   g.fillStyle(0x193e4e,.76).fillRoundedRect(364,584,420,74,15).lineStyle(2,0xe9c880,.8).strokeRoundedRect(364,584,420,74,15);
@@ -527,13 +615,12 @@ export default class ForestStarflightGame extends AnimalSnackGame{
  drawControls(){const s=this.session,g=this.control,j=this.touch.owner===null?STAR_CONTROLS.joystick:this.touch.origin;g.clear();this.drawBellBar(g);
   for(const label of [this.fireLabel,this.dashLabel,this.bombLabel,this.traitLabel,this.evadeLabel])label?.setVisible(false);
   g.fillStyle(0x1c4654,.28).fillCircle(j.x,j.y,57).lineStyle(2,0xd3f2df,.55).strokeCircle(j.x,j.y,57).fillStyle(0xd1eddd,.55).fillCircle(j.x+this.touch.axis.x*36,j.y+this.touch.axis.y*36,23);
-  for(const key of ['special','bomb','trait','dash']){const c=STAR_CONTROLS[key],reserved=key==='special'||(key==='bomb'&&s.ultimateEnergy<100);if(reserved)continue;
-   const progress=key==='trait'?s.ultimateEnergy/100:1-s.player.dashCD/30;
-   g.fillStyle(key==='trait'?0xce4753:key==='bomb'?0x9368b3:0x287f78,.9).fillCircle(c.x,c.y,c.r).lineStyle(2,0xccece1,.9).strokeCircle(c.x,c.y,c.r);
-   this.weaponIcon(g,key==='trait'?'chargeLaser':key==='bomb'?'bomb':'dash',c.x,c.y,.8);
+  for(const key of ['trait','dash']){const c=STAR_CONTROLS[key],recharge=s.craft.id==='falcon'?40:60,progress=key==='trait'?s.ultimateEnergy/100:s.tacticalStock>0?1:s.tacticalRecharge/recharge;
+   g.fillStyle(key==='trait'?0xce4753:s.tacticalStock>0?0x287f78:0x45565b,.9).fillCircle(c.x,c.y,c.r).lineStyle(2,0xccece1,.9).strokeCircle(c.x,c.y,c.r);
+   this.weaponIcon(g,key==='trait'?'chargeLaser':'dash',c.x,c.y,.8);
    if(key==='trait'&&this.touch.firing.size)g.lineStyle(4,0xffffff,.9).strokeCircle(c.x,c.y,c.r-10);
-   if(key==='dash'||(key==='trait'&&s.ultimateEnergy<100))g.lineStyle(5,0xffdf91,.94).beginPath().arc(c.x,c.y,c.r-4,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.max(0,progress),false).strokePath();
-   if(key==='dash'&&s.player.dashing>0)g.lineStyle(4,0xffffff,.9).beginPath().arc(c.x,c.y,c.r-11,-Math.PI/2,-Math.PI/2+Math.PI*2*s.player.dashing/5,false).strokePath();
+   g.lineStyle(5,key==='trait'&&s.ultimateEnergy>=100?0xffffff:0xffdf91,.94).beginPath().arc(c.x,c.y,c.r-4,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.max(0,progress),false).strokePath();
+   if(key==='dash')for(let n=0;n<3;n++)g.fillStyle(n<s.tacticalStock?0xe7ffd7:0x34484d,.95).fillCircle(c.x-12+n*12,c.y+c.r+8,3.5);
   }
   if(this.touch.traitHold){const c=STAR_CONTROLS.trait,progress=Math.min(1,(performance.now()-this.touch.traitHold.at)/1000);g.lineStyle(6,0xffffff,.94).beginPath().arc(c.x,c.y,c.r+5,-Math.PI/2,-Math.PI/2+Math.PI*2*progress,false).strokePath();}
  }
@@ -542,11 +629,15 @@ export default class ForestStarflightGame extends AnimalSnackGame{
   o.add([this.add.rectangle(640,360,1280,720,0x102e3b,.78).setInteractive(),this.panel(640,350,960,570,0x193f4c,0xc8bc8d,28),this.text(640,133,title,38),this.text(640,296,body,25)]);
   o.add(this.b(640,534,390,72,label,fn,0x9c743c));return o;}
  pauseGame(help=false){if(this.mode!=='playing')return;this.closeWeaponBay();this.mode='paused';this.session.setPaused(true);this.clearInput();this.stopTones();this.ultimateOverlay?.setVisible(false);
-  const o=this.showMessage(help?'飛行員小抄':'暫停飛行',help?'搖桿／WASD 移動\n紅鍵／I／空白鍵：按住連射，放開停止\n2號／K：能量滿時發動大招，立即保護\n4號／U：加速5秒，冷卻30秒，幅度依機體\n3號暫時隱藏\n鈴鐺每次命中彈開，每3下換色；5號列顯示特化能力\nH：按住顯示身體判定　G：GM調校':'航程與所有道具已停止，準備好再繼續。\n失敗可以從附近安全航點重新出發。',()=>this.resumeGame());
+  const o=this.showMessage(help?'飛行員小抄':'暫停飛行',help?'搖桿／WASD 移動\n紅鍵／I／空白鍵：按住連射，放開停止\n大招能量滿：在紅鍵上向上滑（鍵盤 K）\n4號／U：專屬戰術特攻，綠鈴補充，最多 3 次\n紅鈴：拾取當下自動選定輪播中的技能\n鈴鐺每 3 次命中換色；虹鈴出現後鎖色\nH：按住顯示身體判定　G：GM調校':'航程與所有道具已停止，準備好再繼續。\n失敗可以從附近安全航點重新出發。',()=>this.resumeGame());
   o.add(this.b(640,619,390,52,'返回遊戲列表',()=>this.leave(),0x315c65));}
  resumeGame(){if(this.mode!=='paused'||this.portrait())return;this.clearInput();this.overlay?.destroy();this.overlay=null;this.session.setPaused(false);this.mode='playing';}
  finish(){this.closeWeaponBay();this.mode='finished';this.clearInput();this.tone('finish');const s=this.session,won=s.status==='won';
   const o=this.showMessage(won?'星光航線挑戰成功！':'先回補給站休息一下','分數 '+s.score.toLocaleString()+' · 擦彈 '+s.stats.graze+' 次\n淨化 '+s.stats.cleared+' 位對手 · 星芽鈴 '+s.stats.weaponChoices+' 次\n'+(won?(s.boss?.name||'區域首領')+'化成滿天星光！':'從附近安全航點重試，保留當時武器。'),()=>this.start(won?null:s.checkpoint),won?'再飛一次':'安全航點重試');
+  if(won&&s.craft.id==='starwing'){const bird=this.craft(210,365,190,o);let frame=4;setStarwingPose30(bird,['arrival',frame,'victory']);this.time.addEvent({delay:200,repeat:2,callback:()=>{if(bird.active)setStarwingPose30(bird,['arrival',++frame,'victory']);}});}
+  if(won&&s.craft.id==='ancient'){const bird=this.craft(210,365,190,o);let frame=4;setAncientPose29(bird,['arrival',frame,'victory']);this.time.addEvent({delay:220,repeat:2,callback:()=>{if(bird.active)setAncientPose29(bird,['arrival',++frame,'victory']);}});}
+  if(won&&s.craft.id==='falcon'){const bird=this.craft(210,365,190,o);let frame=4;setFalconPose28(bird,['falcon-arrival',frame,'victory']);this.time.addEvent({delay:180,repeat:2,callback:()=>{if(bird.active)setFalconPose28(bird,['falcon-arrival',++frame,'victory']);}});}
+  if(won&&s.craft.id==='owl'){const bird=this.craft(210,365,190,o);let frame=4;setOwlPose27(bird,['owl-arrival',frame,'victory']);this.time.addEvent({delay:180,repeat:2,callback:()=>{if(bird.active)setOwlPose27(bird,['owl-arrival',++frame,'victory']);}});}
   o.add(this.b(640,620,390,52,'返回遊戲列表',()=>this.leave()));}
  leave(){this.stopStarflightMusic();this.stopTones();this.clearInput();if(this.scene.manager.keys[this.returnScene]||this.scene.manager.keys.MiniGameHub)this.scene.start(this.scene.manager.keys[this.returnScene]?this.returnScene:'MiniGameHub');else this.showTitle();}
 }

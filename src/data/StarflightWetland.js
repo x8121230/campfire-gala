@@ -43,20 +43,20 @@ export function wetlandDefeat(s,e){
  if(e.kind<28||e.kind>31)return;
  if(e.kind===28){addHazard(s,'wetlandPoison',e.x,e.y,{r:48});s.emit('wetlandSpore',e.x,e.y);}
  if(e.kind===29){s.stats.wetlandElites=(s.stats.wetlandElites||0)+1;s.addPickup('gem',e.x,e.y-14);s.addPickup('gem',e.x,e.y+14);}
- if(e.kind===31){s.score+=4;s.stats.wetlandElites=(s.stats.wetlandElites||0)+1;s.addPickup('weapon',e.x+48,e.y);s.message('寄居蟹躲回茶杯休息！接住變色星芽鈴');s.emit('elite',e.x,e.y);}
+ if(e.kind===31){s.score+=600;s.stats.wetlandElites=(s.stats.wetlandElites||0)+1;s.addPickup('heart',e.x,e.y);s.addPickup('weapon',e.x+48,e.y);s.message('寄居蟹躲回茶杯休息！接住愛心與強化星星');s.emit('elite',e.x,e.y);}
 }
 export function wetlandHazard(s,h,dt){
  if(!h.kind.startsWith('wetland'))return;const p=s.player,active=h.age>=h.warn;
  if(h.kind==='wetlandPoison'){h.x-=32*dt;h.r=Math.min(76,h.r+dt*13);if(active&&Math.hypot((p.x-h.x)*.82,p.y-h.y)<h.r+s.hitRadius)s.environmentSlow=Math.min(s.environmentSlow,.68);}
- if(h.kind==='wetlandCurrent'){h.x-=58*dt;if(active&&Math.abs(p.x-h.x)<h.r+s.hurtbox.rx&&Math.abs(p.y-h.y)<160)s.wetlandDrift+=h.dir*58;}
- if(h.kind==='wetlandSound'){h.currentRadius=24+Math.min(1,h.age/Math.max(.01,h.life+h.age))*210;const d=Math.hypot(p.x-h.x,p.y-h.y);if(active&&!h.hit&&s.bodyRing(h.x,h.y,h.currentRadius)){h.hit=true;s.hit();s.environmentSlow=Math.min(s.environmentSlow,.6);s.emit('wetlandDazed',p.x,p.y);}}
- if(h.kind==='wetlandPollen'){h.x+=(h.vx||-75)*dt;h.y+=Math.sin(h.age*3+(h.phase||0))*14*dt;if(active&&!h.hit&&s.bodyCircle(h.x,h.y,h.r+8)){h.hit=true;s.hit();h.life=.12;s.emit('wetlandPollenPop',h.x,h.y);for(let i=0;i<6;i++)wetlandBullet(s,h.x,h.y,i*Math.PI/3,82,4);}}
+ if(h.kind==='wetlandCurrent'){h.x-=58*dt;if(active&&Math.abs(p.x-h.x)<h.r+s.hitRadius&&Math.abs(p.y-h.y)<160)s.wetlandDrift+=h.dir*58;}
+ if(h.kind==='wetlandSound'){h.currentRadius=24+Math.min(1,h.age/Math.max(.01,h.life+h.age))*210;const d=Math.hypot(p.x-h.x,p.y-h.y);if(active&&!h.hit&&Math.abs(d-h.currentRadius)<12+s.hitRadius){h.hit=true;s.hit();s.environmentSlow=Math.min(s.environmentSlow,.6);s.emit('wetlandDazed',p.x,p.y);}}
+ if(h.kind==='wetlandPollen'){h.x+=(h.vx||-75)*dt;h.y+=Math.sin(h.age*3+(h.phase||0))*14*dt;if(active&&!h.hit&&Math.hypot(p.x-h.x,p.y-h.y)<h.r+s.hitRadius+8){h.hit=true;s.hit();h.life=.12;s.emit('wetlandPollenPop',h.x,h.y);for(let i=0;i<6;i++)wetlandBullet(s,h.x,h.y,i*Math.PI/3,82,4);}}
 }
 export function wetlandEnemy(s,e,dt){
- if(e.kind<28||e.kind>31)return false;const speed=s.tuning.enemySpeedScale,p=s.player;e.fireCD-=dt;e.prismCD=(e.prismCD||0)-dt;e.prismFlash=Math.max(0,(e.prismFlash||0)-dt);
- if(e.kind===28){e.x-=e.speed*speed*dt;e.y=clamp(e.baseY+Math.sin(e.age*2.1+(e.floatPhase||0))*28,48,432);}
+ if(e.kind<28||e.kind>31)return false;const speed=s.tuning.enemySpeedScale,p=s.player;e.fireCD-=dt;e.attackAnim=Math.max(0,(e.attackAnim||0)-dt);e.prismCD=(e.prismCD||0)-dt;e.prismFlash=Math.max(0,(e.prismFlash||0)-dt);
+ if(e.kind===28){if(e.sporeWindup>0){e.sporeWindup-=dt;if(e.sporeWindup<=0){const a=Math.atan2(p.y-e.y,p.x-e.x);for(const d of [-.2,0,.2])wetlandBullet(s,e.x-20,e.y+10,a+d,90,4);e.attackAnim=.3;e.fireCD=3.4;s.emit('wetlandPuff',e.x,e.y);}}else if(e.x<1180&&e.fireCD<=0)e.sporeWindup=.5;e.x-=e.speed*speed*dt;e.y=clamp(e.baseY+Math.sin(e.age*2.1+(e.floatPhase||0))*28,48,432);}
  else if(e.kind===29){e.x=Math.max(1030,e.x-e.speed*speed*dt);e.y=clamp(e.baseY+Math.sin(e.age*1.45)*55,75,395);if(e.x<1190&&e.fireCD<=0){addHazard(s,'wetlandSound',e.x-28,e.y,{r:24});e.fireCD=2.7;s.emit('wetlandNote',e.x,e.y);}}
  else if(e.kind===30){e.x-=e.speed*speed*dt;e.y=clamp(e.baseY+Math.sin(e.age*2.6+e.id)*46,55,425);if(e.x<1180&&e.fireCD<=0){const a=Math.atan2(p.y-e.y,p.x-e.x);wetlandBullet(s,e.x,e.y,a,122,4);e.fireCD=2.2;}}
  else{e.x=Math.max(1045,e.x-e.speed*speed*dt);e.y=clamp(e.baseY+Math.sin(e.age*1.15)*34,90,390);if(e.x<1190&&e.fireCD<=0){for(let i=-1;i<=1;i++)addHazard(s,'wetlandPollen',e.x-42-i*13,e.y+i*42,{vx:-82-i*8,phase:i});e.fireCD=3.6;s.emit('wetlandSteam',e.x,e.y);}}
- if(e.x<-120)e.exit=true;if(s.bodyCircle(e.x,e.y,e.r))s.hit();return true;
+ if(e.x<-120)e.exit=true;if(Math.hypot(e.x-p.x,e.y-p.y)<e.r+s.hitRadius)s.hit();return true;
 }

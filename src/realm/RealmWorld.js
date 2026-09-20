@@ -1,5 +1,6 @@
 import { CAMP_BLOCKS, MAP, SPOTS, WORLD_SCALE, explainCampWalkability, getCampCollisionPaint } from './RealmRules.js';
 import { HERO_FRAME_SIZE, HERO_MOVEMENT_ATLAS, HeroMovementAnimator } from './HeroMovementAnimator.js';
+import { movementProfile } from './RealmMovementProfilesV325.js';
 
 const ASSETS = Object.freeze({
   background: '../../assets/phantom-realm/starsprout-camp/background.png',
@@ -15,9 +16,8 @@ function loadImage(path) {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.decoding = 'async';
-    const timeout = setTimeout(() => reject(new Error('Image load timed out: ' + path)), 10000);
-    image.onload = () => { clearTimeout(timeout); resolve(image); };
-    image.onerror = () => { clearTimeout(timeout); reject(new Error('Unable to load ' + path)); };
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error('Unable to load ' + path));
     image.src = new URL(path, import.meta.url).href;
   });
 }
@@ -226,63 +226,18 @@ export class RealmWorld {
     ctx.restore();
   }
 
-  drawNorthGatePortal(ctx, journey) {
-    if (journey.stage < 3) return;
-    const spot = SPOTS.northGate;
-    const pulse = .5 + Math.sin(this.time * 2.6) * .5;
-    ctx.save();
-    ctx.translate(spot.x, spot.y + 52);
-    ctx.globalCompositeOperation = 'screen';
-
-    const glow = ctx.createRadialGradient(0, 0, 8, 0, 0, 126);
-    glow.addColorStop(0, 'rgba(255,255,224,.78)');
-    glow.addColorStop(.42, 'rgba(121,238,214,.28)');
-    glow.addColorStop(1, 'rgba(121,238,214,0)');
-    ctx.fillStyle = glow;
-    ctx.beginPath(); ctx.ellipse(0, 0, 118, 142, 0, 0, Math.PI * 2); ctx.fill();
-
-    for (let ring = 0; ring < 3; ring += 1) {
-      ctx.save();
-      ctx.rotate(this.time * (ring % 2 ? -.22 : .18) + ring * .65);
-      ctx.strokeStyle = ring === 1 ? 'rgba(255,232,157,.78)' : 'rgba(174,255,231,.72)';
-      ctx.lineWidth = 4 - ring * .7;
-      ctx.setLineDash([22 + ring * 5, 13 + ring * 4]);
-      ctx.beginPath(); ctx.ellipse(0, 0, 66 + ring * 13, 100 + ring * 9, 0, 0, Math.PI * 2); ctx.stroke();
-      ctx.restore();
-    }
-
-    ctx.setLineDash([]);
-    for (let i = 0; i < 12; i += 1) {
-      const angle = i * Math.PI * 2 / 12 + this.time * .16;
-      const x = Math.cos(angle) * (88 + pulse * 4);
-      const y = Math.sin(angle) * (116 + pulse * 6);
-      ctx.save(); ctx.translate(x, y); ctx.rotate(angle + Math.PI / 2);
-      ctx.fillStyle = i % 2 ? 'rgba(255,239,170,.88)' : 'rgba(178,250,211,.86)';
-      ctx.beginPath(); ctx.ellipse(0, 0, 5, 12, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-    }
-
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = .7 + pulse * .2;
-    ctx.strokeStyle = '#fff0a9'; ctx.lineWidth = 4;
-    ctx.beginPath(); ctx.ellipse(0, 112, 74 + pulse * 5, 20 + pulse * 2, 0, 0, Math.PI * 2); ctx.stroke();
-    ctx.font = '700 15px "Microsoft JhengHei",sans-serif'; ctx.textAlign = 'center';
-    ctx.strokeStyle = '#234b42'; ctx.lineWidth = 5; ctx.fillStyle = '#fff4c6';
-    ctx.strokeText('前往晨曦蒲公英丘陵', 0, 154); ctx.fillText('前往晨曦蒲公英丘陵', 0, 154);
-    ctx.restore();
-  }
-
   drawObjectMarkers(ctx, journey) {
-    for (const id of ['washPool']) {
+    for (const id of ['washPool', 'northGate']) {
       const marker = journey.questMarker(id);
       if (!marker) continue;
       const spot = SPOTS[id];
-      this.drawMarker(ctx, marker, spot.x, spot.y - 78);
+      this.drawMarker(ctx, marker, spot.x, spot.y - (id === 'washPool' ? 78 : 36));
     }
   }
 
   render(journey, dt, axis, moving) {
     this.time += dt;
-    this.heroFrame = this.heroAnimator.update(dt, axis, moving, journey.currentMoveSpeed || 260);
+    this.heroFrame = this.heroAnimator.update(dt, axis, moving, journey.currentMoveSpeed || 225, movementProfile(journey.movementProfile));
     const follow = 1 - Math.exp(-Math.max(0, dt) * 5.5);
     this.camera.x += (journey.player.x - this.camera.x) * follow;
     this.camera.y += (journey.player.y - 80 - this.camera.y) * follow;
@@ -301,7 +256,6 @@ export class RealmWorld {
     ctx.drawImage(this.images.background, 0, 0, MAP.width, MAP.height);
     this.drawCollisionEditor(ctx);
     this.drawFountainFx(ctx);
-    this.drawNorthGatePortal(ctx, journey);
     const actors = [
       { y: SPOTS.alden.y, draw: () => this.drawNpc(ctx, 'alden', this.images.alden, journey) },
       { y: SPOTS.bronc.y, draw: () => this.drawNpc(ctx, 'bronc', this.images.bronc, journey) },
